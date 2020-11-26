@@ -1,0 +1,19 @@
+bmn-fhcal-adc-1                     10.18.99.164
+bmn-fhcal-adc-2                     10.18.97.83
+bmn-fhcal-adc-3                     10.18.96.45
+bmn-fhcal-adc-4   3E53  35,37,...   10.18.96.138    ok
+bmn-fhcal-adc-5   5565  1-9         10.18.96.139    ok  
+bmn-fhcal-adc-6   0679  10-18       10.18.96.140    ok
+bmn-fhcal-adc-7   3C64  45,47,...   10.18.96.141
+bmn-fhcal-adc-8   3C71  36,38,...   10.18.96.142    ok
+bmn-fhcal-adc-9   3EC3  46,48,...   10.18.96.143
+bmn-fhcal-adc-10                    10.18.96.144
+bmn-fhcal-adc-11                    10.18.96.145
+
+5565 ok
+D402 - replaced to 0679
+0679 ok    FW 01.00.25814
+3EC3 ok fixed 
+7FF8 - replaced to 3C64
+
+

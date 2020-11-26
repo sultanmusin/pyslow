@@ -1,0 +1,5 @@
+Wed Sep 25 10:49:00 Московское время (зима) 2013 - trying port com9
+Wed Sep 25 10:49:59 Московское время (зима) 2013 - trying port com9
+Wed Sep 25 10:50:14 Московское время (зима) 2013 - trying port com9
+Wed Sep 25 10:50:17 Московское время (зима) 2013 - trying port com9
+Wed Sep 25 11:50:55 Московское время (зима) 2013 - trying port com9

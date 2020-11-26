@@ -1,0 +1,9 @@
+{
+    "python.linting.enabled": true,
+    "python.pythonPath": "/usr/local/bin/python3",
+    "python.autoComplete.extraPaths": [
+        ".", 
+        "/mnt/data/legrus/work/pyslow/control/",
+        "/mnt/data/legrus/work/pyslow/lib/hvsys/"
+    ],
+}

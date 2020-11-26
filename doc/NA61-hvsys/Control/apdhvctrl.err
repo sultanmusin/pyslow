@@ -1,0 +1,7 @@
+13:25:30 proc=cellreadcurrentchannelvalue 2 0; cell=2; 
+13:25:30 proc=new_data; cell=2; er1
+13:25:31 proc=cellreadcurrentchannelvalue 2 1; cell=2; 
+13:25:31 proc=new_data; cell=2; er1
+13:25:33 proc=cellreadcurrentchannelvalue 2 2; cell=2; 
+13:25:33 proc=new_data; cell=2; er1
+13:25:34 proc=cellreadcurrentchannelvalue 2 3; cell=2; 

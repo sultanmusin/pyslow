@@ -1,0 +1,1039 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<config xmlns="http://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" created="17.02.2014" id="default" xsi:noNamespaceSchemaLocation="PsdSlowControlConfig.xsd" xsi:schemaLocation="PsdSlowControlConfig.xsd">
+<module id="1">
+
+  <isOnline>1</isOnline>
+
+  <statusRegister>1</statusRegister>
+
+  <temperature>20.16</temperature>
+  <ledAmplitude>813</ledAmplitude>
+  <pinADCAmplitude>0</pinADCAmplitude>
+
+  <channel id="1" unit="Volts">64.6</channel>
+  <channel id="2" unit="Volts">64.6</channel>
+  <channel id="3" unit="Volts">65.29</channel>
+  <channel id="4" unit="Volts">65.19</channel>
+  <channel id="5" unit="Volts">65.69</channel>
+  <channel id="6" unit="Volts">65.99</channel>
+  <channel id="7" unit="Volts">65.49</channel>
+  <channel id="8" unit="Volts">65.39</channel>
+  <channel id="9" unit="Volts">65.39</channel>
+  <channel id="10" unit="Volts">65.39</channel>
+
+    	
+    </module>
+<module id="2">
+
+  <isOnline>1</isOnline>
+
+  <statusRegister>1</statusRegister>
+
+  <temperature>19.76</temperature>
+  <ledAmplitude>915</ledAmplitude>
+  <pinADCAmplitude>0</pinADCAmplitude>
+
+  <channel id="1" unit="Volts">65.19</channel>
+  <channel id="2" unit="Volts">65.19</channel>
+  <channel id="3" unit="Volts">65.19</channel>
+  <channel id="4" unit="Volts">65.19</channel>
+  <channel id="5" unit="Volts">65.19</channel>
+  <channel id="6" unit="Volts">65.39</channel>
+  <channel id="7" unit="Volts">65.09</channel>
+  <channel id="8" unit="Volts">65.39</channel>
+  <channel id="9" unit="Volts">65.19</channel>
+  <channel id="10" unit="Volts">65.39</channel>
+
+    	
+    </module>
+<module id="3">
+
+  <isOnline>1</isOnline>
+
+  <statusRegister>1</statusRegister>
+
+  <temperature>19.55</temperature>
+  <ledAmplitude>877</ledAmplitude>
+  <pinADCAmplitude>0</pinADCAmplitude>
+
+  <channel id="1" unit="Volts">64.99</channel>
+  <channel id="2" unit="Volts">64.99</channel>
+  <channel id="3" unit="Volts">65.49</channel>
+  <channel id="4" unit="Volts">64.69</channel>
+  <channel id="5" unit="Volts">64.99</channel>
+  <channel id="6" unit="Volts">65.29</channel>
+  <channel id="7" unit="Volts">65.49</channel>
+  <channel id="8" unit="Volts">64.79</channel>
+  <channel id="9" unit="Volts">65.49</channel>
+  <channel id="10" unit="Volts">65.49</channel>
+
+    	
+    </module>
+<module id="4">
+
+  <isOnline>1</isOnline>
+
+  <statusRegister>1</statusRegister>
+
+  <temperature>19.67</temperature>
+  <ledAmplitude>1027</ledAmplitude>
+  <pinADCAmplitude>0</pinADCAmplitude>
+
+  <channel id="1" unit="Volts">65.29</channel>
+  <channel id="2" unit="Volts">64.79</channel>
+  <channel id="3" unit="Volts">64.99</channel>
+  <channel id="4" unit="Volts">64.89</channel>
+  <channel id="5" unit="Volts">65.39</channel>
+  <channel id="6" unit="Volts">65.39</channel>
+  <channel id="7" unit="Volts">64.89</channel>
+  <channel id="8" unit="Volts">64.99</channel>
+  <channel id="9" unit="Volts">65.09</channel>
+  <channel id="10" unit="Volts">64.89</channel>
+
+    	
+    </module>
+<module id="5">
+
+  <isOnline>1</isOnline>
+
+  <statusRegister>1</statusRegister>
+
+  <temperature>-12.78</temperature>
+  <ledAmplitude>912</ledAmplitude>
+  <pinADCAmplitude>0</pinADCAmplitude>
+
+  <channel id="1" unit="Volts">0.0</channel>
+  <channel id="2" unit="Volts">0.0</channel>
+  <channel id="3" unit="Volts">0.0</channel>
+  <channel id="4" unit="Volts">0.0</channel>
+  <channel id="5" unit="Volts">0.0</channel>
+  <channel id="6" unit="Volts">0.0</channel>
+  <channel id="7" unit="Volts">0.0</channel>
+  <channel id="8" unit="Volts">0.0</channel>
+  <channel id="9" unit="Volts">0.0</channel>
+  <channel id="10" unit="Volts">0.0</channel>
+
+    	
+    </module>
+<module id="6">
+
+  <isOnline>1</isOnline>
+
+  <statusRegister>1</statusRegister>
+
+  <temperature>19.99</temperature>
+  <ledAmplitude>925</ledAmplitude>
+  <pinADCAmplitude>0</pinADCAmplitude>
+
+  <channel id="1" unit="Volts">0.0</channel>
+  <channel id="2" unit="Volts">0.0</channel>
+  <channel id="3" unit="Volts">0.0</channel>
+  <channel id="4" unit="Volts">0.0</channel>
+  <channel id="5" unit="Volts">0.0</channel>
+  <channel id="6" unit="Volts">0.0</channel>
+  <channel id="7" unit="Volts">0.0</channel>
+  <channel id="8" unit="Volts">0.0</channel>
+  <channel id="9" unit="Volts">0.0</channel>
+  <channel id="10" unit="Volts">0.0</channel>
+
+    	
+    </module>
+<module id="7">
+
+  <isOnline>1</isOnline>
+
+  <statusRegister>1</statusRegister>
+
+  <temperature>20.41</temperature>
+  <ledAmplitude>857</ledAmplitude>
+  <pinADCAmplitude>0</pinADCAmplitude>
+
+  <channel id="1" unit="Volts">65.34</channel>
+  <channel id="2" unit="Volts">65.04</channel>
+  <channel id="3" unit="Volts">64.89</channel>
+  <channel id="4" unit="Volts">65.04</channel>
+  <channel id="5" unit="Volts">65.74</channel>
+  <channel id="6" unit="Volts">65.29</channel>
+  <channel id="7" unit="Volts">65.49</channel>
+  <channel id="8" unit="Volts">65.44</channel>
+  <channel id="9" unit="Volts">65.24</channel>
+  <channel id="10" unit="Volts">65.44</channel>
+
+    	
+    </module>
+<module id="8">
+
+  <isOnline>1</isOnline>
+
+  <statusRegister>1</statusRegister>
+
+  <temperature>-13.41</temperature>
+  <ledAmplitude>995</ledAmplitude>
+  <pinADCAmplitude>0</pinADCAmplitude>
+
+  <channel id="1" unit="Volts">65.39</channel>
+  <channel id="2" unit="Volts">65.59</channel>
+  <channel id="3" unit="Volts">64.99</channel>
+  <channel id="4" unit="Volts">64.69</channel>
+  <channel id="5" unit="Volts">65.29</channel>
+  <channel id="6" unit="Volts">64.69</channel>
+  <channel id="7" unit="Volts">65.19</channel>
+  <channel id="8" unit="Volts">65.09</channel>
+  <channel id="9" unit="Volts">64.89</channel>
+  <channel id="10" unit="Volts">65.09</channel>
+
+    	
+    </module>
+<module id="9">
+
+  <isOnline>1</isOnline>
+
+  <statusRegister>1</statusRegister>
+
+  <temperature>19.53</temperature>
+  <ledAmplitude>1221</ledAmplitude>
+  <pinADCAmplitude>0</pinADCAmplitude>
+
+  <channel id="1" unit="Volts">65.49</channel>
+  <channel id="2" unit="Volts">65.39</channel>
+  <channel id="3" unit="Volts">65.19</channel>
+  <channel id="4" unit="Volts">65.39</channel>
+  <channel id="5" unit="Volts">64.69</channel>
+  <channel id="6" unit="Volts">64.99</channel>
+  <channel id="7" unit="Volts">65.29</channel>
+  <channel id="8" unit="Volts">65.09</channel>
+  <channel id="9" unit="Volts">65.14</channel>
+  <channel id="10" unit="Volts">64.79</channel>
+
+    	
+    </module>
+<module id="10">
+
+  <isOnline>1</isOnline>
+
+  <statusRegister>1</statusRegister>
+
+  <temperature>19.71</temperature>
+  <ledAmplitude>784</ledAmplitude>
+  <pinADCAmplitude>0</pinADCAmplitude>
+
+  <channel id="1" unit="Volts">64.79</channel>
+  <channel id="2" unit="Volts">65.29</channel>
+  <channel id="3" unit="Volts">65.49</channel>
+  <channel id="4" unit="Volts">65.19</channel>
+  <channel id="5" unit="Volts">65.39</channel>
+  <channel id="6" unit="Volts">65.19</channel>
+  <channel id="7" unit="Volts">64.89</channel>
+  <channel id="8" unit="Volts">64.99</channel>
+  <channel id="9" unit="Volts">65.29</channel>
+  <channel id="10" unit="Volts">65.39</channel>
+
+    	
+    </module>
+<module id="11">
+
+  <isOnline>1</isOnline>
+
+  <statusRegister>1</statusRegister>
+
+  <temperature>19.93</temperature>
+  <ledAmplitude>952</ledAmplitude>
+  <pinADCAmplitude>0</pinADCAmplitude>
+
+  <channel id="1" unit="Volts">65.28</channel>
+  <channel id="2" unit="Volts">64.98</channel>
+  <channel id="3" unit="Volts">65.28</channel>
+  <channel id="4" unit="Volts">65.18</channel>
+  <channel id="5" unit="Volts">64.43</channel>
+  <channel id="6" unit="Volts">64.83</channel>
+  <channel id="7" unit="Volts">65.08</channel>
+  <channel id="8" unit="Volts">65.18</channel>
+  <channel id="9" unit="Volts">65.03</channel>
+  <channel id="10" unit="Volts">65.08</channel>
+
+    	
+    </module>
+<module id="12">
+
+  <isOnline>1</isOnline>
+
+  <statusRegister>1</statusRegister>
+
+  <temperature>20.20</temperature>
+  <ledAmplitude>834</ledAmplitude>
+  <pinADCAmplitude>0</pinADCAmplitude>
+
+  <channel id="1" unit="Volts">65.29</channel>
+  <channel id="2" unit="Volts">65.39</channel>
+  <channel id="3" unit="Volts">65.19</channel>
+  <channel id="4" unit="Volts">65.19</channel>
+  <channel id="5" unit="Volts">65.29</channel>
+  <channel id="6" unit="Volts">65.29</channel>
+  <channel id="7" unit="Volts">65.39</channel>
+  <channel id="8" unit="Volts">65.19</channel>
+  <channel id="9" unit="Volts">65.09</channel>
+  <channel id="10" unit="Volts">65.19</channel>
+
+    	
+    </module>
+<module id="13">
+
+  <isOnline>1</isOnline>
+
+  <statusRegister>1</statusRegister>
+
+  <temperature>19.55</temperature>
+  <ledAmplitude>925</ledAmplitude>
+  <pinADCAmplitude>0</pinADCAmplitude>
+
+  <channel id="1" unit="Volts">64.99</channel>
+  <channel id="2" unit="Volts">65.09</channel>
+  <channel id="3" unit="Volts">65.29</channel>
+  <channel id="4" unit="Volts">65.39</channel>
+  <channel id="5" unit="Volts">65.09</channel>
+  <channel id="6" unit="Volts">64.79</channel>
+  <channel id="7" unit="Volts">64.6</channel>
+  <channel id="8" unit="Volts">64.99</channel>
+  <channel id="9" unit="Volts">65.19</channel>
+  <channel id="10" unit="Volts">65.29</channel>
+
+    	
+    </module>
+<module id="14">
+
+  <isOnline>1</isOnline>
+
+  <statusRegister>1</statusRegister>
+
+  <temperature>19.40</temperature>
+  <ledAmplitude>855</ledAmplitude>
+  <pinADCAmplitude>0</pinADCAmplitude>
+
+  <channel id="1" unit="Volts">65.44</channel>
+  <channel id="2" unit="Volts">65.24</channel>
+  <channel id="3" unit="Volts">65.59</channel>
+  <channel id="4" unit="Volts">65.29</channel>
+  <channel id="5" unit="Volts">65.39</channel>
+  <channel id="6" unit="Volts">65.39</channel>
+  <channel id="7" unit="Volts">65.39</channel>
+  <channel id="8" unit="Volts">65.29</channel>
+  <channel id="9" unit="Volts">65.49</channel>
+  <channel id="10" unit="Volts">65.49</channel>
+
+    	
+    </module>
+<module id="15">
+
+  <isOnline>1</isOnline>
+
+  <statusRegister>1</statusRegister>
+
+  <temperature>19.90</temperature>
+  <ledAmplitude>774</ledAmplitude>
+  <pinADCAmplitude>0</pinADCAmplitude>
+
+  <channel id="1" unit="Volts">66.6</channel>
+  <channel id="2" unit="Volts">66.9</channel>
+  <channel id="3" unit="Volts">66.7</channel>
+  <channel id="4" unit="Volts">66.8</channel>
+  <channel id="5" unit="Volts">66.8</channel>
+  <channel id="6" unit="Volts">66.2</channel>
+  <channel id="7" unit="Volts">66.8</channel>
+  <channel id="8" unit="Volts">66.6</channel>
+  <channel id="9" unit="Volts">66.9</channel>
+  <channel id="10" unit="Volts">66.7</channel>
+
+    	
+    </module>
+<module id="16">
+
+  <isOnline>1</isOnline>
+
+  <statusRegister>1</statusRegister>
+
+  <temperature>20.16</temperature>
+  <ledAmplitude>888</ledAmplitude>
+  <pinADCAmplitude>0</pinADCAmplitude>
+
+  <channel id="1" unit="Volts">64.99</channel>
+  <channel id="2" unit="Volts">64.79</channel>
+  <channel id="3" unit="Volts">65.39</channel>
+  <channel id="4" unit="Volts">64.99</channel>
+  <channel id="5" unit="Volts">65.39</channel>
+  <channel id="6" unit="Volts">65.44</channel>
+  <channel id="7" unit="Volts">64.99</channel>
+  <channel id="8" unit="Volts">65.49</channel>
+  <channel id="9" unit="Volts">65.39</channel>
+  <channel id="10" unit="Volts">65.29</channel>
+
+    	
+    </module>
+<module id="17">
+
+  <isOnline>1</isOnline>
+
+  <statusRegister>1</statusRegister>
+
+  <temperature>20.35</temperature>
+  <ledAmplitude>988</ledAmplitude>
+  <pinADCAmplitude>0</pinADCAmplitude>
+
+  <channel id="1" unit="Volts">65.4</channel>
+  <channel id="2" unit="Volts">65.6</channel>
+  <channel id="3" unit="Volts">65.4</channel>
+  <channel id="4" unit="Volts">65.7</channel>
+  <channel id="5" unit="Volts">65.7</channel>
+  <channel id="6" unit="Volts">65.7</channel>
+  <channel id="7" unit="Volts">65.4</channel>
+  <channel id="8" unit="Volts">65.4</channel>
+  <channel id="9" unit="Volts">65.4</channel>
+  <channel id="10" unit="Volts">65.7</channel>
+
+    	
+    </module>
+<module id="18">
+
+  <isOnline>1</isOnline>
+
+  <statusRegister>1</statusRegister>
+
+  <temperature>-13.51</temperature>
+  <ledAmplitude>1072</ledAmplitude>
+  <pinADCAmplitude>0</pinADCAmplitude>
+
+  <channel id="1" unit="Volts">65.4</channel>
+  <channel id="2" unit="Volts">65.4</channel>
+  <channel id="3" unit="Volts">65.4</channel>
+  <channel id="4" unit="Volts">65.4</channel>
+  <channel id="5" unit="Volts">65.4</channel>
+  <channel id="6" unit="Volts">65.4</channel>
+  <channel id="7" unit="Volts">65.4</channel>
+  <channel id="8" unit="Volts">65.4</channel>
+  <channel id="9" unit="Volts">65.4</channel>
+  <channel id="10" unit="Volts">65.4</channel>
+
+    	
+    </module>
+<module id="19">
+
+  <isOnline>1</isOnline>
+
+  <statusRegister>1</statusRegister>
+
+  <temperature>20.50</temperature>
+  <ledAmplitude>1094</ledAmplitude>
+  <pinADCAmplitude>0</pinADCAmplitude>
+
+  <channel id="1" unit="Volts">65.7</channel>
+  <channel id="2" unit="Volts">65.4</channel>
+  <channel id="3" unit="Volts">65.9</channel>
+  <channel id="4" unit="Volts">65.4</channel>
+  <channel id="5" unit="Volts">65.21</channel>
+  <channel id="6" unit="Volts">65.4</channel>
+  <channel id="7" unit="Volts">65.5</channel>
+  <channel id="8" unit="Volts">65.21</channel>
+  <channel id="9" unit="Volts">65.4</channel>
+  <channel id="10" unit="Volts">65.4</channel>
+
+    	
+    </module>
+<module id="20">
+
+  <isOnline>1</isOnline>
+
+  <statusRegister>1</statusRegister>
+
+  <temperature>19.65</temperature>
+  <ledAmplitude>871</ledAmplitude>
+  <pinADCAmplitude>0</pinADCAmplitude>
+
+  <channel id="1" unit="Volts">64.91</channel>
+  <channel id="2" unit="Volts">64.91</channel>
+  <channel id="3" unit="Volts">64.91</channel>
+  <channel id="4" unit="Volts">64.91</channel>
+  <channel id="5" unit="Volts">64.91</channel>
+  <channel id="6" unit="Volts">64.91</channel>
+  <channel id="7" unit="Volts">64.91</channel>
+  <channel id="8" unit="Volts">64.91</channel>
+  <channel id="9" unit="Volts">64.91</channel>
+  <channel id="10" unit="Volts">64.91</channel>
+
+    	
+    </module>
+<module id="21">
+
+  <isOnline>1</isOnline>
+
+  <statusRegister>1</statusRegister>
+
+  <temperature>-13.15</temperature>
+  <ledAmplitude>958</ledAmplitude>
+  <pinADCAmplitude>0</pinADCAmplitude>
+
+  <channel id="1" unit="Volts">65.4</channel>
+  <channel id="2" unit="Volts">65.6</channel>
+  <channel id="3" unit="Volts">65.4</channel>
+  <channel id="4" unit="Volts">65.5</channel>
+  <channel id="5" unit="Volts">65.4</channel>
+  <channel id="6" unit="Volts">65.4</channel>
+  <channel id="7" unit="Volts">65.4</channel>
+  <channel id="8" unit="Volts">65.9</channel>
+  <channel id="9" unit="Volts">65.4</channel>
+  <channel id="10" unit="Volts">65.7</channel>
+
+    	
+    </module>
+<module id="22">
+
+  <isOnline>1</isOnline>
+
+  <statusRegister>1</statusRegister>
+
+  <temperature>-12.97</temperature>
+  <ledAmplitude>1058</ledAmplitude>
+  <pinADCAmplitude>0</pinADCAmplitude>
+
+  <channel id="1" unit="Volts">66.2</channel>
+  <channel id="2" unit="Volts">66.4</channel>
+  <channel id="3" unit="Volts">66.4</channel>
+  <channel id="4" unit="Volts">66.4</channel>
+  <channel id="5" unit="Volts">66.1</channel>
+  <channel id="6" unit="Volts">66.2</channel>
+  <channel id="7" unit="Volts">66.7</channel>
+  <channel id="8" unit="Volts">66.7</channel>
+  <channel id="9" unit="Volts">66.7</channel>
+  <channel id="10" unit="Volts">66.3</channel>
+
+    	
+    </module>
+<module id="23">
+
+  <isOnline>1</isOnline>
+
+  <statusRegister>1</statusRegister>
+
+  <temperature>20.28</temperature>
+  <ledAmplitude>996</ledAmplitude>
+  <pinADCAmplitude>0</pinADCAmplitude>
+
+  <channel id="1" unit="Volts">66.5</channel>
+  <channel id="2" unit="Volts">66.4</channel>
+  <channel id="3" unit="Volts">66.5</channel>
+  <channel id="4" unit="Volts">66.3</channel>
+  <channel id="5" unit="Volts">66.4</channel>
+  <channel id="6" unit="Volts">66.4</channel>
+  <channel id="7" unit="Volts">66.4</channel>
+  <channel id="8" unit="Volts">66.3</channel>
+  <channel id="9" unit="Volts">66.9</channel>
+  <channel id="10" unit="Volts">66.4</channel>
+
+    	
+    </module>
+<module id="24">
+
+  <isOnline>1</isOnline>
+
+  <statusRegister>1</statusRegister>
+
+  <temperature>-13.81</temperature>
+  <ledAmplitude>1029</ledAmplitude>
+  <pinADCAmplitude>0</pinADCAmplitude>
+
+  <channel id="1" unit="Volts">0.0</channel>
+  <channel id="2" unit="Volts">0.0</channel>
+  <channel id="3" unit="Volts">0.0</channel>
+  <channel id="4" unit="Volts">0.0</channel>
+  <channel id="5" unit="Volts">0.0</channel>
+  <channel id="6" unit="Volts">0.0</channel>
+  <channel id="7" unit="Volts">0.0</channel>
+  <channel id="8" unit="Volts">0.0</channel>
+  <channel id="9" unit="Volts">0.0</channel>
+  <channel id="10" unit="Volts">0.0</channel>
+
+    	
+    </module>
+<module id="25">
+
+  <isOnline>1</isOnline>
+
+  <statusRegister>1</statusRegister>
+
+  <temperature>20.22</temperature>
+  <ledAmplitude>1027</ledAmplitude>
+  <pinADCAmplitude>0</pinADCAmplitude>
+
+  <channel id="1" unit="Volts">66.4</channel>
+  <channel id="2" unit="Volts">66.2</channel>
+  <channel id="3" unit="Volts">66.7</channel>
+  <channel id="4" unit="Volts">66.7</channel>
+  <channel id="5" unit="Volts">66.7</channel>
+  <channel id="6" unit="Volts">66.4</channel>
+  <channel id="7" unit="Volts">66.5</channel>
+  <channel id="8" unit="Volts">66.4</channel>
+  <channel id="9" unit="Volts">66.4</channel>
+  <channel id="10" unit="Volts">66.4</channel>
+
+    	
+    </module>
+<module id="26">
+
+  <isOnline>1</isOnline>
+
+  <statusRegister>1</statusRegister>
+
+  <temperature>20.18</temperature>
+  <ledAmplitude>1038</ledAmplitude>
+  <pinADCAmplitude>0</pinADCAmplitude>
+
+  <channel id="1" unit="Volts">66.1</channel>
+  <channel id="2" unit="Volts">66.7</channel>
+  <channel id="3" unit="Volts">66.4</channel>
+  <channel id="4" unit="Volts">66.4</channel>
+  <channel id="5" unit="Volts">66.4</channel>
+  <channel id="6" unit="Volts">66.7</channel>
+  <channel id="7" unit="Volts">66.4</channel>
+  <channel id="8" unit="Volts">66.5</channel>
+  <channel id="9" unit="Volts">66.4</channel>
+  <channel id="10" unit="Volts">66.5</channel>
+
+    	
+    </module>
+<module id="27">
+
+  <isOnline>1</isOnline>
+
+  <statusRegister>1</statusRegister>
+
+  <temperature>-13.87</temperature>
+  <ledAmplitude>1042</ledAmplitude>
+  <pinADCAmplitude>0</pinADCAmplitude>
+
+  <channel id="1" unit="Volts">66.7</channel>
+  <channel id="2" unit="Volts">67.0</channel>
+  <channel id="3" unit="Volts">66.8</channel>
+  <channel id="4" unit="Volts">66.82</channel>
+  <channel id="5" unit="Volts">66.8</channel>
+  <channel id="6" unit="Volts">67.0</channel>
+  <channel id="7" unit="Volts">66.8</channel>
+  <channel id="8" unit="Volts">66.6</channel>
+  <channel id="9" unit="Volts">66.7</channel>
+  <channel id="10" unit="Volts">66.4</channel>
+
+    	
+    </module>
+<module id="28">
+
+  <isOnline>1</isOnline>
+
+  <statusRegister>1</statusRegister>
+
+  <temperature>19.04</temperature>
+  <ledAmplitude>979</ledAmplitude>
+  <pinADCAmplitude>0</pinADCAmplitude>
+
+  <channel id="1" unit="Volts">66.75</channel>
+  <channel id="2" unit="Volts">66.7</channel>
+  <channel id="3" unit="Volts">66.45</channel>
+  <channel id="4" unit="Volts">66.5</channel>
+  <channel id="5" unit="Volts">66.06</channel>
+  <channel id="6" unit="Volts">66.75</channel>
+  <channel id="7" unit="Volts">66.85</channel>
+  <channel id="8" unit="Volts">66.65</channel>
+  <channel id="9" unit="Volts">66.65</channel>
+  <channel id="10" unit="Volts">66.55</channel>
+
+    	
+    </module>
+<module id="29">
+
+  <isOnline>1</isOnline>
+
+  <statusRegister>1</statusRegister>
+
+  <temperature>19.78</temperature>
+  <ledAmplitude>998</ledAmplitude>
+  <pinADCAmplitude>0</pinADCAmplitude>
+
+  <channel id="1" unit="Volts">66.0</channel>
+  <channel id="2" unit="Volts">66.0</channel>
+  <channel id="3" unit="Volts">66.0</channel>
+  <channel id="4" unit="Volts">66.0</channel>
+  <channel id="5" unit="Volts">66.0</channel>
+  <channel id="6" unit="Volts">66.0</channel>
+  <channel id="7" unit="Volts">66.0</channel>
+  <channel id="8" unit="Volts">66.0</channel>
+  <channel id="9" unit="Volts">66.0</channel>
+  <channel id="10" unit="Volts">66.0</channel>
+
+    	
+    </module>
+<module id="30">
+
+  <isOnline>1</isOnline>
+
+  <statusRegister>1</statusRegister>
+
+  <temperature>20.39</temperature>
+  <ledAmplitude>916</ledAmplitude>
+  <pinADCAmplitude>0</pinADCAmplitude>
+
+  <channel id="1" unit="Volts">66.2</channel>
+  <channel id="2" unit="Volts">66.2</channel>
+  <channel id="3" unit="Volts">66.2</channel>
+  <channel id="4" unit="Volts">66.2</channel>
+  <channel id="5" unit="Volts">66.2</channel>
+  <channel id="6" unit="Volts">66.2</channel>
+  <channel id="7" unit="Volts">66.0</channel>
+  <channel id="8" unit="Volts">66.2</channel>
+  <channel id="9" unit="Volts">66.0</channel>
+  <channel id="10" unit="Volts">65.8</channel>
+
+    	
+    </module>
+<module id="31">
+
+  <isOnline>1</isOnline>
+
+  <statusRegister>1</statusRegister>
+
+  <temperature>20.22</temperature>
+  <ledAmplitude>1096</ledAmplitude>
+  <pinADCAmplitude>0</pinADCAmplitude>
+
+  <channel id="1" unit="Volts">66.8</channel>
+  <channel id="2" unit="Volts">66.8</channel>
+  <channel id="3" unit="Volts">66.8</channel>
+  <channel id="4" unit="Volts">66.8</channel>
+  <channel id="5" unit="Volts">66.7</channel>
+  <channel id="6" unit="Volts">66.9</channel>
+  <channel id="7" unit="Volts">66.8</channel>
+  <channel id="8" unit="Volts">66.3</channel>
+  <channel id="9" unit="Volts">66.9</channel>
+  <channel id="10" unit="Volts">66.6</channel>
+
+    	
+    </module>
+<module id="32">
+
+  <isOnline>1</isOnline>
+
+  <statusRegister>1</statusRegister>
+
+  <temperature>-12.80</temperature>
+  <ledAmplitude>1041</ledAmplitude>
+  <pinADCAmplitude>0</pinADCAmplitude>
+
+  <channel id="1" unit="Volts">65.61</channel>
+  <channel id="2" unit="Volts">65.71</channel>
+  <channel id="3" unit="Volts">64.81</channel>
+  <channel id="4" unit="Volts">65.51</channel>
+  <channel id="5" unit="Volts">65.41</channel>
+  <channel id="6" unit="Volts">65.61</channel>
+  <channel id="7" unit="Volts">65.11</channel>
+  <channel id="8" unit="Volts">65.31</channel>
+  <channel id="9" unit="Volts">65.41</channel>
+  <channel id="10" unit="Volts">65.41</channel>
+
+    	
+    </module>
+<module id="33">
+
+  <isOnline>1</isOnline>
+
+  <statusRegister>1</statusRegister>
+
+  <temperature>20.87</temperature>
+  <ledAmplitude>1389</ledAmplitude>
+  <pinADCAmplitude>0</pinADCAmplitude>
+
+  <channel id="1" unit="Volts">66.5</channel>
+  <channel id="2" unit="Volts">66.9</channel>
+  <channel id="3" unit="Volts">66.8</channel>
+  <channel id="4" unit="Volts">66.9</channel>
+  <channel id="5" unit="Volts">66.9</channel>
+  <channel id="6" unit="Volts">66.8</channel>
+  <channel id="7" unit="Volts">66.9</channel>
+  <channel id="8" unit="Volts">67.0</channel>
+  <channel id="9" unit="Volts">66.9</channel>
+  <channel id="10" unit="Volts">66.8</channel>
+
+    	
+    </module>
+<module id="34">
+
+  <isOnline>1</isOnline>
+
+  <statusRegister>1</statusRegister>
+
+  <temperature>19.74</temperature>
+  <ledAmplitude>1012</ledAmplitude>
+  <pinADCAmplitude>0</pinADCAmplitude>
+
+  <channel id="1" unit="Volts">66.7</channel>
+  <channel id="2" unit="Volts">66.8</channel>
+  <channel id="3" unit="Volts">66.8</channel>
+  <channel id="4" unit="Volts">66.7</channel>
+  <channel id="5" unit="Volts">66.2</channel>
+  <channel id="6" unit="Volts">66.6</channel>
+  <channel id="7" unit="Volts">66.8</channel>
+  <channel id="8" unit="Volts">67.0</channel>
+  <channel id="9" unit="Volts">66.7</channel>
+  <channel id="10" unit="Volts">67.0</channel>
+
+    	
+    </module>
+<module id="35">
+
+  <isOnline>1</isOnline>
+
+  <statusRegister>1</statusRegister>
+
+  <temperature>20.43</temperature>
+  <ledAmplitude>1527</ledAmplitude>
+  <pinADCAmplitude>0</pinADCAmplitude>
+
+  <channel id="1" unit="Volts">66.8</channel>
+  <channel id="2" unit="Volts">66.8</channel>
+  <channel id="3" unit="Volts">66.7</channel>
+  <channel id="4" unit="Volts">66.9</channel>
+  <channel id="5" unit="Volts">67.0</channel>
+  <channel id="6" unit="Volts">66.8</channel>
+  <channel id="7" unit="Volts">67.0</channel>
+  <channel id="8" unit="Volts">66.9</channel>
+  <channel id="9" unit="Volts">66.9</channel>
+  <channel id="10" unit="Volts">66.8</channel>
+
+    	
+    </module>
+<module id="36">
+
+  <isOnline>1</isOnline>
+
+  <statusRegister>1</statusRegister>
+
+  <temperature>-11.07</temperature>
+  <ledAmplitude>1439</ledAmplitude>
+  <pinADCAmplitude>0</pinADCAmplitude>
+
+  <channel id="1" unit="Volts">66.9</channel>
+  <channel id="2" unit="Volts">66.9</channel>
+  <channel id="3" unit="Volts">66.5</channel>
+  <channel id="4" unit="Volts">66.9</channel>
+  <channel id="5" unit="Volts">66.5</channel>
+  <channel id="6" unit="Volts">66.6</channel>
+  <channel id="7" unit="Volts">66.7</channel>
+  <channel id="8" unit="Volts">66.9</channel>
+  <channel id="9" unit="Volts">66.9</channel>
+  <channel id="10" unit="Volts">66.9</channel>
+
+    	
+    </module>
+<module id="37">
+
+  <isOnline>1</isOnline>
+
+  <statusRegister>1</statusRegister>
+
+  <temperature>19.46</temperature>
+  <ledAmplitude>1000</ledAmplitude>
+  <pinADCAmplitude>0</pinADCAmplitude>
+
+  <channel id="1" unit="Volts">66.2</channel>
+  <channel id="2" unit="Volts">66.4</channel>
+  <channel id="3" unit="Volts">66.4</channel>
+  <channel id="4" unit="Volts">66.4</channel>
+  <channel id="5" unit="Volts">66.4</channel>
+  <channel id="6" unit="Volts">66.6</channel>
+  <channel id="7" unit="Volts">66.01</channel>
+  <channel id="8" unit="Volts">66.5</channel>
+  <channel id="9" unit="Volts">66.3</channel>
+  <channel id="10" unit="Volts">66.8</channel>
+
+    	
+    </module>
+<module id="38">
+
+  <isOnline>1</isOnline>
+
+  <statusRegister>1</statusRegister>
+
+  <temperature>20.28</temperature>
+  <ledAmplitude>1007</ledAmplitude>
+  <pinADCAmplitude>0</pinADCAmplitude>
+
+  <channel id="1" unit="Volts">66.3</channel>
+  <channel id="2" unit="Volts">66.2</channel>
+  <channel id="3" unit="Volts">66.2</channel>
+  <channel id="4" unit="Volts">66.4</channel>
+  <channel id="5" unit="Volts">66.4</channel>
+  <channel id="6" unit="Volts">66.3</channel>
+  <channel id="7" unit="Volts">66.3</channel>
+  <channel id="8" unit="Volts">66.1</channel>
+  <channel id="9" unit="Volts">66.3</channel>
+  <channel id="10" unit="Volts">66.5</channel>
+
+    	
+    </module>
+<module id="39">
+
+  <isOnline>1</isOnline>
+
+  <statusRegister>1</statusRegister>
+
+  <temperature>-12.56</temperature>
+  <ledAmplitude>945</ledAmplitude>
+  <pinADCAmplitude>0</pinADCAmplitude>
+
+  <channel id="1" unit="Volts">66.01</channel>
+  <channel id="2" unit="Volts">65.01</channel>
+  <channel id="3" unit="Volts">65.51</channel>
+  <channel id="4" unit="Volts">65.11</channel>
+  <channel id="5" unit="Volts">65.31</channel>
+  <channel id="6" unit="Volts">65.11</channel>
+  <channel id="7" unit="Volts">66.01</channel>
+  <channel id="8" unit="Volts">65.11</channel>
+  <channel id="9" unit="Volts">65.61</channel>
+  <channel id="10" unit="Volts">65.41</channel>
+
+    	
+    </module>
+<module id="40">
+
+  <isOnline>1</isOnline>
+
+  <statusRegister>1</statusRegister>
+
+  <temperature>-11.28</temperature>
+  <ledAmplitude>994</ledAmplitude>
+  <pinADCAmplitude>0</pinADCAmplitude>
+
+  <channel id="1" unit="Volts">65.8</channel>
+  <channel id="2" unit="Volts">66.0</channel>
+  <channel id="3" unit="Volts">65.4</channel>
+  <channel id="4" unit="Volts">66.1</channel>
+  <channel id="5" unit="Volts">66.2</channel>
+  <channel id="6" unit="Volts">59.3</channel>
+  <channel id="7" unit="Volts">65.7</channel>
+  <channel id="8" unit="Volts">66.1</channel>
+  <channel id="9" unit="Volts">65.6</channel>
+  <channel id="10" unit="Volts">66.0</channel>
+
+    	
+    </module>
+<module id="41">
+
+  <isOnline>1</isOnline>
+
+  <statusRegister>1</statusRegister>
+
+  <temperature>19.97</temperature>
+  <ledAmplitude>1000</ledAmplitude>
+  <pinADCAmplitude>0</pinADCAmplitude>
+
+  <channel id="1" unit="Volts">66.8</channel>
+  <channel id="2" unit="Volts">66.9</channel>
+  <channel id="3" unit="Volts">66.8</channel>
+  <channel id="4" unit="Volts">66.8</channel>
+  <channel id="5" unit="Volts">66.8</channel>
+  <channel id="6" unit="Volts">66.8</channel>
+  <channel id="7" unit="Volts">66.8</channel>
+  <channel id="8" unit="Volts">66.3</channel>
+  <channel id="9" unit="Volts">66.7</channel>
+  <channel id="10" unit="Volts">66.8</channel>
+
+    	
+    </module>
+<module id="42">
+
+  <isOnline>1</isOnline>
+
+  <statusRegister>1</statusRegister>
+
+  <temperature>19.69</temperature>
+  <ledAmplitude>1006</ledAmplitude>
+  <pinADCAmplitude>0</pinADCAmplitude>
+
+  <channel id="1" unit="Volts">66.3</channel>
+  <channel id="2" unit="Volts">66.01</channel>
+  <channel id="3" unit="Volts">66.3</channel>
+  <channel id="4" unit="Volts">66.3</channel>
+  <channel id="5" unit="Volts">66.1</channel>
+  <channel id="6" unit="Volts">66.5</channel>
+  <channel id="7" unit="Volts">66.5</channel>
+  <channel id="8" unit="Volts">66.3</channel>
+  <channel id="9" unit="Volts">66.5</channel>
+  <channel id="10" unit="Volts">66.3</channel>
+
+    	
+    </module>
+<module id="43">
+
+  <isOnline>1</isOnline>
+
+  <statusRegister>1</statusRegister>
+
+  <temperature>19.99</temperature>
+  <ledAmplitude>915</ledAmplitude>
+  <pinADCAmplitude>0</pinADCAmplitude>
+
+  <channel id="1" unit="Volts">66.5</channel>
+  <channel id="2" unit="Volts">66.2</channel>
+  <channel id="3" unit="Volts">66.4</channel>
+  <channel id="4" unit="Volts">66.7</channel>
+  <channel id="5" unit="Volts">66.3</channel>
+  <channel id="6" unit="Volts">66.7</channel>
+  <channel id="7" unit="Volts">66.7</channel>
+  <channel id="8" unit="Volts">66.5</channel>
+  <channel id="9" unit="Volts">66.5</channel>
+  <channel id="10" unit="Volts">66.4</channel>
+
+    	
+    </module>
+<module id="44">
+
+  <isOnline>1</isOnline>
+
+  <statusRegister>1</statusRegister>
+
+  <temperature>19.86</temperature>
+  <ledAmplitude>976</ledAmplitude>
+  <pinADCAmplitude>0</pinADCAmplitude>
+
+  <channel id="1" unit="Volts">67.4</channel>
+  <channel id="2" unit="Volts">68.0</channel>
+  <channel id="3" unit="Volts">67.9</channel>
+  <channel id="4" unit="Volts">67.7</channel>
+  <channel id="5" unit="Volts">67.9</channel>
+  <channel id="6" unit="Volts">67.9</channel>
+  <channel id="7" unit="Volts">67.9</channel>
+  <channel id="8" unit="Volts">67.5</channel>
+  <channel id="9" unit="Volts">68.1</channel>
+  <channel id="10" unit="Volts">68.0</channel>
+
+    	
+    </module>
+    
+<module id="45">
+
+  <isOnline>1</isOnline>
+
+  <statusRegister>1</statusRegister>
+
+  <temperature>19.86</temperature>
+  <ledAmplitude>976</ledAmplitude>
+  <pinADCAmplitude>0</pinADCAmplitude>
+
+  <channel id="1" unit="Volts">67.4</channel>
+  <channel id="2" unit="Volts">68.0</channel>
+  <channel id="3" unit="Volts">67.9</channel>
+  <channel id="4" unit="Volts">67.7</channel>
+  <channel id="5" unit="Volts">67.9</channel>
+  <channel id="6" unit="Volts">67.9</channel>
+  <channel id="7" unit="Volts">67.9</channel>
+  <channel id="8" unit="Volts">67.5</channel>
+  <channel id="9" unit="Volts">68.1</channel>
+  <channel id="10" unit="Volts">68.0</channel>
+
+    	
+    </module>
+</config>
