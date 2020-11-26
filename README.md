@@ -1,21 +1,25 @@
 # README #
 
-This README would normally document whatever steps are necessary to get your application up and running.
-
-### What is this repository for? ###
-
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+DCS for Forward Hadron Calorimeters based on HVsys hardware
 
 ### How do I get set up? ###
 
 * Summary of set up
+
+Get python 3.7+ running
+
 * Configuration
 * Dependencies
+
+See requirements.txt
+
 * Database configuration
+#TODO 
+
 * How to run tests
+#TODO 
 * Deployment instructions
+#TODO 
 
 ### Contribution guidelines ###
 
@@ -23,7 +27,9 @@ This README would normally document whatever steps are necessary to get your app
 * Code review
 * Other guidelines
 
-### Who do I talk to? ###
+### Contacts ###
 
 * Repo owner or admin
-* Other community or team contact
+opetukhov@inr.ru
+https://bitbucket.org/legrus/pyslow/
+
