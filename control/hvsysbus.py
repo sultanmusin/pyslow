@@ -22,12 +22,11 @@ from task import *
 from partstate import *
 
 
-class HVsysSystemModule:
+class HVsysBus:
     IP_PORT = 4001
     MAX_BURST_COMMANDS = 2
 
     def __init__(self, config):
-        #TODO read from cfg
         self.id = config.id
         self.port = config.port
         self.task_queue = asyncio.Queue(1000)
@@ -51,7 +50,7 @@ class HVsysSystemModule:
         return self.part_cache[addr]
 
     async def connect(self):
-        self.reader, self.writer = await asyncio.open_connection(self.port, HVsysSystemModule.IP_PORT)
+        self.reader, self.writer = await asyncio.open_connection(self.port, HVsysBus.IP_PORT)
 
     async def disconnect(self):
         self.writer.close()

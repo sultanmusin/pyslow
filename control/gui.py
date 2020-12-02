@@ -22,6 +22,7 @@ sys.path.append('lib/hvsys')
 import config
 from message import Message
 from detector import *
+from hvsyssupply import HVsysSupply
 
 
 configuration = None
@@ -363,11 +364,11 @@ class MainWindow(wx.Frame):
 #        for part in moduleConfig.parts:
         asyncio.create_task(detector.poll_module_important(moduleId, self.DisplayValueOnComplete), name="poll_module_important")
 
-    def DisplayValueOnComplete(self, capability, value):
+    def DisplayValueOnComplete(self, part, capability, value):
         
         print("DisplayValueOnComplete: %s=%s"%(capability, value))
         if capability in self.hvControls: 
-            str_value = HVsysSupply.valueToString(capability, value)
+            str_value = part.valueToString(capability, value)
             self.hvControls[capability].SetValue(str_value)
 
     def OnAbout(self,e):
