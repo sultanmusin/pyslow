@@ -453,7 +453,7 @@ async def main():
     loop.set_exception_handler(handler)
 
     try:
-        for id, sm in detector.systemModules.items():
+        for id, sm in detector.buses.items():
             await asyncio.create_task(sm.connect(), name="Connect to system module")
             asyncio.create_task(sm.send(), name="System module sending loop")
     except OSError as e:
