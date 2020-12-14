@@ -1,0 +1,138 @@
+Old SC poll procedure (HV ON)
+===
+showCurrentModuleState is called
+getSetVoltages called for moduleId = 40
+(getSetVoltages) supply.CHAN_CALIB = 328
+(getSetVoltages) readings = [1998, 1998, 1998, 1998, 1998, 1998, 1998, 1998, 1998, 1998]
+getMeasVoltages is called for moduleId = 40
+(getMeasVoltages) supply.CHAN_CALIB = 328
+(getMeasVoltages) readings = [1998, 1998, 1998, 1998, 1998, 1998, 1998, 1998, 1998, 1998]
+Get pedSet v, calibration = 3157, 5163, reading = 8399, voltage = 71.11
+getPedestalMeasVoltage is called for moduleId = 40
+Get pedMeas v, calibration = 3157, 5163, reading = 8399, voltage = 71.11
+No errorMask found for module: 40
+Module = 40
+[ 71.33, 71.33, 71.33, 71.33, 71.33, 71.33, 71.33, 71.33, 71.33, 71.33, ]
+showCurrentModuleState is finished
+===
+Old SC poll procedure (HV OFF) 
+===
+showCurrentModuleState is called
+getSetVoltages called for moduleId = 40
+(getSetVoltages) supply.CHAN_CALIB = 328
+(getSetVoltages) readings = [1998, 1998, 1998, 1998, 1998, 1998, 1998, 1998, 1998, 1998]
+getMeasVoltages is called for moduleId = 40
+(getMeasVoltages) supply.CHAN_CALIB = 328
+(getMeasVoltages) readings = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+Get pedSet v, calibration = 3157, 5163, reading = 8399, voltage = 71.11
+getPedestalMeasVoltage is called for moduleId = 40
+Get pedMeas v, calibration = 3157, 5163, reading = 0, voltage = 29.97
+No errorMask found for module: 40
+Module = 40
+[ 71.33, 71.33, 71.33, 71.33, 71.33, 71.33, 71.33, 71.33, 71.33, 71.33, ]
+showCurrentModuleState is finished
+===
+Terminal view: 
+===
+07ce
+07ce
+07ce
+07ce
+07ce
+07ce
+07ce
+07ce
+07ce
+07ce
+0000
+0000
+0000
+0000
+0000
+0000
+0000
+0000
+0000
+20cf
+0000
+0002
+08b2
+08b2
+0064
+03e8
+0003
+014d
+0064
+0000
+===
+New SC (hv off): 
+HV Supply/102/CELL_ID: r6600 = 32787 (0x8013)
+HV Supply/102/STATUS: r6602 = 2 (0x0002)
+HV Supply/102/1/SET_VOLTAGE: r6604 = 1998 (0x07ce)
+HV Supply/102/2/SET_VOLTAGE: r6606 = 1998 (0x07ce)
+HV Supply/102/3/SET_VOLTAGE: r6608 = 1998 (0x07ce)
+HV Supply/102/4/SET_VOLTAGE: r660a = 1998 (0x07ce)
+HV Supply/102/5/SET_VOLTAGE: r660c = 1998 (0x07ce)
+HV Supply/102/6/SET_VOLTAGE: r660e = 1998 (0x07ce)
+HV Supply/102/7/SET_VOLTAGE: r6610 = 1998 (0x07ce)
+HV Supply/102/8/SET_VOLTAGE: r6612 = 1998 (0x07ce)
+HV Supply/102/9/SET_VOLTAGE: r6614 = 1998 (0x07ce)
+HV Supply/102/10/SET_VOLTAGE: r6616 = 1998 (0x07ce)
+HV Supply/102/SET_PEDESTAL_VOLTAGE: r6618 = 8410 (0x20da)
+HV Supply/102/RAMP_TIME: r6626 = 1 (0x0001)
+HV Supply/102/TEMPERATURE: r6628 = 2178 (0x0882)
+HV Supply/102/RAMP_STATUS: r662c = 0 (0x0000)
+HV Supply/102/1/MEAS_VOLTAGE: r662e = 0 (0x0000)
+HV Supply/102/2/MEAS_VOLTAGE: r6630 = 0 (0x0000)
+HV Supply/102/3/MEAS_VOLTAGE: r6632 = 0 (0x0000)
+HV Supply/102/4/MEAS_VOLTAGE: r6634 = 0 (0x0000)
+HV Supply/102/5/MEAS_VOLTAGE: r6636 = 0 (0x0000)
+HV Supply/102/6/MEAS_VOLTAGE: r6638 = 0 (0x0000)
+HV Supply/102/7/MEAS_VOLTAGE: r663a = 0 (0x0000)
+HV Supply/102/8/MEAS_VOLTAGE: r663c = 0 (0x0000)
+HV Supply/102/9/MEAS_VOLTAGE: r663e = 0 (0x0000)
+HV Supply/102/10/MEAS_VOLTAGE: r6640 = 0 (0x0000)
+HV Supply/102/MEAS_PEDESTAL_VOLTAGE: r6642 = 0 (0x0000)
+HV Supply/102/VOLTAGE_CALIBRATION: r6650 = 328 (0x0148)
+HV Supply/102/PEDESTAL_VOLTAGE_CALIBRATION_MIN: r6654 = 3157 (0x0c55)
+HV Supply/102/PEDESTAL_VOLTAGE_CALIBRATION_MAX: r6652 = 5163 (0x142b)
+HV Supply/102/VERSION_DATE_LOW: r6656 = 5613 (0x15ed)
+HV Supply/102/VERSION_DATE_HIGH: r6658 = 308 (0x0134)
+HV Supply/102/CELL_ADDRESS: r665c = 24957 (0x617d)
+
+
+New SC (HV ON):
+
+HV Supply/102/CELL_ID: r6600 = 32787 (0x8013)
+HV Supply/102/STATUS: r6602 = 1 (0x0001)
+HV Supply/102/1/SET_VOLTAGE: r6604 = 1998 (0x07ce)
+HV Supply/102/2/SET_VOLTAGE: r6606 = 1998 (0x07ce)
+HV Supply/102/3/SET_VOLTAGE: r6608 = 1998 (0x07ce)
+HV Supply/102/4/SET_VOLTAGE: r660a = 1998 (0x07ce)
+HV Supply/102/5/SET_VOLTAGE: r660c = 1998 (0x07ce)
+HV Supply/102/6/SET_VOLTAGE: r660e = 1998 (0x07ce)
+HV Supply/102/7/SET_VOLTAGE: r6610 = 1998 (0x07ce)
+HV Supply/102/8/SET_VOLTAGE: r6612 = 1998 (0x07ce)
+HV Supply/102/9/SET_VOLTAGE: r6614 = 1998 (0x07ce)
+HV Supply/102/10/SET_VOLTAGE: r6616 = 1998 (0x07ce)
+HV Supply/102/SET_PEDESTAL_VOLTAGE: r6618 = 8413 (0x20dd)
+HV Supply/102/RAMP_TIME: r6626 = 1 (0x0001)
+HV Supply/102/TEMPERATURE: r6628 = 2177 (0x0881)
+HV Supply/102/RAMP_STATUS: r662c = 0 (0x0000)
+HV Supply/102/1/MEAS_VOLTAGE: r662e = 1998 (0x07ce)
+HV Supply/102/2/MEAS_VOLTAGE: r6630 = 1998 (0x07ce)
+HV Supply/102/3/MEAS_VOLTAGE: r6632 = 1998 (0x07ce)
+HV Supply/102/4/MEAS_VOLTAGE: r6634 = 1998 (0x07ce)
+HV Supply/102/5/MEAS_VOLTAGE: r6636 = 1998 (0x07ce)
+HV Supply/102/6/MEAS_VOLTAGE: r6638 = 1998 (0x07ce)
+HV Supply/102/7/MEAS_VOLTAGE: r663a = 1998 (0x07ce)
+HV Supply/102/8/MEAS_VOLTAGE: r663c = 1998 (0x07ce)
+HV Supply/102/9/MEAS_VOLTAGE: r663e = 1998 (0x07ce)
+HV Supply/102/10/MEAS_VOLTAGE: r6640 = 1998 (0x07ce)
+HV Supply/102/MEAS_PEDESTAL_VOLTAGE: r6642 = 8413 (0x20dd)
+HV Supply/102/VOLTAGE_CALIBRATION: r6650 = 328 (0x0148)
+HV Supply/102/PEDESTAL_VOLTAGE_CALIBRATION_MIN: r6654 = 3157 (0x0c55)
+HV Supply/102/PEDESTAL_VOLTAGE_CALIBRATION_MAX: r6652 = 5163 (0x142b)
+HV Supply/102/VERSION_DATE_LOW: r6656 = 5613 (0x15ed)
+HV Supply/102/VERSION_DATE_HIGH: r6658 = 308 (0x0134)
+HV Supply/102/CELL_ADDRESS: r665c = 24957 (0x617d)
