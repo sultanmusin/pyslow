@@ -30,6 +30,8 @@ class HVsysSystemBox:
 
     capabilities_by_subaddress = {val: key for key, val in capabilities.items()}
 
+    priority_capabilities = []
+
     volatile = []
 
 

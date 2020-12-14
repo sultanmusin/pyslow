@@ -12,7 +12,11 @@ __status__ = "Development"
 
 class HVsysPS:
     DESCRIPTION = "HV power source"
-    pass
+
+    capabilities = [] # TODO
+
+    priority_capabilities = []
+
 
 
 """ Documentation by hvsys 800e

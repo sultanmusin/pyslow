@@ -19,12 +19,13 @@ sys.path.append('lib/hvsys')
 
 from hvsys import HVsys
 
-def validate(xml_path: str, xsd_path: str) -> bool:
-
-    xmlschema_doc = etree.parse(xsd_path)
-    xmlschema = etree.XMLSchema(xmlschema_doc)
+def validate(xml_path: str, xsd_path: str=None) -> bool:
 
     xml_doc = etree.parse(xml_path)
+
+    if xsd_path is not None: 
+        xmlschema_doc = etree.parse(xsd_path)
+        xmlschema = etree.XMLSchema(xmlschema_doc)
     #result = xmlschema.validate(xml_doc)
 
     #TODO xmlschema.assertValid(xml_doc)
@@ -32,14 +33,14 @@ def validate(xml_path: str, xsd_path: str) -> bool:
     return True
 
 
-def load(xml_path: str, schema: str):
+def load(xml_path: str, schema: str=None):
     validate(xml_path, schema)
     with open(xml_path, 'r') as f:
         soup = BeautifulSoup(f, 'xml')
         return Config(soup)
 
 
-
+ 
 class Config: 
     def __init__(self, soup):
         self.soup = soup
@@ -47,11 +48,11 @@ class Config:
 
 
     def process_config(self):
-        self.systemModules = {}
+        self.buses = {} # dict[str,BusConfig]
 
         for sys_mod in self.soup.select("global connection hvsys"):
             id = sys_mod.attrs['id']
-            self.systemModules[id] = SystemModuleConfig(sys_mod)
+            self.buses[id] = BusConfig(sys_mod)
 
         xx = list(map(lambda tag: int(tag.text), self.soup.select("config module geometry x")))
         self.geom_min_x, self.geom_max_x = min(xx), max(xx)
@@ -61,7 +62,7 @@ class Config:
         self.geom_min_y, self.geom_max_y = min(yy), max(yy)
         self.geom_height = self.geom_max_y - self.geom_min_y + 1
 
-        self.modules = {}
+        self.modules = {} # dict[str,ModuleConfig]
         self.modulesOrderedByGeometry = [''] * self.geom_height * self.geom_width
 
         for mod in self.soup.select("config module"):
@@ -109,7 +110,7 @@ class ModuleConfig:
                 self.addr[part] = int(partConfigNode.find('id').text)
 
         connectionNode = soup.find('connection').find('hvsys')
-        self.systemModuleId = connectionNode.attrs['id']
+        self.bus_id = connectionNode.attrs['id']
 
         hvConfigNode = soup.find('connection').find('hv')
         if self.has('hv'):
@@ -135,7 +136,7 @@ class ModuleConfig:
         return self.addr[part]
 
 
-class SystemModuleConfig:
+class BusConfig:
     def __init__(self, soup):
         self.id = soup.attrs['id']
         self.port = soup.find("port").text

@@ -31,11 +31,19 @@ class HVsysLED:
 
     capabilities_by_subaddress = {val: key for key, val in capabilities.items()}
 
+    priority_capabilities = []
+
     volatile = [
         "STATUS",
         "DAC_VALUE",
         "AVERAGE_ADC"
     ]
+
+    def __init__(self):
+        self.state = {}
+        for cap in HVsysLED.capabilities:
+            self.state[cap] = None
+
 
     # TODO maybe fix smth
     def valueToString(self, cap:str, value:int) -> str:

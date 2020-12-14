@@ -47,7 +47,7 @@ class PartState:
                 return now - la < PartState.RECENT_TIMEOUT
 
 
-    def updateState(self, cap:str, value:int, when:float=None):
+    def updateState(self, part, cap:str, value:int, when:float=None):
         timestamp = when if when else time.time()
         if cap not in self.capabilities:
             raise KeyError("PartState.updateState: unknown capability %s " % (cap))

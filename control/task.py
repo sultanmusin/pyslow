@@ -21,9 +21,10 @@ sys.path.append('../lib/hvsys')
 from message import Message 
 
 class Task:
-    def __init__(self, cmd:Message, cb:Callable[[str], None]):
+    def __init__(self, cmd:Message, part, cb:Callable[[str], None]):
         self.timestamp = time.time()
         self.cmd = cmd
+        self.part = part
         self.cb = cb
 
     # add more listeners to the event of completing the task

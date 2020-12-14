@@ -11,6 +11,7 @@ __status__ = "Development"
 
 
 import asyncio
+import logging
 import os
 import sys
 import wx
@@ -106,8 +107,10 @@ class MainWindow(wx.Frame):
         self.gridSizer.Add(wx.StaticText(self, -1, ""))
         self.hvControls['HV_ON'] = wx.Button(self, -1, "HV ON")
         self.gridSizer.Add(self.hvControls['HV_ON'])
+        self.Bind(wx.EVT_BUTTON, self.OnSwitchOnHV, self.hvControls['HV_ON'])
         self.hvControls['HV_OFF'] = wx.Button(self, -1, "HV OFF")
         self.gridSizer.Add(self.hvControls['HV_OFF'])
+        self.Bind(wx.EVT_BUTTON, self.OnSwitchOffHV, self.hvControls['HV_OFF'])
         self.gridSizer.Add(wx.StaticText(self, -1, ""))
         self.gridSizer.Add(wx.StaticText(self, -1, ""))
 
@@ -260,18 +263,19 @@ class MainWindow(wx.Frame):
     def OnRead(self,e):
         global detector
 
-        partAddress = self.GetActivePartAddress()
-        partType = self.GetActivePartType()
+        part_address = self.GetActivePartAddress()
+        part_type = self.GetActivePartType()
 
-        if partAddress is None:
+        if part_address is None:
             print("No part address, cannot send cmd")
         else:
-            command = Message(Message.READ_SHORT, partAddress, partType, self.moduleCapabilitiesBox.GetStringSelection(), 0)
-            self.commandText.SetValue(command.rstrip())
+            command = Message(Message.READ_SHORT, part_address, part_type, self.moduleCapabilitiesBox.GetStringSelection(), 0)
+            self.commandText.SetValue(str(command).rstrip())
 
             # find out which system module interacts with active module
-            sm_id = self.config.modules[self.activeModuleId].systemModuleId
-            asyncio.create_task(detector.add_task(sm_id, command, self.ShowQueryResult))
+            bus_id = self.config.modules[self.activeModuleId].bus_id
+            part = detector.buses[bus_id].getPart(part_address) 
+            asyncio.create_task(detector.add_task(bus_id, command, part, self.ShowQueryResult))
 
 
 
@@ -284,17 +288,38 @@ class MainWindow(wx.Frame):
     def OnWrite(self,e):
         global detector
 
-        partAddress = self.GetActivePartAddress()
-        partType = self.GetActivePartType()
+        part_address = self.GetActivePartAddress()
+        part_type = self.GetActivePartType()
 
         value = int(self.valueText.GetValue())
 
-        command = Message.Create(Message.WRITE_SHORT, partAddress, partType, self.moduleCapabilitiesBox.GetStringSelection(), value)
+        command = Message(Message.WRITE_SHORT, part_address, part_type, self.moduleCapabilitiesBox.GetStringSelection(), value)
         self.commandText.SetValue(command.rstrip())
 
         # TODO send (danger danger)
 
-#        asyncio.create_task(detector.poll_module_important(self.activeModuleId))
+
+    def SwitchHV(self,state):
+        global detector
+
+        moduleId = self.activeModuleId
+        moduleConfig = self.config.modules[moduleId]
+        
+        if moduleConfig.has('hv'): 
+            bus_id = self.config.modules[self.activeModuleId].bus_id
+            part_address = int(self.config.modules[self.activeModuleId].address('hv'))
+            part = detector.buses[bus_id].getPart(part_address) 
+            command = Message(Message.WRITE_SHORT, part_address, part, 'STATUS', state)
+            logging.warning('HV switching!')
+            asyncio.create_task(detector.add_task(bus_id, command, part, print))
+        else:
+            logging.warning('HV ON requested for module without HV part')
+
+    def OnSwitchOnHV(self, e):
+        self.SwitchHV(HVsysSupply.POWER_ON)
+
+    def OnSwitchOffHV(self, e):
+        self.SwitchHV(HVsysSupply.POWER_OFF)
 
 
     def OnSelectModuleFromGrid(self,e):
@@ -443,6 +468,8 @@ async def main():
     global detector
     global loop
     global configuration
+
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s | %(levelname)s | %(message)s')
 
     configuration = config.load("config/PsdSlowControlConfig.xml", schema="config/PsdSlowControlConfig.xsd")
 

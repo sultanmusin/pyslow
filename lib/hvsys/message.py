@@ -34,13 +34,14 @@ class Message:
         self.checksum = '?'     #TODO checksum
 
 
-    # convenience method for backward compatibility. 
+    def is_write_command(self):
+        return self.command_type == Message.WRITE_SHORT
+
+    def is_read_command(self):
+        return self.command_type != Message.WRITE_SHORT
+
     @classmethod
-    def Create(cls, command_type: str, address: int, device: type, capability: str, value: int) -> str:
-        return str(Message(command_type, address, device, capability, value))
-    
-    @classmethod
-    def Decode(cls, command: str, device: type = None) -> Message:
+    def decode(cls, command: str, device: type = None) -> Message:
         command_type = command[0] 
         if command_type not in Message.COMMAND_TYPES:
             raise ValueError

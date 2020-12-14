@@ -25,6 +25,9 @@ class HVsysSupply:
     VOLTAGE_RESOLUTION = 4096         # counts
     VOLTAGE_DECIMAL_PLACES = 2        # to 0.01 V
 
+    POWER_OFF = 0
+    POWER_ON = 1
+
     capabilities = {
         "CELL_ID": 0x00,         
         "STATUS": 0x02,               # status -  error i.e. in process of settings - stat=avADC-ADCsetpt;
@@ -65,6 +68,16 @@ class HVsysSupply:
 
     capabilities_by_subaddress = {val: key for key, val in capabilities.items()}
 
+    # poll these first so the voltages can be translated to string using the calibrations
+    priority_capabilities = [
+        "TEMPERATURE",
+        "PEDESTAL_VOLTAGE_CALIBRATION_MIN", 
+        "PEDESTAL_VOLTAGE_CALIBRATION_MAX",
+        "SET_PEDESTAL_VOLTAGE",
+        "VOLTAGE_CALIBRATION"
+    ]
+
+
     volatile = [
         "STATUS",
         "TEMPERATURE",
@@ -88,6 +101,9 @@ class HVsysSupply:
             self.state[cap] = None
 
 
+    def updateState(self, cap, value):
+        self.state[cap] = value # TODO checks 
+
     def pedestalVoltsToCounts(self, volts: float) -> int: 
         volts_to_set = volts + HVsysSupply.PEDESTAL_VOLTAGE_BIAS              # Set real ped V this much HIGHER so the per-channel voltage settings can tune both ways up and down
                                                                               # May be DANGEROUS to set ped V before per-channel V with HV ON
@@ -98,15 +114,18 @@ class HVsysSupply:
             print("HVsysSupply: trying to set invalid voltage, %2.2f < %2.2f (lower bound), setting lower bound"%(volts_to_set, calib_ped_low))
             volts_to_set = calib_ped_low
 
-        if volts_to_set > calib_ped_high:
-            print("HVsysSupply: trying to set invalid voltage, %2.2f > %2.2f (upper bound), setting upper bound"%(volts_to_set, calib_ped_high))
-            volts_to_set = calib_ped_high
+        # we can set values more than higher calibration so I comment out this check.
+        # this_is_ok.jpg
+
+        #if volts_to_set > calib_ped_high:
+        #    print("HVsysSupply: trying to set invalid voltage, %2.2f > %2.2f (upper bound), setting upper bound"%(volts_to_set, calib_ped_high))
+        #    volts_to_set = calib_ped_high
 
         return int((HVsysSupply.PEDESTAL_RESOLUTION - 1) * (volts_to_set - calib_ped_low) / (calib_ped_high - calib_ped_low))
 
 
     def pedestalCountsToVolts(self, counts: int) -> float:
-        if counts < 0 or counts >= HVsysSupply.PEDESTAL_RESOLUTION:
+        if counts < 0: # or counts >= HVsysSupply.PEDESTAL_RESOLUTION:
             raise ValueError("HVsysSupply: invalid pedestal counts %d >= PEDESTAL_RESOLUTION"%(counts))
 
         calib_ped_high = self.state["PEDESTAL_VOLTAGE_CALIBRATION_MAX"] / 100.0     # 5270 -> 52.70 V
@@ -146,7 +165,7 @@ class HVsysSupply:
         pedestal_voltage = self.pedestalCountsToVolts(self.state["SET_PEDESTAL_VOLTAGE"])
 
         volts = pedestal_voltage - counts * calib_voltage_slope / (HVsysSupply.VOLTAGE_RESOLUTION - 1) + HVsysSupply.PEDESTAL_VOLTAGE_BIAS
-        return str(round(volts, HVsysSupply.VOLTAGE_DECIMAL_PLACES))
+        return round(volts, HVsysSupply.VOLTAGE_DECIMAL_PLACES)
 
     convertorsFromString = {
         "1/SET_VOLTAGE": voltsToCounts,
@@ -202,13 +221,16 @@ class HVsysSupply:
 
     def valueToString(self, cap:str, value:int) -> str:
         if cap in HVsysSupply.convertorsToString:
-            result = HVsysSupply.convertorsToString[cap](self, value)
+            method = self.convertorsToString[cap]
+            result = method(self, value)
+            return str(result)
         else:
             return str(value)
 
     def valueFromString(self, cap:str, string:str) -> int:
         if cap in HVsysSupply.convertorsToString:
-            result = HVsysSupply.convertorsFromString[cap](self, string)
+            result = self.convertorsFromString[cap](self, string)
+            return result
         else:
             return int(string)
 
