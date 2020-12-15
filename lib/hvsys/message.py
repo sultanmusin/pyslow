@@ -31,7 +31,8 @@ class Message:
         self.capability = capability
         self.subaddress = caps[capability]
         self.value = value
-        self.checksum = '?'     #TODO checksum
+        self.checksum = '?' if self.is_read_command() else '!'    #TODO checksum
+
 
 
     def is_write_command(self):
