@@ -104,8 +104,8 @@ class HVsysSupply:
     def updateState(self, cap, value):
         self.state[cap] = value # TODO checks 
 
-    def pedestalVoltsToCounts(self, volts: float) -> int: 
-        volts_to_set = volts + HVsysSupply.PEDESTAL_VOLTAGE_BIAS              # Set real ped V this much HIGHER so the per-channel voltage settings can tune both ways up and down
+    def pedestalVoltsToCounts(self, volts: str) -> int:                       # also can accept float value
+        volts_to_set = float(volts) + HVsysSupply.PEDESTAL_VOLTAGE_BIAS       # Set real ped V this much HIGHER so the per-channel voltage settings can tune both ways up and down
                                                                               # May be DANGEROUS to set ped V before per-channel V with HV ON
         calib_ped_high = self.state["PEDESTAL_VOLTAGE_CALIBRATION_MAX"] / 100.0     # 6248 -> 62.48 V
         calib_ped_low = self.state["PEDESTAL_VOLTAGE_CALIBRATION_MIN"] / 100.0      # 4953 -> 49.53 V

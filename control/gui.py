@@ -135,6 +135,7 @@ class MainWindow(wx.Frame):
             self.gridSizer.Add(self.hvControls['%d/SET_VOLTAGE'%row])
             self.hvControls['%d/SET_VOLTAGE'%row].myname = '%d/SET_VOLTAGE'%row
             self.hvControls['%d/SET_VOLTAGE'%row].Bind(wx.EVT_KILL_FOCUS, self.OnKillFocus)
+
             self.hvControls['%d/MEAS_VOLTAGE'%row] = wx.TextCtrl(self, -1, "0.0")
             self.gridSizer.Add(self.hvControls['%d/MEAS_VOLTAGE'%row])
             self.hvControls['%d/REF_VOLTAGE'%row] = wx.TextCtrl(self, -1, "0.0")
@@ -145,6 +146,9 @@ class MainWindow(wx.Frame):
         self.gridSizer.Add(wx.StaticText(self, -1, "  Pedestal"))
         self.hvControls['SET_PEDESTAL_VOLTAGE'] = wx.TextCtrl(self, -1, "0.0")
         self.gridSizer.Add(self.hvControls['SET_PEDESTAL_VOLTAGE'])
+        self.hvControls['SET_PEDESTAL_VOLTAGE'].myname = 'SET_PEDESTAL_VOLTAGE'
+        self.hvControls['SET_PEDESTAL_VOLTAGE'].Bind(wx.EVT_KILL_FOCUS, self.OnKillFocus)
+
         self.hvControls['MEAS_PEDESTAL_VOLTAGE'] = wx.TextCtrl(self, -1, "0.0")
         self.gridSizer.Add(self.hvControls['MEAS_PEDESTAL_VOLTAGE'])
         self.hvControls['REF_PEDESTAL_VOLTAGE'] = wx.TextCtrl(self, -1, "0.0")
@@ -164,6 +168,8 @@ class MainWindow(wx.Frame):
         self.gridSizer.Add(wx.StaticText(self, -1, "  LED Frequency"))
         self.ledControls['SET_FREQUENCY'] = wx.TextCtrl(self, -1, "0")
         self.gridSizer.Add(self.ledControls['SET_FREQUENCY'])
+        self.ledControls['SET_FREQUENCY'].myname = 'SET_FREQUENCY'
+        self.ledControls['SET_FREQUENCY'].Bind(wx.EVT_KILL_FOCUS, self.OnKillFocus)
         self.ledControls['MEAS_FREQUENCY'] = wx.TextCtrl(self, -1, "0")
         self.gridSizer.Add(self.ledControls['MEAS_FREQUENCY'])
         self.ledControls['REF_FREQUENCY'] = wx.TextCtrl(self, -1, "100")
@@ -173,6 +179,9 @@ class MainWindow(wx.Frame):
         self.gridSizer.Add(wx.StaticText(self, -1, "  LED Amplitude"))
         self.ledControls['SET_AMPLITUDE'] = wx.TextCtrl(self, -1, "0")
         self.gridSizer.Add(self.ledControls['SET_AMPLITUDE'])
+        self.ledControls['SET_AMPLITUDE'].myname = 'SET_AMPLITUDE'
+        self.ledControls['SET_AMPLITUDE'].Bind(wx.EVT_KILL_FOCUS, self.OnKillFocus)
+
         self.ledControls['MEAS_AMPLITUDE'] = wx.TextCtrl(self, -1, "0")
         self.gridSizer.Add(self.ledControls['MEAS_AMPLITUDE'])
         self.ledControls['REF_AMPLITUDE'] = wx.TextCtrl(self, -1, "1000")
@@ -376,27 +385,30 @@ class MainWindow(wx.Frame):
         self.SelectModule(moduleId)
         
     def getPartNameByCap(self, cap:str):
-        part_name = None
         if cap in self.hvControls:
-            part_name = 'hv'
+            return 'hv'
         elif cap in self.ledControls:
-            part_name = 'led'
+            return 'led'
         else:
             raise ValueError('getPartNameByCap: unknown cap '+cap)
+
 
 
     def OnKillFocus(self,e):
         field = e.GetEventObject()
         cap = field.myname
-        value = self.hvControls[cap].GetValue()
-        print("OnKillFocus: requested %s = %s" % (cap, value))
+        text_value = field.GetValue()
+        logging.debug("OnKillFocus: requested %s = %s" % (cap, text_value))
 
         bus_id = self.config.modules[self.activeModuleId].bus_id
         part_name = self.getPartNameByCap(cap)
-        part_address = int(self.config.modules[self.activeModuleId].address(part_name))
+        module_config = self.config.modules[self.activeModuleId]
+        part_address = int(module_config.address(part_name))
         part = detector.buses[bus_id].getPart(part_address) 
-        command = Message(Message.WRITE_SHORT, part_address, part, cap, value)
-        logging.warning('HV switching!')
+        reg_value = part.valueFromString(cap, text_value)
+        logging.debug("OnKillFocus: translated to %s" % (reg_value))
+        command = Message(Message.WRITE_SHORT, part_address, part, cap, reg_value)
+        logging.warning('HV setting!')
         asyncio.create_task(detector.add_task(bus_id, command, part, print))
 
         
