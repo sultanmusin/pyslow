@@ -13,6 +13,7 @@ __status__ = "Development"
 import asyncio
 import logging
 import os
+import string
 import sys
 import wx
 import wx.richtext
@@ -30,6 +31,50 @@ configuration = None
 detector = None
 
 
+class CharValidator(wx.PyValidator):
+    ''' Validates data as it is entered into the text controls. '''
+
+    #----------------------------------------------------------------------
+    def __init__(self, flag):
+        wx.PyValidator.__init__(self)
+        self.flag = flag
+        self.Bind(wx.EVT_CHAR, self.OnChar)
+
+    #----------------------------------------------------------------------
+    def Clone(self):
+        '''Required Validator method'''
+        return CharValidator(self.flag)
+
+    #----------------------------------------------------------------------
+    def Validate(self, win):
+        return True
+
+    #----------------------------------------------------------------------
+    def TransferToWindow(self):
+        return True
+
+    #----------------------------------------------------------------------
+    def TransferFromWindow(self):
+        return True
+
+    #----------------------------------------------------------------------
+    def OnChar(self, event):
+        keycode = int(event.GetKeyCode())
+        controls = [wx.WXK_BACK, wx.WXK_TAB, wx.WXK_RETURN, wx.WXK_TAB]
+        if keycode < 256:
+            #print keycode
+            key = chr(keycode)
+            if keycode in controls: 
+                return
+            #print key
+            if self.flag == 'no-alpha' and key in string.ascii_letters:
+                return
+            if self.flag == 'no-digit' and key in string.digits:
+                return
+            if self.flag == 'float' and key not in string.digits + '.':
+                return
+        event.Skip()
+        
 class MainWindow(wx.Frame):
     def __init__(self, parent, title):
         self.dirname=''
@@ -86,8 +131,10 @@ class MainWindow(wx.Frame):
         self.gridSizer.Add(wx.StaticText(self, -1, "Error"))
         for row in range(1,self.N_SECTIONS+1):
             self.gridSizer.Add(wx.StaticText(self, -1, "  "+str(row)))
-            self.hvControls['%d/SET_VOLTAGE'%row] = wx.TextCtrl(self, -1, "0.0")
+            self.hvControls['%d/SET_VOLTAGE'%row] = wx.TextCtrl(self, -1, "0.0")#, validator=CharValidator('float'))
             self.gridSizer.Add(self.hvControls['%d/SET_VOLTAGE'%row])
+            self.hvControls['%d/SET_VOLTAGE'%row].myname = '%d/SET_VOLTAGE'%row
+            self.hvControls['%d/SET_VOLTAGE'%row].Bind(wx.EVT_KILL_FOCUS, self.OnKillFocus)
             self.hvControls['%d/MEAS_VOLTAGE'%row] = wx.TextCtrl(self, -1, "0.0")
             self.gridSizer.Add(self.hvControls['%d/MEAS_VOLTAGE'%row])
             self.hvControls['%d/REF_VOLTAGE'%row] = wx.TextCtrl(self, -1, "0.0")
@@ -327,6 +374,31 @@ class MainWindow(wx.Frame):
         moduleId = theButton.myname
         print("OnSelectModule: %s" % moduleId)
         self.SelectModule(moduleId)
+        
+    def getPartNameByCap(self, cap:str):
+        part_name = None
+        if cap in self.hvControls:
+            part_name = 'hv'
+        elif cap in self.ledControls:
+            part_name = 'led'
+        else:
+            raise ValueError('getPartNameByCap: unknown cap '+cap)
+
+
+    def OnKillFocus(self,e):
+        field = e.GetEventObject()
+        cap = field.myname
+        value = self.hvControls[cap].GetValue()
+        print("OnKillFocus: requested %s = %s" % (cap, value))
+
+        bus_id = self.config.modules[self.activeModuleId].bus_id
+        part_name = self.getPartNameByCap(cap)
+        part_address = int(self.config.modules[self.activeModuleId].address(part_name))
+        part = detector.buses[bus_id].getPart(part_address) 
+        command = Message(Message.WRITE_SHORT, part_address, part, cap, value)
+        logging.warning('HV switching!')
+        asyncio.create_task(detector.add_task(bus_id, command, part, print))
+
         
 
 
