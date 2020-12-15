@@ -1,0 +1,6 @@
+lxml
+BeautifulSoup==4.9.1
+wx==4.1.0
+wxasync
+
+
