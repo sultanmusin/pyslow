@@ -74,6 +74,7 @@ class HVsysSupply:
         "PEDESTAL_VOLTAGE_CALIBRATION_MIN", 
         "PEDESTAL_VOLTAGE_CALIBRATION_MAX",
         "SET_PEDESTAL_VOLTAGE",
+        "MEAS_PEDESTAL_VOLTAGE",
         "VOLTAGE_CALIBRATION"
     ]
 
@@ -153,6 +154,25 @@ class HVsysSupply:
 
         return int((HVsysSupply.VOLTAGE_RESOLUTION - 1) * volts_to_set / calib_voltage_slope)
 
+    def measVoltsToCounts(self, volts: str) -> int:
+        if "VOLTAGE_CALIBRATION" not in self.state or self.state["VOLTAGE_CALIBRATION"] is None: 
+            raise ValueError("HVsysSupply: cannot translate volts to counts without knowing VOLTAGE_CALIBRATION")
+        if "MEAS_PEDESTAL_VOLTAGE" not in self.state or self.state["MEAS_PEDESTAL_VOLTAGE"] is None: 
+            raise ValueError("HVsysSupply: cannot translate volts to counts without knowing MEAS_PEDESTAL_VOLTAGE")
+        pedestal_voltage = self.pedestalCountsToVolts(self.state["MEAS_PEDESTAL_VOLTAGE"])
+        volts_to_set = -(float(volts) - pedestal_voltage - HVsysSupply.PEDESTAL_VOLTAGE_BIAS)  # e.g. -0.5V means we need to go 0.5V lower than pedestal (with positive counts)       
+        calib_voltage_slope = self.state["VOLTAGE_CALIBRATION"] / 100.0              #  325 -> -3.25 V (full scale) 
+
+        if volts_to_set < 0:
+            print("HVsysSupply: trying to set invalid voltage, %2.2f < %2.2f (lower bound), setting lower bound"%(volts_to_set, 0))
+            volts_to_set = 0
+
+        if volts_to_set > calib_voltage_slope:
+            print("HVsysSupply: trying to set invalid voltage, %2.2f > %2.2f (upper bound), setting upper bound"%(volts_to_set, calib_voltage_slope))
+            volts_to_set = calib_voltage_slope
+
+        return int((HVsysSupply.VOLTAGE_RESOLUTION - 1) * volts_to_set / calib_voltage_slope)
+
     def countsToVolts(self, counts: int) -> str:
         if counts < 0 or counts >= HVsysSupply.VOLTAGE_RESOLUTION:
             raise ValueError("HVsysSupply: invalid voltage counts %d >= VOLTAGE_RESOLUTION"%(counts))
@@ -163,6 +183,20 @@ class HVsysSupply:
 
         calib_voltage_slope = self.state["VOLTAGE_CALIBRATION"] / 100.0              #  325 -> -3.25 V (full scale) 
         pedestal_voltage = self.pedestalCountsToVolts(self.state["SET_PEDESTAL_VOLTAGE"])
+
+        volts = pedestal_voltage - counts * calib_voltage_slope / (HVsysSupply.VOLTAGE_RESOLUTION - 1) + HVsysSupply.PEDESTAL_VOLTAGE_BIAS
+        return round(volts, HVsysSupply.VOLTAGE_DECIMAL_PLACES)
+
+    def measCountsToVolts(self, counts: int) -> str:
+        if counts < 0 or counts >= HVsysSupply.VOLTAGE_RESOLUTION:
+            raise ValueError("HVsysSupply: invalid voltage counts %d >= VOLTAGE_RESOLUTION"%(counts))
+        if "VOLTAGE_CALIBRATION" not in self.state or self.state["VOLTAGE_CALIBRATION"] is None: 
+            raise ValueError("HVsysSupply: cannot translate counts to volts without knowing VOLTAGE_CALIBRATION")
+        if "SET_PEDESTAL_VOLTAGE" not in self.state or self.state["MEAS_PEDESTAL_VOLTAGE"] is None: 
+            raise ValueError("HVsysSupply: cannot translate counts to volts without knowing MEAS_PEDESTAL_VOLTAGE")
+
+        calib_voltage_slope = self.state["VOLTAGE_CALIBRATION"] / 100.0              #  325 -> -3.25 V (full scale) 
+        pedestal_voltage = self.pedestalCountsToVolts(self.state["MEAS_PEDESTAL_VOLTAGE"])
 
         volts = pedestal_voltage - counts * calib_voltage_slope / (HVsysSupply.VOLTAGE_RESOLUTION - 1) + HVsysSupply.PEDESTAL_VOLTAGE_BIAS
         return round(volts, HVsysSupply.VOLTAGE_DECIMAL_PLACES)
@@ -180,16 +214,16 @@ class HVsysSupply:
         "10/SET_VOLTAGE": voltsToCounts,
         "SET_PEDESTAL_VOLTAGE": pedestalVoltsToCounts,
         "TEMPERATURE": lambda self, val: int(val),
-        "1/MEAS_VOLTAGE": voltsToCounts,
-        "2/MEAS_VOLTAGE": voltsToCounts,
-        "3/MEAS_VOLTAGE": voltsToCounts,
-        "4/MEAS_VOLTAGE": voltsToCounts,
-        "5/MEAS_VOLTAGE": voltsToCounts,
-        "6/MEAS_VOLTAGE": voltsToCounts,
-        "7/MEAS_VOLTAGE": voltsToCounts,
-        "8/MEAS_VOLTAGE": voltsToCounts,
-        "9/MEAS_VOLTAGE": voltsToCounts,
-        "10/MEAS_VOLTAGE": voltsToCounts, 
+        "1/MEAS_VOLTAGE": measVoltsToCounts,
+        "2/MEAS_VOLTAGE": measVoltsToCounts,
+        "3/MEAS_VOLTAGE": measVoltsToCounts,
+        "4/MEAS_VOLTAGE": measVoltsToCounts,
+        "5/MEAS_VOLTAGE": measVoltsToCounts,
+        "6/MEAS_VOLTAGE": measVoltsToCounts,
+        "7/MEAS_VOLTAGE": measVoltsToCounts,
+        "8/MEAS_VOLTAGE": measVoltsToCounts,
+        "9/MEAS_VOLTAGE": measVoltsToCounts,
+        "10/MEAS_VOLTAGE": measVoltsToCounts, 
         "MEAS_PEDESTAL_VOLTAGE": pedestalVoltsToCounts,
     }
 
@@ -206,16 +240,16 @@ class HVsysSupply:
         "10/SET_VOLTAGE": countsToVolts,
         "SET_PEDESTAL_VOLTAGE": pedestalCountsToVolts,
         "TEMPERATURE": lambda self, s: str(s),
-        "1/MEAS_VOLTAGE": countsToVolts,
-        "2/MEAS_VOLTAGE": countsToVolts,
-        "3/MEAS_VOLTAGE": countsToVolts,
-        "4/MEAS_VOLTAGE": countsToVolts,
-        "5/MEAS_VOLTAGE": countsToVolts,
-        "6/MEAS_VOLTAGE": countsToVolts,
-        "7/MEAS_VOLTAGE": countsToVolts,
-        "8/MEAS_VOLTAGE": countsToVolts,
-        "9/MEAS_VOLTAGE": countsToVolts,
-        "10/MEAS_VOLTAGE": countsToVolts, 
+        "1/MEAS_VOLTAGE": measCountsToVolts,
+        "2/MEAS_VOLTAGE": measCountsToVolts,
+        "3/MEAS_VOLTAGE": measCountsToVolts,
+        "4/MEAS_VOLTAGE": measCountsToVolts,
+        "5/MEAS_VOLTAGE": measCountsToVolts,
+        "6/MEAS_VOLTAGE": measCountsToVolts,
+        "7/MEAS_VOLTAGE": measCountsToVolts,
+        "8/MEAS_VOLTAGE": measCountsToVolts,
+        "9/MEAS_VOLTAGE": measCountsToVolts,
+        "10/MEAS_VOLTAGE": measCountsToVolts, 
         "MEAS_PEDESTAL_VOLTAGE": pedestalCountsToVolts,
     }
 
