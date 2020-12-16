@@ -45,7 +45,7 @@ class Alerter(Worker):
             for module_id, module_config in self.detector.config.modules.items():
                 if module_config.online:
                     logging.debug('poll_online_module_status ' + module_id)
-                    address = module_config.address
+                    address = module_config.address('hv')
                     bus_id = module_config.bus_id
                     bus = self.detector.buses[bus_id]
                     part = bus.getPart(address)
