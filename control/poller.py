@@ -16,6 +16,7 @@ import sys
 import getopt
 
 sys.path.append('.')
+sys.path.append('control')
 sys.path.append('lib/hvsys')
 sys.path.append('../lib/hvsys')
 import config
@@ -36,6 +37,7 @@ def print_usage():
     print('       poller.py -c config.xml -a 0x66 -r 0x18\n')
     print('To see the register list without polling: ')
     print('       poller.py -c <configfile> [-b bus] -a <address> -l')
+
     sys.exit()
 
 def handler(loop, context):
