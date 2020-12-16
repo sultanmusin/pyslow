@@ -24,6 +24,7 @@ sys.path.append('lib/workers')
 import config
 from message import Message
 from detector import *
+from hvstatus import * 
 from hvsyssupply import HVsysSupply
 from worker import Worker
 
@@ -59,6 +60,13 @@ class Alerter(Worker):
     
     def on_complete_command(self, part, cap, value):
         logging.debug('Alerter: command complete! %s#%s/%s = %s'%(part.DESCRIPTION, "no id", cap, value))
+        status = HVStatus(value)
+        if status.is_error():
+            description = str(status)
+            logging.warning(description)
+            if self.callback is not None:
+                self.callback(description)
+
 
 
 Worker.register_subclass(Alerter)
@@ -68,7 +76,7 @@ def handler(loop, context):
     print(context)
 
 def on_alert(msg:str):
-    logging.warning(str)
+    logging.warning(msg)
 
 async def main():
     logging.basicConfig(level=logging.DEBUG, format='%(asctime)s | %(levelname)s | %(message)s')
