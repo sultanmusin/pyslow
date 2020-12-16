@@ -4,6 +4,7 @@
     "python.autoComplete.extraPaths": [
         ".", 
         "control/",
-        "lib/hvsys/"
+        "lib/hvsys/",
+        "lib/workers/"
     ],
 }
