@@ -14,7 +14,7 @@ __status__ = "Development"
 
 class HVsysSupply:
 
-    CELL_ID = 0x8013 # TODO or 800c?
+    CELL_ID = 0x8013 
 
     DESCRIPTION = "HV Supply"
 
