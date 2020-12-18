@@ -47,13 +47,14 @@ def on_complete(value):
     print('Response = %d (0x%04x)'%(value, value))
 
 async def main(argv):
-    opts, args = getopt.getopt(argv,"hb:c:a:r:l",["bus=","config=","address=","register=","list"])
+    opts, args = getopt.getopt(argv,"hb:c:a:r:lw:",["bus=","config=","address=","register=","list","write="])
 
     bus_id = None
     address = None
     config_file = None
     register = None
     print_list = None
+    write = None
 
     for opt, arg in opts:
         if opt == '-h':
@@ -66,6 +67,8 @@ async def main(argv):
             config_file = arg
         elif opt in ("-r", "--register"):
             register = arg
+        elif opt in ("-w", "--write"):
+            write = int(arg, 0)
         elif opt in ("-l", "--list"):
             print_list = True
 
@@ -131,7 +134,11 @@ async def main(argv):
     print("Module link ok")
 
     for cap in caps:
-        command = Message(Message.READ_SHORT, address, part, cap, 0)
+        if write is None:
+            command = Message(Message.READ_SHORT, address, part, cap, 0)
+        else:
+            command = Message(Message.WRITE_SHORT, address, part, cap, write)
+
         print("Request: %s"%(str(command).rstrip()))
         asyncio.create_task(detector.add_task(bus_id, command, part, on_complete))
 
