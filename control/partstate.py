@@ -12,7 +12,7 @@ import time
 
 # Stores integers related to detector parts. Could be mapped to historical database
 class PartState:
-    RECENT_TIMEOUT = 60 #sec
+    RECENT_TIMEOUT = 1 #sec
 
     def __init__(self, part_type:type):
         self.part_type = part_type
