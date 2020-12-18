@@ -91,6 +91,8 @@ class MainWindow(wx.Frame):
 
         # select first online module (if any...)
         self.SelectFirstOnlineModule()
+        self.ShowReferenceParameters()
+        self.SetReferenceParameters()
 
     def CreateLayout(self):
 
@@ -125,12 +127,14 @@ class MainWindow(wx.Frame):
 
         self.gridSizer = wx.FlexGridSizer(self.N_SECTIONS+7, 5, 4, 4)
         self.gridSizer.Add(wx.StaticText(self, -1, "  Section"))
+        self.gridSizer.Add(wx.StaticText(self, -1, "Reference "))
         self.gridSizer.Add(wx.StaticText(self, -1, "Set "))
         self.gridSizer.Add(wx.StaticText(self, -1, "Meas "))
-        self.gridSizer.Add(wx.StaticText(self, -1, "Ref "))
         self.gridSizer.Add(wx.StaticText(self, -1, "Error"))
         for row in range(1,self.N_SECTIONS+1):
             self.gridSizer.Add(wx.StaticText(self, -1, "  "+str(row)))
+            self.hvControls['%d/REF_VOLTAGE'%row] = wx.TextCtrl(self, -1, "0.0")
+            self.gridSizer.Add(self.hvControls['%d/REF_VOLTAGE'%row])
             self.hvControls['%d/SET_VOLTAGE'%row] = wx.TextCtrl(self, -1, "0.0")#, validator=CharValidator('float'))
             self.gridSizer.Add(self.hvControls['%d/SET_VOLTAGE'%row])
             self.hvControls['%d/SET_VOLTAGE'%row].myname = '%d/SET_VOLTAGE'%row
@@ -138,21 +142,27 @@ class MainWindow(wx.Frame):
 
             self.hvControls['%d/MEAS_VOLTAGE'%row] = wx.TextCtrl(self, -1, "0.0")
             self.gridSizer.Add(self.hvControls['%d/MEAS_VOLTAGE'%row])
-            self.hvControls['%d/REF_VOLTAGE'%row] = wx.TextCtrl(self, -1, "0.0")
-            self.gridSizer.Add(self.hvControls['%d/REF_VOLTAGE'%row])
             self.hvControls['%d/ERROR'%row] = wx.TextCtrl(self, -1, "OK")
             self.gridSizer.Add(self.hvControls['%d/ERROR'%row])
 
         self.gridSizer.Add(wx.StaticText(self, -1, "  Pedestal"))
+        self.hvControls['REF_PEDESTAL_VOLTAGE'] = wx.TextCtrl(self, -1, "0.0")
+        self.gridSizer.Add(self.hvControls['REF_PEDESTAL_VOLTAGE'])
         self.hvControls['SET_PEDESTAL_VOLTAGE'] = wx.TextCtrl(self, -1, "0.0")
         self.gridSizer.Add(self.hvControls['SET_PEDESTAL_VOLTAGE'])
         self.hvControls['SET_PEDESTAL_VOLTAGE'].myname = 'SET_PEDESTAL_VOLTAGE'
         self.hvControls['SET_PEDESTAL_VOLTAGE'].Bind(wx.EVT_KILL_FOCUS, self.OnKillFocus)
-
         self.hvControls['MEAS_PEDESTAL_VOLTAGE'] = wx.TextCtrl(self, -1, "0.0")
         self.gridSizer.Add(self.hvControls['MEAS_PEDESTAL_VOLTAGE'])
-        self.hvControls['REF_PEDESTAL_VOLTAGE'] = wx.TextCtrl(self, -1, "0.0")
-        self.gridSizer.Add(self.hvControls['REF_PEDESTAL_VOLTAGE'])
+        self.gridSizer.Add(wx.StaticText(self, -1, ""))
+
+        self.gridSizer.Add(wx.StaticText(self, -1, "  Temperature"))
+        self.hvControls['REF_TEMPERATURE'] = wx.TextCtrl(self, -1, "25.00")
+        self.gridSizer.Add(self.hvControls['REF_TEMPERATURE'])
+        self.hvControls['TEMPERATURE_SLOPE'] = wx.TextCtrl(self, -1, "")
+        self.gridSizer.Add(self.hvControls['TEMPERATURE_SLOPE'])
+        self.hvControls['TEMPERATURE'] = wx.TextCtrl(self, -1, "0.0")
+        self.gridSizer.Add(self.hvControls['TEMPERATURE'])
         self.gridSizer.Add(wx.StaticText(self, -1, ""))
 
         self.gridSizer.Add(wx.StaticText(self, -1, ""))
@@ -252,7 +262,24 @@ class MainWindow(wx.Frame):
                 self.SelectModule(m.id)
                 break
 
+    def ShowReferenceParameters(self):
+        active_module_config = configuration.modules[self.activeModuleId]
+        self.hvControls['REF_PEDESTAL_VOLTAGE'].SetValue(str(active_module_config.hvPedestal))
+        for ch, hv in active_module_config.hv.items():
+            self.hvControls['%s/REF_VOLTAGE'%ch].SetValue(str(hv))    
+        
+        self.hvControls['REF_TEMPERATURE'].SetValue("%.2f"%(configuration.reference_temperature))
+        self.hvControls['TEMPERATURE_SLOPE'].SetValue(str("-%d mV/C" % int(configuration.temperature_slope)))
 
+    def SetReferenceParameters(self):
+        active_module_config = configuration.modules[self.activeModuleId]
+#        self.hvControls['REF_PEDESTAL_VOLTAGE'].SetValue(str(active_module_config.hvPedestal))
+        for ch, hv in active_module_config.hv.items():
+            pass
+#            self.hvControls['%s/REF_VOLTAGE'%ch].SetValue(str(hv))    
+        
+#        self.hvControls['REF_TEMPERATURE'].SetValue("%.2f"%(configuration.reference_temperature))
+#        self.hvControls['TEMPERATURE_SLOPE'].SetValue(str("-%d mV/C" % int(configuration.temperature_slope)))
 
     def CreateMenu(self):
         # Setting up the menu.
