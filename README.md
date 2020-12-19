@@ -31,6 +31,18 @@ Then use requirements.txt:
 
 python3 -m pip install -r requirements.txt
 
+### Run! ###
+
+Run gui: 
+python3 control/gui.py
+
+Run certain standalone worker: 
+python3 lib/workers/alerter.py
+
+Run poller (CLI utility to read/write hsvys registers):
+python3 control/poller.py
+
+All the scripts above use the config/PsdSlowControlConfig.xml 
 
 ### Contacts ###
 
