@@ -48,6 +48,7 @@ class Alerter(Worker):
                     logging.debug('poll_online_module_status ' + module_id)
                     address = module_config.address('hv')
                     bus_id = module_config.bus_id
+                    #logging.warning("!!! %f"%(self.detector.config.temperature_slope))
                     bus = self.detector.buses[bus_id]
                     part = bus.getPart(address)
                     command = Message(Message.READ_SHORT, address, part, 'STATUS', 0)
