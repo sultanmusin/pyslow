@@ -498,7 +498,7 @@ class MainWindow(wx.Frame):
     def pollModule(self, moduleId):
         moduleConfig = self.config.modules[moduleId]
 #        for part in moduleConfig.parts:
-        asyncio.create_task(detector.poll_module_important(moduleId, self.DisplayValueOnComplete), name="poll_module_important")
+        asyncio.create_task(detector.poll_module_important(moduleId, self.DisplayValueOnComplete))
 
     def DisplayValueOnComplete(self, part, capability, value):
         
@@ -592,8 +592,8 @@ async def main():
 
     try:
         for id, sm in detector.buses.items():
-            await asyncio.create_task(sm.connect(), name="Connect to system module")
-            asyncio.create_task(sm.send(), name="System module sending loop")
+            await asyncio.create_task(sm.connect())
+            asyncio.create_task(sm.send())
     except OSError as e:
         print("Cannot connect to system module")  
 

@@ -6,7 +6,18 @@ DCS for Forward Hadron Calorimeters based on HVsys hardware
 
 * Summary of set up
 
-Get python 3.7+ running, install prerequisites for wxpython, install wxpython and other pip modules.
+Get python 3.7 running 
+
+* Using anaconda (https://docs.anaconda.com/anaconda/install/linux/):
+
+
+conda create --name dcs wxpython bs4 lxml python=3.7
+conda activate dcs
+pip install wxasync
+
+Sorry, the more recent python versions (3.8+) are currently not supported due to conda conflist with wxpython (?)
+
+Also the commands below were not tested, try them at your own risk (or just see 'Using anaconda' above)
 
 * Dependencies
 
@@ -20,11 +31,6 @@ Then use requirements.txt:
 
 python3 -m pip install -r requirements.txt
 
-### Contribution guidelines ###
-
-* Writing tests
-* Code review
-* Other guidelines
 
 ### Contacts ###
 

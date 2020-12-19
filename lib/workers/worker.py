@@ -39,7 +39,7 @@ class Worker:
     def start(self, future):
         try:
             loop = asyncio.get_event_loop()
-            self.task = loop.create_task(future(), name=str(self))
+            self.task = loop.create_task(future())
         except asyncio.CancelledError:
             pass
 
