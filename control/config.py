@@ -140,5 +140,5 @@ class ModuleConfig:
 
 class BusConfig:
     def __init__(self, soup):
-        self.id = soup.attrs['id']
+        self.id = soup.attrs['id'] if 'id' in soup.attrs else 'default'
         self.port = soup.find("port").text
