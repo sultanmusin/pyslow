@@ -51,7 +51,7 @@ class Config:
         self.buses = {} # dict[str,BusConfig]
 
         for sys_mod in self.soup.select("global connection hvsys"):
-            id = sys_mod.attrs['id']
+            id = sys_mod.attrs['id'] if 'id' in sys_mod.attrs else 'default'
             self.buses[id] = BusConfig(sys_mod)
 
         xx = list(map(lambda tag: int(tag.text), self.soup.select("config module geometry x")))
