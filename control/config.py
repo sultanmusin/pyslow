@@ -19,6 +19,8 @@ sys.path.append('lib/hvsys')
 
 from hvsys import HVsys
 
+DefaultBusId = 'default'
+
 def validate(xml_path: str, xsd_path: str=None) -> bool:
 
     xml_doc = etree.parse(xml_path)
@@ -51,7 +53,7 @@ class Config:
         self.buses = {} # dict[str,BusConfig]
 
         for sys_mod in self.soup.select("global connection hvsys"):
-            id = sys_mod.attrs['id'] if 'id' in sys_mod.attrs else 'default'
+            id = sys_mod.attrs['id'] if 'id' in sys_mod.attrs else DefaultBusId
             self.buses[id] = BusConfig(sys_mod)
 
         xx = list(map(lambda tag: int(tag.text), self.soup.select("config module geometry x")))
@@ -112,7 +114,7 @@ class ModuleConfig:
                 self.addr[part] = int(partConfigNode.find('id').text)
 
         connectionNode = soup.find('connection').find('hvsys')
-        self.bus_id = connectionNode.attrs['id']
+        self.bus_id = connectionNode.attrs['id'] if 'id' in connectionNode.attrs else DefaultBusId
 
         hvConfigNode = soup.find('connection').find('hv')
         if self.has('hv'):
@@ -140,5 +142,5 @@ class ModuleConfig:
 
 class BusConfig:
     def __init__(self, soup):
-        self.id = soup.attrs['id'] if 'id' in soup.attrs else 'default'
+        self.id = soup.attrs['id'] if 'id' in soup.attrs else DefaultBusId
         self.port = soup.find("port").text
