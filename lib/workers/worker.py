@@ -15,9 +15,6 @@ import logging
 import os
 import string
 import sys
-import wx
-import wx.richtext
-from wxasync import WxAsyncApp
 
 sys.path.append('.')
 sys.path.append('lib/hvsys')
