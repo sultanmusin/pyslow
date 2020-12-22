@@ -14,12 +14,32 @@ __status__ = "Development"
 
 
 class Message:
+    """
+    Describes request message for HVsys electonics transmitted over a serial bus (plain text protocol). 
+    All numbers for request (and response) are hex-coded values
+    Message format is: 'CAARR[VVVV]M\n', where
+        C is command type, one of '<' (read byte), 'r' (read short) or 'w' (write short)
+        AA is device address (for example, hv supply labeled '100' has address 0x64, thus AA=64)
+        RR is register offset inside device (see device classes HVsysSupply, HVsysLED)
+        VVVV is specified only for 'w' (write) commands
+        M is checksum (checksum check can be enabled or disabled)
+    Request (and response) ends with a new line.
+    """
     READ_BYTE = '<'
     READ_SHORT = 'r'
     WRITE_SHORT = 'w'
     COMMAND_TYPES = [READ_BYTE, READ_SHORT, WRITE_SHORT]
 
     def __init__(self, command_type: str, address: int, device: type, capability: str, value: int):
+        """
+        Construct a message. 
+        All numbers for request (and response) are hex-coded values
+        :param command_type: one of COMMAND_TYPES '<' (read byte), 'r' (read short) or 'w' (write short)
+        :param address integer device address (0-255)
+        :param device one of device classes [HVsysSupply, HVsysLED]
+        :param capability one of device capabilities (should be present in device in the previous parameter
+        :param value 0-65535, short value (ignored for read commands)
+        """
         self.command_type = command_type
         self.address = address
         self.device = device
@@ -33,16 +53,25 @@ class Message:
         self.value = value
         self.checksum = '?' if self.is_read_command() else '!'    #TODO checksum
 
-
-
     def is_write_command(self):
+        """
+        If this message is a write command
+        """
         return self.command_type == Message.WRITE_SHORT
 
     def is_read_command(self):
+        """
+        If this message is a read command
+        """
         return self.command_type != Message.WRITE_SHORT
 
     @classmethod
     def decode(cls, command: str, device: type = None) -> Message:
+        """
+        Restore the message object from string representation
+        :param command: command string
+        :param device: one of HVsys device types that support device.capabilities 
+        """
         command_type = command[0] 
         if command_type not in Message.COMMAND_TYPES:
             raise ValueError
@@ -62,8 +91,12 @@ class Message:
 
         return Message(command_type, address, device, cap, value)
 
-    # To be used by built-in str() function
+    
     def __str__(self):
+        """
+        Convert message to string (to send over a serial line or display)
+        To be used by built-in str() function
+        """
         if self.command_type not in Message.COMMAND_TYPES:
             raise ValueError
 
@@ -71,5 +104,3 @@ class Message:
             return "%s%02x%02x%04x%s\n" % (self.command_type, self.address, self.subaddress, self.value, self.checksum)
         else:
             return "%s%02x%02x%s\n" % (self.command_type, self.address, self.subaddress, self.checksum)
-
-        
