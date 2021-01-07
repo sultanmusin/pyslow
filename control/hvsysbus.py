@@ -28,8 +28,9 @@ from hvsys import HVsys
 class HVsysBus:
     IP_PORT = 4001
     MAX_BURST_COMMANDS = 2
+    DefaultBusId = 'default'
 
-    def __init__(self, bus_config:BusConfig, module_configs:List[ModuleConfig]):
+    def __init__(self, bus_config, module_configs:list):
         self.id = bus_config.id
         self.port = bus_config.port
         self.task_queue = asyncio.Queue(1000)
