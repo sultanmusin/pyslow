@@ -108,8 +108,8 @@ class MainWindow(wx.Frame):
             if len(m) > 0:
                 self.moduleMiniButtons[m] = wx.Button(self, -1, m, size=(36,40), style=wx.BU_EXACTFIT)
                 self.moduleMiniButtons[m].myname = m
+                self.Bind(wx.EVT_BUTTON, self.OnSelectModuleFromGrid, self.moduleMiniButtons[m])
                 if self.config.modules[m].online:
-                    self.Bind(wx.EVT_BUTTON, self.OnSelectModuleFromGrid, self.moduleMiniButtons[m])
                     self.moduleMiniButtons[m].SetBackgroundColour((255, 255, 0))
                 self.miniGridSizer.Add(self.moduleMiniButtons[m])
             else:
@@ -363,8 +363,8 @@ class MainWindow(wx.Frame):
 
 
     def ShowQueryResult(self, data):
-        self.responseText.SetValue(data.rstrip().decode('utf-8'))
-        self.valueText.SetValue(str(int(data[0:4], 16)))
+        self.responseText.SetValue("0x%x" % (data))
+        self.valueText.SetValue(str(data))
 
 
 
@@ -444,11 +444,7 @@ class MainWindow(wx.Frame):
     def OnSelectModuleFromList(self,e):
         moduleId = self.config.modulesOrderedById[self.moduleListBox.GetSelection()]
         print("OnSelectModuleFromList: %s" % moduleId)
-        if self.config.modules[moduleId].online:
-            self.SelectModule(moduleId)
-        else:
-            listIndex = self.config.modulesOrderedById.index(self.activeModuleId)
-            self.moduleListBox.Select(listIndex)
+        self.SelectModule(moduleId)
         
 
     def SelectModule(self, moduleId):
