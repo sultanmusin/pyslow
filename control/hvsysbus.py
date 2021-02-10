@@ -92,7 +92,7 @@ class HVsysBus:
                 message = task.cmd
                 # Check cache of the specified part here
                 part_cache = self.getPartCache(message.address, message.device)
-                if message.is_read_command() and part_cache.isRecent(message.capability):
+                if message.is_read_command() and message.capability not in message.device.volatile and part_cache.isRecent(message.capability):
                     response = part_cache.getState(message.capability)
                     logging.info("Found recent value in cache, skipping request! %s/%d/%s == %d"%(message.device.DESCRIPTION, message.address, message.capability, response))
                     task.cb(response)
