@@ -43,7 +43,9 @@ GRID_ROWS_HV = N_SECTIONS + 3 # for pedestal, temperature, slope
 # LED grid legend
 GRID_ROW_FREQUENCY = 0
 GRID_ROW_AMPLITUDE = 1
-GRID_ROWS_LED = 2
+GRID_ROW_ADC_SET_POINT = 2
+GRID_ROW_AVERAGE_POINTS = 3
+GRID_ROWS_LED = 4
 
 # All grids column legend
 GRID_COLUMN_REFERENCE = 0
@@ -51,6 +53,7 @@ GRID_COLUMN_SET = 1
 GRID_COLUMN_MEAS = 2
 GRID_COLUMN_STATE = 3
 GRID_COLUMNS = 4
+GRID_COLUMNS_LED = 3
 
 cc = wx.grid.GridCellCoords
 hv_grid_coords = {
@@ -81,11 +84,12 @@ hv_grid_coords = {
 
 capability_by_hv_grid_coords = {val.Get() : key for key, val in hv_grid_coords.items()}
 
-
 led_grid_coords = {
     "MEAS_PEDESTAL_VOLTAGE": cc(GRID_ROW_PEDESTAL,GRID_COLUMN_MEAS),
     "SET_FREQUENCY": cc(GRID_ROW_FREQUENCY,GRID_COLUMN_SET),
     "SET_AMPLITUDE": cc(GRID_ROW_AMPLITUDE,GRID_COLUMN_SET),
+    "ADC_SET_POINT": cc(GRID_ROW_ADC_SET_POINT,GRID_COLUMN_SET),
+    "AVERAGE_POINTS": cc(GRID_ROW_AVERAGE_POINTS,GRID_COLUMN_SET),
 }
 
 capability_by_led_grid_coords = {val.Get() : key for key, val in led_grid_coords.items()}
@@ -156,8 +160,7 @@ class MainWindow(wx.Frame):
 
         bSizerLeft.Add( self.m_staticTextLeftCaption, 0, wx.ALL, 5 )
 
-        m_checkListModulesChoices = []
-        self.m_checkListModules = wx.CheckListBox( self.m_panelLeft, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, m_checkListModulesChoices, 0 )
+        self.m_checkListModules = wx.CheckListBox( self.m_panelLeft, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, [], wx.LB_MULTIPLE )
         bSizerLeft.Add( self.m_checkListModules, 0, wx.ALL|wx.EXPAND, 5 )
 
         fgSizerModuleGrid = wx.FlexGridSizer(self.config.geom_height, self.config.geom_width, 3, 3)
@@ -186,24 +189,24 @@ class MainWindow(wx.Frame):
 
         bSizerMulti = wx.BoxSizer( wx.HORIZONTAL )
 
-        self.m_checkBoxOnline = wx.CheckBox( self.m_collapsiblePaneMulti.GetPane(), wx.ID_ANY, u"Online", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_checkBoxOnline = wx.CheckBox( self.m_collapsiblePaneMulti.GetPane(), wx.ID_ANY, u"Online", wx.DefaultPosition, wx.DefaultSize, wx.CHK_3STATE )
         bSizerMulti.Add( self.m_checkBoxOnline, 0, wx.ALL, 5 )
 
-        self.m_checkBoxHvOn = wx.CheckBox( self.m_collapsiblePaneMulti.GetPane(), wx.ID_ANY, u"HV ON", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_checkBoxHvOn = wx.CheckBox( self.m_collapsiblePaneMulti.GetPane(), wx.ID_ANY, u"HV ON", wx.DefaultPosition, wx.DefaultSize, wx.CHK_3STATE )
         bSizerMulti.Add( self.m_checkBoxHvOn, 0, wx.ALL, 5 )
 
-        self.m_checkBoxLedAuto = wx.CheckBox( self.m_collapsiblePaneMulti.GetPane(), wx.ID_ANY, u"LED Auto", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_checkBoxLedAuto = wx.CheckBox( self.m_collapsiblePaneMulti.GetPane(), wx.ID_ANY, u"LED Auto", wx.DefaultPosition, wx.DefaultSize, wx.CHK_3STATE )
         bSizerMulti.Add( self.m_checkBoxLedAuto, 0, wx.ALL, 5 )
 
-        self.m_checkBoxPoll = wx.CheckBox( self.m_collapsiblePaneMulti.GetPane(), wx.ID_ANY, u"Poll", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_checkBoxPoll = wx.CheckBox( self.m_collapsiblePaneMulti.GetPane(), wx.ID_ANY, u"Poll", wx.DefaultPosition, wx.DefaultSize, wx.CHK_3STATE )
         bSizerMulti.Add( self.m_checkBoxPoll, 0, wx.ALL, 5 )
         self.m_checkBoxPoll.SetValue( self.config.query_delay > 0 )
 
-        self.m_checkBoxTemperatureControl = wx.CheckBox( self.m_collapsiblePaneMulti.GetPane(), wx.ID_ANY, u"Temperature Control", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_checkBoxTemperatureControl = wx.CheckBox( self.m_collapsiblePaneMulti.GetPane(), wx.ID_ANY, u"Temperature Control", wx.DefaultPosition, wx.DefaultSize, wx.CHK_3STATE )
         bSizerMulti.Add( self.m_checkBoxTemperatureControl, 0, wx.ALL, 5 )
         self.m_checkBoxTemperatureControl.Disable()
 
-        self.m_checkBoxAlertsEnabled = wx.CheckBox( self.m_collapsiblePaneMulti.GetPane(), wx.ID_ANY, u"Alerts Enabled", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_checkBoxAlertsEnabled = wx.CheckBox( self.m_collapsiblePaneMulti.GetPane(), wx.ID_ANY, u"Alerts Enabled", wx.DefaultPosition, wx.DefaultSize, wx.CHK_3STATE )
         bSizerMulti.Add( self.m_checkBoxAlertsEnabled, 0, wx.ALL, 5 )
         self.m_checkBoxAlertsEnabled.Disable()
 
@@ -279,7 +282,7 @@ class MainWindow(wx.Frame):
         self.m_gridLED = wx.grid.Grid( self.m_collapsiblePaneLED.GetPane(), wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0 )
 
         # Grid
-        self.m_gridLED.CreateGrid( GRID_ROWS_LED, GRID_COLUMNS )
+        self.m_gridLED.CreateGrid( GRID_ROWS_LED, GRID_COLUMNS_LED )
         self.m_gridLED.EnableEditing( True )
         self.m_gridLED.EnableGridLines( True )
         self.m_gridLED.EnableDragGridSize( False )
@@ -291,14 +294,16 @@ class MainWindow(wx.Frame):
         self.m_gridLED.SetColLabelValue( GRID_COLUMN_REFERENCE, u"Reference" )
         self.m_gridLED.SetColLabelValue( GRID_COLUMN_SET, u"Set" )
         self.m_gridLED.SetColLabelValue( GRID_COLUMN_MEAS, u"Measured" )
-        self.m_gridLED.SetColLabelValue( GRID_COLUMN_STATE, u"State" )
         self.m_gridLED.SetColLabelAlignment( wx.ALIGN_CENTER, wx.ALIGN_CENTER )
 
         # Rows
+        self.m_gridLED.SetRowLabelSize( 100 )
         self.m_gridLED.EnableDragRowSize( False )
         self.m_gridLED.SetRowLabelValue( GRID_ROW_AMPLITUDE, u"Amplitude" )
         self.m_gridLED.SetRowLabelValue( GRID_ROW_FREQUENCY, u"Frequency" )
-        self.m_gridLED.SetRowLabelAlignment( wx.ALIGN_CENTER, wx.ALIGN_CENTER )
+        self.m_gridLED.SetRowLabelValue( GRID_ROW_ADC_SET_POINT, u"ADC Setpoint" )
+        self.m_gridLED.SetRowLabelValue( GRID_ROW_AVERAGE_POINTS, u"Average points" )
+        self.m_gridLED.SetRowLabelAlignment( wx.ALIGN_LEFT, wx.ALIGN_CENTER )
 
         # Label Appearance
 
@@ -662,21 +667,36 @@ class MainWindow(wx.Frame):
             logging.debug("OnSelectModuleFromList: single select %s" % module_ids)
             self.SelectModule(module_ids, multiple=True)
         
+    def set_tri_state(self, checkbox, count, total):
+        if count == 0:
+            self.m_checkBoxOnline.Set3StateValue( wx.CHK_UNCHECKED )
+        elif count == total:
+            self.m_checkBoxOnline.Set3StateValue( wx.CHK_CHECKED )
+        else:
+            self.m_checkBoxOnline.Set3StateValue( wx.CHK_UNDETERMINED )
+
+
 
     def SelectModule(self, module_id, multiple=False):
         print("SelectModule: %s, multiple selection == %s" % (module_id, multiple))
         self.activeModuleId = module_id
 
-        self.m_pollTimer.Stop()
-
         if multiple:
             logging.debug("hide all parts")
+            n_selected = len(module_id)
+            n_online = len([id for id in module_id if self.config.modules[id].online])
+            n_hv_on = 0 #TODO
+            self.set_tri_state(self.m_checkBoxOnline, n_online, n_selected)
+
+            self.m_staticTextRightCaption.SetLabelText( "Modules %s " % (', '.join(module_id)) )
+
             for panel in [self.m_collapsiblePaneHV, self.m_collapsiblePaneLED, self.m_collapsiblePaneDebug]:
                 panel.Collapse()
                 panel.Disable()
         else:
             listIndex = self.config.modulesOrderedById.index(module_id)
             self.m_checkListModules.Select(listIndex)
+
 
             for button in self.m_moduleMiniButtons.values():
                 if button.myname == module_id: 
@@ -689,6 +709,8 @@ class MainWindow(wx.Frame):
                 ["%s=%d" % (p, moduleConfig.address(p)) for p in moduleConfig.parts]
             )
             self.m_staticTextRightCaption.SetLabelText("Module %s [%s]" % (moduleConfig.id, partsText))
+
+            self.m_checkBoxOnline.Set3StateValue(wx.CHK_CHECKED if moduleConfig.online else wx.CHK_UNCHECKED)
 
 #            self.m_collapsiblePaneDebug.Collapse(True)
             self.m_collapsiblePaneDebug.Enable()
