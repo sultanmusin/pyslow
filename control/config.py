@@ -93,6 +93,8 @@ class Config:
 
         self.reference_temperature = float(self.soup.select("global flags refTemp")[0].text)
         self.temperature_slope = float(self.soup.select("global flags tempSlope")[0].text)
+        self.verbose = bool(int(self.soup.select("global flags verbose")[0].text))
+        self.query_delay = int(self.soup.select("global flags queryDelay")[0].text)
 
 
 
