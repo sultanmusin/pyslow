@@ -216,6 +216,8 @@ class MainWindow(wx.Frame):
         self.m_collapsiblePaneMulti.GetPane().Layout()
         bSizerMulti.Fit( self.m_collapsiblePaneMulti.GetPane() )
         bSizerRight.Add( self.m_collapsiblePaneMulti, 0, wx.EXPAND |wx.ALL, 5 )
+        self.m_collapsiblePaneMulti.Hide()
+        self.m_collapsiblePaneMulti.Show() # magic to force whos panel
 
         self.m_collapsiblePaneHV = wx.CollapsiblePane( self.m_panelRight, wx.ID_ANY, u"High Voltage", wx.DefaultPosition, wx.DefaultSize, wx.CP_DEFAULT_STYLE )
         self.m_collapsiblePaneHV.Collapse( False )
