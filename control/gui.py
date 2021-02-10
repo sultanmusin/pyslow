@@ -17,6 +17,8 @@ import string
 import sys
 import wx
 import wx.richtext
+import wx.xrc
+import wx.grid
 from wxasync import WxAsyncApp
 
 sys.path.append('.')
@@ -25,67 +27,80 @@ import config
 from message import Message
 from detector import *
 from hvsyssupply import HVsysSupply
-
+from hvsysled import HVsysLED
+from hvstatus import HVStatus
 
 configuration = None
 detector = None
 
+# HV grid legend
+N_SECTIONS = 10
+GRID_ROW_PEDESTAL = N_SECTIONS
+GRID_ROW_TEMPERATURE = N_SECTIONS + 1
+GRID_ROW_SLOPE = N_SECTIONS + 2
+GRID_ROWS_HV = N_SECTIONS + 3 # for pedestal, temperature, slope
 
-class CharValidator(wx.PyValidator):
-    ''' Validates data as it is entered into the text controls. '''
+# LED grid legend
+GRID_ROW_FREQUENCY = 0
+GRID_ROW_AMPLITUDE = 1
+GRID_ROWS_LED = 2
 
-    #----------------------------------------------------------------------
-    def __init__(self, flag):
-        wx.PyValidator.__init__(self)
-        self.flag = flag
-        self.Bind(wx.EVT_CHAR, self.OnChar)
+# All grids column legend
+GRID_COLUMN_REFERENCE = 0
+GRID_COLUMN_SET = 1
+GRID_COLUMN_MEAS = 2
+GRID_COLUMN_STATE = 3
+GRID_COLUMNS = 4
 
-    #----------------------------------------------------------------------
-    def Clone(self):
-        '''Required Validator method'''
-        return CharValidator(self.flag)
+cc = wx.grid.GridCellCoords
+hv_grid_coords = {
+    "1/SET_VOLTAGE": cc(0,GRID_COLUMN_SET),
+    "2/SET_VOLTAGE": cc(1,GRID_COLUMN_SET),
+    "3/SET_VOLTAGE": cc(2,GRID_COLUMN_SET),
+    "4/SET_VOLTAGE": cc(3,GRID_COLUMN_SET),
+    "5/SET_VOLTAGE": cc(4,GRID_COLUMN_SET),
+    "6/SET_VOLTAGE": cc(5,GRID_COLUMN_SET),
+    "7/SET_VOLTAGE": cc(6,GRID_COLUMN_SET),
+    "8/SET_VOLTAGE": cc(7,GRID_COLUMN_SET),
+    "9/SET_VOLTAGE": cc(8,GRID_COLUMN_SET),
+    "10/SET_VOLTAGE": cc(9,GRID_COLUMN_SET),
+    "SET_PEDESTAL_VOLTAGE": cc(GRID_ROW_PEDESTAL,GRID_COLUMN_SET),
+    "TEMPERATURE": cc(GRID_ROW_TEMPERATURE,GRID_COLUMN_MEAS),
+    "1/MEAS_VOLTAGE": cc(0,GRID_COLUMN_MEAS),
+    "2/MEAS_VOLTAGE": cc(1,GRID_COLUMN_MEAS),
+    "3/MEAS_VOLTAGE": cc(2,GRID_COLUMN_MEAS),
+    "4/MEAS_VOLTAGE": cc(3,GRID_COLUMN_MEAS),
+    "5/MEAS_VOLTAGE": cc(4,GRID_COLUMN_MEAS),
+    "6/MEAS_VOLTAGE": cc(5,GRID_COLUMN_MEAS),
+    "7/MEAS_VOLTAGE": cc(6,GRID_COLUMN_MEAS),
+    "8/MEAS_VOLTAGE": cc(7,GRID_COLUMN_MEAS),
+    "9/MEAS_VOLTAGE": cc(8,GRID_COLUMN_MEAS),
+    "10/MEAS_VOLTAGE": cc(9,GRID_COLUMN_MEAS),        
+    "MEAS_PEDESTAL_VOLTAGE": cc(GRID_ROW_PEDESTAL,GRID_COLUMN_MEAS),
+}
 
-    #----------------------------------------------------------------------
-    def Validate(self, win):
-        return True
+capability_by_hv_grid_coords = {val.Get() : key for key, val in hv_grid_coords.items()}
 
-    #----------------------------------------------------------------------
-    def TransferToWindow(self):
-        return True
 
-    #----------------------------------------------------------------------
-    def TransferFromWindow(self):
-        return True
+led_grid_coords = {
+    "MEAS_PEDESTAL_VOLTAGE": cc(GRID_ROW_PEDESTAL,GRID_COLUMN_MEAS),
+    "SET_FREQUENCY": cc(GRID_ROW_FREQUENCY,GRID_COLUMN_SET),
+    "SET_AMPLITUDE": cc(GRID_ROW_AMPLITUDE,GRID_COLUMN_SET),
+}
 
-    #----------------------------------------------------------------------
-    def OnChar(self, event):
-        keycode = int(event.GetKeyCode())
-        controls = [wx.WXK_BACK, wx.WXK_TAB, wx.WXK_RETURN, wx.WXK_TAB]
-        if keycode < 256:
-            #print keycode
-            key = chr(keycode)
-            if keycode in controls: 
-                return
-            #print key
-            if self.flag == 'no-alpha' and key in string.ascii_letters:
-                return
-            if self.flag == 'no-digit' and key in string.digits:
-                return
-            if self.flag == 'float' and key not in string.digits + '.':
-                return
-        event.Skip()
-        
+capability_by_led_grid_coords = {val.Get() : key for key, val in led_grid_coords.items()}
+
 class MainWindow(wx.Frame):
+
     def __init__(self, parent, title):
         self.dirname=''
 
         global configuration
         self.config = configuration
 
+        wx.Log().EnableLogging(False)
 
-        wx.Frame.__init__(self, parent, title=title, size=(1500,1000))
-        self.CreateStatusBar() # A Statusbar in the bottom of the window
-        self.CreateMenu()
+        wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"FHCal DCS", pos = wx.DefaultPosition, size = wx.Size( 1000,1000 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
         self.CreateLayout()
         self.Show()
 
@@ -95,165 +110,348 @@ class MainWindow(wx.Frame):
         self.SetReferenceParameters()
 
     def CreateLayout(self):
+        self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 
-        self.moduleListTitle = wx.StaticBox(self, -1, "Modules")
-        self.moduleListBox = wx.ListBox(self, choices=self.config.modulesOrderedById, style=wx.LB_SINGLE | wx.LB_HSCROLL)
-        self.Bind(wx.EVT_LISTBOX, self.OnSelectModuleFromList, self.moduleListBox)
-        self.moduleListBox.SetSelection(0)
+        self.m_statusBar1 = self.CreateStatusBar( 5, wx.STB_SIZEGRIP, wx.ID_ANY )
+        self.m_menubar1 = wx.MenuBar( 0 )
+        self.m_menuFile = wx.Menu()
+        self.m_menuOpen = wx.MenuItem( self.m_menuFile, wx.ID_ANY, u"&Open", wx.EmptyString, wx.ITEM_NORMAL )
+        self.m_menuFile.Append( self.m_menuOpen )
+
+        self.m_menuSave = wx.MenuItem( self.m_menuFile, wx.ID_ANY, u"&Save", wx.EmptyString, wx.ITEM_NORMAL )
+        self.m_menuFile.Append( self.m_menuSave )
+
+        self.m_menuPreferences = wx.MenuItem( self.m_menuFile, wx.ID_ANY, u"&Preferences", wx.EmptyString, wx.ITEM_NORMAL )
+        self.m_menuFile.Append( self.m_menuPreferences )
+
+        self.m_menuExit = wx.MenuItem( self.m_menuFile, wx.ID_ANY, u"E&xit", wx.EmptyString, wx.ITEM_NORMAL )
+        self.m_menuFile.Append( self.m_menuExit )
+
+        self.m_menubar1.Append( self.m_menuFile, u"&File" )
+
+        self.m_menuHelp = wx.Menu()
+        self.m_menuAbout = wx.MenuItem( self.m_menuHelp, wx.ID_ANY, u"A&bout", wx.EmptyString, wx.ITEM_NORMAL )
+        self.m_menuHelp.Append( self.m_menuAbout )
+
+        self.m_menubar1.Append( self.m_menuHelp, u"&Help" )
+
+        self.SetMenuBar( self.m_menubar1 )
+
+        # Menu Events
+        self.Bind(wx.EVT_MENU, self.OnOpen, self.m_menuOpen)
+        self.Bind(wx.EVT_MENU, self.OnSave, self.m_menuSave)
+        self.Bind(wx.EVT_MENU, self.OnPreferences, self.m_menuPreferences)
+        self.Bind(wx.EVT_MENU, self.OnExit, self.m_menuExit)
+        self.Bind(wx.EVT_MENU, self.OnAbout, self.m_menuAbout)
+
+        bSizerMain = wx.BoxSizer( wx.HORIZONTAL )
+
+        self.m_panelLeft = wx.Panel( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.BORDER_THEME|wx.TAB_TRAVERSAL )
+        self.m_panelLeft.SetMaxSize( wx.Size( 400,-1 ) )
+
+        bSizerLeft = wx.BoxSizer( wx.VERTICAL )
+
+        self.m_staticTextLeftCaption = wx.StaticText( self.m_panelLeft, wx.ID_ANY, u"Detector Map", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_staticTextLeftCaption.Wrap( -1 )
+
+        bSizerLeft.Add( self.m_staticTextLeftCaption, 0, wx.ALL, 5 )
+
+        m_checkListModulesChoices = []
+        self.m_checkListModules = wx.CheckListBox( self.m_panelLeft, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, m_checkListModulesChoices, 0 )
+        bSizerLeft.Add( self.m_checkListModules, 0, wx.ALL|wx.EXPAND, 5 )
+
+        fgSizerModuleGrid = wx.FlexGridSizer(self.config.geom_height, self.config.geom_width, 3, 3)
+        fgSizerModuleGrid.SetFlexibleDirection( wx.BOTH )
+        fgSizerModuleGrid.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+
+
+        bSizerLeft.Add( fgSizerModuleGrid, 1, wx.EXPAND, 5 )
+
+
+        self.m_panelLeft.SetSizer( bSizerLeft )
+        self.m_panelLeft.Layout()
+        bSizerLeft.Fit( self.m_panelLeft )
+        bSizerMain.Add( self.m_panelLeft, 1, wx.EXPAND |wx.ALL, 5 )
+
+        self.m_panelRight = wx.Panel( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.BORDER_THEME|wx.TAB_TRAVERSAL )
+        bSizerRight = wx.BoxSizer( wx.VERTICAL )
+
+        self.m_staticTextRightCaption = wx.StaticText( self.m_panelRight, wx.ID_ANY, u"Module #", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_staticTextRightCaption.Wrap( -1 )
+
+        bSizerRight.Add( self.m_staticTextRightCaption, 0, wx.ALL, 5 )
+
+        self.m_collapsiblePaneMulti = wx.CollapsiblePane( self.m_panelRight, wx.ID_ANY, u"Module Control", wx.DefaultPosition, wx.DefaultSize, wx.CP_DEFAULT_STYLE )
+        self.m_collapsiblePaneMulti.Collapse( False )
+
+        bSizerMulti = wx.BoxSizer( wx.HORIZONTAL )
+
+        self.m_checkBoxOnline = wx.CheckBox( self.m_collapsiblePaneMulti.GetPane(), wx.ID_ANY, u"Online", wx.DefaultPosition, wx.DefaultSize, 0 )
+        bSizerMulti.Add( self.m_checkBoxOnline, 0, wx.ALL, 5 )
+
+        self.m_checkBoxHvOn = wx.CheckBox( self.m_collapsiblePaneMulti.GetPane(), wx.ID_ANY, u"HV ON", wx.DefaultPosition, wx.DefaultSize, 0 )
+        bSizerMulti.Add( self.m_checkBoxHvOn, 0, wx.ALL, 5 )
+
+        self.m_checkBoxLedAuto = wx.CheckBox( self.m_collapsiblePaneMulti.GetPane(), wx.ID_ANY, u"LED Auto", wx.DefaultPosition, wx.DefaultSize, 0 )
+        bSizerMulti.Add( self.m_checkBoxLedAuto, 0, wx.ALL, 5 )
+
+        self.m_checkBoxPoll = wx.CheckBox( self.m_collapsiblePaneMulti.GetPane(), wx.ID_ANY, u"Poll", wx.DefaultPosition, wx.DefaultSize, 0 )
+        bSizerMulti.Add( self.m_checkBoxPoll, 0, wx.ALL, 5 )
+        self.m_checkBoxPoll.SetValue( self.config.query_delay > 0 )
+
+        self.m_checkBoxTemperatureControl = wx.CheckBox( self.m_collapsiblePaneMulti.GetPane(), wx.ID_ANY, u"Temperature Control", wx.DefaultPosition, wx.DefaultSize, 0 )
+        bSizerMulti.Add( self.m_checkBoxTemperatureControl, 0, wx.ALL, 5 )
+        self.m_checkBoxTemperatureControl.Disable()
+
+        self.m_checkBoxAlertsEnabled = wx.CheckBox( self.m_collapsiblePaneMulti.GetPane(), wx.ID_ANY, u"Alerts Enabled", wx.DefaultPosition, wx.DefaultSize, 0 )
+        bSizerMulti.Add( self.m_checkBoxAlertsEnabled, 0, wx.ALL, 5 )
+        self.m_checkBoxAlertsEnabled.Disable()
+
+
+        self.m_collapsiblePaneMulti.GetPane().SetSizer( bSizerMulti )
+        self.m_collapsiblePaneMulti.GetPane().Layout()
+        bSizerMulti.Fit( self.m_collapsiblePaneMulti.GetPane() )
+        bSizerRight.Add( self.m_collapsiblePaneMulti, 0, wx.EXPAND |wx.ALL, 5 )
+
+        self.m_collapsiblePaneHV = wx.CollapsiblePane( self.m_panelRight, wx.ID_ANY, u"High Voltage", wx.DefaultPosition, wx.DefaultSize, wx.CP_DEFAULT_STYLE )
+        self.m_collapsiblePaneHV.Collapse( False )
+
+        bSizerHV = wx.BoxSizer( wx.VERTICAL )
+
+        self.m_gridHV = wx.grid.Grid( self.m_collapsiblePaneHV.GetPane(), wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0 )
+
+        # Grid
+        self.m_gridHV.CreateGrid( GRID_ROWS_HV, GRID_COLUMNS )
+        self.m_gridHV.EnableEditing( True )
+        self.m_gridHV.SetDefaultEditor(wx.grid.GridCellFloatEditor(width=3, precision=1))
+        self.m_gridHV.EnableGridLines( True )
+        self.m_gridHV.EnableDragGridSize( False )
+        self.m_gridHV.SetMargins( 0, 0 )
+
+        # Columns
+        self.m_gridHV.EnableDragColMove( False )
+        self.m_gridHV.EnableDragColSize( True )
+        self.m_gridHV.SetColLabelValue( GRID_COLUMN_REFERENCE, u"Reference" )
+        self.m_gridHV.SetColLabelValue( GRID_COLUMN_SET, u"Set" )
+        self.m_gridHV.SetColLabelValue( GRID_COLUMN_MEAS, u"Measured" )
+        self.m_gridHV.SetColLabelValue( GRID_COLUMN_STATE, u"State" )
+        self.m_gridHV.SetColLabelAlignment( wx.ALIGN_CENTER, wx.ALIGN_CENTER )
+
+        # Rows
+        for row in range(GRID_ROWS_HV):
+            self.m_gridHV.SetRowLabelValue(row, "Section %d"%(row+1))
+            for col in range(GRID_COLUMNS):
+                self.m_gridHV.SetReadOnly(row, col, True)
+                self.m_gridHV.SetCellValue(row, col, "0.0")
+
+            self.m_gridHV.SetReadOnly(row, 1, False)
+            self.m_gridHV.SetCellValue(row, 3, "OK")
+
+        self.m_gridHV.EnableDragRowSize( False )
+        self.m_gridHV.SetRowLabelSize( 100 )
+        self.m_gridHV.SetRowLabelValue( GRID_ROW_PEDESTAL, u"Pedestal" )
+        self.m_gridHV.SetRowLabelValue( GRID_ROW_TEMPERATURE, u"Temperature" )
+        self.m_gridHV.SetRowLabelValue( GRID_ROW_SLOPE, u"Slope" )
+        self.m_gridHV.SetRowLabelAlignment( wx.ALIGN_LEFT, wx.ALIGN_CENTER )
+
+        self.m_gridHV.SetCellValue(GRID_ROW_PEDESTAL, 3, "")
+        self.m_gridHV.SetCellValue(GRID_ROW_TEMPERATURE, 3, "")
+        self.m_gridHV.SetCellValue(GRID_ROW_SLOPE, 3, "")
+
+
+        # Label Appearance
+
+        # Cell Defaults
+        self.m_gridHV.SetDefaultCellAlignment( wx.ALIGN_LEFT, wx.ALIGN_TOP )
+        bSizerHV.Add( self.m_gridHV, 0, wx.ALL, 5 )
+
+
+        self.m_collapsiblePaneHV.GetPane().SetSizer( bSizerHV )
+        self.m_collapsiblePaneHV.GetPane().Layout()
+        bSizerHV.Fit( self.m_collapsiblePaneHV.GetPane() )
+        bSizerRight.Add( self.m_collapsiblePaneHV, 0, wx.EXPAND |wx.ALL, 5 )
+
+        self.m_collapsiblePaneLED = wx.CollapsiblePane( self.m_panelRight, wx.ID_ANY, u"LED Control", wx.DefaultPosition, wx.DefaultSize, wx.CP_DEFAULT_STYLE )
+        self.m_collapsiblePaneLED.Collapse( False )
+
+        bSizerLED = wx.BoxSizer( wx.VERTICAL )
+
+        self.m_gridLED = wx.grid.Grid( self.m_collapsiblePaneLED.GetPane(), wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0 )
+
+        # Grid
+        self.m_gridLED.CreateGrid( GRID_ROWS_LED, GRID_COLUMNS )
+        self.m_gridLED.EnableEditing( True )
+        self.m_gridLED.EnableGridLines( True )
+        self.m_gridLED.EnableDragGridSize( False )
+        self.m_gridLED.SetMargins( 0, 0 )
+
+        # Columns
+        self.m_gridLED.EnableDragColMove( False )
+        self.m_gridLED.EnableDragColSize( True )
+        self.m_gridLED.SetColLabelValue( GRID_COLUMN_REFERENCE, u"Reference" )
+        self.m_gridLED.SetColLabelValue( GRID_COLUMN_SET, u"Set" )
+        self.m_gridLED.SetColLabelValue( GRID_COLUMN_MEAS, u"Measured" )
+        self.m_gridLED.SetColLabelValue( GRID_COLUMN_STATE, u"State" )
+        self.m_gridLED.SetColLabelAlignment( wx.ALIGN_CENTER, wx.ALIGN_CENTER )
+
+        # Rows
+        self.m_gridLED.EnableDragRowSize( False )
+        self.m_gridLED.SetRowLabelValue( GRID_ROW_AMPLITUDE, u"Amplitude" )
+        self.m_gridLED.SetRowLabelValue( GRID_ROW_FREQUENCY, u"Frequency" )
+        self.m_gridLED.SetRowLabelAlignment( wx.ALIGN_CENTER, wx.ALIGN_CENTER )
+
+        # Label Appearance
+
+        # Cell Defaults
+        self.m_gridLED.SetDefaultCellAlignment( wx.ALIGN_LEFT, wx.ALIGN_TOP )
+        bSizerLED.Add( self.m_gridLED, 0, wx.ALL, 5 )
+
+
+        self.m_collapsiblePaneLED.GetPane().SetSizer( bSizerLED )
+        self.m_collapsiblePaneLED.GetPane().Layout()
+        bSizerLED.Fit( self.m_collapsiblePaneLED.GetPane() )
+        bSizerRight.Add( self.m_collapsiblePaneLED, 0, wx.EXPAND |wx.ALL, 5 )
+
+        self.m_collapsiblePaneDebug = wx.CollapsiblePane( self.m_panelRight, wx.ID_ANY, u"Debug", wx.DefaultPosition, wx.DefaultSize, wx.CP_DEFAULT_STYLE )
+        self.m_collapsiblePaneDebug.Collapse( True )
+
+        bSizerDebug = wx.BoxSizer( wx.HORIZONTAL )
+
+        self.m_listBoxParts = wx.ListBox( self.m_collapsiblePaneDebug.GetPane(), wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, [], 0 )
+        bSizerDebug.Add( self.m_listBoxParts, 0, wx.ALL, 5 )
+
+        self.m_listBoxCapabilities = wx.ListBox( self.m_collapsiblePaneDebug.GetPane(), wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, [], 0 )
+        bSizerDebug.Add( self.m_listBoxCapabilities, 0, wx.ALL, 5 )
+
+        self.m_textCtrl1 = wx.TextCtrl( self.m_collapsiblePaneDebug.GetPane(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+        bSizerDebug.Add( self.m_textCtrl1, 0, wx.ALL, 5 )
+
+        self.m_button1 = wx.Button( self.m_collapsiblePaneDebug.GetPane(), wx.ID_ANY, u"Read", wx.DefaultPosition, wx.DefaultSize, 0 )
+        bSizerDebug.Add( self.m_button1, 0, wx.ALL, 5 )
+
+        self.m_textCtrl2 = wx.TextCtrl( self.m_collapsiblePaneDebug.GetPane(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+        bSizerDebug.Add( self.m_textCtrl2, 0, wx.ALL, 5 )
+
+        self.m_button2 = wx.Button( self.m_collapsiblePaneDebug.GetPane(), wx.ID_ANY, u"Write", wx.DefaultPosition, wx.DefaultSize, 0 )
+        bSizerDebug.Add( self.m_button2, 0, wx.ALL, 5 )
+
+        self.m_textCtrl3 = wx.TextCtrl( self.m_collapsiblePaneDebug.GetPane(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+        bSizerDebug.Add( self.m_textCtrl3, 0, wx.ALL, 5 )
+
+
+        self.m_collapsiblePaneDebug.GetPane().SetSizer( bSizerDebug )
+        self.m_collapsiblePaneDebug.GetPane().Layout()
+        bSizerDebug.Fit( self.m_collapsiblePaneDebug.GetPane() )
+        bSizerRight.Add( self.m_collapsiblePaneDebug, 0, wx.ALL|wx.EXPAND, 5 )
+
+
+        self.m_panelRight.SetSizer( bSizerRight )
+        self.m_panelRight.Layout()
+        bSizerRight.Fit( self.m_panelRight )
+        bSizerMain.Add( self.m_panelRight, 1, wx.EXPAND |wx.ALL, 5 )
+
+
+        self.SetSizer( bSizerMain )
+        self.Layout()
+
+        self.Centre( wx.BOTH )
+
+        # Module poll timer
+        self.m_pollTimer = wx.Timer(self, 12345)
+        self.Bind( wx.EVT_TIMER, self.OnPollTimer, self.m_pollTimer )
+        if self.config.query_delay > 0: # means we should periodically query the module          
+            self.m_pollTimer.Start(self.config.query_delay * 1000)
+            logging.info("First poll timer start!")
+
+
+        # Connect Events
+
+        self.m_checkBoxHvOn.Bind( wx.EVT_CHECKBOX, self.OnCheckBoxHVChange )
+        self.m_checkBoxLedAuto.Bind( wx.EVT_CHECKBOX, self.OnCheckBoxLEDChange )
+        self.m_checkBoxPoll.Bind( wx.EVT_CHECKBOX, self.OnCheckBoxPollChange )
+
+        self.m_gridHV.Bind( wx.grid.EVT_GRID_CELL_CHANGED, self.OnHVGridChange )
+        self.m_gridLED.Bind( wx.grid.EVT_GRID_CELL_CHANGED, self.OnLEDGridChange )
+
+        self.m_checkListModules.Bind(wx.EVT_LISTBOX, self.OnSelectModuleFromList)
+
+        index = 0
+        for title, config in self.config.modules.items():
+            self.m_checkListModules.Append(str(title))
+            self.m_checkListModules.Check(index, config.online)
+            index = index + 1
+
+        self.m_checkListModules.SetSelection(0)
         
-        self.miniGridSizer = wx.FlexGridSizer(self.config.geom_height, self.config.geom_width, 3, 3)
-
-        self.moduleMiniButtons = {}
+        self.m_moduleMiniButtons = {}
         for m in self.config.modulesOrderedByGeometry:
             if len(m) > 0:
-                self.moduleMiniButtons[m] = wx.Button(self, -1, m, size=(36,40), style=wx.BU_EXACTFIT)
-                self.moduleMiniButtons[m].myname = m
-                self.Bind(wx.EVT_BUTTON, self.OnSelectModuleFromGrid, self.moduleMiniButtons[m])
+                self.m_moduleMiniButtons[m] = wx.Button(self.m_panelLeft, -1, m, size=(36,40), style=wx.BU_EXACTFIT)
+                self.m_moduleMiniButtons[m].myname = m
+                self.Bind(wx.EVT_BUTTON, self.OnSelectModuleFromGrid, self.m_moduleMiniButtons[m])
                 if self.config.modules[m].online:
-                    self.moduleMiniButtons[m].SetBackgroundColour((255, 255, 0))
-                self.miniGridSizer.Add(self.moduleMiniButtons[m])
+                    self.m_moduleMiniButtons[m].SetBackgroundColour((255, 255, 0))
+                fgSizerModuleGrid.Add(self.m_moduleMiniButtons[m])
             else:
-                self.miniGridSizer.Add(wx.StaticText(self, -1, ""))
+                fgSizerModuleGrid.Add(wx.StaticText(self.m_panelLeft, -1, ""))
 
-        self.leftPaneSizer = wx.BoxSizer(wx.VERTICAL)
-        self.leftPaneSizer.Add(self.moduleListTitle, 0, wx.EXPAND)
-        self.leftPaneSizer.Add(self.moduleListBox, 1, wx.EXPAND)
-        self.leftPaneSizer.Add(self.miniGridSizer, 0, wx.EXPAND)
 
-        self.N_SECTIONS = 10
+    def __del__( self ):
+        pass
 
-        self.hvControls = {}
-        self.ledControls = {}
 
-        self.gridSizer = wx.FlexGridSizer(self.N_SECTIONS+7, 5, 4, 4)
-        self.gridSizer.Add(wx.StaticText(self, -1, "  Section"))
-        self.gridSizer.Add(wx.StaticText(self, -1, "Reference "))
-        self.gridSizer.Add(wx.StaticText(self, -1, "Set "))
-        self.gridSizer.Add(wx.StaticText(self, -1, "Meas "))
-        self.gridSizer.Add(wx.StaticText(self, -1, "Error"))
-        for row in range(1,self.N_SECTIONS+1):
-            self.gridSizer.Add(wx.StaticText(self, -1, "  "+str(row)))
-            self.hvControls['%d/REF_VOLTAGE'%row] = wx.TextCtrl(self, -1, "0.0")
-            self.gridSizer.Add(self.hvControls['%d/REF_VOLTAGE'%row])
-            self.hvControls['%d/SET_VOLTAGE'%row] = wx.TextCtrl(self, -1, "0.0")#, validator=CharValidator('float'))
-            self.gridSizer.Add(self.hvControls['%d/SET_VOLTAGE'%row])
-            self.hvControls['%d/SET_VOLTAGE'%row].myname = '%d/SET_VOLTAGE'%row
-            self.hvControls['%d/SET_VOLTAGE'%row].Bind(wx.EVT_KILL_FOCUS, self.OnKillFocus)
+    def OnPollTimer(self, event):
+        logging.info("Poll timer fired!")
+        #print(event)
+        pass
 
-            self.hvControls['%d/MEAS_VOLTAGE'%row] = wx.TextCtrl(self, -1, "0.0")
-            self.gridSizer.Add(self.hvControls['%d/MEAS_VOLTAGE'%row])
-            self.hvControls['%d/ERROR'%row] = wx.TextCtrl(self, -1, "OK")
-            self.gridSizer.Add(self.hvControls['%d/ERROR'%row])
+    def OnCheckBoxPollChange(self, event):
+        if self.m_checkBoxPoll.GetValue() and self.config.query_delay > 0:
+            self.m_pollTimer.Start(self.config.query_delay * 1000)
+            logging.info("Poll timer started!")
+        else: 
+            self.m_pollTimer.Stop()
+            logging.info("Poll timer stopped!")
 
-        self.gridSizer.Add(wx.StaticText(self, -1, "  Pedestal"))
-        self.hvControls['REF_PEDESTAL_VOLTAGE'] = wx.TextCtrl(self, -1, "0.0")
-        self.gridSizer.Add(self.hvControls['REF_PEDESTAL_VOLTAGE'])
-        self.hvControls['SET_PEDESTAL_VOLTAGE'] = wx.TextCtrl(self, -1, "0.0")
-        self.gridSizer.Add(self.hvControls['SET_PEDESTAL_VOLTAGE'])
-        self.hvControls['SET_PEDESTAL_VOLTAGE'].myname = 'SET_PEDESTAL_VOLTAGE'
-        self.hvControls['SET_PEDESTAL_VOLTAGE'].Bind(wx.EVT_KILL_FOCUS, self.OnKillFocus)
-        self.hvControls['MEAS_PEDESTAL_VOLTAGE'] = wx.TextCtrl(self, -1, "0.0")
-        self.gridSizer.Add(self.hvControls['MEAS_PEDESTAL_VOLTAGE'])
-        self.gridSizer.Add(wx.StaticText(self, -1, ""))
 
-        self.gridSizer.Add(wx.StaticText(self, -1, "  Temperature"))
-        self.hvControls['REF_TEMPERATURE'] = wx.TextCtrl(self, -1, "25.00")
-        self.gridSizer.Add(self.hvControls['REF_TEMPERATURE'])
-        self.hvControls['TEMPERATURE_SLOPE'] = wx.TextCtrl(self, -1, "")
-        self.gridSizer.Add(self.hvControls['TEMPERATURE_SLOPE'])
-        self.hvControls['TEMPERATURE'] = wx.TextCtrl(self, -1, "0.0")
-        self.gridSizer.Add(self.hvControls['TEMPERATURE'])
-        self.gridSizer.Add(wx.StaticText(self, -1, ""))
+    # Virtual event handlers, overide them in your derived class
+    def OnHVGridChange( self, event ):
+        global detector
+        logging.info("OnHVGridChange: %s"%(event.GetString()))
 
-        self.gridSizer.Add(wx.StaticText(self, -1, ""))
-        self.hvControls['HV_ON'] = wx.Button(self, -1, "HV ON")
-        self.gridSizer.Add(self.hvControls['HV_ON'])
-        self.Bind(wx.EVT_BUTTON, self.OnSwitchOnHV, self.hvControls['HV_ON'])
-        self.hvControls['HV_OFF'] = wx.Button(self, -1, "HV OFF")
-        self.gridSizer.Add(self.hvControls['HV_OFF'])
-        self.Bind(wx.EVT_BUTTON, self.OnSwitchOffHV, self.hvControls['HV_OFF'])
-        self.gridSizer.Add(wx.StaticText(self, -1, ""))
-        self.gridSizer.Add(wx.StaticText(self, -1, ""))
+        moduleId = self.activeModuleId
+        moduleConfig = self.config.modules[moduleId]
+        
+        if moduleConfig.has('hv'): 
+            bus_id = self.config.modules[self.activeModuleId].bus_id
+            part_address = int(self.config.modules[self.activeModuleId].address('hv'))
+            part = detector.buses[bus_id].getPart(part_address) 
 
-        self.gridSizer.Add(wx.StaticText(self, -1, "  LED Frequency"))
-        self.ledControls['SET_FREQUENCY'] = wx.TextCtrl(self, -1, "0")
-        self.gridSizer.Add(self.ledControls['SET_FREQUENCY'])
-        self.ledControls['SET_FREQUENCY'].myname = 'SET_FREQUENCY'
-        self.ledControls['SET_FREQUENCY'].Bind(wx.EVT_KILL_FOCUS, self.OnKillFocus)
-        self.ledControls['MEAS_FREQUENCY'] = wx.TextCtrl(self, -1, "0")
-        self.gridSizer.Add(self.ledControls['MEAS_FREQUENCY'])
-        self.ledControls['REF_FREQUENCY'] = wx.TextCtrl(self, -1, "100")
-        self.gridSizer.Add(self.ledControls['REF_FREQUENCY'])
-        self.gridSizer.Add(wx.StaticText(self, -1, ""))
+            cap = capability_by_hv_grid_coords[(event.Row, event.Col)]
+            new_value = self.m_gridHV.GetCellValue(event.Row, event.Col)
+            value = part.valueFromString(cap, new_value)
 
-        self.gridSizer.Add(wx.StaticText(self, -1, "  LED Amplitude"))
-        self.ledControls['SET_AMPLITUDE'] = wx.TextCtrl(self, -1, "0")
-        self.gridSizer.Add(self.ledControls['SET_AMPLITUDE'])
-        self.ledControls['SET_AMPLITUDE'].myname = 'SET_AMPLITUDE'
-        self.ledControls['SET_AMPLITUDE'].Bind(wx.EVT_KILL_FOCUS, self.OnKillFocus)
+            command = Message(Message.WRITE_SHORT, part_address, part, cap, value)
+            asyncio.create_task(detector.add_task(bus_id, command, part, print))
 
-        self.ledControls['MEAS_AMPLITUDE'] = wx.TextCtrl(self, -1, "0")
-        self.gridSizer.Add(self.ledControls['MEAS_AMPLITUDE'])
-        self.ledControls['REF_AMPLITUDE'] = wx.TextCtrl(self, -1, "1000")
-        self.gridSizer.Add(self.ledControls['REF_AMPLITUDE'])
-        self.gridSizer.Add(wx.StaticText(self, -1, ""))
+    def OnLEDGridChange( self, event ):
+        global detector
+        logging.info("OnLEDGridChange: %s"%(event.GetString()))
 
-        self.controlSizer = wx.BoxSizer(wx.VERTICAL)
-        self.controlLabel = wx.StaticBox(self, -1, "Control")
-        self.controlSizer.Add(self.controlLabel, 0, wx.EXPAND)
-        self.controlSizer.Add(self.gridSizer, 1, wx.EXPAND)
+        moduleId = self.activeModuleId
+        moduleConfig = self.config.modules[moduleId]
+        
+        if moduleConfig.has('led'): 
+            bus_id = self.config.modules[self.activeModuleId].bus_id
+            part_address = int(self.config.modules[self.activeModuleId].address('led'))
+            part = detector.buses[bus_id].getPart(part_address) 
 
-        self.debugLineSizer = wx.BoxSizer(wx.HORIZONTAL)
+            cap = capability_by_led_grid_coords[(event.Row, event.Col)]
+            new_value = self.m_gridLED.GetCellValue(event.Row, event.Col)
+            value = part.valueFromString(cap, new_value)
 
-        self.debugLineSizer.Add(wx.StaticText(self, -1, "Part:"), 0, wx.EXPAND)
-        self.modulePartsBox = wx.Choice(self, -1, choices=["loading..."])
-        self.Bind(wx.EVT_CHOICE, self.OnChoosePart, self.modulePartsBox)
-        self.debugLineSizer.Add(self.modulePartsBox, 0, wx.EXPAND)
-
-        self.debugLineSizer.Add(wx.StaticText(self, -1, "Capability:"), 0, wx.EXPAND)
-        self.moduleCapabilitiesBox = wx.Choice(self, -1, choices=[])
-        self.Bind(wx.EVT_CHOICE, self.OnChooseCapability, self.moduleCapabilitiesBox)
-        self.debugLineSizer.Add(self.moduleCapabilitiesBox, 0, wx.EXPAND)
-
-        self.SelectFirstOnlineModule()
-        self.modulePartsBox.Select(0)   # now as we have second dropdown created we can use it
-        self.OnChoosePart(None)
-
-        self.buttonRead = wx.Button(self, -1, "Read")
-        self.debugLineSizer.Add(self.buttonRead, 0, wx.EXPAND)
-        self.Bind(wx.EVT_BUTTON, self.OnRead, self.buttonRead)
-
-        self.buttonWrite = wx.Button(self, -1, "Write")
-        self.debugLineSizer.Add(self.buttonWrite, 0, wx.EXPAND)
-        self.Bind(wx.EVT_BUTTON, self.OnWrite, self.buttonWrite)
-
-        self.debugLineSizer.Add(wx.StaticText(self, -1, "Command:"), 0, wx.EXPAND)
-        self.commandText = wx.TextCtrl(self, -1, "...")
-        self.debugLineSizer.Add(self.commandText, 1, wx.EXPAND)
-        self.debugLineSizer.Add(wx.StaticText(self, -1, "Response:"), 0, wx.EXPAND)
-        self.responseText = wx.TextCtrl(self, -1, "0")
-        self.debugLineSizer.Add(self.responseText, 1, wx.EXPAND)
-        self.debugLineSizer.Add(wx.StaticText(self, -1, "Value:"), 0, wx.EXPAND)
-        self.valueText = wx.TextCtrl(self, -1, "0")
-        self.debugLineSizer.Add(self.valueText, 1, wx.EXPAND)
-
-        self.debugSizer = wx.BoxSizer(wx.VERTICAL)
-        self.sb = wx.StaticBox(self, -1, "Debug")
-        self.debugSizer.Add(self.sb, 1, wx.EXPAND)
-        self.debugSizer.Add(self.debugLineSizer, 1, wx.EXPAND)
-        #self.debugSizer.Add(self.btn4, 1, wx.EXPAND)
-
-        self.rightPaneSizer = wx.BoxSizer(wx.VERTICAL)
-        self.rightPaneSizer.Add(self.controlSizer, 1, wx.EXPAND)
-        self.rightPaneSizer.Add(self.debugSizer, 0, wx.EXPAND)
-
-        # Use some sizers to see layout options
-        self.mainSizer = wx.BoxSizer(wx.HORIZONTAL)
-        self.mainSizer.Add(self.leftPaneSizer, 0, wx.EXPAND)
-        self.mainSizer.Add(self.rightPaneSizer, 1, wx.EXPAND)
-
-        #Layout sizers
-        self.SetSizer(self.mainSizer)
+            command = Message(Message.WRITE_SHORT, part_address, part, cap, value)
+            asyncio.create_task(detector.add_task(bus_id, command, part, print))
 
 
     def SelectFirstOnlineModule(self):
@@ -264,12 +462,12 @@ class MainWindow(wx.Frame):
 
     def ShowReferenceParameters(self):
         active_module_config = configuration.modules[self.activeModuleId]
-        self.hvControls['REF_PEDESTAL_VOLTAGE'].SetValue(str(active_module_config.hvPedestal))
         for ch, hv in active_module_config.hv.items():
-            self.hvControls['%s/REF_VOLTAGE'%ch].SetValue(str(hv))    
-        
-        self.hvControls['REF_TEMPERATURE'].SetValue("%.2f"%(configuration.reference_temperature))
-        self.hvControls['TEMPERATURE_SLOPE'].SetValue(str("-%d mV/C" % int(configuration.temperature_slope)))
+            self.m_gridHV.SetCellValue(int(ch), GRID_COLUMN_REFERENCE, str(hv))    
+
+        self.m_gridHV.SetCellValue(GRID_ROW_PEDESTAL, GRID_COLUMN_REFERENCE, str(active_module_config.hvPedestal))
+        self.m_gridHV.SetCellValue(GRID_ROW_TEMPERATURE, GRID_COLUMN_REFERENCE, str(configuration.reference_temperature))
+        self.m_gridHV.SetCellValue(GRID_ROW_SLOPE, GRID_COLUMN_REFERENCE, str(-configuration.temperature_slope))
 
     def SetReferenceParameters(self):
         active_module_config = configuration.modules[self.activeModuleId]
@@ -280,30 +478,6 @@ class MainWindow(wx.Frame):
         
 #        self.hvControls['REF_TEMPERATURE'].SetValue("%.2f"%(configuration.reference_temperature))
 #        self.hvControls['TEMPERATURE_SLOPE'].SetValue(str("-%d mV/C" % int(configuration.temperature_slope)))
-
-    def CreateMenu(self):
-        # Setting up the menu.
-        filemenu= wx.Menu()
-        helpmenu= wx.Menu()
-        menuOpen = filemenu.Append(wx.ID_OPEN, "&Open configuration"," Open configuration file")
-        menuSave = filemenu.Append(wx.ID_SAVE, "&Save configuration"," Save configuration file")
-        menuPreferences = filemenu.Append(wx.ID_PREFERENCES, "&Preferences"," Open application preferences")
-        menuExit = filemenu.Append(wx.ID_EXIT,"E&xit"," Terminate the program")
-        menuAbout= helpmenu.Append(wx.ID_ABOUT, "&About"," Information about this program")
-
-        # Creating the menubar.
-        menuBar = wx.MenuBar()
-        menuBar.Append(filemenu,"&File") # Adding the "filemenu" to the MenuBar
-        menuBar.Append(helpmenu,"&Help") # Adding the "helpmenu" to the MenuBar
-        self.SetMenuBar(menuBar)  # Adding the MenuBar to the Frame content.
-
-        # Events
-        self.Bind(wx.EVT_MENU, self.OnOpen, menuOpen)
-        self.Bind(wx.EVT_MENU, self.OnSave, menuSave)
-        self.Bind(wx.EVT_MENU, self.OnPreferences, menuPreferences)
-        self.Bind(wx.EVT_MENU, self.OnExit, menuExit)
-        self.Bind(wx.EVT_MENU, self.OnAbout, menuAbout)
-
 
 
     def OnChoosePart(self,e):
@@ -342,7 +516,6 @@ class MainWindow(wx.Frame):
             print("Unknown module part to interact with")
         
 
-
     def OnRead(self,e):
         global detector
 
@@ -361,11 +534,9 @@ class MainWindow(wx.Frame):
             asyncio.create_task(detector.add_task(bus_id, command, part, self.ShowQueryResult))
 
 
-
     def ShowQueryResult(self, data):
         self.responseText.SetValue("0x%x" % (data))
         self.valueText.SetValue(str(data))
-
 
 
     def OnWrite(self,e):
@@ -382,6 +553,27 @@ class MainWindow(wx.Frame):
         # TODO send (danger danger)
 
 
+    def OnCheckBoxHVChange(self, event):
+        value = HVsysSupply.POWER_ON if self.m_checkBoxHvOn.GetValue() > 0 else HVsysSupply.POWER_OFF
+        self.SwitchHV(value)
+
+    def OnCheckBoxLEDChange(self, event):
+        global detector
+        value = (self.m_checkBoxLedAuto.GetValue() > 0)
+
+        moduleId = self.activeModuleId
+        moduleConfig = self.config.modules[moduleId]
+        
+        if moduleConfig.has('led'): 
+            bus_id = self.config.modules[self.activeModuleId].bus_id
+            part_address = int(self.config.modules[self.activeModuleId].address('led'))
+            part = detector.buses[bus_id].getPart(part_address) 
+            command = Message(Message.WRITE_SHORT, part_address, part, 'AUTOREG', value)
+            logging.warning('LED switching!')
+            asyncio.create_task(detector.add_task(bus_id, command, part, print))
+        else:
+            logging.warning('LED autoreg requested for module without LED part')
+
     def SwitchHV(self,state):
         global detector
 
@@ -395,6 +587,7 @@ class MainWindow(wx.Frame):
             command = Message(Message.WRITE_SHORT, part_address, part, 'STATUS', state)
             logging.warning('HV switching!')
             asyncio.create_task(detector.add_task(bus_id, command, part, print))
+            asyncio.create_task(detector.monitor_ramp_status(bus_id, part, part_address, self.DisplayRampStatus))
         else:
             logging.warning('HV ON requested for module without HV part')
 
@@ -403,6 +596,19 @@ class MainWindow(wx.Frame):
 
     def OnSwitchOffHV(self, e):
         self.SwitchHV(HVsysSupply.POWER_OFF)
+
+    def DisplayRampStatus(self, part, progress, value):
+        logging.info("DisplayRampStatus: %d", value)
+        status = HVStatus(value)
+        for ch in range(1,11):
+            description = status.channel_description(ch)
+            self.m_gridHV.SetCellValue(ch-1, GRID_COLUMN_STATE, description)
+            if status.is_ramp():
+                description = description + '  ' + '#' * progress
+            self.m_statusBar1.SetStatusText(description)
+
+        if not status.is_ramp(): # so its finished
+            self.pollModule(self.activeModuleId)
 
 
     def OnSelectModuleFromGrid(self,e):
@@ -442,53 +648,76 @@ class MainWindow(wx.Frame):
 
 
     def OnSelectModuleFromList(self,e):
-        moduleId = self.config.modulesOrderedById[self.moduleListBox.GetSelection()]
-        print("OnSelectModuleFromList: %s" % moduleId)
-        self.SelectModule(moduleId)
+        selections = self.m_checkListModules.GetSelections()
+        if len(selections) == 0:
+            pass # this whould not happen
+        elif len(selections) == 1:
+            # single module select
+            module_id = self.config.modulesOrderedById[selections[0]]
+            logging.debug("OnSelectModuleFromList: single select %s" % module_id)
+            self.SelectModule(module_id)
+        else:
+            # multiselect
+            module_ids = [self.config.modulesOrderedById[s] for s in selections]
+            logging.debug("OnSelectModuleFromList: single select %s" % module_ids)
+            self.SelectModule(module_ids, multiple=True)
         
 
-    def SelectModule(self, moduleId):
-        print("SelectModule: %s" % (moduleId))
+    def SelectModule(self, module_id, multiple=False):
+        print("SelectModule: %s, multiple selection == %s" % (module_id, multiple))
+        self.activeModuleId = module_id
 
-        self.activeModuleId = moduleId
+        self.m_pollTimer.Stop()
 
-        listIndex = self.config.modulesOrderedById.index(moduleId)
-        self.moduleListBox.Select(listIndex)
+        if multiple:
+            logging.debug("hide all parts")
+            for panel in [self.m_collapsiblePaneHV, self.m_collapsiblePaneLED, self.m_collapsiblePaneDebug]:
+                panel.Collapse()
+                panel.Disable()
+        else:
+            listIndex = self.config.modulesOrderedById.index(module_id)
+            self.m_checkListModules.Select(listIndex)
 
-        for button in self.moduleMiniButtons.values():
-            if button.myname == moduleId: 
-                button.SetFont(wx.Font(wx.FontInfo(12).Bold()))
+            for button in self.m_moduleMiniButtons.values():
+                if button.myname == module_id: 
+                    button.SetFont(wx.Font(wx.FontInfo(12).Bold()))
+                else:
+                    button.SetFont(wx.Font(wx.FontInfo(12)))
+
+            moduleConfig = self.config.modules[module_id]
+            partsText = ', '.join(
+                ["%s=%d" % (p, moduleConfig.address(p)) for p in moduleConfig.parts]
+            )
+            self.m_staticTextRightCaption.SetLabelText("Module %s [%s]" % (moduleConfig.id, partsText))
+
+#            self.m_collapsiblePaneDebug.Collapse(True)
+            self.m_collapsiblePaneDebug.Enable()
+            #self.textLedFrequencyRef.SetValue(str(moduleConfig.ledFrequency))
+            
+            self.m_listBoxParts.Clear() #AAA
+            for part in moduleConfig.parts:
+                self.m_listBoxParts.Append(part)
+                #self.m_listBoxParts.SetClientData(index, address)
+
+            self.m_checkBoxOnline.SetValue( moduleConfig.online )
+            if moduleConfig.online:
+                if moduleConfig.has('hv'): 
+                    self.m_collapsiblePaneHV.Collapse(False)
+                    self.m_collapsiblePaneHV.Enable()
+
+                if moduleConfig.has('led'): 
+                    self.m_collapsiblePaneLED.Collapse(False)
+                    self.m_collapsiblePaneLED.Enable()
+                self.pollModule(module_id)
             else:
-                button.SetFont(wx.Font(wx.FontInfo(12)))
+                logging.info("Selected module offline, no polling")
+                if moduleConfig.has('hv'): 
+                    self.m_collapsiblePaneHV.Collapse(True)
+                    self.m_collapsiblePaneHV.Disable()
 
-        activeModule = self.config.modules[moduleId]
-        partsText = ', '.join(
-            ["%s=%d" % (p, activeModule.address(p)) for p in activeModule.parts]
-        )
-        self.controlLabel.SetLabelText("Module %s [%s]" % (activeModule.id, partsText))
-
-        moduleConfig = self.config.modules[moduleId]
-
-        for field in self.hvControls:
-            self.hvControls[field].Enable(moduleConfig.has('hv'))   # enable or disable depending on whether this module has the HV part
-        
-        if moduleConfig.has('hv'): 
-            pass #TODO
-                
-        if field in self.ledControls:
-            self.ledControls[field].Enable(moduleConfig.has('led'))   # enable or disable depending on whether this module has the LED part
-
-        if moduleConfig.has('led'): 
-            pass #TODO
-
-        #self.textLedFrequencyRef.SetValue(str(moduleConfig.ledFrequency))
-
-        self.modulePartsBox.Clear() #AAA
-        for part in moduleConfig.parts:
-            self.modulePartsBox.Append(part)
-            #self.modulePartsBox.SetClientData(index, address)
-
-        self.pollModule(moduleId)
+                if moduleConfig.has('led'): 
+                    self.m_collapsiblePaneLED.Collapse(True)
+                    self.m_collapsiblePaneLED.Disable()
 
 
     def pollModule(self, moduleId):
@@ -499,9 +728,24 @@ class MainWindow(wx.Frame):
     def DisplayValueOnComplete(self, part, capability, value):
         
         print("DisplayValueOnComplete: %s=%s"%(capability, value))
-        if capability in self.hvControls: 
-            str_value = part.valueToString(capability, value)
-            self.hvControls[capability].SetValue(str_value)
+
+        str_value = part.valueToString(capability, value)
+
+        if type(part) is HVsysSupply:
+            if capability in hv_grid_coords:
+                self.m_gridHV.SetCellValue(hv_grid_coords[capability], str_value)
+
+            if  capability == 'STATUS':
+                status = HVStatus(value)
+                is_on = status.is_on()
+                self.m_checkBoxHvOn.SetValue( is_on )
+        elif type(part) is HVsysLED:
+            if capability in led_grid_coords:
+                self.m_gridLED.SetCellValue(led_grid_coords[capability], str_value)
+
+            if capability == 'AUTOREG':   
+                is_on = (value > 0)
+                self.m_checkBoxLedAuto.SetValue( is_on )
 
     def OnAbout(self,e):
         # Create a message dialog box
@@ -585,15 +829,16 @@ async def main():
 
     loop = asyncio.get_event_loop()
     loop.set_exception_handler(handler)
-
+    
     try:
         for id, sm in detector.buses.items():
             await asyncio.create_task(sm.connect())
             asyncio.create_task(sm.send())
     except OSError as e:
-        print("Cannot connect to system module")  
+        print("Cannot connect to system module: %s"%(str(e)))  
 
     print("Module link ok")
+    
     app = WxAsyncApp(False)
     frame = MainWindow(None, "FHcal DCS")
     await app.MainLoop()
