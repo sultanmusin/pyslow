@@ -113,6 +113,7 @@ class MainWindow(wx.Frame):
         self.ShowReferenceParameters()
         self.SetReferenceParameters()
 
+
     def CreateLayout(self):
         self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 
@@ -468,7 +469,7 @@ class MainWindow(wx.Frame):
     def ShowReferenceParameters(self):
         active_module_config = configuration.modules[self.activeModuleId]
         for ch, hv in active_module_config.hv.items():
-            self.m_gridHV.SetCellValue(int(ch), GRID_COLUMN_REFERENCE, str(hv))    
+            self.m_gridHV.SetCellValue(int(ch)-1, GRID_COLUMN_REFERENCE, str(hv))    
 
         self.m_gridHV.SetCellValue(GRID_ROW_PEDESTAL, GRID_COLUMN_REFERENCE, str(active_module_config.hvPedestal))
         self.m_gridHV.SetCellValue(GRID_ROW_TEMPERATURE, GRID_COLUMN_REFERENCE, str(configuration.reference_temperature))
