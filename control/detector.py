@@ -114,6 +114,11 @@ class Detector:
                 command = Message(Message.READ_SHORT, address, type(part), cap, 0)
                 await self.add_task(sys_mod_id, command, part, partial(poll_cb, part, cap))
 
+    async def monitor_ramp_status(self, bus_id, part, address, callback):
+        command = Message(Message.READ_SHORT, address, part, "STATUS", 0)
+        for i in range(0,10):
+            await self.add_task(bus_id, command, part, partial(callback, part, i))
+            await asyncio.sleep(1)
 
     def set_hv_state(self, module_id:int, hv_status:int, show_channels:bool):
         error_mask = 65532
