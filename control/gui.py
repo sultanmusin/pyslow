@@ -57,6 +57,17 @@ GRID_COLUMNS_LED = 3
 
 cc = wx.grid.GridCellCoords
 hv_grid_coords = {
+    "1/REF_VOLTAGE": cc(0,GRID_COLUMN_REFERENCE),
+    "2/REF_VOLTAGE": cc(1,GRID_COLUMN_REFERENCE),
+    "3/REF_VOLTAGE": cc(2,GRID_COLUMN_REFERENCE),
+    "4/REF_VOLTAGE": cc(3,GRID_COLUMN_REFERENCE),
+    "5/REF_VOLTAGE": cc(4,GRID_COLUMN_REFERENCE),
+    "6/REF_VOLTAGE": cc(5,GRID_COLUMN_REFERENCE),
+    "7/REF_VOLTAGE": cc(6,GRID_COLUMN_REFERENCE),
+    "8/REF_VOLTAGE": cc(7,GRID_COLUMN_REFERENCE),
+    "9/REF_VOLTAGE": cc(8,GRID_COLUMN_REFERENCE),
+    "10/REF_VOLTAGE": cc(9,GRID_COLUMN_REFERENCE),
+
     "1/SET_VOLTAGE": cc(0,GRID_COLUMN_SET),
     "2/SET_VOLTAGE": cc(1,GRID_COLUMN_SET),
     "3/SET_VOLTAGE": cc(2,GRID_COLUMN_SET),
@@ -250,6 +261,7 @@ class MainWindow(wx.Frame):
                 self.m_gridHV.SetReadOnly(row, col, True)
                 self.m_gridHV.SetCellValue(row, col, "0.0")
 
+            self.m_gridHV.SetReadOnly(row, 0, False)
             self.m_gridHV.SetReadOnly(row, 1, False)
             self.m_gridHV.SetCellValue(row, 3, "OK")
 
@@ -869,5 +881,5 @@ async def main():
     await app.MainLoop()
 
 
-
-asyncio.run(main(), debug=True)
+if __name__ == '__main__':
+    asyncio.run(main(), debug=True)
