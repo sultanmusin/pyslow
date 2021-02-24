@@ -24,6 +24,7 @@ from task import *
 from partstate import *
 from config import *
 from hvsys import HVsys
+from hvsyssupply import HVsysSupply
 
 class HVsysBus:
     IP_PORT = 4001
@@ -44,7 +45,7 @@ class HVsysBus:
                 part_type = HVsys.catalogus[part_name]        # e.g. HVsysSupply or other part
                 if part_address in self.parts:
                     raise ValueError("Duplicate part id = %d for hvsys bus %s" % (part_address, self.id))
-                self.parts[part_address] = part_type()        # now create the instance of the part connected to our bus 
+                self.parts[part_address] = part_type(bus_config.det_cfg) if part_type == HVsysSupply else part_type()        # now create the instance of the part connected to our bus 
 
     def getPartCache(self, addr:int, part_type: type) -> PartState:
         if addr not in self.part_cache: 

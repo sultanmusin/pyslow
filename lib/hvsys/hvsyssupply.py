@@ -10,7 +10,9 @@ __version__ = "0.5"
 __email__ = "opetukhov@inr.ru"
 __status__ = "Development"
 
-
+import sys
+sys.path.append('control')
+import config
 
 class HVsysSupply:
 
@@ -83,6 +85,7 @@ class HVsysSupply:
         "STATUS",
         "TEMPERATURE",
         "RAMP_STATUS",
+        "MEAS_PEDESTAL_VOLTAGE",
         "1/MEAS_VOLTAGE",
         "2/MEAS_VOLTAGE",
         "3/MEAS_VOLTAGE",
@@ -96,7 +99,8 @@ class HVsysSupply:
     ]
 
 
-    def __init__(self):
+    def __init__(self, det_cfg:config.Config):
+        self.det_cfg = det_cfg
         self.state = {}
         for cap in HVsysSupply.capabilities:
             self.state[cap] = None
@@ -141,7 +145,9 @@ class HVsysSupply:
         if "SET_PEDESTAL_VOLTAGE" not in self.state or self.state["SET_PEDESTAL_VOLTAGE"] is None: 
             raise ValueError("HVsysSupply: cannot translate volts to counts without knowing SET_PEDESTAL_VOLTAGE")
         pedestal_voltage = self.pedestalCountsToVolts(self.state["SET_PEDESTAL_VOLTAGE"])
-        volts_to_set = -(float(volts) - pedestal_voltage - HVsysSupply.PEDESTAL_VOLTAGE_BIAS)  # e.g. -0.5V means we need to go 0.5V lower than pedestal (with positive counts)       
+        tmp = float( self.valueToString('TEMPERATURE', self.state['TEMPERATURE']) )
+        tmp_corr = (tmp - self.det_cfg.reference_temperature) * self.det_cfg.temperature_slope / 1000
+        volts_to_set = tmp_corr - (float(volts) - pedestal_voltage - HVsysSupply.PEDESTAL_VOLTAGE_BIAS)  # e.g. -0.5V means we need to go 0.5V lower than pedestal (with positive counts)       
         calib_voltage_slope = self.state["VOLTAGE_CALIBRATION"] / 100.0              #  325 -> -3.25 V (full scale) 
 
         if volts_to_set < 0:

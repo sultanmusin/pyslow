@@ -2,8 +2,6 @@
 <config xmlns="http://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" created="17.02.2014" id="default" xsi:noNamespaceSchemaLocation="PsdSlowControlConfig.xsd" xsi:schemaLocation="PsdSlowControlConfig.xsd">
 <global>
         <flags>
-<!--            <onlineModules> 1 </onlineModules>-->
-            <onlineModules> 40 </onlineModules>
 <!--
             <onlineModules> 1 </onlineModules>
 
@@ -46,9 +44,9 @@
             <onlineModules> 20 </onlineModules>
 
             <onlineModules> 21 </onlineModules>
-
+-->
             <onlineModules> 22 </onlineModules>
-
+<!--
             <onlineModules> 23 </onlineModules>
 
             <onlineModules> 24 </onlineModules>
@@ -115,7 +113,7 @@
 
             <onlineModules> 54 </onlineModules>
 -->
-            <queryDelay unit="sec">600</queryDelay>
+            <queryDelay unit="sec">10</queryDelay>
             <verbose> 1 </verbose>
             <useVoiceNotifications> 0 </useVoiceNotifications>
             <voiceServer> na61daqt </voiceServer>
@@ -128,7 +126,7 @@
         <hvsys id='north'>
                 <rate unit="baud">57600</rate>
                 <!--port>10.18.96.48</port-->
-                <port>192.168.69.204</port>
+                <port>192.168.0.7</port>
                 <!--port>localhost</port-->
                 <dataBits>8</dataBits>
                 <stopBits>1</stopBits>

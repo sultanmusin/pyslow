@@ -52,7 +52,7 @@ class Config:
 
         for sys_mod in self.soup.select("global connection hvsys"):
             id = sys_mod.attrs['id'] if 'id' in sys_mod.attrs else HVsysBus.DefaultBusId
-            self.buses[id] = BusConfig(sys_mod)
+            self.buses[id] = BusConfig(self, sys_mod)
 
         xx = list(map(lambda tag: int(tag.text), self.soup.select("config module geometry x")))
         self.geom_min_x, self.geom_max_x = min(xx), max(xx)
@@ -141,6 +141,7 @@ class ModuleConfig:
 
 
 class BusConfig:
-    def __init__(self, soup):
+    def __init__(self, det_cfg:Config, soup):
+        self.det_cfg = det_cfg
         self.id = soup.attrs['id'] if 'id' in soup.attrs else HVsysBus.DefaultBusId
         self.port = soup.find("port").text
