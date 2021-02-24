@@ -33,6 +33,10 @@ from hvstatus import HVStatus
 configuration = None
 detector = None
 
+GRID_COLUMN_ONLINE = 0
+GRID_COLUMN_HV_ON = 1
+GRID_COLUMN_LEFT_STATE = 2
+
 # HV grid legend
 N_SECTIONS = 10
 GRID_ROW_PEDESTAL = N_SECTIONS
@@ -161,16 +165,55 @@ class MainWindow(wx.Frame):
 
         bSizerLeft.Add( self.m_staticTextLeftCaption, 0, wx.ALL, 5 )
 
-        self.m_checkListModules = wx.CheckListBox( self.m_panelLeft, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, [], wx.LB_MULTIPLE )
-        bSizerLeft.Add( self.m_checkListModules, 0, wx.ALL|wx.EXPAND, 5 )
+        self.m_gridModules = wx.grid.Grid( self.m_panelLeft, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0 )
+
+        # Grid
+        self.m_gridModules.CreateGrid( len(self.config.modules), 3 )
+        self.m_gridModules.EnableEditing( True )
+        self.m_gridModules.EnableGridLines( True )
+        self.m_gridModules.EnableDragGridSize( False )
+        self.m_gridModules.SetMargins( 0, 0 )
+        self.m_gridModules.SetMaxSize( wx.Size(-1, 500) )
+        
+
+        # Columns
+        self.m_gridModules.EnableDragColMove( False )
+        self.m_gridModules.EnableDragColSize( True )
+        self.m_gridModules.SetColLabelValue( 0, u"Online" )
+        self.m_gridModules.SetColLabelValue( 1, u"HV ON" )
+        self.m_gridModules.SetColLabelValue( 2, u"State" )
+        self.m_gridModules.SetColFormatBool( 0 )
+        self.m_gridModules.SetColFormatBool( 1 )
+        self.m_gridModules.SetColLabelSize( wx.grid.GRID_AUTOSIZE )
+        self.m_gridModules.SetColLabelAlignment( wx.ALIGN_CENTER, wx.ALIGN_CENTER )
+
+        # Rows
+        self.m_gridModules.EnableDragRowSize( False )
+        self.m_gridModules.SetRowLabelAlignment( wx.ALIGN_LEFT, wx.ALIGN_CENTER )
+
+        # Label Appearance
+
+        # Cell Defaults
+        self.m_gridModules.SetDefaultCellAlignment( wx.ALIGN_LEFT, wx.ALIGN_TOP )
+        #self.m_gridModules.SetDefaultEditor( wx.grid.GridCellBoolEditor )
+
+        # Populate cells
+        for index, (title, config) in enumerate(self.config.modules.items()):
+            self.m_gridModules.SetRowLabelValue( index, "Module %s"%(title) )
+            self.m_gridModules.SetCellEditor( index, GRID_COLUMN_ONLINE, wx.grid.GridCellBoolEditor() )
+#            self.m_gridModules.SetCellValue( index, GRID_COLUMN_ONLINE, config.online )
+            # hv on and state columns get filled later on detector poll procedure                 
+
+        bSizerLeft.Add( self.m_gridModules, 1, wx.ALL, 5 )
 
         fgSizerModuleGrid = wx.FlexGridSizer(self.config.geom_height, self.config.geom_width, 3, 3)
         fgSizerModuleGrid.SetFlexibleDirection( wx.BOTH )
         fgSizerModuleGrid.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 
+        fgSizerModuleGrid.SetMinSize( wx.Size( -1,400 ) )
 
         bSizerLeft.Add( fgSizerModuleGrid, 1, wx.EXPAND, 5 )
-
+        bSizerLeft.Layout()
 
         self.m_panelLeft.SetSizer( bSizerLeft )
         self.m_panelLeft.Layout()
@@ -381,15 +424,19 @@ class MainWindow(wx.Frame):
         self.m_gridHV.Bind( wx.grid.EVT_GRID_CELL_CHANGED, self.OnHVGridChange )
         self.m_gridLED.Bind( wx.grid.EVT_GRID_CELL_CHANGED, self.OnLEDGridChange )
 
-        self.m_checkListModules.Bind(wx.EVT_LISTBOX, self.OnSelectModuleFromList)
+        self.m_gridModules.Bind( wx.grid.EVT_GRID_RANGE_SELECT, self.OnModuleGridRangeSelect )   
+        self.m_gridModules.Bind( wx.grid.EVT_GRID_CMD_SELECT_CELL, self.OnModuleGridSelectCell )   
+        self.m_gridModules.Bind( wx.grid.EVT_GRID_LABEL_LEFT_CLICK, self.OnModuleGridLabelLeftClick )   
+        self.m_gridModules.Bind( wx.grid.EVT_GRID_CELL_CHANGED, self.OnModuleGridChange )   
 
         index = 0
         for title, config in self.config.modules.items():
-            self.m_checkListModules.Append(str(title))
-            self.m_checkListModules.Check(index, config.online)
+            #self.m_gridModules.Append(str(title))
+            #self.m_checkListModules.Check(index, config.online)
             index = index + 1
 
-        self.m_checkListModules.SetSelection(0)
+
+        #self.m_checkListModules.SetSelection(0)
         
         self.m_moduleMiniButtons = {}
         for m in self.config.modulesOrderedByGeometry:
@@ -422,17 +469,67 @@ class MainWindow(wx.Frame):
             logging.info("Poll timer stopped!")
 
 
-    # Virtual event handlers, overide them in your derived class
+    def OnModuleGridSelectCell( self, event ):
+        global detector
+        #self.OnModuleGridRangeSelect( event )
+        self.m_gridModules.SelectRow( event.Row )
+        logging.info("OnModuleGridSelect: %s"%(event.GetString()))
+        
+
+
+    def OnModuleGridRangeSelect( self, event ):
+        global detector
+        selectedRows = self.m_gridModules.GetSelectedRows()
+        #        for index, (title, config) in enumerate(self.config.modules.items()):
+        selected_modules = [list(self.config.modules.keys())[i] for i in selectedRows]
+
+        logging.info("OnModuleGridRangeSelect: %s"%(selected_modules))
+        logging.info("OnModuleGridRangeSelect: prev selected %s"%(self.activeModuleId))
+        
+        if len(selected_modules) > 0 and selected_modules != self.activeModuleId:
+            self.SelectModule(selected_modules)
+
+    def OnModuleGridLabelLeftClick( self, event ):
+        # Disable clicking on column caption
+        if event.Row > -1:
+            event.Skip()
+        
+
+    def OnModuleGridChange( self, event ):
+        global detector
+        
+        #cap = capability_by_hv_grid_coords[(event.Row, event.Col)]
+        new_value = self.m_gridModules.GetCellValue(event.Row, event.Col)
+
+        logging.info("OnModuleChange: %s %s %s"%(event.Row, event.Col, new_value))
+
+        """
+        moduleId = self.activeModuleId[0]
+        moduleConfig = self.config.modules[moduleId]
+        
+        if moduleConfig.has('hv'): 
+            bus_id = self.config.modules[moduleId].bus_id
+            part_address = int(self.config.modules[moduleId].address('hv'))
+            part = detector.buses[bus_id].getPart(part_address) 
+
+            cap = capability_by_hv_grid_coords[(event.Row, event.Col)]
+            new_value = self.m_gridHV.GetCellValue(event.Row, event.Col)
+            value = part.valueFromString(cap, new_value)
+
+            command = Message(Message.WRITE_SHORT, part_address, part, cap, value)
+            asyncio.create_task(detector.add_task(bus_id, command, part, print))
+        """
+
     def OnHVGridChange( self, event ):
         global detector
         logging.info("OnHVGridChange: %s"%(event.GetString()))
 
-        moduleId = self.activeModuleId
+        moduleId = self.activeModuleId[0]
         moduleConfig = self.config.modules[moduleId]
         
         if moduleConfig.has('hv'): 
-            bus_id = self.config.modules[self.activeModuleId].bus_id
-            part_address = int(self.config.modules[self.activeModuleId].address('hv'))
+            bus_id = self.config.modules[moduleId].bus_id
+            part_address = int(self.config.modules[moduleId].address('hv'))
             part = detector.buses[bus_id].getPart(part_address) 
 
             cap = capability_by_hv_grid_coords[(event.Row, event.Col)]
@@ -465,23 +562,25 @@ class MainWindow(wx.Frame):
     def SelectFirstOnlineModule(self):
         for m in self.config.modules.values():
             if m.online:
-                self.SelectModule(m.id)
+                self.SelectModule([m.id])
                 break
 
     def ShowReferenceParameters(self):
-        active_module_config = configuration.modules[self.activeModuleId]
-        for ch, hv in active_module_config.hv.items():
-            self.m_gridHV.SetCellValue(int(ch)-1, GRID_COLUMN_REFERENCE, str(hv))    
+        if type(self.activeModuleId) is list and len(self.activeModuleId) == 1:
+            active_module_config = configuration.modules[self.activeModuleId[0]]
+            for ch, hv in active_module_config.hv.items():
+                self.m_gridHV.SetCellValue(int(ch)-1, GRID_COLUMN_REFERENCE, str(hv))    
 
-        self.m_gridHV.SetCellValue(GRID_ROW_PEDESTAL, GRID_COLUMN_REFERENCE, str(active_module_config.hvPedestal))
-        self.m_gridHV.SetCellValue(GRID_ROW_TEMPERATURE, GRID_COLUMN_REFERENCE, str(configuration.reference_temperature))
-        self.m_gridHV.SetCellValue(GRID_ROW_SLOPE, GRID_COLUMN_REFERENCE, str(-configuration.temperature_slope))
+            self.m_gridHV.SetCellValue(GRID_ROW_PEDESTAL, GRID_COLUMN_REFERENCE, str(active_module_config.hvPedestal))
+            self.m_gridHV.SetCellValue(GRID_ROW_TEMPERATURE, GRID_COLUMN_REFERENCE, str(configuration.reference_temperature))
+            self.m_gridHV.SetCellValue(GRID_ROW_SLOPE, GRID_COLUMN_REFERENCE, str(-configuration.temperature_slope))
 
     def SetReferenceParameters(self):
-        active_module_config = configuration.modules[self.activeModuleId]
+        if type(self.activeModuleId) is list and len(self.activeModuleId) == 1:
+            active_module_config = configuration.modules[self.activeModuleId[0]]
 #        self.hvControls['REF_PEDESTAL_VOLTAGE'].SetValue(str(active_module_config.hvPedestal))
-        for ch, hv in active_module_config.hv.items():
-            pass
+            for ch, hv in active_module_config.hv.items():
+                pass
 #            self.hvControls['%s/REF_VOLTAGE'%ch].SetValue(str(hv))    
         
 #        self.hvControls['REF_TEMPERATURE'].SetValue("%.2f"%(configuration.reference_temperature))
@@ -652,24 +751,7 @@ class MainWindow(wx.Frame):
         logging.warning('HV setting!')
         asyncio.create_task(detector.add_task(bus_id, command, part, print))
 
-        
-
-
-    def OnSelectModuleFromList(self,e):
-        selections = self.m_checkListModules.GetSelections()
-        if len(selections) == 0:
-            pass # this whould not happen
-        elif len(selections) == 1:
-            # single module select
-            module_id = self.config.modulesOrderedById[selections[0]]
-            logging.debug("OnSelectModuleFromList: single select %s" % module_id)
-            self.SelectModule(module_id)
-        else:
-            # multiselect
-            module_ids = [self.config.modulesOrderedById[s] for s in selections]
-            logging.debug("OnSelectModuleFromList: single select %s" % module_ids)
-            self.SelectModule(module_ids, multiple=True)
-        
+                
     def set_tri_state(self, checkbox, count, total):
         if count == 0:
             self.m_checkBoxOnline.Set3StateValue( wx.CHK_UNCHECKED )
@@ -680,26 +762,35 @@ class MainWindow(wx.Frame):
 
 
 
-    def SelectModule(self, module_id, multiple=False):
-        print("SelectModule: %s, multiple selection == %s" % (module_id, multiple))
-        self.activeModuleId = module_id
+    def SelectModule(self, module_ids):
+        print("SelectModule: %s" % (module_ids))
+        self.activeModuleId = module_ids
 
-        if multiple:
+        if type(module_ids) is not list:
+            module_ids = [module_ids] # behave you scalar!!
+
+        if len(module_ids) > 1:
+            # multiple module select
             logging.debug("hide all parts")
-            n_selected = len(module_id)
-            n_online = len([id for id in module_id if self.config.modules[id].online])
+            for panel in [self.m_collapsiblePaneHV, self.m_collapsiblePaneLED, self.m_collapsiblePaneDebug]:
+                #panel.Collapse()
+                panel.Disable()
+
+            n_selected = len(module_ids)
+            n_online = len([id for id in module_ids if self.config.modules[id].online])
             n_hv_on = 0 #TODO
             self.set_tri_state(self.m_checkBoxOnline, n_online, n_selected)
+            self.set_tri_state(self.m_checkBoxPoll, n_online, n_selected)
 
-            self.m_staticTextRightCaption.SetLabelText( "Modules %s " % (', '.join(module_id)) )
+            self.m_staticTextRightCaption.SetLabelText( "Modules %s " % (', '.join(module_ids)) )
 
-            for panel in [self.m_collapsiblePaneHV, self.m_collapsiblePaneLED, self.m_collapsiblePaneDebug]:
-                panel.Collapse()
-                panel.Disable()
-        else:
+                
+        elif len(module_ids) == 1:
+            module_id = module_ids[0] # behave you vector!! lol
+
             listIndex = self.config.modulesOrderedById.index(module_id)
-            self.m_checkListModules.Select(listIndex)
-
+            self.m_gridModules.SelectRow( listIndex )
+            self.m_gridModules.MakeCellVisible( listIndex, 0 )
 
             for button in self.m_moduleMiniButtons.values():
                 if button.myname == module_id: 
@@ -715,8 +806,8 @@ class MainWindow(wx.Frame):
 
             self.m_checkBoxOnline.Set3StateValue(wx.CHK_CHECKED if moduleConfig.online else wx.CHK_UNCHECKED)
 
-#            self.m_collapsiblePaneDebug.Collapse(True)
             self.m_collapsiblePaneDebug.Enable()
+            self.m_collapsiblePaneDebug.Collapse(True)
             #self.textLedFrequencyRef.SetValue(str(moduleConfig.ledFrequency))
             
             self.m_listBoxParts.Clear() #AAA
@@ -725,23 +816,30 @@ class MainWindow(wx.Frame):
                 #self.m_listBoxParts.SetClientData(index, address)
 
             self.m_checkBoxOnline.SetValue( moduleConfig.online )
+            self.m_checkBoxPoll.SetValue( moduleConfig.online )
+
             if moduleConfig.online:
                 if moduleConfig.has('hv'): 
-                    self.m_collapsiblePaneHV.Collapse(False)
                     self.m_collapsiblePaneHV.Enable()
+                    #self.m_collapsiblePaneHV.Collapse(False)
+                    #self.m_collapsiblePaneHV.Show()
+                    #self.m_gridModules.Show()
+                    #self.m_collapsiblePaneHV.GetPane().Hide()
+                    #self.m_collapsiblePaneHV.GetPane().Show() # magic to force show panel
+
 
                 if moduleConfig.has('led'): 
-                    self.m_collapsiblePaneLED.Collapse(False)
                     self.m_collapsiblePaneLED.Enable()
+                    #self.m_collapsiblePaneLED.Collapse(False)
                 self.pollModule(module_id)
             else:
                 logging.info("Selected module offline, no polling")
                 if moduleConfig.has('hv'): 
-                    self.m_collapsiblePaneHV.Collapse(True)
+                    #self.m_collapsiblePaneHV.Collapse(True)
                     self.m_collapsiblePaneHV.Disable()
 
                 if moduleConfig.has('led'): 
-                    self.m_collapsiblePaneLED.Collapse(True)
+                    #self.m_collapsiblePaneLED.Collapse(True)
                     self.m_collapsiblePaneLED.Disable()
 
 
