@@ -39,7 +39,7 @@ class HVsysLED:
         "AVERAGE_ADC"
     ]
 
-    def __init__(self):
+    def __init__(self, det_cfg:config.Config):
         self.state = {}
         for cap in HVsysLED.capabilities:
             self.state[cap] = None
