@@ -26,7 +26,7 @@ dist/
 .idea/
 
 # Microsoft VS Code
-.vscode/
+.vscode/*.json
 
 # Unit test reports
 TEST*.xml
