@@ -10,9 +10,9 @@ __version__ = "0.5"
 __email__ = "opetukhov@inr.ru"
 __status__ = "Development"
 
-import sys
-sys.path.append('control')
-import config
+#import sys
+#sys.path.append('control')
+#import config
 
 class HVsysSupply:
 
@@ -99,7 +99,8 @@ class HVsysSupply:
     ]
 
 
-    def __init__(self, det_cfg:config.Config):
+#    def __init__(self, det_cfg:config.Config):
+    def __init__(self, det_cfg):
         self.det_cfg = det_cfg
         self.state = {}
         for cap in HVsysSupply.capabilities:
@@ -147,7 +148,10 @@ class HVsysSupply:
         pedestal_voltage = self.pedestalCountsToVolts(self.state["SET_PEDESTAL_VOLTAGE"])
         tmp = float( self.valueToString('TEMPERATURE', self.state['TEMPERATURE']) )
         tmp_corr = (tmp - self.det_cfg.reference_temperature) * self.det_cfg.temperature_slope / 1000
-        volts_to_set = tmp_corr - (float(volts) - pedestal_voltage - HVsysSupply.PEDESTAL_VOLTAGE_BIAS)  # e.g. -0.5V means we need to go 0.5V lower than pedestal (with positive counts)       
+        volts_to_set = -(float(volts) - pedestal_voltage - HVsysSupply.PEDESTAL_VOLTAGE_BIAS)  # e.g. -0.5V means we need to go 0.5V lower than pedestal (with positive counts)       
+        volts_to_set_corr = tmp_corr - (float(volts) - pedestal_voltage - HVsysSupply.PEDESTAL_VOLTAGE_BIAS)  # e.g. -0.5V means we need to go 0.5V lower than pedestal (with positive counts)       
+
+        logging.debug("coltsToCounts: temperature correction for T=%s = %d" % (tmp_corr))
         calib_voltage_slope = self.state["VOLTAGE_CALIBRATION"] / 100.0              #  325 -> -3.25 V (full scale) 
 
         if volts_to_set < 0:

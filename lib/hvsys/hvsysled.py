@@ -8,7 +8,9 @@ __version__ = "0.5"
 __email__ = "opetukhov@inr.ru"
 __status__ = "Development"
 
-
+#import sys
+#sys.path.append('control')
+#from config import Config
 
 class HVsysLED:
     cell_id = 0x8006
@@ -39,7 +41,8 @@ class HVsysLED:
         "AVERAGE_ADC"
     ]
 
-    def __init__(self, det_cfg:config.Config):
+#    def __init__(self, det_cfg:config.Config):
+    def __init__(self, det_cfg):
         self.state = {}
         for cap in HVsysLED.capabilities:
             self.state[cap] = None
