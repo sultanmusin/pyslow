@@ -10,9 +10,7 @@ __version__ = "0.5"
 __email__ = "opetukhov@inr.ru"
 __status__ = "Development"
 
-#import sys
-#sys.path.append('control')
-#import config
+import logging
 
 class HVsysSupply:
 
@@ -147,11 +145,10 @@ class HVsysSupply:
             raise ValueError("HVsysSupply: cannot translate volts to counts without knowing SET_PEDESTAL_VOLTAGE")
         pedestal_voltage = self.pedestalCountsToVolts(self.state["SET_PEDESTAL_VOLTAGE"])
         tmp = float( self.valueToString('TEMPERATURE', self.state['TEMPERATURE']) )
-        tmp_corr = (tmp - self.det_cfg.reference_temperature) * self.det_cfg.temperature_slope / 1000
-        volts_to_set = -(float(volts) - pedestal_voltage - HVsysSupply.PEDESTAL_VOLTAGE_BIAS)  # e.g. -0.5V means we need to go 0.5V lower than pedestal (with positive counts)       
-        volts_to_set_corr = tmp_corr - (float(volts) - pedestal_voltage - HVsysSupply.PEDESTAL_VOLTAGE_BIAS)  # e.g. -0.5V means we need to go 0.5V lower than pedestal (with positive counts)       
+        tmp_corr = -(tmp - self.det_cfg.reference_temperature) * self.det_cfg.temperature_slope / 1000 # minus for normal termerature correction, e.g. config value 60 means "-60mV/C"
+        volts_to_set = tmp_corr - (float(volts) - pedestal_voltage - HVsysSupply.PEDESTAL_VOLTAGE_BIAS)  # e.g. -0.5V means we need to go 0.5V lower than pedestal (with positive counts)       
 
-        logging.debug("coltsToCounts: temperature correction for T=%s = %d" % (tmp_corr))
+        logging.debug("coltsToCounts: temperature correction for T=%s is %d V" % (tmp, tmp_corr))
         calib_voltage_slope = self.state["VOLTAGE_CALIBRATION"] / 100.0              #  325 -> -3.25 V (full scale) 
 
         if volts_to_set < 0:
@@ -194,7 +191,10 @@ class HVsysSupply:
         calib_voltage_slope = self.state["VOLTAGE_CALIBRATION"] / 100.0              #  325 -> -3.25 V (full scale) 
         pedestal_voltage = self.pedestalCountsToVolts(self.state["SET_PEDESTAL_VOLTAGE"])
 
-        volts = pedestal_voltage - counts * calib_voltage_slope / (HVsysSupply.VOLTAGE_RESOLUTION - 1) + HVsysSupply.PEDESTAL_VOLTAGE_BIAS
+        tmp = float( self.valueToString('TEMPERATURE', self.state['TEMPERATURE']) )
+        tmp_corr = -(tmp - self.det_cfg.reference_temperature) * self.det_cfg.temperature_slope / 1000 # minus for normal termerature correction, e.g. config value 60 means "-60mV/C"
+
+        volts = pedestal_voltage - counts * calib_voltage_slope / (HVsysSupply.VOLTAGE_RESOLUTION - 1) + HVsysSupply.PEDESTAL_VOLTAGE_BIAS + tmp_corr
         return round(volts, HVsysSupply.VOLTAGE_DECIMAL_PLACES)
 
     def measCountsToVolts(self, counts: int) -> str:
