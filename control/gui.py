@@ -617,16 +617,7 @@ class MainWindow(wx.Frame):
             self.m_gridHV.SetCellValue(GRID_ROW_SLOPE, GRID_COLUMN_REFERENCE, str(-configuration.temperature_slope))
 
     def SetReferenceParameters(self):
-        if type(self.activeModuleId) is list and len(self.activeModuleId) == 1:
-            active_module_config = configuration.modules[self.activeModuleId[0]]
-#        self.hvControls['REF_PEDESTAL_VOLTAGE'].SetValue(str(active_module_config.hvPedestal))
-            for ch, hv in active_module_config.hv.items():
-                pass
-#            self.hvControls['%s/REF_VOLTAGE'%ch].SetValue(str(hv))    
-        
-#        self.hvControls['REF_TEMPERATURE'].SetValue("%.2f"%(configuration.reference_temperature))
-#        self.hvControls['TEMPERATURE_SLOPE'].SetValue(str("-%d mV/C" % int(configuration.temperature_slope)))
-
+        pass
 
     def OnChoosePart(self,e):
         part = self.modulePartsBox.GetStringSelection() # [self.moduleListBox.GetSelection()]
@@ -708,6 +699,11 @@ class MainWindow(wx.Frame):
             moduleConfig = self.config.modules[moduleId]
             moduleConfig.online = value
         """
+        for module_id, config in self.config.modules.items():
+            if config.online:
+                
+                self.pollModule(module_id)
+
         self.UpdateModuleGrid()
         
 
