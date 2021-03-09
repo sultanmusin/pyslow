@@ -119,7 +119,7 @@ class MainWindow(wx.Frame):
 
         wx.Log().EnableLogging(False)
 
-        wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"FHCal DCS", pos = wx.DefaultPosition, size = wx.Size( 1000,1000 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
+        wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"FHCal DCS", pos = wx.DefaultPosition, size = wx.Size( 1080,960 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
         self.CreateLayout()
         self.Show()
 
@@ -127,6 +127,7 @@ class MainWindow(wx.Frame):
         self.SelectFirstOnlineModule()
         self.ShowReferenceParameters()
         self.SetReferenceParameters()
+        self.UpdateModuleGrid()
 
 
     def CreateLayout(self):
@@ -242,7 +243,7 @@ class MainWindow(wx.Frame):
         self.m_collapsiblePaneMulti = wx.CollapsiblePane( self.m_panelRight, wx.ID_ANY, u"Module Control", wx.DefaultPosition, wx.DefaultSize, wx.CP_DEFAULT_STYLE )
         self.m_collapsiblePaneMulti.Collapse( False )
 
-        bSizerMulti = wx.BoxSizer( wx.HORIZONTAL )
+        bSizerMulti = wx.WrapSizer( wx.HORIZONTAL )
 
         self.m_checkBoxOnline = wx.CheckBox( self.m_collapsiblePaneMulti.GetPane(), wx.ID_ANY, u"Online", wx.DefaultPosition, wx.DefaultSize, wx.CHK_3STATE )
         bSizerMulti.Add( self.m_checkBoxOnline, 0, wx.ALL, 5 )
@@ -259,11 +260,15 @@ class MainWindow(wx.Frame):
 
         self.m_checkBoxTemperatureControl = wx.CheckBox( self.m_collapsiblePaneMulti.GetPane(), wx.ID_ANY, u"Temperature Control", wx.DefaultPosition, wx.DefaultSize, wx.CHK_3STATE )
         bSizerMulti.Add( self.m_checkBoxTemperatureControl, 0, wx.ALL, 5 )
+        self.m_checkBoxTemperatureControl.SetValue(True)
         self.m_checkBoxTemperatureControl.Disable()
 
         self.m_checkBoxAlertsEnabled = wx.CheckBox( self.m_collapsiblePaneMulti.GetPane(), wx.ID_ANY, u"Alerts Enabled", wx.DefaultPosition, wx.DefaultSize, wx.CHK_3STATE )
         bSizerMulti.Add( self.m_checkBoxAlertsEnabled, 0, wx.ALL, 5 )
         self.m_checkBoxAlertsEnabled.Disable()
+
+        self.m_buttonApplyReference = wx.Button( self.m_collapsiblePaneMulti.GetPane(), wx.ID_ANY, u"Apply reference HV", wx.DefaultPosition, wx.DefaultSize, wx.CHK_3STATE )
+        bSizerMulti.Add( self.m_buttonApplyReference, 0, wx.ALL, 5 )
 
 
         self.m_collapsiblePaneMulti.GetPane().SetSizer( bSizerMulti )
@@ -429,9 +434,11 @@ class MainWindow(wx.Frame):
 
         # Connect Events
 
+        self.m_checkBoxOnline.Bind( wx.EVT_CHECKBOX, self.OnCheckBoxOnlineChange )
         self.m_checkBoxHvOn.Bind( wx.EVT_CHECKBOX, self.OnCheckBoxHVChange )
         self.m_checkBoxLedAuto.Bind( wx.EVT_CHECKBOX, self.OnCheckBoxLEDChange )
         self.m_checkBoxPoll.Bind( wx.EVT_CHECKBOX, self.OnCheckBoxPollChange )
+        self.m_buttonApplyReference.Bind( wx.EVT_BUTTON, self.OnButtonApplyReferenceClick )
 
         self.m_gridHV.Bind( wx.grid.EVT_GRID_CELL_CHANGED, self.OnHVGridChange )
         self.m_gridLED.Bind( wx.grid.EVT_GRID_CELL_CHANGED, self.OnLEDGridChange )
@@ -440,15 +447,6 @@ class MainWindow(wx.Frame):
         self.m_gridModules.Bind( wx.grid.EVT_GRID_CMD_SELECT_CELL, self.OnModuleGridSelectCell )   
         self.m_gridModules.Bind( wx.grid.EVT_GRID_LABEL_LEFT_CLICK, self.OnModuleGridLabelLeftClick )   
         self.m_gridModules.Bind( wx.grid.EVT_GRID_CELL_CHANGED, self.OnModuleGridChange )   
-
-        index = 0
-        for title, config in self.config.modules.items():
-            #self.m_gridModules.Append(str(title))
-            #self.m_checkListModules.Check(index, config.online)
-            index = index + 1
-
-
-        #self.m_checkListModules.SetSelection(0)
         
         self.m_moduleMiniButtons = {}
         for m in self.config.modulesOrderedByGeometry:
@@ -466,11 +464,42 @@ class MainWindow(wx.Frame):
     def __del__( self ):
         pass
 
+    
+    def UpdateModuleGrid(self):
+        for index, (title, config) in enumerate(self.config.modules.items()):
+            self.m_gridModules.SetCellValue(index, GRID_COLUMN_ONLINE, "1" if config.online else "0")
+
+            if config.has('hv'): 
+                bus_id = config.bus_id
+                part_address = int(config.address('hv'))
+                part = detector.buses[bus_id].getPart(part_address) 
+
+                self.m_gridModules.SetReadOnly(index, GRID_COLUMN_HV_ON, False)
+
+                if 'STATUS' in part.state and part.state['STATUS'] is not None:
+                    status = HVStatus(part.state['STATUS'])
+                    self.m_gridModules.SetCellValue(index, GRID_COLUMN_LEFT_STATE, str(status))
+                    self.m_gridModules.SetCellValue(index, GRID_COLUMN_HV_ON, "1" if status.is_on() else "0")
+                else:
+                    # not polled yet, strange
+                    self.m_gridModules.SetCellValue(index, GRID_COLUMN_LEFT_STATE, "unknown" if config.online else "offline")
+                    self.m_gridModules.SetCellValue(index, GRID_COLUMN_HV_ON, "0")
+            else:
+                self.m_gridModules.SetCellValue(index, GRID_COLUMN_HV_ON, "0")
+                self.m_gridModules.SetReadOnly(index, GRID_COLUMN_HV_ON, True)
+                self.m_gridModules.SetCellValue(index, GRID_COLUMN_LEFT_STATE, "unknown")
+
 
     def OnPollTimer(self, event):
         logging.info("Poll timer fired!")
         #print(event)
-        pass
+        #for module_id in self.activeModuleId:
+        for module_id, config in self.config.modules.items():
+            if config.online:
+                self.pollModule(module_id)
+        
+        self.UpdateModuleGrid()
+
 
     def OnCheckBoxPollChange(self, event):
         if self.m_checkBoxPoll.GetValue() and self.config.query_delay > 0:
@@ -555,12 +584,12 @@ class MainWindow(wx.Frame):
         global detector
         logging.info("OnLEDGridChange: %s"%(event.GetString()))
 
-        moduleId = self.activeModuleId
+        moduleId = self.activeModuleId[0]
         moduleConfig = self.config.modules[moduleId]
         
         if moduleConfig.has('led'): 
-            bus_id = self.config.modules[self.activeModuleId].bus_id
-            part_address = int(self.config.modules[self.activeModuleId].address('led'))
+            bus_id = self.config.modules[moduleId].bus_id
+            part_address = int(self.config.modules[moduleId].address('led'))
             part = detector.buses[bus_id].getPart(part_address) 
 
             cap = capability_by_led_grid_coords[(event.Row, event.Col)]
@@ -672,6 +701,25 @@ class MainWindow(wx.Frame):
         # TODO send (danger danger)
 
 
+    def OnButtonApplyReferenceClick(self, event):
+        """
+        value = self.m_checkBoxOnline.GetValue() > 0
+        for moduleId in self.activeModuleId:
+            moduleConfig = self.config.modules[moduleId]
+            moduleConfig.online = value
+        """
+        self.UpdateModuleGrid()
+        
+
+    def OnCheckBoxOnlineChange(self, event):
+        value = self.m_checkBoxOnline.GetValue() > 0
+        for moduleId in self.activeModuleId:
+            moduleConfig = self.config.modules[moduleId]
+            moduleConfig.online = value
+        
+        self.UpdateModuleGrid()
+        
+
     def OnCheckBoxHVChange(self, event):
         value = HVsysSupply.POWER_ON if self.m_checkBoxHvOn.GetValue() > 0 else HVsysSupply.POWER_OFF
         self.SwitchHV(value)
@@ -680,35 +728,35 @@ class MainWindow(wx.Frame):
         global detector
         value = (self.m_checkBoxLedAuto.GetValue() > 0)
 
-        moduleId = self.activeModuleId
-        moduleConfig = self.config.modules[moduleId]
-        
-        if moduleConfig.has('led'): 
-            bus_id = self.config.modules[self.activeModuleId].bus_id
-            part_address = int(self.config.modules[self.activeModuleId].address('led'))
-            part = detector.buses[bus_id].getPart(part_address) 
-            command = Message(Message.WRITE_SHORT, part_address, part, 'AUTOREG', value)
-            logging.warning('LED switching!')
-            asyncio.create_task(detector.add_task(bus_id, command, part, print))
-        else:
-            logging.warning('LED autoreg requested for module without LED part')
+        for moduleId in self.activeModuleId:
+            moduleConfig = self.config.modules[moduleId]
+            
+            if moduleConfig.has('led'): 
+                bus_id = self.config.modules[moduleId].bus_id
+                part_address = int(self.config.modules[moduleId].address('led'))
+                part = detector.buses[bus_id].getPart(part_address) 
+                command = Message(Message.WRITE_SHORT, part_address, part, 'AUTOREG', value)
+                logging.warning('LED switching!')
+                asyncio.create_task(detector.add_task(bus_id, command, part, print))
+            else:
+                logging.warning('LED autoreg requested for module without LED part')
 
     def SwitchHV(self,state):
         global detector
 
-        moduleId = self.activeModuleId
-        moduleConfig = self.config.modules[moduleId]
-        
-        if moduleConfig.has('hv'): 
-            bus_id = self.config.modules[self.activeModuleId].bus_id
-            part_address = int(self.config.modules[self.activeModuleId].address('hv'))
-            part = detector.buses[bus_id].getPart(part_address) 
-            command = Message(Message.WRITE_SHORT, part_address, part, 'STATUS', state)
-            logging.warning('HV switching!')
-            asyncio.create_task(detector.add_task(bus_id, command, part, print))
-            asyncio.create_task(detector.monitor_ramp_status(bus_id, part, part_address, self.DisplayRampStatus))
-        else:
-            logging.warning('HV ON requested for module without HV part')
+        for moduleId in self.activeModuleId:
+            moduleConfig = self.config.modules[moduleId]
+            
+            if moduleConfig.has('hv'): 
+                bus_id = self.config.modules[moduleId].bus_id
+                part_address = int(self.config.modules[moduleId].address('hv'))
+                part = detector.buses[bus_id].getPart(part_address) 
+                command = Message(Message.WRITE_SHORT, part_address, part, 'STATUS', state)
+                logging.warning('HV switching!')
+                asyncio.create_task(detector.add_task(bus_id, command, part, print))
+                asyncio.create_task(detector.monitor_ramp_status(bus_id, part, part_address, self.DisplayRampStatus))
+            else:
+                logging.warning('HV ON requested for module without HV part')
 
     def OnSwitchOnHV(self, e):
         self.SwitchHV(HVsysSupply.POWER_ON)
@@ -727,7 +775,9 @@ class MainWindow(wx.Frame):
             self.m_statusBar1.SetStatusText(description)
 
         if not status.is_ramp(): # so its finished
-            self.pollModule(self.activeModuleId)
+            if len(self.activeModuleId) == 1:
+                self.pollModule(self.activeModuleId[0])
+            self.UpdateModuleGrid()
 
 
     def OnSelectModuleFromGrid(self,e):
@@ -881,6 +931,8 @@ class MainWindow(wx.Frame):
             if capability == 'AUTOREG':   
                 is_on = (value > 0)
                 self.m_checkBoxLedAuto.SetValue( is_on )
+        
+        self.UpdateModuleGrid()  # will switch off if this gets too heavy
 
     def OnAbout(self,e):
         # Create a message dialog box
