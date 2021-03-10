@@ -34,7 +34,7 @@ class HVsysBus:
     def __init__(self, bus_config, module_configs:list):
         self.id = bus_config.id
         self.port = bus_config.port
-        self.task_queue = asyncio.Queue(1000)
+        self.task_queue = asyncio.Queue(10000)
         self.timeout = 1.0 # sec
         self.loop = asyncio.get_event_loop()
         self.part_cache = {} # dict[int, PartState]
