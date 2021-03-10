@@ -692,18 +692,54 @@ class MainWindow(wx.Frame):
         # TODO send (danger danger)
 
 
-    def OnButtonApplyReferenceClick(self, event):
-        """
-        value = self.m_checkBoxOnline.GetValue() > 0
-        for moduleId in self.activeModuleId:
-            moduleConfig = self.config.modules[moduleId]
-            moduleConfig.online = value
-        """
-        for module_id, config in self.config.modules.items():
-            if config.online:
-                
-                self.pollModule(module_id)
+    async def pollOnlineModules(self):
+        global detector
+        
+        last_task = None
+        for module_id, module_config in self.config.modules.items():
+            if module_config.online:
+                await self.pollModule(module_id, False)
+        
+#        await asyncio.gather(tasks)
+#        logging.warning("lol all finished") TODO normal wait
 
+
+    def OnButtonApplyReferenceClick(self, event):
+        global detector
+        
+        for module_id in self.activeModuleId:
+            module_config = self.config.modules[module_id]
+            if module_config.online:
+                bus_id = self.config.modules[module_id].bus_id
+                if module_config.has('hv'): 
+                    part_address = int(self.config.modules[module_id].address('hv'))
+                    part = detector.buses[bus_id].getPart(part_address) 
+                    value = part.valueFromString('SET_PEDESTAL_VOLTAGE', str(module_config.hvPedestal))
+                    command = Message(Message.WRITE_SHORT, part_address, part, 'SET_PEDESTAL_VOLTAGE', value)
+                    asyncio.create_task(detector.add_task(bus_id, command, part, print))
+
+                    for ch, hv in module_config.hv.items():
+                        cap = '%s/SET_VOLTAGE'%(ch)
+                        value = part.valueFromString(cap, str(hv))
+                        command = Message(Message.WRITE_SHORT, part_address, part, cap, value)
+                        asyncio.create_task(detector.add_task(bus_id, command, part, print))
+
+                if module_config.has('led'): 
+                    part_address = int(self.config.modules[module_id].address('led'))
+                    part = detector.buses[bus_id].getPart(part_address) 
+                    value = part.valueFromString('AUTOREG', str(module_config.ledAutoTune))
+                    command = Message(Message.WRITE_SHORT, part_address, part, 'AUTOREG', value)
+                    asyncio.create_task(detector.add_task(bus_id, command, part, print))
+                    value = part.valueFromString('SET_FREQUENCY', str(module_config.ledFrequency))
+                    command = Message(Message.WRITE_SHORT, part_address, part, 'SET_FREQUENCY', value)
+                    asyncio.create_task(detector.add_task(bus_id, command, part, print))
+                    value = part.valueFromString('SET_AMPLITUDE', str(module_config.ledBrightness))
+                    command = Message(Message.WRITE_SHORT, part_address, part, 'SET_AMPLITUDE', value)
+                    asyncio.create_task(detector.add_task(bus_id, command, part, print))
+                    value = part.valueFromString('ADC_SET_POINT', str(module_config.ledPinADCSet))
+                    command = Message(Message.WRITE_SHORT, part_address, part, 'ADC_SET_POINT', value)
+                    asyncio.create_task(detector.add_task(bus_id, command, part, print))
+             
         self.UpdateModuleGrid()
         
 
@@ -901,10 +937,14 @@ class MainWindow(wx.Frame):
                     self.m_collapsiblePaneLED.Disable()
 
 
-    def pollModule(self, moduleId):
+    def pollModule(self, moduleId, callback=None):
         moduleConfig = self.config.modules[moduleId]
 #        for part in moduleConfig.parts:
-        asyncio.create_task(detector.poll_module_important(moduleId, self.DisplayValueOnComplete))
+        if callback is None:
+            callback = self.DisplayValueOnComplete
+        elif callback == False:
+            callback = lambda *args: None  # empty callback; do nothing
+        return asyncio.create_task(detector.poll_module_important(moduleId, callback))
 
     def DisplayValueOnComplete(self, part, capability, value):
         
@@ -1024,6 +1064,7 @@ async def main():
     
     app = WxAsyncApp(False)
     frame = MainWindow(None, "FHcal DCS")
+    await frame.pollOnlineModules()
     await app.MainLoop()
 
 
