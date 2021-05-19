@@ -56,7 +56,9 @@ GRID_ROW_FREQUENCY = 0
 GRID_ROW_AMPLITUDE = 1
 GRID_ROW_ADC_SET_POINT = 2
 GRID_ROW_AVERAGE_POINTS = 3
-GRID_ROWS_LED = 4
+GRID_ROW_AUTOREG = 4
+GRID_ROW_AVERAGE_ADC = 5
+GRID_ROWS_LED = 6
 
 # All grids column legend
 GRID_COLUMN_REFERENCE = 0
@@ -107,11 +109,12 @@ hv_grid_coords = {
 capability_by_hv_grid_coords = {val.Get() : key for key, val in hv_grid_coords.items()}
 
 led_grid_coords = {
-    "MEAS_PEDESTAL_VOLTAGE": cc(GRID_ROW_PEDESTAL,GRID_COLUMN_MEAS),
     "SET_FREQUENCY": cc(GRID_ROW_FREQUENCY,GRID_COLUMN_SET),
     "SET_AMPLITUDE": cc(GRID_ROW_AMPLITUDE,GRID_COLUMN_SET),
     "ADC_SET_POINT": cc(GRID_ROW_ADC_SET_POINT,GRID_COLUMN_SET),
     "AVERAGE_POINTS": cc(GRID_ROW_AVERAGE_POINTS,GRID_COLUMN_SET),
+    "AUTOREG": cc(GRID_ROW_AUTOREG,GRID_COLUMN_SET),
+    "AVERAGE_ADC": cc(GRID_ROW_AVERAGE_ADC,GRID_COLUMN_SET),
 }
 
 capability_by_led_grid_coords = {val.Get() : key for key, val in led_grid_coords.items()}
@@ -199,6 +202,7 @@ class MainWindow(wx.Frame):
         self.m_gridModules.EnableDragGridSize( False )
         self.m_gridModules.SetMargins( 0, 0 )
         self.m_gridModules.SetMaxSize( wx.Size(-1, 500) )
+        self.m_gridModules.SetSelectionMode(wx.grid.Grid.SelectRows)
         
 
         # Columns
@@ -374,6 +378,8 @@ class MainWindow(wx.Frame):
         self.m_gridLED.SetRowLabelValue( GRID_ROW_FREQUENCY, u"Frequency" )
         self.m_gridLED.SetRowLabelValue( GRID_ROW_ADC_SET_POINT, u"ADC Setpoint" )
         self.m_gridLED.SetRowLabelValue( GRID_ROW_AVERAGE_POINTS, u"Average points" )
+        self.m_gridLED.SetRowLabelValue( GRID_ROW_AUTOREG, u"Autoregulation on/off" )
+        self.m_gridLED.SetRowLabelValue( GRID_ROW_AVERAGE_ADC, u"Average ADC readout" )
         self.m_gridLED.SetRowLabelAlignment( wx.ALIGN_LEFT, wx.ALIGN_CENTER )
 
         # Label Appearance
@@ -493,16 +499,16 @@ class MainWindow(wx.Frame):
                     self.m_gridModules.SetCellValue(index, GRID_COLUMN_LEFT_STATE, str(status))
                     if status.is_on():
                         self.m_gridModules.SetCellValue(index, GRID_COLUMN_HV_ON, "1")
-                        self.m_gridModules.SetCellBackgroundColour(6, GRID_COLUMN_LEFT_STATE, COLOR_OK)    
+                        self.m_gridModules.SetCellBackgroundColour(index, GRID_COLUMN_LEFT_STATE, COLOR_OK)    
                     else:
                         self.m_gridModules.SetCellValue(index, GRID_COLUMN_HV_ON, "0")
-                        self.m_gridModules.SetCellBackgroundColour(2, GRID_COLUMN_LEFT_STATE, COLOR_HV_OFF)    
+                        self.m_gridModules.SetCellBackgroundColour(index, GRID_COLUMN_LEFT_STATE, COLOR_HV_OFF)    
                     if status.is_error():
-                        self.m_gridModules.SetCellBackgroundColour(6, GRID_COLUMN_LEFT_STATE, COLOR_ERROR)    
+                        self.m_gridModules.SetCellBackgroundColour(index, GRID_COLUMN_LEFT_STATE, COLOR_ERROR)    
                     if not part.has_reference_voltage():
-                        self.m_gridModules.SetCellBackgroundColour(3, GRID_COLUMN_LEFT_STATE, COLOR_NOT_REFERENCE)   
+                        self.m_gridModules.SetCellBackgroundColour(index, GRID_COLUMN_LEFT_STATE, COLOR_NOT_REFERENCE)   
                     if status.is_ramp():
-                        self.m_gridModules.SetCellBackgroundColour(3, GRID_COLUMN_LEFT_STATE, COLOR_RAMP)   
+                        self.m_gridModules.SetCellBackgroundColour(index, GRID_COLUMN_LEFT_STATE, COLOR_RAMP)   
 
                 else:
                     # not polled yet, strange
@@ -732,6 +738,15 @@ class MainWindow(wx.Frame):
 
     def OnButtonSelectAllModulesClick(self, event):
         self.m_gridModules.SelectAll()
+        selectedRows = self.m_gridModules.GetSelectedRows()
+        #        for index, (title, config) in enumerate(self.config.modules.items()):
+        selected_modules = [list(self.config.modules.keys())[i] for i in selectedRows]
+
+        logging.info("OnModuleGridRangeSelect: %s"%(selected_modules))
+        logging.info("OnModuleGridRangeSelect: prev selected %s"%(self.activeModuleId))
+        
+        if len(selected_modules) > 0 and selected_modules != self.activeModuleId:
+            self.SelectModule(selected_modules)
 
     def OnButtonApplyReferenceClick(self, event):
         global detector
