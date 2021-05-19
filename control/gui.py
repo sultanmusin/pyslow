@@ -344,12 +344,11 @@ class MainWindow(wx.Frame):
         bSizerHV.Fit( self.m_collapsiblePaneHV.GetPane() )
         bSizerRight.Add( self.m_collapsiblePaneHV, 0, wx.EXPAND |wx.ALL, 5 )
 
-        self.m_collapsiblePaneLED = wx.CollapsiblePane( self.m_panelRight, wx.ID_ANY, u"LED Control", wx.DefaultPosition, wx.DefaultSize, wx.CP_NO_TLW_RESIZE )
-        self.m_collapsiblePaneLED.Collapse( False )
+        self.m_panelLED = wx.Panel( self.m_panelRight, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL, u"LED Control")
 
         bSizerLED = wx.BoxSizer( wx.VERTICAL )
 
-        self.m_gridLED = wx.grid.Grid( self.m_collapsiblePaneLED.GetPane(), wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_gridLED = wx.grid.Grid( self.m_panelLED, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0 )
 
         # Grid
         self.m_gridLED.CreateGrid( GRID_ROWS_LED, GRID_COLUMNS_LED )
@@ -382,10 +381,10 @@ class MainWindow(wx.Frame):
         bSizerLED.Add( self.m_gridLED, 0, wx.ALL, 5 )
 
 
-        self.m_collapsiblePaneLED.GetPane().SetSizer( bSizerLED )
-        self.m_collapsiblePaneLED.GetPane().Layout()
-        bSizerLED.Fit( self.m_collapsiblePaneLED.GetPane() )
-        bSizerRight.Add( self.m_collapsiblePaneLED, 0, wx.EXPAND |wx.ALL, 5 )
+        self.m_panelLED.SetSizer( bSizerLED )
+        self.m_panelLED.Layout()
+        bSizerLED.Fit( self.m_panelLED )
+        bSizerRight.Add( self.m_panelLED, 0, wx.EXPAND |wx.ALL, 5 )
 
         self.m_collapsiblePaneDebug = wx.CollapsiblePane( self.m_panelRight, wx.ID_ANY, u"Debug", wx.DefaultPosition, wx.DefaultSize, wx.CP_NO_TLW_RESIZE )
         self.m_collapsiblePaneDebug.Collapse( True )
@@ -891,7 +890,7 @@ class MainWindow(wx.Frame):
         if len(module_ids) > 1:
             # multiple module select
             logging.debug("hide all parts")
-            for panel in [self.m_collapsiblePaneHV, self.m_collapsiblePaneLED, self.m_collapsiblePaneDebug]:
+            for panel in [self.m_collapsiblePaneHV, self.m_collapsiblePaneDebug]:
                 panel.Collapse()
 #                panel.Disable()
 
@@ -927,8 +926,6 @@ class MainWindow(wx.Frame):
 
             self.m_collapsiblePaneHV.Enable()
             self.m_collapsiblePaneHV.Collapse(False)
-            self.m_collapsiblePaneLED.Enable()
-            self.m_collapsiblePaneLED.Collapse(False)
             self.m_collapsiblePaneDebug.Enable()
             self.m_collapsiblePaneDebug.Collapse(True)
             #self.textLedFrequencyRef.SetValue(str(moduleConfig.ledFrequency))
@@ -952,7 +949,8 @@ class MainWindow(wx.Frame):
 
 
                 if moduleConfig.has('led'): 
-                    self.m_collapsiblePaneLED.Enable()
+                    pass
+                    #self.m_collapsiblePaneLED.Enable()
                     #self.m_collapsiblePaneLED.Collapse(False)
                 self.pollModule(module_id)
             else:
@@ -962,8 +960,9 @@ class MainWindow(wx.Frame):
                     self.m_collapsiblePaneHV.Disable()
 
                 if moduleConfig.has('led'): 
+                    pass
                     #self.m_collapsiblePaneLED.Collapse(True)
-                    self.m_collapsiblePaneLED.Disable()
+                    # self.m_collapsiblePaneLED.Disable()
 
 
     def pollModule(self, moduleId, callback=None):
@@ -1084,7 +1083,7 @@ async def main():
     
     try:
         for id, sm in detector.buses.items():
-#            await asyncio.create_task(sm.connect())
+            await asyncio.create_task(sm.connect())
             asyncio.create_task(sm.send())
     except OSError as e:
         print("Cannot connect to system module: %s"%(str(e)))  
