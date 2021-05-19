@@ -4,7 +4,6 @@
 #     https://www.atlassian.com/git/tutorials/saving-changes/gitignore
 
 doc/legacy/slowControl.csv
-config/PsdSlowControlConfig.xml
 
 # Node artifact files
 node_modules/
@@ -53,3 +52,4 @@ Thumbs.db
 
 # Vim 
 *.swp
+config/PsdSlowControlConfig.xml

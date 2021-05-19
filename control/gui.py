@@ -240,7 +240,7 @@ class MainWindow(wx.Frame):
 
         bSizerRight.Add( self.m_staticTextRightCaption, 0, wx.ALL, 5 )
 
-        self.m_collapsiblePaneMulti = wx.CollapsiblePane( self.m_panelRight, wx.ID_ANY, u"Module Control", wx.DefaultPosition, wx.DefaultSize, wx.CP_DEFAULT_STYLE )
+        self.m_collapsiblePaneMulti = wx.CollapsiblePane( self.m_panelRight, wx.ID_ANY, u"Module Control", wx.DefaultPosition, wx.DefaultSize, wx.CP_NO_TLW_RESIZE )
         self.m_collapsiblePaneMulti.Collapse( False )
 
         bSizerMulti = wx.WrapSizer( wx.HORIZONTAL )
@@ -278,7 +278,7 @@ class MainWindow(wx.Frame):
         self.m_collapsiblePaneMulti.GetPane().Hide()
         self.m_collapsiblePaneMulti.GetPane().Show() # magic to force show panel
 
-        self.m_collapsiblePaneHV = wx.CollapsiblePane( self.m_panelRight, wx.ID_ANY, u"High Voltage", wx.DefaultPosition, wx.DefaultSize, wx.CP_DEFAULT_STYLE )
+        self.m_collapsiblePaneHV = wx.CollapsiblePane( self.m_panelRight, wx.ID_ANY, u"High Voltage", wx.DefaultPosition, wx.DefaultSize, wx.CP_NO_TLW_RESIZE )
         self.m_collapsiblePaneHV.Collapse( False )
 
         bSizerHV = wx.BoxSizer( wx.VERTICAL )
@@ -337,7 +337,7 @@ class MainWindow(wx.Frame):
         bSizerHV.Fit( self.m_collapsiblePaneHV.GetPane() )
         bSizerRight.Add( self.m_collapsiblePaneHV, 0, wx.EXPAND |wx.ALL, 5 )
 
-        self.m_collapsiblePaneLED = wx.CollapsiblePane( self.m_panelRight, wx.ID_ANY, u"LED Control", wx.DefaultPosition, wx.DefaultSize, wx.CP_DEFAULT_STYLE )
+        self.m_collapsiblePaneLED = wx.CollapsiblePane( self.m_panelRight, wx.ID_ANY, u"LED Control", wx.DefaultPosition, wx.DefaultSize, wx.CP_NO_TLW_RESIZE )
         self.m_collapsiblePaneLED.Collapse( False )
 
         bSizerLED = wx.BoxSizer( wx.VERTICAL )
@@ -380,7 +380,7 @@ class MainWindow(wx.Frame):
         bSizerLED.Fit( self.m_collapsiblePaneLED.GetPane() )
         bSizerRight.Add( self.m_collapsiblePaneLED, 0, wx.EXPAND |wx.ALL, 5 )
 
-        self.m_collapsiblePaneDebug = wx.CollapsiblePane( self.m_panelRight, wx.ID_ANY, u"Debug", wx.DefaultPosition, wx.DefaultSize, wx.CP_DEFAULT_STYLE )
+        self.m_collapsiblePaneDebug = wx.CollapsiblePane( self.m_panelRight, wx.ID_ANY, u"Debug", wx.DefaultPosition, wx.DefaultSize, wx.CP_NO_TLW_RESIZE )
         self.m_collapsiblePaneDebug.Collapse( True )
 
         bSizerDebug = wx.BoxSizer( wx.HORIZONTAL )
