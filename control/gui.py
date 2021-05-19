@@ -33,6 +33,13 @@ from hvstatus import HVStatus
 configuration = None
 detector = None
 
+COLOR_OFFLINE = wx.Colour(192,192,192)
+COLOR_HV_OFF = wx.Colour(224,224,96)
+COLOR_RAMP = wx.Colour(96,96,224)
+COLOR_ERROR = wx.Colour(224,48,48)
+COLOR_NOT_REFERENCE = wx.Colour(224,48,224)
+COLOR_OK = wx.Colour(128,224,48)
+
 GRID_COLUMN_ONLINE = 0
 GRID_COLUMN_HV_ON = 1
 GRID_COLUMN_LEFT_STATE = 2
@@ -467,7 +474,11 @@ class MainWindow(wx.Frame):
     
     def UpdateModuleGrid(self):
         for index, (title, config) in enumerate(self.config.modules.items()):
-            self.m_gridModules.SetCellValue(index, GRID_COLUMN_ONLINE, "1" if config.online else "0")
+            if config.online:
+                self.m_gridModules.SetCellValue(index, GRID_COLUMN_ONLINE, "1")
+            else:
+                self.m_gridModules.SetCellValue(index, GRID_COLUMN_ONLINE, "0")
+                self.m_gridModules.SetCellBackgroundColour(index, GRID_COLUMN_LEFT_STATE, COLOR_OFFLINE)    
 
             if config.has('hv'): 
                 bus_id = config.bus_id
@@ -479,11 +490,24 @@ class MainWindow(wx.Frame):
                 if 'STATUS' in part.state and part.state['STATUS'] is not None:
                     status = HVStatus(part.state['STATUS'])
                     self.m_gridModules.SetCellValue(index, GRID_COLUMN_LEFT_STATE, str(status))
-                    self.m_gridModules.SetCellValue(index, GRID_COLUMN_HV_ON, "1" if status.is_on() else "0")
+                    if status.is_on():
+                        self.m_gridModules.SetCellValue(index, GRID_COLUMN_HV_ON, "1")
+                        self.m_gridModules.SetCellBackgroundColour(6, GRID_COLUMN_LEFT_STATE, COLOR_OK)    
+                    else:
+                        self.m_gridModules.SetCellValue(index, GRID_COLUMN_HV_ON, "0")
+                        self.m_gridModules.SetCellBackgroundColour(2, GRID_COLUMN_LEFT_STATE, COLOR_HV_OFF)    
+                    if status.is_error():
+                        self.m_gridModules.SetCellBackgroundColour(6, GRID_COLUMN_LEFT_STATE, COLOR_ERROR)    
+                    if not part.has_reference_voltage():
+                        self.m_gridModules.SetCellBackgroundColour(3, GRID_COLUMN_LEFT_STATE, COLOR_NOT_REFERENCE)   
+                    if status.is_ramp():
+                        self.m_gridModules.SetCellBackgroundColour(3, GRID_COLUMN_LEFT_STATE, COLOR_RAMP)   
+
                 else:
                     # not polled yet, strange
                     self.m_gridModules.SetCellValue(index, GRID_COLUMN_LEFT_STATE, "unknown" if config.online else "offline")
                     self.m_gridModules.SetCellValue(index, GRID_COLUMN_HV_ON, "0")
+                    self.m_gridModules.SetCellBackgroundColour(index, GRID_COLUMN_LEFT_STATE, COLOR_OFFLINE)    
             else:
                 self.m_gridModules.SetCellValue(index, GRID_COLUMN_HV_ON, "0")
                 self.m_gridModules.SetReadOnly(index, GRID_COLUMN_HV_ON, True)
