@@ -892,8 +892,8 @@ class MainWindow(wx.Frame):
             # multiple module select
             logging.debug("hide all parts")
             for panel in [self.m_collapsiblePaneHV, self.m_collapsiblePaneLED, self.m_collapsiblePaneDebug]:
-                #panel.Collapse()
-                panel.Disable()
+                panel.Collapse()
+#                panel.Disable()
 
             n_selected = len(module_ids)
             n_online = len([id for id in module_ids if self.config.modules[id].online])
@@ -925,6 +925,10 @@ class MainWindow(wx.Frame):
 
             self.m_checkBoxOnline.Set3StateValue(wx.CHK_CHECKED if moduleConfig.online else wx.CHK_UNCHECKED)
 
+            self.m_collapsiblePaneHV.Enable()
+            self.m_collapsiblePaneHV.Collapse(False)
+            self.m_collapsiblePaneLED.Enable()
+            self.m_collapsiblePaneLED.Collapse(False)
             self.m_collapsiblePaneDebug.Enable()
             self.m_collapsiblePaneDebug.Collapse(True)
             #self.textLedFrequencyRef.SetValue(str(moduleConfig.ledFrequency))
@@ -1080,7 +1084,7 @@ async def main():
     
     try:
         for id, sm in detector.buses.items():
-            await asyncio.create_task(sm.connect())
+#            await asyncio.create_task(sm.connect())
             asyncio.create_task(sm.send())
     except OSError as e:
         print("Cannot connect to system module: %s"%(str(e)))  
