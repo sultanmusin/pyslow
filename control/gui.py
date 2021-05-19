@@ -184,6 +184,12 @@ class MainWindow(wx.Frame):
 
         bSizerLeft.Add( self.m_staticTextLeftCaption, 0, wx.ALL, 5 )
 
+        self.m_buttonSelectAllModules = wx.Button( self.m_panelLeft, wx.ID_ANY, u"Select All Modules", wx.DefaultPosition, wx.DefaultSize, wx.CHK_3STATE )
+        bSizerLeft.Add( self.m_buttonSelectAllModules, 0, wx.ALL, 5 )
+
+        self.m_buttonSelectAllModules.Bind( wx.EVT_BUTTON, self.OnButtonSelectAllModulesClick )
+
+
         self.m_gridModules = wx.grid.Grid( self.m_panelLeft, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0 )
 
         # Grid
@@ -247,43 +253,40 @@ class MainWindow(wx.Frame):
 
         bSizerRight.Add( self.m_staticTextRightCaption, 0, wx.ALL, 5 )
 
-        self.m_collapsiblePaneMulti = wx.CollapsiblePane( self.m_panelRight, wx.ID_ANY, u"Module Control", wx.DefaultPosition, wx.DefaultSize, wx.CP_NO_TLW_RESIZE )
-        self.m_collapsiblePaneMulti.Collapse( False )
+        self.m_panelMulti = wx.Panel( self.m_panelRight, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL, u"Module Control")
 
         bSizerMulti = wx.WrapSizer( wx.HORIZONTAL )
 
-        self.m_checkBoxOnline = wx.CheckBox( self.m_collapsiblePaneMulti.GetPane(), wx.ID_ANY, u"Online", wx.DefaultPosition, wx.DefaultSize, wx.CHK_3STATE )
+        self.m_checkBoxOnline = wx.CheckBox( self.m_panelMulti, wx.ID_ANY, u"Online", wx.DefaultPosition, wx.DefaultSize, wx.CHK_3STATE )
         bSizerMulti.Add( self.m_checkBoxOnline, 0, wx.ALL, 5 )
 
-        self.m_checkBoxHvOn = wx.CheckBox( self.m_collapsiblePaneMulti.GetPane(), wx.ID_ANY, u"HV ON", wx.DefaultPosition, wx.DefaultSize, wx.CHK_3STATE )
+        self.m_checkBoxHvOn = wx.CheckBox( self.m_panelMulti, wx.ID_ANY, u"HV ON", wx.DefaultPosition, wx.DefaultSize, wx.CHK_3STATE )
         bSizerMulti.Add( self.m_checkBoxHvOn, 0, wx.ALL, 5 )
 
-        self.m_checkBoxLedAuto = wx.CheckBox( self.m_collapsiblePaneMulti.GetPane(), wx.ID_ANY, u"LED Auto", wx.DefaultPosition, wx.DefaultSize, wx.CHK_3STATE )
+        self.m_checkBoxLedAuto = wx.CheckBox( self.m_panelMulti, wx.ID_ANY, u"LED Auto", wx.DefaultPosition, wx.DefaultSize, wx.CHK_3STATE )
         bSizerMulti.Add( self.m_checkBoxLedAuto, 0, wx.ALL, 5 )
 
-        self.m_checkBoxPoll = wx.CheckBox( self.m_collapsiblePaneMulti.GetPane(), wx.ID_ANY, u"Poll", wx.DefaultPosition, wx.DefaultSize, wx.CHK_3STATE )
+        self.m_checkBoxPoll = wx.CheckBox( self.m_panelMulti, wx.ID_ANY, u"Poll", wx.DefaultPosition, wx.DefaultSize, wx.CHK_3STATE )
         bSizerMulti.Add( self.m_checkBoxPoll, 0, wx.ALL, 5 )
         self.m_checkBoxPoll.SetValue( self.config.query_delay > 0 )
 
-        self.m_checkBoxTemperatureControl = wx.CheckBox( self.m_collapsiblePaneMulti.GetPane(), wx.ID_ANY, u"Temperature Control", wx.DefaultPosition, wx.DefaultSize, wx.CHK_3STATE )
+        self.m_checkBoxTemperatureControl = wx.CheckBox( self.m_panelMulti, wx.ID_ANY, u"Temperature Control", wx.DefaultPosition, wx.DefaultSize, wx.CHK_3STATE )
         bSizerMulti.Add( self.m_checkBoxTemperatureControl, 0, wx.ALL, 5 )
         self.m_checkBoxTemperatureControl.SetValue(True)
         self.m_checkBoxTemperatureControl.Disable()
 
-        self.m_checkBoxAlertsEnabled = wx.CheckBox( self.m_collapsiblePaneMulti.GetPane(), wx.ID_ANY, u"Alerts Enabled", wx.DefaultPosition, wx.DefaultSize, wx.CHK_3STATE )
+        self.m_checkBoxAlertsEnabled = wx.CheckBox( self.m_panelMulti, wx.ID_ANY, u"Alerts Enabled", wx.DefaultPosition, wx.DefaultSize, wx.CHK_3STATE )
         bSizerMulti.Add( self.m_checkBoxAlertsEnabled, 0, wx.ALL, 5 )
         self.m_checkBoxAlertsEnabled.Disable()
 
-        self.m_buttonApplyReference = wx.Button( self.m_collapsiblePaneMulti.GetPane(), wx.ID_ANY, u"Apply reference HV", wx.DefaultPosition, wx.DefaultSize, wx.CHK_3STATE )
+        self.m_buttonApplyReference = wx.Button( self.m_panelMulti, wx.ID_ANY, u"Apply reference HV", wx.DefaultPosition, wx.DefaultSize, wx.CHK_3STATE )
         bSizerMulti.Add( self.m_buttonApplyReference, 0, wx.ALL, 5 )
 
 
-        self.m_collapsiblePaneMulti.GetPane().SetSizer( bSizerMulti )
-        self.m_collapsiblePaneMulti.GetPane().Layout()
-        bSizerMulti.Fit( self.m_collapsiblePaneMulti.GetPane() )
-        bSizerRight.Add( self.m_collapsiblePaneMulti, 0, wx.EXPAND |wx.ALL, 5 )
-        self.m_collapsiblePaneMulti.GetPane().Hide()
-        self.m_collapsiblePaneMulti.GetPane().Show() # magic to force show panel
+        self.m_panelMulti.SetSizer( bSizerMulti )
+        self.m_panelMulti.Layout()
+        bSizerMulti.Fit( self.m_panelMulti )
+        bSizerRight.Add( self.m_panelMulti, 0, wx.EXPAND |wx.ALL, 5 )
 
         self.m_panelHV = wx.Panel( self.m_panelRight, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL, u"High Voltage" )
 
@@ -726,6 +729,9 @@ class MainWindow(wx.Frame):
 #        await asyncio.gather(tasks)
 #        logging.warning("lol all finished") TODO normal wait
 
+
+    def OnButtonSelectAllModulesClick(self, event):
+        self.m_gridModules.SelectAll()
 
     def OnButtonApplyReferenceClick(self, event):
         global detector
