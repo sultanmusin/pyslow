@@ -606,7 +606,7 @@ class MainWindow(wx.Frame):
         global detector
         logging.info("OnLEDGridChange: %s"%(event.GetString()))
 
-        for moduleId in activeModuleId:
+        for moduleId in self.activeModuleId:
             moduleConfig = self.config.modules[moduleId]
             
             if moduleConfig.has('led'): 
