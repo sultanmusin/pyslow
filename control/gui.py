@@ -285,7 +285,7 @@ class MainWindow(wx.Frame):
         self.m_collapsiblePaneMulti.GetPane().Hide()
         self.m_collapsiblePaneMulti.GetPane().Show() # magic to force show panel
 
-        self.m_PanelHV = wx.Panel( self.m_panelRight, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL, u"High Voltage" )
+        self.m_panelHV = wx.Panel( self.m_panelRight, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL, u"High Voltage" )
 
         bSizerHV = wx.BoxSizer( wx.VERTICAL )
 
@@ -606,20 +606,20 @@ class MainWindow(wx.Frame):
         global detector
         logging.info("OnLEDGridChange: %s"%(event.GetString()))
 
-        moduleId = self.activeModuleId[0]
-        moduleConfig = self.config.modules[moduleId]
-        
-        if moduleConfig.has('led'): 
-            bus_id = self.config.modules[moduleId].bus_id
-            part_address = int(self.config.modules[moduleId].address('led'))
-            part = detector.buses[bus_id].getPart(part_address) 
+        for moduleId in activeModuleId:
+            moduleConfig = self.config.modules[moduleId]
+            
+            if moduleConfig.has('led'): 
+                bus_id = self.config.modules[moduleId].bus_id
+                part_address = int(self.config.modules[moduleId].address('led'))
+                part = detector.buses[bus_id].getPart(part_address) 
 
-            cap = capability_by_led_grid_coords[(event.Row, event.Col)]
-            new_value = self.m_gridLED.GetCellValue(event.Row, event.Col)
-            value = part.valueFromString(cap, new_value)
+                cap = capability_by_led_grid_coords[(event.Row, event.Col)]
+                new_value = self.m_gridLED.GetCellValue(event.Row, event.Col)
+                value = part.valueFromString(cap, new_value)
 
-            command = Message(Message.WRITE_SHORT, part_address, part, cap, value)
-            asyncio.create_task(detector.add_task(bus_id, command, part, print))
+                command = Message(Message.WRITE_SHORT, part_address, part, cap, value)
+                asyncio.create_task(detector.add_task(bus_id, command, part, print))
 
 
     def SelectFirstOnlineModule(self):
