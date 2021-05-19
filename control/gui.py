@@ -609,12 +609,13 @@ class MainWindow(wx.Frame):
     def ShowReferenceParameters(self):
         if type(self.activeModuleId) is list and len(self.activeModuleId) == 1:
             active_module_config = configuration.modules[self.activeModuleId[0]]
-            for ch, hv in active_module_config.hv.items():
-                self.m_gridHV.SetCellValue(int(ch)-1, GRID_COLUMN_REFERENCE, str(hv))    
+            if active_module_config.has('hv'):
+                for ch, hv in active_module_config.hv.items():
+                    self.m_gridHV.SetCellValue(int(ch)-1, GRID_COLUMN_REFERENCE, str(hv))    
 
-            self.m_gridHV.SetCellValue(GRID_ROW_PEDESTAL, GRID_COLUMN_REFERENCE, str(active_module_config.hvPedestal))
-            self.m_gridHV.SetCellValue(GRID_ROW_TEMPERATURE, GRID_COLUMN_REFERENCE, str(configuration.reference_temperature))
-            self.m_gridHV.SetCellValue(GRID_ROW_SLOPE, GRID_COLUMN_REFERENCE, str(-configuration.temperature_slope))
+                self.m_gridHV.SetCellValue(GRID_ROW_PEDESTAL, GRID_COLUMN_REFERENCE, str(active_module_config.hvPedestal))
+                self.m_gridHV.SetCellValue(GRID_ROW_TEMPERATURE, GRID_COLUMN_REFERENCE, str(configuration.reference_temperature))
+                self.m_gridHV.SetCellValue(GRID_ROW_SLOPE, GRID_COLUMN_REFERENCE, str(-configuration.temperature_slope))
 
     def SetReferenceParameters(self):
         pass
