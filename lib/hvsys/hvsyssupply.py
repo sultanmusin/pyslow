@@ -278,7 +278,10 @@ class HVsysSupply:
         else:
             return int(string)
 
-        
+
+    def has_reference_voltage(self):
+        return True
+
 """ Doc
 	
 	public int PED_CALIB_MIN = 0;
