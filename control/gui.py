@@ -285,12 +285,11 @@ class MainWindow(wx.Frame):
         self.m_collapsiblePaneMulti.GetPane().Hide()
         self.m_collapsiblePaneMulti.GetPane().Show() # magic to force show panel
 
-        self.m_collapsiblePaneHV = wx.CollapsiblePane( self.m_panelRight, wx.ID_ANY, u"High Voltage", wx.DefaultPosition, wx.DefaultSize, wx.CP_NO_TLW_RESIZE )
-        self.m_collapsiblePaneHV.Collapse( False )
+        self.m_PanelHV = wx.Panel( self.m_panelRight, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL, u"High Voltage" )
 
         bSizerHV = wx.BoxSizer( wx.VERTICAL )
 
-        self.m_gridHV = wx.grid.Grid( self.m_collapsiblePaneHV.GetPane(), wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_gridHV = wx.grid.Grid( self.m_panelHV, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0 )
 
         # Grid
         self.m_gridHV.CreateGrid( GRID_ROWS_HV, GRID_COLUMNS )
@@ -339,10 +338,10 @@ class MainWindow(wx.Frame):
         bSizerHV.Add( self.m_gridHV, 0, wx.ALL, 5 )
 
 
-        self.m_collapsiblePaneHV.GetPane().SetSizer( bSizerHV )
-        self.m_collapsiblePaneHV.GetPane().Layout()
-        bSizerHV.Fit( self.m_collapsiblePaneHV.GetPane() )
-        bSizerRight.Add( self.m_collapsiblePaneHV, 0, wx.EXPAND |wx.ALL, 5 )
+        self.m_panelHV.SetSizer( bSizerHV )
+        self.m_panelHV.Layout()
+        bSizerHV.Fit( self.m_panelHV )
+        bSizerRight.Add( self.m_panelHV, 0, wx.EXPAND |wx.ALL, 5 )
 
         self.m_panelLED = wx.Panel( self.m_panelRight, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL, u"LED Control")
 
@@ -890,7 +889,7 @@ class MainWindow(wx.Frame):
         if len(module_ids) > 1:
             # multiple module select
             logging.debug("hide all parts")
-            for panel in [self.m_collapsiblePaneHV, self.m_collapsiblePaneDebug]:
+            for panel in [self.m_collapsiblePaneDebug]:
                 panel.Collapse()
 #                panel.Disable()
 
@@ -924,8 +923,6 @@ class MainWindow(wx.Frame):
 
             self.m_checkBoxOnline.Set3StateValue(wx.CHK_CHECKED if moduleConfig.online else wx.CHK_UNCHECKED)
 
-            self.m_collapsiblePaneHV.Enable()
-            self.m_collapsiblePaneHV.Collapse(False)
             self.m_collapsiblePaneDebug.Enable()
             self.m_collapsiblePaneDebug.Collapse(True)
             #self.textLedFrequencyRef.SetValue(str(moduleConfig.ledFrequency))
@@ -939,30 +936,9 @@ class MainWindow(wx.Frame):
             self.m_checkBoxPoll.SetValue( moduleConfig.online )
 
             if moduleConfig.online:
-                if moduleConfig.has('hv'): 
-                    self.m_collapsiblePaneHV.Enable()
-                    #self.m_collapsiblePaneHV.Collapse(False)
-                    #self.m_collapsiblePaneHV.Show()
-                    #self.m_gridModules.Show()
-                    #self.m_collapsiblePaneHV.GetPane().Hide()
-                    #self.m_collapsiblePaneHV.GetPane().Show() # magic to force show panel
-
-
-                if moduleConfig.has('led'): 
-                    pass
-                    #self.m_collapsiblePaneLED.Enable()
-                    #self.m_collapsiblePaneLED.Collapse(False)
                 self.pollModule(module_id)
             else:
                 logging.info("Selected module offline, no polling")
-                if moduleConfig.has('hv'): 
-                    #self.m_collapsiblePaneHV.Collapse(True)
-                    self.m_collapsiblePaneHV.Disable()
-
-                if moduleConfig.has('led'): 
-                    pass
-                    #self.m_collapsiblePaneLED.Collapse(True)
-                    # self.m_collapsiblePaneLED.Disable()
 
 
     def pollModule(self, moduleId, callback=None):
