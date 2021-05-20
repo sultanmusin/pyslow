@@ -63,7 +63,7 @@ class Detector:
     # this method is same as above but skips some unimportant registers for speed optimization purposes
     async def poll_module_important(self, id, poll_cb):   # 
         module_config = self.config.modules[id]    # first we get the module config by its id
-        bus = self.buses[module_config.bus_id]            # then we get to which bus it is connected
+        bus = self.buses[module_config.bus_id]     # then we get to which bus it is connected
 
         for part_name in module_config.parts:
             addr = module_config.addr[part_name]   # then we get all of its parts addresses
@@ -154,5 +154,11 @@ class Detector:
         await self.buses[bus_id].add_task(command, part, cb)
 
 
+    def queue_length(self):
+        total = 0
 
+        for bus in self.buses:
+            total = total + bus.queue_length()
+
+        return total
 

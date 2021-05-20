@@ -128,3 +128,6 @@ class HVsysBus:
     async def add_task(self, command, part, cb):
         task = Task(command, part, cb)
         self.task_queue.put_nowait(task)
+
+    def queue_length(self):
+        return self.task_queue.qsize()

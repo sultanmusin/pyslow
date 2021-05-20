@@ -732,9 +732,6 @@ class MainWindow(wx.Frame):
             if module_config.online:
                 await self.pollModule(module_id, False)
         
-#        await asyncio.gather(tasks)
-#        logging.warning("lol all finished") TODO normal wait
-
 
     def OnButtonSelectAllModulesClick(self, event):
         self.m_gridModules.SelectAll()
@@ -994,6 +991,7 @@ class MainWindow(wx.Frame):
                 self.m_checkBoxLedAuto.SetValue( is_on )
         
         self.UpdateModuleGrid()  # will switch off if this gets too heavy
+        self.m_statusBar1.SetStatusText('TODO: %d'%(detector.queue_length()), 1)
 
     def OnAbout(self,e):
         # Create a message dialog box
