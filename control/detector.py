@@ -157,8 +157,8 @@ class Detector:
     def queue_length(self):
         total = 0
 
-        for bus in self.buses:
-            total = total + bus.queue_length()
+        for bus_id in self.buses:
+            total = total + self.buses[bus_id].queue_length()
 
         return total
 
