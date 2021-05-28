@@ -1077,9 +1077,10 @@ async def main():
     loop.set_exception_handler(handler)
     
     try:
+        print("Staring bus listeners...")
         for id, sm in detector.buses.items():
-            await asyncio.create_task(sm.connect())
-            asyncio.create_task(sm.send())
+            await loop.create_task(sm.connect())
+            loop.create_task(sm.send())
     except OSError as e:
         print("Cannot connect to system module: %s"%(str(e)))  
 
@@ -1092,4 +1093,6 @@ async def main():
 
 
 if __name__ == '__main__':
-    asyncio.run(main(), debug=True)
+    #asyncio.run(main(), debug=True)
+    print("Staring main loop...")
+    asyncio.get_event_loop().run_until_complete(asyncio.wait([main()]))

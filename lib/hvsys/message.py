@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from __future__ import annotations   # For neat recursive type hints
+# from __future__ import annotations   # For neat recursive type hints
 
 
 __author__ = "Oleg Petukhov"
@@ -66,7 +66,7 @@ class Message:
         return self.command_type != Message.WRITE_SHORT
 
     @classmethod
-    def decode(cls, command: str, device: type = None) -> Message:
+    def decode(cls, command: str, device: type = None):
         """
         Restore the message object from string representation
         :param command: command string

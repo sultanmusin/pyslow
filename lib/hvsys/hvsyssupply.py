@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from __future__ import annotations   # For neat recursive type hints
+# from __future__ import annotations   # For neat recursive type hints
 
 __author__ = "Oleg Petukhov"
 __copyright__ = "2020, INR RAS"
