@@ -17,6 +17,8 @@ class HVsysPS:
 
     priority_capabilities = []
 
+    cell_id = 0x8000 # not really
+
 
 
 """ Documentation by hvsys 800e

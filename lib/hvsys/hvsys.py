@@ -24,6 +24,13 @@ class HVsys:
 #        'switch': HVsysSwitch
     }
 
+    def find_device_by_cell_id(cell_id: int):
+        for (id, device) in catalogus:
+            if device.cell_id == cell_id:
+                return device
+        
+        return None
+
 #    @classmethod
 #    def GetCapNameBySubaddress(cls, device: type, subaddress: int):
 #        if not hasattr(device, "capabilities_by_subaddress"):
