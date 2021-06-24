@@ -54,16 +54,18 @@ class Config:
             id = sys_mod.attrs['id'] if 'id' in sys_mod.attrs else HVsysBus.DefaultBusId
             self.buses[id] = BusConfig(self, sys_mod)
 
-        xx = list(map(lambda tag: int(tag.text), self.soup.select("config module geometry x")))
-        self.geom_min_x, self.geom_max_x = min(xx), max(xx)
-        self.geom_width = self.geom_max_x - self.geom_min_x + 1
-
-        yy = list(map(lambda tag: int(tag.text), self.soup.select("config module geometry y")))
-        self.geom_min_y, self.geom_max_y = min(yy), max(yy)
-        self.geom_height = self.geom_max_y - self.geom_min_y + 1
-
         self.modules = {} # dict[str,ModuleConfig]
-        self.modulesOrderedByGeometry = [''] * self.geom_height * self.geom_width
+
+        xx = list(map(lambda tag: int(tag.text), self.soup.select("config module geometry x")))
+        if len(xx) > 0:
+            self.geom_min_x, self.geom_max_x = min(xx), max(xx)
+            self.geom_width = self.geom_max_x - self.geom_min_x + 1
+
+            yy = list(map(lambda tag: int(tag.text), self.soup.select("config module geometry y")))
+            self.geom_min_y, self.geom_max_y = min(yy), max(yy)
+            self.geom_height = self.geom_max_y - self.geom_min_y + 1
+
+            self.modulesOrderedByGeometry = [''] * self.geom_height * self.geom_width
 
         for mod in self.soup.select("config module"):
             id = mod.attrs['id']
