@@ -44,7 +44,7 @@ def handler(loop, context):
 def on_complete(value):
     print('Response = %d (0x%04x)'%(value, value))
     device = HVsys.find_device_by_cell_id(value)
-    print(device.DESCRIPTION)
+    print(device.DESCRIPTION if device is not None else 'na61ps10c')
 
 
 async def main(argv):
