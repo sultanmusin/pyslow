@@ -4,6 +4,7 @@
 #     https://www.atlassian.com/git/tutorials/saving-changes/gitignore
 
 doc/legacy/slowControl.csv
+doc/na61-psd-slow-control/references/
 
 # Node artifact files
 node_modules/

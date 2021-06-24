@@ -1,0 +1,194 @@
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="config">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="global">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="connection">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="hvsys">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="rate">
+                            <xs:complexType>
+                              <xs:simpleContent>
+                                <xs:extension base="xs:int">
+                                  <xs:attribute type="xs:string" name="unit"/>
+                                </xs:extension>
+                              </xs:simpleContent>
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element type="xs:string" name="port"/>
+                          <xs:element type="xs:byte" name="dataBits"/>
+                          <xs:element type="xs:byte" name="stopBits"/>
+                          <xs:element type="xs:byte" name="parity"/>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="tec">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="rate">
+                            <xs:complexType>
+                              <xs:simpleContent>
+                                <xs:extension base="xs:int">
+                                  <xs:attribute type="xs:string" name="unit"/>
+                                </xs:extension>
+                              </xs:simpleContent>
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element type="xs:byte" name="dataBits"/>
+                          <xs:element type="xs:byte" name="stopBits"/>
+                          <xs:element type="xs:byte" name="parity"/>
+                          <xs:element type="xs:float" name="firmware"/>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="settings">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="hv">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="base">
+                            <xs:complexType>
+                              <xs:simpleContent>
+                                <xs:extension base="xs:float">
+                                  <xs:attribute type="xs:string" name="unit"/>
+                                </xs:extension>
+                              </xs:simpleContent>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="module" maxOccurs="unbounded" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="geometry">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="size" minOccurs="1" maxOccurs="1">
+                      <xs:complexType>
+                        <xs:simpleContent>
+                          <xs:extension base="xs:byte">
+                            <xs:attribute type="xs:string" name="unit" use="optional"/>
+                          </xs:extension>
+                        </xs:simpleContent>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="x" minOccurs="1" maxOccurs="1">
+                      <xs:complexType>
+                        <xs:simpleContent>
+                          <xs:extension base="xs:short">
+                            <xs:attribute type="xs:string" name="unit" use="optional"/>
+                          </xs:extension>
+                        </xs:simpleContent>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="y" minOccurs="1" maxOccurs="1">
+                      <xs:complexType>
+                        <xs:simpleContent>
+                          <xs:extension base="xs:short">
+                            <xs:attribute type="xs:string" name="unit" use="optional"/>
+                          </xs:extension>
+                        </xs:simpleContent>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="connection">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="hvsys">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="led">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element type="xs:byte" name="id" minOccurs="1" maxOccurs="1"/>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element name="hv" minOccurs="1" maxOccurs="1">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element type="xs:byte" name="id"/>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="tec">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element type="xs:string" name="port" minOccurs="1" maxOccurs="1"/>
+                          <xs:element type="xs:byte" name="id" minOccurs="1" maxOccurs="1"/>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="settings">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="led" minOccurs="1" maxOccurs="1">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element type="xs:string" name="autoTune" minOccurs="1" maxOccurs="1"/>
+                          <xs:element type="xs:short" name="brightness" minOccurs="1" maxOccurs="1"/>
+                          <xs:element name="frequency" minOccurs="1" maxOccurs="1">
+                            <xs:complexType>
+                              <xs:simpleContent>
+                                <xs:extension base="xs:byte">
+                                  <xs:attribute type="xs:string" name="unit" use="optional"/>
+                                </xs:extension>
+                              </xs:simpleContent>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="hv" minOccurs="1" maxOccurs="1">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="channel" maxOccurs="10" minOccurs="10">
+                            <xs:complexType>
+                              <xs:simpleContent>
+                                <xs:extension base="xs:float">
+                                  <xs:attribute type="xs:byte" name="id" use="required"/>
+                                  <xs:attribute type="xs:string" name="unit" use="optional"/>
+                                </xs:extension>
+                              </xs:simpleContent>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+            <xs:attribute type="xs:byte" name="id" use="required"/>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute type="xs:string" name="id"/>
+      <xs:attribute type="xs:string" name="created"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

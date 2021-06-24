@@ -1,0 +1,1646 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config
+    xmlns="http://www.w3schools.com"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="PsdSlowControlConfig.xsd" 
+	xsi:noNamespaceSchemaLocation="PsdSlowControlConfig.xsd" 
+    id="default" 
+    created="17.02.2014">
+    <global>
+        <flags>
+            <!--onlineModules>28</onlineModules-->
+            <onlineModules>
+                1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,
+                17,18,19,20,21,22,23,24,25,26,27,28,
+                29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44
+            </onlineModules>
+            <queryDelay unit="sec">10</queryDelay>
+        </flags>
+        <connection>
+		<hvsys>
+		        <rate unit="baud">57600</rate>
+    	                <port>/dev/ttyr01</port>
+		        <dataBits>8</dataBits>
+		        <stopBits>1</stopBits>
+		        <parity>0</parity>		        
+		</hvsys>
+		</connection>
+		<settings>
+		    <hv>
+		        <base unit="Volts">64.0</base>
+		    </hv>
+		</settings>
+    </global>
+    <module id="1">
+    	<geometry>
+    	    <size>1</size>
+    	    <x>8</x>
+            <y>4</y>
+    	</geometry>
+    	    	 
+    	<connection>
+			<hvsys>
+				<led>
+				    <id>1</id>
+				</led>    
+				<hv>
+				    <id>2</id>
+				</hv>
+			</hvsys>
+    	        	</connection>    
+    	<settings>
+    	    <led>
+			    <autoTune>false</autoTune>
+			    <brightness>1000</brightness>
+			    <frequency unit="Hz">100</frequency>
+    	    </led>
+			<hv>
+				<channel id="1" unit="Volts">66.4</channel>
+				<channel id="2" unit="Volts">66.4</channel>
+				<channel id="3" unit="Volts">66.4</channel>
+				<channel id="4" unit="Volts">66.4</channel>
+				<channel id="5" unit="Volts">66.4</channel>
+				<channel id="6" unit="Volts">66.4</channel>
+				<channel id="7" unit="Volts">66.4</channel>
+				<channel id="8" unit="Volts">66.4</channel>
+				<channel id="9" unit="Volts">66.4</channel>
+				<channel id="10" unit="Volts">66.4</channel> 
+			</hv>
+    	</settings> 
+    	
+    </module>
+    <module id="2">
+    	<geometry>
+    	    <size>1</size>
+    	    <x>7</x>
+    	   	<y>4</y>
+    	</geometry>
+    	    	 
+    	<connection>
+			<hvsys>
+				<led>
+				    <id>3</id>
+				</led>    
+				<hv>
+				    <id>4</id>
+				</hv>
+			</hvsys>
+    	        	</connection>    
+    	<settings>
+    	    <led>
+			    <autoTune>false</autoTune>
+			    <brightness>1000</brightness>
+			    <frequency unit="Hz">100</frequency>
+    	    </led>
+			<hv>
+				<channel id="1" unit="Volts">66.4</channel>
+				<channel id="2" unit="Volts">66.4</channel>
+				<channel id="3" unit="Volts">66.4</channel>
+				<channel id="4" unit="Volts">66.4</channel>
+				<channel id="5" unit="Volts">66.4</channel>
+				<channel id="6" unit="Volts">66.4</channel>
+				<channel id="7" unit="Volts">66.4</channel>
+				<channel id="8" unit="Volts">66.4</channel>
+				<channel id="9" unit="Volts">66.4</channel>
+				<channel id="10" unit="Volts">66.4</channel> 
+			</hv>
+    	</settings> 
+    	
+    </module>
+    <module id="3">
+    	<geometry>
+    	    <size>1</size>
+    	    <x>6</x>
+    	   	<y>4</y>
+    	</geometry>
+    	    	 
+    	<connection>
+			<hvsys>
+				<led>
+				    <id>5</id>
+				</led>    
+				<hv>
+				    <id>6</id>
+				</hv>
+			</hvsys>
+    	        	</connection>    
+    	<settings>
+    	    <led>
+			    <autoTune>false</autoTune>
+			    <brightness>1000</brightness>
+			    <frequency unit="Hz">100</frequency>
+    	    </led>
+			<hv>
+				<channel id="1" unit="Volts">66.4</channel>
+				<channel id="2" unit="Volts">66.4</channel>
+				<channel id="3" unit="Volts">66.4</channel>
+				<channel id="4" unit="Volts">66.4</channel>
+				<channel id="5" unit="Volts">66.4</channel>
+				<channel id="6" unit="Volts">66.4</channel>
+				<channel id="7" unit="Volts">66.4</channel>
+				<channel id="8" unit="Volts">66.4</channel>
+				<channel id="9" unit="Volts">66.4</channel>
+				<channel id="10" unit="Volts">66.4</channel> 
+			</hv>
+    	</settings> 
+    	
+    </module>
+    <module id="4">
+    	<geometry>
+    	    <size>1</size>
+    	    <x>5</x>
+    	   	<y>4</y>
+    	</geometry>
+    	    	 
+    	<connection>
+			<hvsys>
+				<led>
+				    <id>7</id>
+				</led>    
+				<hv>
+				    <id>8</id>
+				</hv>
+			</hvsys>
+    	        	</connection>    
+    	<settings>
+    	    <led>
+			    <autoTune>false</autoTune>
+			    <brightness>1000</brightness>
+			    <frequency unit="Hz">100</frequency>
+    	    </led>
+			<hv>
+				<channel id="1" unit="Volts">66.4</channel>
+				<channel id="2" unit="Volts">66.4</channel>
+				<channel id="3" unit="Volts">66.4</channel>
+				<channel id="4" unit="Volts">66.4</channel>
+				<channel id="5" unit="Volts">66.4</channel>
+				<channel id="6" unit="Volts">66.4</channel>
+				<channel id="7" unit="Volts">66.4</channel>
+				<channel id="8" unit="Volts">66.4</channel>
+				<channel id="9" unit="Volts">66.4</channel>
+				<channel id="10" unit="Volts">66.4</channel> 
+			</hv>
+    	</settings> 
+    	
+    </module>
+    <module id="5">
+    	<geometry>
+    	    <size>1</size>
+    	    <x>8</x>
+    	   	<y>5</y>
+    	</geometry>
+    	    	 
+    	<connection>
+			<hvsys>
+				<led>
+				    <id>9</id>
+				</led>    
+				<hv>
+				    <id>10</id>
+				</hv>
+			</hvsys>
+    	        	</connection>    
+    	<settings>
+    	    <led>
+			    <autoTune>false</autoTune>
+			    <brightness>1000</brightness>
+			    <frequency unit="Hz">100</frequency>
+    	    </led>
+			<hv>
+				<channel id="1" unit="Volts">66.4</channel>
+				<channel id="2" unit="Volts">66.4</channel>
+				<channel id="3" unit="Volts">66.4</channel>
+				<channel id="4" unit="Volts">66.4</channel>
+				<channel id="5" unit="Volts">66.4</channel>
+				<channel id="6" unit="Volts">66.4</channel>
+				<channel id="7" unit="Volts">66.4</channel>
+				<channel id="8" unit="Volts">66.4</channel>
+				<channel id="9" unit="Volts">66.4</channel>
+				<channel id="10" unit="Volts">66.4</channel> 
+			</hv>
+    	</settings> 
+    	
+    </module>
+    <module id="6">
+    	<geometry>
+    	    <size>1</size>
+    	    <x>7</x>
+    	   	<y>5</y>
+    	</geometry>
+    	    	 
+    	<connection>
+			<hvsys>
+				<led>
+				    <id>11</id>
+				</led>    
+				<hv>
+				    <id>12</id>
+				</hv>
+			</hvsys>
+    	        	</connection>    
+    	<settings>
+    	    <led>
+			    <autoTune>false</autoTune>
+			    <brightness>1000</brightness>
+			    <frequency unit="Hz">100</frequency>
+    	    </led>
+			<hv>
+				<channel id="1" unit="Volts">66.4</channel>
+				<channel id="2" unit="Volts">66.4</channel>
+				<channel id="3" unit="Volts">66.4</channel>
+				<channel id="4" unit="Volts">66.4</channel>
+				<channel id="5" unit="Volts">66.4</channel>
+				<channel id="6" unit="Volts">66.4</channel>
+				<channel id="7" unit="Volts">66.4</channel>
+				<channel id="8" unit="Volts">66.4</channel>
+				<channel id="9" unit="Volts">66.4</channel>
+				<channel id="10" unit="Volts">66.4</channel> 
+			</hv>
+    	</settings> 
+    	
+    </module>
+    <module id="7">
+    	<geometry>
+    	    <size>1</size>
+    	    <x>6</x>
+    	   	<y>5</y>
+    	</geometry>
+    	    	 
+    	<connection>
+			<hvsys>
+				<led>
+				    <id>13</id>
+				</led>    
+				<hv>
+				    <id>14</id>
+				</hv>
+			</hvsys>
+    	        	</connection>    
+    	<settings>
+    	    <led>
+			    <autoTune>false</autoTune>
+			    <brightness>1000</brightness>
+			    <frequency unit="Hz">100</frequency>
+    	    </led>
+			<hv>
+				<channel id="1" unit="Volts">66.4</channel>
+				<channel id="2" unit="Volts">66.4</channel>
+				<channel id="3" unit="Volts">66.4</channel>
+				<channel id="4" unit="Volts">66.4</channel>
+				<channel id="5" unit="Volts">66.4</channel>
+				<channel id="6" unit="Volts">66.4</channel>
+				<channel id="7" unit="Volts">66.4</channel>
+				<channel id="8" unit="Volts">66.4</channel>
+				<channel id="9" unit="Volts">66.4</channel>
+				<channel id="10" unit="Volts">66.4</channel> 
+			</hv>
+    	</settings> 
+    	
+    </module>
+    <module id="8">
+    	<geometry>
+    	    <size>1</size>
+    	    <x>5</x>
+    	   	<y>5</y>
+    	</geometry>
+    	    	 
+    	<connection>
+			<hvsys>
+				<led>
+				    <id>15</id>
+				</led>    
+				<hv>
+				    <id>16</id>
+				</hv>
+			</hvsys>
+    	        	</connection>    
+    	<settings>
+    	    <led>
+			    <autoTune>false</autoTune>
+			    <brightness>1000</brightness>
+			    <frequency unit="Hz">100</frequency>
+    	    </led>
+			<hv>
+				<channel id="1" unit="Volts">66.4</channel>
+				<channel id="2" unit="Volts">66.4</channel>
+				<channel id="3" unit="Volts">66.4</channel>
+				<channel id="4" unit="Volts">66.4</channel>
+				<channel id="5" unit="Volts">66.4</channel>
+				<channel id="6" unit="Volts">66.4</channel>
+				<channel id="7" unit="Volts">66.4</channel>
+				<channel id="8" unit="Volts">66.4</channel>
+				<channel id="9" unit="Volts">66.4</channel>
+				<channel id="10" unit="Volts">66.4</channel> 
+			</hv>
+    	</settings> 
+    	
+    </module>
+    <module id="9">
+    	<geometry>
+    	    <size>1</size>
+    	    <x>8</x>
+    	   	<y>6</y>
+    	</geometry>
+    	    	 
+    	<connection>
+			<hvsys>
+				<led>
+				    <id>17</id>
+				</led>    
+				<hv>
+				    <id>18</id>
+				</hv>
+			</hvsys>
+    	        	</connection>    
+    	<settings>
+    	    <led>
+			    <autoTune>false</autoTune>
+			    <brightness>1000</brightness>
+			    <frequency unit="Hz">100</frequency>
+    	    </led>
+			<hv>
+				<channel id="1" unit="Volts">66.4</channel>
+				<channel id="2" unit="Volts">66.4</channel>
+				<channel id="3" unit="Volts">66.4</channel>
+				<channel id="4" unit="Volts">66.4</channel>
+				<channel id="5" unit="Volts">66.4</channel>
+				<channel id="6" unit="Volts">66.4</channel>
+				<channel id="7" unit="Volts">66.4</channel>
+				<channel id="8" unit="Volts">66.4</channel>
+				<channel id="9" unit="Volts">66.4</channel>
+				<channel id="10" unit="Volts">66.4</channel> 
+			</hv>
+    	</settings> 
+    	
+    </module>
+    <module id="10">
+    	<geometry>
+    	    <size>1</size>
+    	    <x>7</x>
+    	   	<y>6</y>
+    	</geometry>
+    	<connection>
+			<hvsys>
+				<led>
+				    <id>19</id>
+				</led>    
+				<hv>
+				    <id>20</id>
+				</hv>
+			</hvsys>
+    	        	</connection>    
+    	<settings>
+    	    <led>
+			    <autoTune>false</autoTune>
+			    <brightness>1000</brightness>
+			    <frequency unit="Hz">100</frequency>
+    	    </led>
+			<hv>
+				<channel id="1" unit="Volts">66.4</channel>
+				<channel id="2" unit="Volts">66.4</channel>
+				<channel id="3" unit="Volts">66.4</channel>
+				<channel id="4" unit="Volts">66.4</channel>
+				<channel id="5" unit="Volts">66.4</channel>
+				<channel id="6" unit="Volts">66.4</channel>
+				<channel id="7" unit="Volts">66.4</channel>
+				<channel id="8" unit="Volts">66.4</channel>
+				<channel id="9" unit="Volts">66.4</channel>
+				<channel id="10" unit="Volts">66.4</channel> 
+			</hv>
+    	</settings> 
+    </module>
+    <module id="11">
+    	<geometry>
+    	    <size>1</size>
+    	    <x>6</x>
+    	   	<y>6</y>
+    	</geometry>
+    	 
+    	<connection>
+			<hvsys>
+				<led>
+				    <id>21</id>
+				</led>    
+				<hv>
+				    <id>22</id>
+				</hv>
+			</hvsys>
+    	        	</connection>    
+    	<settings>
+    	    <led>
+			    <autoTune>false</autoTune>
+			    <brightness>1000</brightness>
+			    <frequency unit="Hz">100</frequency>
+    	    </led>
+			<hv>
+				<channel id="1" unit="Volts">66.4</channel>
+				<channel id="2" unit="Volts">66.4</channel>
+				<channel id="3" unit="Volts">66.4</channel>
+				<channel id="4" unit="Volts">66.4</channel>
+				<channel id="5" unit="Volts">66.4</channel>
+				<channel id="6" unit="Volts">66.4</channel>
+				<channel id="7" unit="Volts">66.4</channel>
+				<channel id="8" unit="Volts">66.4</channel>
+				<channel id="9" unit="Volts">66.4</channel>
+				<channel id="10" unit="Volts">66.4</channel> 
+			</hv>
+    	</settings>	
+    	
+    </module>
+    <module id="12">
+    	<geometry>
+    	    <size>1</size>
+    	    <x>5</x>
+    	   	<y>6</y>
+    	</geometry>
+    	 
+    	<connection>
+			<hvsys>
+				<led>
+				    <id>23</id>
+				</led>    
+				<hv>
+				    <id>24</id>
+				</hv>
+			</hvsys>
+    	        	</connection>    
+    	<settings>
+    	    <led>
+			    <autoTune>false</autoTune>
+			    <brightness>1000</brightness>
+			    <frequency unit="Hz">100</frequency>
+    	    </led>
+			<hv>
+				<channel id="1" unit="Volts">66.4</channel>
+				<channel id="2" unit="Volts">66.4</channel>
+				<channel id="3" unit="Volts">66.4</channel>
+				<channel id="4" unit="Volts">66.4</channel>
+				<channel id="5" unit="Volts">66.4</channel>
+				<channel id="6" unit="Volts">66.4</channel>
+				<channel id="7" unit="Volts">66.4</channel>
+				<channel id="8" unit="Volts">66.4</channel>
+				<channel id="9" unit="Volts">66.4</channel>
+				<channel id="10" unit="Volts">66.4</channel> 
+			</hv>
+    	</settings> 	
+    </module>
+    <module id="13">
+    	<geometry>
+    	    <size>1</size>
+    	    <x>8</x>
+    	   	<y>7</y>
+    	</geometry>
+ 
+    	<connection>
+			<hvsys>
+				<led>
+				    <id>25</id>
+				</led>    
+				<hv>
+				    <id>26</id>
+				</hv>
+			</hvsys>
+    	        	</connection>    
+    	<settings>
+    	    <led>
+			    <autoTune>false</autoTune>
+			    <brightness>1000</brightness>
+			    <frequency unit="Hz">100</frequency>
+    	    </led>
+			<hv>
+				<channel id="1" unit="Volts">66.4</channel>
+				<channel id="2" unit="Volts">66.4</channel>
+				<channel id="3" unit="Volts">66.4</channel>
+				<channel id="4" unit="Volts">66.4</channel>
+				<channel id="5" unit="Volts">66.4</channel>
+				<channel id="6" unit="Volts">66.4</channel>
+				<channel id="7" unit="Volts">66.4</channel>
+				<channel id="8" unit="Volts">66.4</channel>
+				<channel id="9" unit="Volts">66.4</channel>
+				<channel id="10" unit="Volts">66.4</channel> 
+			</hv>
+    	</settings>
+
+    </module>
+    <module id="14">
+    	<geometry>
+    	    <size>1</size>
+    	    <x>7</x>
+    	   	<y>7</y>
+    	</geometry>
+ 
+    	<connection>
+			<hvsys>
+				<led>
+				    <id>27</id>
+				</led>    
+				<hv>
+				    <id>28</id>
+				</hv>
+			</hvsys>
+    	        	</connection>    
+    	<settings>
+    	    <led>
+			    <autoTune>false</autoTune>
+			    <brightness>1000</brightness>
+			    <frequency unit="Hz">100</frequency>
+    	    </led>
+			<hv>
+				<channel id="1" unit="Volts">66.4</channel>
+				<channel id="2" unit="Volts">66.4</channel>
+				<channel id="3" unit="Volts">66.4</channel>
+				<channel id="4" unit="Volts">66.4</channel>
+				<channel id="5" unit="Volts">66.4</channel>
+				<channel id="6" unit="Volts">66.4</channel>
+				<channel id="7" unit="Volts">66.4</channel>
+				<channel id="8" unit="Volts">66.4</channel>
+				<channel id="9" unit="Volts">66.4</channel>
+				<channel id="10" unit="Volts">66.4</channel> 
+			</hv>
+    	</settings>
+
+    </module>
+    <module id="15">
+    	<geometry>
+    	    <size>1</size>
+    	    <x>6</x>
+    	   	<y>7</y>
+    	</geometry>
+    	 
+    	<connection>
+			<hvsys>
+				<led>
+				    <id>29</id>
+				</led>    
+				<hv>
+				    <id>30</id>
+				</hv>
+			</hvsys>
+    	        	</connection>    
+    	<settings>
+    	    <led>
+			    <autoTune>false</autoTune>
+			    <brightness>1000</brightness>
+			    <frequency unit="Hz">100</frequency>
+    	    </led>
+			<hv>
+				<channel id="1" unit="Volts">66.4</channel>
+				<channel id="2" unit="Volts">66.4</channel>
+				<channel id="3" unit="Volts">66.4</channel>
+				<channel id="4" unit="Volts">66.4</channel>
+				<channel id="5" unit="Volts">66.4</channel>
+				<channel id="6" unit="Volts">66.4</channel>
+				<channel id="7" unit="Volts">66.4</channel>
+				<channel id="8" unit="Volts">66.4</channel>
+				<channel id="9" unit="Volts">66.4</channel>
+				<channel id="10" unit="Volts">66.4</channel> 
+			</hv>
+    	</settings>
+    	
+    </module>
+    <module id="16">
+    	<geometry>
+    	    <size>1</size>
+    	    <x>5</x>
+    	   	<y>7</y>
+    	</geometry>
+    	 
+    	<connection>
+			<hvsys>
+				<led>
+				    <id>31</id>
+				</led>    
+				<hv>
+				    <id>32</id>
+				</hv>
+			</hvsys>
+    	        	</connection>    
+    	<settings>
+    	    <led>
+			    <autoTune>false</autoTune>
+			    <brightness>1000</brightness>
+			    <frequency unit="Hz">100</frequency>
+    	    </led>
+			<hv>
+				<channel id="1" unit="Volts">66.4</channel>
+				<channel id="2" unit="Volts">66.4</channel>
+				<channel id="3" unit="Volts">66.4</channel>
+				<channel id="4" unit="Volts">66.4</channel>
+				<channel id="5" unit="Volts">66.4</channel>
+				<channel id="6" unit="Volts">66.4</channel>
+				<channel id="7" unit="Volts">66.4</channel>
+				<channel id="8" unit="Volts">66.4</channel>
+				<channel id="9" unit="Volts">66.4</channel>
+				<channel id="10" unit="Volts">66.4</channel> 
+			</hv>
+    	</settings> 
+    </module>    
+    <module id="17">
+    	<geometry>
+    	    <size>2</size>
+    	    <x>9</x>
+    	   	<y>2</y>
+    	</geometry>
+    	<connection>
+			<hvsys>
+				<led>
+				    <id>33</id>
+				</led>    
+				<hv>
+				    <id>34</id>
+				</hv>
+			</hvsys>
+    	        	</connection>    
+    	<settings>
+    	    <led>
+			    <autoTune>false</autoTune>
+			    <brightness>1000</brightness>
+			    <frequency unit="Hz">100</frequency>
+    	    </led>
+			<hv>
+				<channel id="1" unit="Volts">66.4</channel>
+				<channel id="2" unit="Volts">66.4</channel>
+				<channel id="3" unit="Volts">66.4</channel>
+				<channel id="4" unit="Volts">66.4</channel>
+				<channel id="5" unit="Volts">66.4</channel>
+				<channel id="6" unit="Volts">66.4</channel>
+				<channel id="7" unit="Volts">66.4</channel>
+				<channel id="8" unit="Volts">66.4</channel>
+				<channel id="9" unit="Volts">66.4</channel>
+				<channel id="10" unit="Volts">66.4</channel> 
+			</hv>
+    	</settings> 
+    </module>
+    <module id="18">
+    	<geometry>
+    	    <size>2</size>
+    	    <x>7</x>
+    	   	<y>2</y>
+    	</geometry>
+        	<connection>
+			<hvsys>
+				<led>
+				    <id>35</id>
+				</led>    
+				<hv>
+				    <id>36</id>
+				</hv>
+			</hvsys>
+    	        	</connection>    
+    	<settings>
+    	    <led>
+			    <autoTune>false</autoTune>
+			    <brightness>1000</brightness>
+			    <frequency unit="Hz">100</frequency>
+    	    </led>
+			<hv>
+				<channel id="1" unit="Volts">66.4</channel>
+				<channel id="2" unit="Volts">66.4</channel>
+				<channel id="3" unit="Volts">66.4</channel>
+				<channel id="4" unit="Volts">66.4</channel>
+				<channel id="5" unit="Volts">66.4</channel>
+				<channel id="6" unit="Volts">66.4</channel>
+				<channel id="7" unit="Volts">66.4</channel>
+				<channel id="8" unit="Volts">66.4</channel>
+				<channel id="9" unit="Volts">66.4</channel>
+				<channel id="10" unit="Volts">66.4</channel> 
+			</hv>
+    	</settings> 
+    </module>
+    <module id="19">
+    	<geometry>
+    	    <size>2</size>
+    	    <x>5</x>
+    	   	<y>2</y>
+    	</geometry>
+        	<connection>
+			<hvsys>
+				<led>
+				    <id>37</id>
+				</led>    
+				<hv>
+				    <id>38</id>
+				</hv>
+			</hvsys>
+    	        	</connection>    
+    	<settings>
+    	    <led>
+			    <autoTune>false</autoTune>
+			    <brightness>1000</brightness>
+			    <frequency unit="Hz">100</frequency>
+    	    </led>
+			<hv>
+				<channel id="1" unit="Volts">66.4</channel>
+				<channel id="2" unit="Volts">66.4</channel>
+				<channel id="3" unit="Volts">66.4</channel>
+				<channel id="4" unit="Volts">66.4</channel>
+				<channel id="5" unit="Volts">66.4</channel>
+				<channel id="6" unit="Volts">66.4</channel>
+				<channel id="7" unit="Volts">66.4</channel>
+				<channel id="8" unit="Volts">66.4</channel>
+				<channel id="9" unit="Volts">66.4</channel>
+				<channel id="10" unit="Volts">66.4</channel> 
+			</hv>
+    	</settings> 
+    </module>
+    <module id="20">
+    	<geometry>
+    	    <size>2</size>
+    	    <x>3</x>
+    	   	<y>2</y>
+    	</geometry>
+        	<connection>
+			<hvsys>
+				<led>
+				    <id>39</id>
+				</led>    
+				<hv>
+				    <id>40</id>
+				</hv>
+			</hvsys>
+    	        	</connection>    
+    	<settings>
+    	    <led>
+			    <autoTune>false</autoTune>
+			    <brightness>1000</brightness>
+			    <frequency unit="Hz">100</frequency>
+    	    </led>
+			<hv>
+				<channel id="1" unit="Volts">66.4</channel>
+				<channel id="2" unit="Volts">66.4</channel>
+				<channel id="3" unit="Volts">66.4</channel>
+				<channel id="4" unit="Volts">66.4</channel>
+				<channel id="5" unit="Volts">66.4</channel>
+				<channel id="6" unit="Volts">66.4</channel>
+				<channel id="7" unit="Volts">66.4</channel>
+				<channel id="8" unit="Volts">66.4</channel>
+				<channel id="9" unit="Volts">66.4</channel>
+				<channel id="10" unit="Volts">66.4</channel> 
+			</hv>
+    	</settings> 
+    </module>
+    <module id="21">
+    	<geometry>
+    	    <size>2</size>
+    	    <x>3</x>
+    	   	<y>4</y>
+    	</geometry>
+        	<connection>
+			<hvsys>
+				<led>
+				    <id>41</id>
+				</led>    
+				<hv>
+				    <id>42</id>
+				</hv>
+			</hvsys>
+    	        	</connection>    
+    	<settings>
+    	    <led>
+			    <autoTune>false</autoTune>
+			    <brightness>1000</brightness>
+			    <frequency unit="Hz">100</frequency>
+    	    </led>
+			<hv>
+				<channel id="1" unit="Volts">66.4</channel>
+				<channel id="2" unit="Volts">66.4</channel>
+				<channel id="3" unit="Volts">66.4</channel>
+				<channel id="4" unit="Volts">66.4</channel>
+				<channel id="5" unit="Volts">66.4</channel>
+				<channel id="6" unit="Volts">66.4</channel>
+				<channel id="7" unit="Volts">66.4</channel>
+				<channel id="8" unit="Volts">66.4</channel>
+				<channel id="9" unit="Volts">66.4</channel>
+				<channel id="10" unit="Volts">66.4</channel> 
+			</hv>
+    	</settings> 
+    </module>
+    <module id="22">
+    	<geometry>
+    	    <size>2</size>
+    	    <x>3</x>
+    	   	<y>6</y>
+    	</geometry>
+        	<connection>
+			<hvsys>
+				<led>
+				    <id>43</id>
+				</led>    
+				<hv>
+				    <id>44</id>
+				</hv>
+			</hvsys>
+    	        	</connection>    
+    	<settings>
+    	    <led>
+			    <autoTune>false</autoTune>
+			    <brightness>1000</brightness>
+			    <frequency unit="Hz">100</frequency>
+    	    </led>
+			<hv>
+				<channel id="1" unit="Volts">66.4</channel>
+				<channel id="2" unit="Volts">66.4</channel>
+				<channel id="3" unit="Volts">66.4</channel>
+				<channel id="4" unit="Volts">66.4</channel>
+				<channel id="5" unit="Volts">66.4</channel>
+				<channel id="6" unit="Volts">66.4</channel>
+				<channel id="7" unit="Volts">66.4</channel>
+				<channel id="8" unit="Volts">66.4</channel>
+				<channel id="9" unit="Volts">66.4</channel>
+				<channel id="10" unit="Volts">66.4</channel> 
+			</hv>
+    	</settings> 
+    </module>
+    <module id="23">
+    	<geometry>
+    	    <size>2</size>
+    	    <x>3</x>
+    	   	<y>8</y>
+    	</geometry>
+        	<connection>
+			<hvsys>
+				<led>
+				    <id>45</id>
+				</led>    
+				<hv>
+				    <id>46</id>
+				</hv>
+			</hvsys>
+    	        	</connection>    
+    	<settings>
+    	    <led>
+			    <autoTune>false</autoTune>
+			    <brightness>1000</brightness>
+			    <frequency unit="Hz">100</frequency>
+    	    </led>
+			<hv>
+				<channel id="1" unit="Volts">66.4</channel>
+				<channel id="2" unit="Volts">66.4</channel>
+				<channel id="3" unit="Volts">66.4</channel>
+				<channel id="4" unit="Volts">66.4</channel>
+				<channel id="5" unit="Volts">66.4</channel>
+				<channel id="6" unit="Volts">66.4</channel>
+				<channel id="7" unit="Volts">66.4</channel>
+				<channel id="8" unit="Volts">66.4</channel>
+				<channel id="9" unit="Volts">66.4</channel>
+				<channel id="10" unit="Volts">66.4</channel> 
+			</hv>
+    	</settings> 
+    </module>
+    <module id="24">
+    	<geometry>
+    	    <size>2</size>
+    	    <x>5</x>
+    	   	<y>8</y>
+    	</geometry>
+        	<connection>
+			<hvsys>
+				<led>
+				    <id>47</id>
+				</led>    
+				<hv>
+				    <id>48</id>
+				</hv>
+			</hvsys>
+    	        	</connection>    
+    	<settings>
+    	    <led>
+			    <autoTune>false</autoTune>
+			    <brightness>1000</brightness>
+			    <frequency unit="Hz">100</frequency>
+    	    </led>
+			<hv>
+				<channel id="1" unit="Volts">66.4</channel>
+				<channel id="2" unit="Volts">66.4</channel>
+				<channel id="3" unit="Volts">66.4</channel>
+				<channel id="4" unit="Volts">66.4</channel>
+				<channel id="5" unit="Volts">66.4</channel>
+				<channel id="6" unit="Volts">66.4</channel>
+				<channel id="7" unit="Volts">66.4</channel>
+				<channel id="8" unit="Volts">66.4</channel>
+				<channel id="9" unit="Volts">66.4</channel>
+				<channel id="10" unit="Volts">66.4</channel> 
+			</hv>
+    	</settings> 
+    </module>
+    <module id="25">
+    	<geometry>
+    	    <size>2</size>
+    	    <x>7</x>
+    	   	<y>8</y>
+    	</geometry>
+        <connection>
+			<hvsys>
+				<led>
+				    <id>49</id>
+				</led>    
+				<hv>
+				    <id>50</id>
+				</hv>
+			</hvsys>
+    	        	</connection>    
+    	<settings>
+    	    <led>
+			    <autoTune>false</autoTune>
+			    <brightness>1000</brightness>
+			    <frequency unit="Hz">100</frequency>
+    	    </led>
+			<hv>
+				<channel id="1" unit="Volts">66.4</channel>
+				<channel id="2" unit="Volts">66.4</channel>
+				<channel id="3" unit="Volts">66.4</channel>
+				<channel id="4" unit="Volts">66.4</channel>
+				<channel id="5" unit="Volts">66.4</channel>
+				<channel id="6" unit="Volts">66.4</channel>
+				<channel id="7" unit="Volts">66.4</channel>
+				<channel id="8" unit="Volts">66.4</channel>
+				<channel id="9" unit="Volts">66.4</channel>
+				<channel id="10" unit="Volts">66.4</channel> 
+			</hv>
+    	</settings> 
+    </module>
+    <module id="26">
+    	<geometry>
+    	    <size>2</size>
+    	    <x>9</x>
+    	   	<y>8</y>
+    	</geometry>
+        	<connection>
+			<hvsys>
+				<led>
+				    <id>51</id>
+				</led>    
+				<hv>
+				    <id>52</id>
+				</hv>
+			</hvsys>
+    	        	</connection>    
+    	<settings>
+    	    <led>
+			    <autoTune>false</autoTune>
+			    <brightness>1000</brightness>
+			    <frequency unit="Hz">100</frequency>
+    	    </led>
+			<hv>
+				<channel id="1" unit="Volts">66.4</channel>
+				<channel id="2" unit="Volts">66.4</channel>
+				<channel id="3" unit="Volts">66.4</channel>
+				<channel id="4" unit="Volts">66.4</channel>
+				<channel id="5" unit="Volts">66.4</channel>
+				<channel id="6" unit="Volts">66.4</channel>
+				<channel id="7" unit="Volts">66.4</channel>
+				<channel id="8" unit="Volts">66.4</channel>
+				<channel id="9" unit="Volts">66.4</channel>
+				<channel id="10" unit="Volts">66.4</channel> 
+			</hv>
+    	</settings> 
+    </module>
+    <module id="27">
+    	<geometry>
+    	    <size>2</size>
+    	    <x>9</x>
+    	   	<y>6</y>
+    	</geometry>
+        	<connection>
+			<hvsys>
+				<led>
+				    <id>53</id>
+				</led>    
+				<hv>
+				    <id>54</id>
+				</hv>
+			</hvsys>
+    	        	</connection>    
+    	<settings>
+    	    <led>
+			    <autoTune>false</autoTune>
+			    <brightness>1000</brightness>
+			    <frequency unit="Hz">100</frequency>
+    	    </led>
+			<hv>
+				<channel id="1" unit="Volts">66.4</channel>
+				<channel id="2" unit="Volts">66.4</channel>
+				<channel id="3" unit="Volts">66.4</channel>
+				<channel id="4" unit="Volts">66.4</channel>
+				<channel id="5" unit="Volts">66.4</channel>
+				<channel id="6" unit="Volts">66.4</channel>
+				<channel id="7" unit="Volts">66.4</channel>
+				<channel id="8" unit="Volts">66.4</channel>
+				<channel id="9" unit="Volts">66.4</channel>
+				<channel id="10" unit="Volts">66.4</channel> 
+			</hv>
+    	</settings> 
+    </module>
+    <module id="28">
+    	<geometry>
+    	    <size>2</size>
+    	    <x>9</x>
+    	   	<y>4</y>
+    	</geometry>
+       	<connection>
+			<hvsys>
+				<led>
+				    <id>55</id>
+				</led>    
+				<hv>
+				    <id>56</id>
+				</hv>
+			</hvsys>
+    	        	</connection>    
+    	<settings>
+    	    <led>
+			    <autoTune>false</autoTune>
+			    <brightness>1000</brightness>
+			    <frequency unit="Hz">100</frequency>
+    	    </led>
+			<hv>
+				<channel id="1" unit="Volts">66.4</channel>
+				<channel id="2" unit="Volts">66.4</channel>
+				<channel id="3" unit="Volts">66.4</channel>
+				<channel id="4" unit="Volts">66.4</channel>
+				<channel id="5" unit="Volts">66.4</channel>
+				<channel id="6" unit="Volts">66.4</channel>
+				<channel id="7" unit="Volts">66.4</channel>
+				<channel id="8" unit="Volts">66.4</channel>
+				<channel id="9" unit="Volts">66.4</channel>
+				<channel id="10" unit="Volts">66.4</channel> 
+			</hv>
+    	</settings> 
+    </module>
+    <module id="29">
+    	<geometry>
+    	    <size>2</size>
+    	    <x>9</x>
+    	   	<y>0</y>
+    	</geometry>
+       	<connection>
+			<hvsys>
+				<led>
+				    <id>57</id>
+				</led>    
+				<hv>
+				    <id>58</id>
+				</hv>
+			</hvsys>
+    	        	</connection>    
+    	<settings>
+    	    <led>
+			    <autoTune>false</autoTune>
+			    <brightness>1000</brightness>
+			    <frequency unit="Hz">100</frequency>
+    	    </led>
+			<hv>
+				<channel id="1" unit="Volts">66.4</channel>
+				<channel id="2" unit="Volts">66.4</channel>
+				<channel id="3" unit="Volts">66.4</channel>
+				<channel id="4" unit="Volts">66.4</channel>
+				<channel id="5" unit="Volts">66.4</channel>
+				<channel id="6" unit="Volts">66.4</channel>
+				<channel id="7" unit="Volts">66.4</channel>
+				<channel id="8" unit="Volts">66.4</channel>
+				<channel id="9" unit="Volts">66.4</channel>
+				<channel id="10" unit="Volts">66.4</channel> 
+			</hv>
+    	</settings> 
+    </module>
+    <module id="30">
+    	<geometry>
+    	    <size>2</size>
+    	    <x>7</x>
+    	   	<y>0</y>
+    	</geometry>
+       	<connection>
+			<hvsys>
+				<led>
+				    <id>59</id>
+				</led>    
+				<hv>
+				    <id>60</id>
+				</hv>
+			</hvsys>
+    	        	</connection>    
+    	<settings>
+    	    <led>
+			    <autoTune>false</autoTune>
+			    <brightness>1000</brightness>
+			    <frequency unit="Hz">100</frequency>
+    	    </led>
+			<hv>
+				<channel id="1" unit="Volts">66.4</channel>
+				<channel id="2" unit="Volts">66.4</channel>
+				<channel id="3" unit="Volts">66.4</channel>
+				<channel id="4" unit="Volts">66.4</channel>
+				<channel id="5" unit="Volts">66.4</channel>
+				<channel id="6" unit="Volts">66.4</channel>
+				<channel id="7" unit="Volts">66.4</channel>
+				<channel id="8" unit="Volts">66.4</channel>
+				<channel id="9" unit="Volts">66.4</channel>
+				<channel id="10" unit="Volts">66.4</channel> 
+			</hv>
+    	</settings> 
+    </module>
+    <module id="31">
+    	<geometry>
+    	    <size>2</size>
+    	    <x>5</x>
+    	   	<y>0</y>
+    	</geometry>
+       	<connection>
+			<hvsys>
+				<led>
+				    <id>61</id>
+				</led>    
+				<hv>
+				    <id>62</id>
+				</hv>
+			</hvsys>
+    	        	</connection>    
+    	<settings>
+    	    <led>
+			    <autoTune>false</autoTune>
+			    <brightness>1000</brightness>
+			    <frequency unit="Hz">100</frequency>
+    	    </led>
+			<hv>
+				<channel id="1" unit="Volts">66.4</channel>
+				<channel id="2" unit="Volts">66.4</channel>
+				<channel id="3" unit="Volts">66.4</channel>
+				<channel id="4" unit="Volts">66.4</channel>
+				<channel id="5" unit="Volts">66.4</channel>
+				<channel id="6" unit="Volts">66.4</channel>
+				<channel id="7" unit="Volts">66.4</channel>
+				<channel id="8" unit="Volts">66.4</channel>
+				<channel id="9" unit="Volts">66.4</channel>
+				<channel id="10" unit="Volts">66.4</channel> 
+			</hv>
+    	</settings> 
+    </module>
+    <module id="32">
+    	<geometry>
+    	    <size>2</size>
+    	    <x>3</x>
+    	   	<y>0</y>
+    	</geometry>
+       	<connection>
+			<hvsys>
+				<led>
+				    <id>63</id>
+				</led>    
+				<hv>
+				    <id>64</id>
+				</hv>
+			</hvsys>
+    	        	</connection>    
+    	<settings>
+    	    <led>
+			    <autoTune>false</autoTune>
+			    <brightness>1000</brightness>
+			    <frequency unit="Hz">100</frequency>
+    	    </led>
+			<hv>
+				<channel id="1" unit="Volts">66.4</channel>
+				<channel id="2" unit="Volts">66.4</channel>
+				<channel id="3" unit="Volts">66.4</channel>
+				<channel id="4" unit="Volts">66.4</channel>
+				<channel id="5" unit="Volts">66.4</channel>
+				<channel id="6" unit="Volts">66.4</channel>
+				<channel id="7" unit="Volts">66.4</channel>
+				<channel id="8" unit="Volts">66.4</channel>
+				<channel id="9" unit="Volts">66.4</channel>
+				<channel id="10" unit="Volts">66.4</channel> 
+			</hv>
+    	</settings> 
+    </module>
+    <module id="33">
+    	<geometry>
+    	    <size>2</size>
+    	    <x>1</x>
+    	   	<y>2</y>
+    	</geometry>
+       	<connection>
+			<hvsys>
+				<led>
+				    <id>65</id>
+				</led>    
+				<hv>
+				    <id>66</id>
+				</hv>
+			</hvsys>
+    	        	</connection>    
+    	<settings>
+    	    <led>
+			    <autoTune>false</autoTune>
+			    <brightness>1000</brightness>
+			    <frequency unit="Hz">100</frequency>
+    	    </led>
+			<hv>
+				<channel id="1" unit="Volts">66.4</channel>
+				<channel id="2" unit="Volts">66.4</channel>
+				<channel id="3" unit="Volts">66.4</channel>
+				<channel id="4" unit="Volts">66.4</channel>
+				<channel id="5" unit="Volts">66.4</channel>
+				<channel id="6" unit="Volts">66.4</channel>
+				<channel id="7" unit="Volts">66.4</channel>
+				<channel id="8" unit="Volts">66.4</channel>
+				<channel id="9" unit="Volts">66.4</channel>
+				<channel id="10" unit="Volts">66.4</channel> 
+			</hv>
+    	</settings> 
+    </module>
+    <module id="34">
+    	<geometry>
+    	    <size>2</size>
+    	    <x>1</x>
+    	   	<y>4</y>
+    	</geometry>
+       	<connection>
+			<hvsys>
+				<led>
+				    <id>67</id>
+				</led>    
+				<hv>
+				    <id>68</id>
+				</hv>
+			</hvsys>
+    	        	</connection>    
+    	<settings>
+    	    <led>
+			    <autoTune>false</autoTune>
+			    <brightness>1000</brightness>
+			    <frequency unit="Hz">100</frequency>
+    	    </led>
+			<hv>
+				<channel id="1" unit="Volts">66.4</channel>
+				<channel id="2" unit="Volts">66.4</channel>
+				<channel id="3" unit="Volts">66.4</channel>
+				<channel id="4" unit="Volts">66.4</channel>
+				<channel id="5" unit="Volts">66.4</channel>
+				<channel id="6" unit="Volts">66.4</channel>
+				<channel id="7" unit="Volts">66.4</channel>
+				<channel id="8" unit="Volts">66.4</channel>
+				<channel id="9" unit="Volts">66.4</channel>
+				<channel id="10" unit="Volts">66.4</channel> 
+			</hv>
+    	</settings> 
+    </module>
+    <module id="35">
+    	<geometry>
+    	    <size>2</size>
+    	    <x>1</x>
+    	   	<y>6</y>
+    	</geometry>
+       	<connection>
+			<hvsys>
+				<led>
+				    <id>69</id>
+				</led>    
+				<hv>
+				    <id>70</id>
+				</hv>
+			</hvsys>
+    	        	</connection>    
+    	<settings>
+    	    <led>
+			    <autoTune>false</autoTune>
+			    <brightness>1000</brightness>
+			    <frequency unit="Hz">100</frequency>
+    	    </led>
+			<hv>
+				<channel id="1" unit="Volts">66.4</channel>
+				<channel id="2" unit="Volts">66.4</channel>
+				<channel id="3" unit="Volts">66.4</channel>
+				<channel id="4" unit="Volts">66.4</channel>
+				<channel id="5" unit="Volts">66.4</channel>
+				<channel id="6" unit="Volts">66.4</channel>
+				<channel id="7" unit="Volts">66.4</channel>
+				<channel id="8" unit="Volts">66.4</channel>
+				<channel id="9" unit="Volts">66.4</channel>
+				<channel id="10" unit="Volts">66.4</channel> 
+			</hv>
+    	</settings> 
+    </module>
+    <module id="36">
+    	<geometry>
+    	    <size>2</size>
+    	    <x>1</x>
+    	   	<y>8</y>
+    	</geometry>
+       	<connection>
+			<hvsys>
+				<led>
+				    <id>71</id>
+				</led>    
+				<hv>
+				    <id>72</id>
+				</hv>
+			</hvsys>
+    	        	</connection>    
+    	<settings>
+    	    <led>
+			    <autoTune>false</autoTune>
+			    <brightness>1000</brightness>
+			    <frequency unit="Hz">100</frequency>
+    	    </led>
+			<hv>
+				<channel id="1" unit="Volts">66.4</channel>
+				<channel id="2" unit="Volts">66.4</channel>
+				<channel id="3" unit="Volts">66.4</channel>
+				<channel id="4" unit="Volts">66.4</channel>
+				<channel id="5" unit="Volts">66.4</channel>
+				<channel id="6" unit="Volts">66.4</channel>
+				<channel id="7" unit="Volts">66.4</channel>
+				<channel id="8" unit="Volts">66.4</channel>
+				<channel id="9" unit="Volts">66.4</channel>
+				<channel id="10" unit="Volts">66.4</channel> 
+			</hv>
+    	</settings> 
+    </module>    
+    <module id="37">
+    	<geometry>
+    	    <size>2</size>
+    	    <x>3</x>
+    	   	<y>10</y>
+    	</geometry>
+       	<connection>
+			<hvsys>
+				<led>
+				    <id>73</id>
+				</led>    
+				<hv>
+				    <id>74</id>
+				</hv>
+			</hvsys>
+    	        	</connection>    
+    	<settings>
+    	    <led>
+			    <autoTune>false</autoTune>
+			    <brightness>1000</brightness>
+			    <frequency unit="Hz">100</frequency>
+    	    </led>
+			<hv>
+				<channel id="1" unit="Volts">66.4</channel>
+				<channel id="2" unit="Volts">66.4</channel>
+				<channel id="3" unit="Volts">66.4</channel>
+				<channel id="4" unit="Volts">66.4</channel>
+				<channel id="5" unit="Volts">66.4</channel>
+				<channel id="6" unit="Volts">66.4</channel>
+				<channel id="7" unit="Volts">66.4</channel>
+				<channel id="8" unit="Volts">66.4</channel>
+				<channel id="9" unit="Volts">66.4</channel>
+				<channel id="10" unit="Volts">66.4</channel> 
+			</hv>
+    	</settings> 
+    </module>
+    <module id="38">
+    	<geometry>
+    	    <size>2</size>
+    	    <x>5</x>
+    	   	<y>10</y>
+    	</geometry>
+       	<connection>
+			<hvsys>
+				<led>
+				    <id>75</id>
+				</led>    
+				<hv>
+				    <id>76</id>
+				</hv>
+			</hvsys>
+    	        	</connection>    
+    	<settings>
+    	    <led>
+			    <autoTune>false</autoTune>
+			    <brightness>1000</brightness>
+			    <frequency unit="Hz">100</frequency>
+    	    </led>
+			<hv>
+				<channel id="1" unit="Volts">66.4</channel>
+				<channel id="2" unit="Volts">66.4</channel>
+				<channel id="3" unit="Volts">66.4</channel>
+				<channel id="4" unit="Volts">66.4</channel>
+				<channel id="5" unit="Volts">66.4</channel>
+				<channel id="6" unit="Volts">66.4</channel>
+				<channel id="7" unit="Volts">66.4</channel>
+				<channel id="8" unit="Volts">66.4</channel>
+				<channel id="9" unit="Volts">66.4</channel>
+				<channel id="10" unit="Volts">66.4</channel> 
+			</hv>
+    	</settings> 
+    </module>
+    <module id="39">
+    	<geometry>
+    	    <size>2</size>
+    	    <x>7</x>
+    	   	<y>10</y>
+    	</geometry>
+       	<connection>
+			<hvsys>
+				<led>
+				    <id>77</id>
+				</led>    
+				<hv>
+				    <id>78</id>
+				</hv>
+			</hvsys>
+    	        	</connection>    
+    	<settings>
+    	    <led>
+			    <autoTune>false</autoTune>
+			    <brightness>1000</brightness>
+			    <frequency unit="Hz">100</frequency>
+    	    </led>
+			<hv>
+				<channel id="1" unit="Volts">66.4</channel>
+				<channel id="2" unit="Volts">66.4</channel>
+				<channel id="3" unit="Volts">66.4</channel>
+				<channel id="4" unit="Volts">66.4</channel>
+				<channel id="5" unit="Volts">66.4</channel>
+				<channel id="6" unit="Volts">66.4</channel>
+				<channel id="7" unit="Volts">66.4</channel>
+				<channel id="8" unit="Volts">66.4</channel>
+				<channel id="9" unit="Volts">66.4</channel>
+				<channel id="10" unit="Volts">66.4</channel> 
+			</hv>
+    	</settings> 
+    </module>
+    <module id="40">
+    	<geometry>
+    	    <size>2</size>
+    	    <x>9</x>
+    	   	<y>10</y>
+    	</geometry>
+       	<connection>
+			<hvsys>
+				<led>
+				    <id>79</id>
+				</led>    
+				<hv>
+				    <id>80</id>
+				</hv>
+			</hvsys>
+    	        	</connection>    
+    	<settings>
+    	    <led>
+			    <autoTune>false</autoTune>
+			    <brightness>1000</brightness>
+			    <frequency unit="Hz">100</frequency>
+    	    </led>
+			<hv>
+				<channel id="1" unit="Volts">66.4</channel>
+				<channel id="2" unit="Volts">66.4</channel>
+				<channel id="3" unit="Volts">66.4</channel>
+				<channel id="4" unit="Volts">66.4</channel>
+				<channel id="5" unit="Volts">66.4</channel>
+				<channel id="6" unit="Volts">66.4</channel>
+				<channel id="7" unit="Volts">66.4</channel>
+				<channel id="8" unit="Volts">66.4</channel>
+				<channel id="9" unit="Volts">66.4</channel>
+				<channel id="10" unit="Volts">66.4</channel> 
+			</hv>
+    	</settings> 
+    </module>
+    <module id="41">
+    	<geometry>
+    	    <size>2</size>
+    	    <x>11</x>
+    	   	<y>8</y>
+    	</geometry>
+       	<connection>
+			<hvsys>
+				<led>
+				    <id>81</id>
+				</led>    
+				<hv>
+				    <id>82</id>
+				</hv>
+			</hvsys>
+    	        	</connection>    
+    	<settings>
+    	    <led>
+			    <autoTune>false</autoTune>
+			    <brightness>1000</brightness>
+			    <frequency unit="Hz">100</frequency>
+    	    </led>
+			<hv>
+				<channel id="1" unit="Volts">66.4</channel>
+				<channel id="2" unit="Volts">66.4</channel>
+				<channel id="3" unit="Volts">66.4</channel>
+				<channel id="4" unit="Volts">66.4</channel>
+				<channel id="5" unit="Volts">66.4</channel>
+				<channel id="6" unit="Volts">66.4</channel>
+				<channel id="7" unit="Volts">66.4</channel>
+				<channel id="8" unit="Volts">66.4</channel>
+				<channel id="9" unit="Volts">66.4</channel>
+				<channel id="10" unit="Volts">66.4</channel> 
+			</hv>
+    	</settings> 
+    </module>
+    <module id="42">
+    	<geometry>
+    	    <size>2</size>
+    	    <x>11</x>
+    	   	<y>6</y>
+    	</geometry>
+       	<connection>
+			<hvsys>
+				<led>
+				    <id>83</id>
+				</led>    
+				<hv>
+				    <id>84</id>
+				</hv>
+			</hvsys>
+    	        	</connection>    
+    	<settings>
+    	    <led>
+			    <autoTune>false</autoTune>
+			    <brightness>1000</brightness>
+			    <frequency unit="Hz">100</frequency>
+    	    </led>
+			<hv>
+				<channel id="1" unit="Volts">66.4</channel>
+				<channel id="2" unit="Volts">66.4</channel>
+				<channel id="3" unit="Volts">66.4</channel>
+				<channel id="4" unit="Volts">66.4</channel>
+				<channel id="5" unit="Volts">66.4</channel>
+				<channel id="6" unit="Volts">66.4</channel>
+				<channel id="7" unit="Volts">66.4</channel>
+				<channel id="8" unit="Volts">66.4</channel>
+				<channel id="9" unit="Volts">66.4</channel>
+				<channel id="10" unit="Volts">66.4</channel> 
+			</hv>
+    	</settings> 
+    </module>
+    <module id="43">
+    	<geometry>
+    	    <size>2</size>
+    	    <x>11</x>
+    	   	<y>4</y>
+    	</geometry>
+       	<connection>
+			<hvsys>
+				<led>
+				    <id>85</id>
+				</led>    
+				<hv>
+				    <id>86</id>
+				</hv>
+			</hvsys>
+    	        	</connection>    
+    	<settings>
+    	    <led>
+			    <autoTune>false</autoTune>
+			    <brightness>1000</brightness>
+			    <frequency unit="Hz">100</frequency>
+    	    </led>
+			<hv>
+				<channel id="1" unit="Volts">66.4</channel>
+				<channel id="2" unit="Volts">66.4</channel>
+				<channel id="3" unit="Volts">66.4</channel>
+				<channel id="4" unit="Volts">66.4</channel>
+				<channel id="5" unit="Volts">66.4</channel>
+				<channel id="6" unit="Volts">66.4</channel>
+				<channel id="7" unit="Volts">66.4</channel>
+				<channel id="8" unit="Volts">66.4</channel>
+				<channel id="9" unit="Volts">66.4</channel>
+				<channel id="10" unit="Volts">66.4</channel> 
+			</hv>
+    	</settings> 
+    </module>
+    <module id="44">
+    	<geometry>
+    	    <size>2</size>
+    	    <x>11</x>
+    	  	<y>2</y>
+    	</geometry>
+       	<connection>
+			<hvsys>
+				<led>
+				    <id>87</id>
+				</led>    
+				<hv>
+				    <id>88</id>
+				</hv>
+			</hvsys>
+    	</connection>    
+    	<settings>
+    	    <led>
+			    <autoTune>false</autoTune>
+			    <brightness>1000</brightness>
+			    <frequency unit="Hz">100</frequency>
+    	    </led>
+			<hv>
+				<channel id="1" unit="Volts">66.4</channel>
+				<channel id="2" unit="Volts">66.4</channel>
+				<channel id="3" unit="Volts">66.4</channel>
+				<channel id="4" unit="Volts">66.4</channel>
+				<channel id="5" unit="Volts">66.4</channel>
+				<channel id="6" unit="Volts">66.4</channel>
+				<channel id="7" unit="Volts">66.4</channel>
+				<channel id="8" unit="Volts">66.4</channel>
+				<channel id="9" unit="Volts">66.4</channel>
+				<channel id="10" unit="Volts">66.4</channel> 
+			</hv>
+    	</settings> 
+    </module>
+</config>

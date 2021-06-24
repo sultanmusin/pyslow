@@ -1,0 +1,46 @@
+10
+
+dir
+10703
+svn+ssh://svn.cern.ch/reps/na61soft/trunk/DAQpsd/na61-psd-slow-control/references
+svn+ssh://svn.cern.ch/reps/na61soft
+
+
+
+2014-04-18T20:55:18.510622Z
+10668
+petukhov
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+7c6e8ea0-0a27-4360-9bb0-0d873ab685f0
+
+jSSC-2.6.0-Release
+dir
+
+commons-collections-3.2.1
+dir
+
+commons-jxpath-1.3
+dir
+
+commons-configuration-1.10
+dir
+
+commons-lang-2.6
+dir
+
+commons-logging-1.1.3
+dir
+
