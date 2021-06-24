@@ -1,8 +1,7 @@
-sudo yum install gtk3-devel python3-devel
-
 python-config
 lxml
 bs4
 wxasync
+
 
 

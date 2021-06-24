@@ -6,10 +6,9 @@ DCS for Forward Hadron Calorimeters based on HVsys hardware
 
 * Summary of set up
 
-Get python 3.7 running 
+Get python 3.6+ running 
 
 * Using anaconda (https://docs.anaconda.com/anaconda/install/linux/):
-
 
 conda create --name dcs wxpython bs4 lxml python=3.7
 conda activate dcs
@@ -21,11 +20,13 @@ Also the commands below were not tested, try them at your own risk (or just see 
 
 * Dependencies
 
-Get wxpython, e.g. for centos run:
-yum groupinstall "Development Tools"
-yum install ncurses-devel zlib-devel gtk+-devel gtk2-devel qt-devel tcl-devel tk-devel kernel-headers kernel-devel
-yum install gtk3-devel python3-distutils-extra
-yum install python-wxpython4
+CentOS 7:
+
+sudo yum install gtk3-devel python3-devel
+
+Ubuntu:
+
+sudo apt-get install pkg-config libgtk-3-dev buld-essential gcc-5
 
 Then use requirements.txt:
 
