@@ -1095,4 +1095,5 @@ async def main():
 if __name__ == '__main__':
     #asyncio.run(main(), debug=True)
     print("Staring main loop...")
-    asyncio.get_event_loop().run_until_complete(asyncio.wait([main()]))
+    #asyncio.get_event_loop().run_until_complete(asyncio.wait([main()]))
+    asyncio.get_event_loop().run_until_complete(app.MainLoop())
