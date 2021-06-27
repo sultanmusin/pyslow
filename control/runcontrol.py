@@ -18,6 +18,16 @@ import wx
 # end wxGlade
 
 
+RAW_FILE_PATTERN = '/home/runna61/DataBuffer/run-%06dx000_%d.raw'     # %(run_number, card_number)
+DATA_PATH_PATTERN = '/home/runna61/RunData/run-%06d'                  # %(run_number)
+START_COMMAND_PATTERN = 'echo "START%05d" | nc -w 10 localhost 2345'  # %(run_number)
+STOP_COMMAND = 'echo "STOP      " | nc -w 10 localhost 2345'          # %(run_number)
+
+run_number = 15
+# start_command = START_COMMAND_PATTERN%(run_number, HOSTNAME)
+
+
+
 class MainFrame(wx.Frame):
     def __init__(self, *args, **kwds):
         # begin wxGlade: MainFrame.__init__
