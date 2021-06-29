@@ -10,16 +10,13 @@ __status__ = "Development"
 
 
 import asyncio
+import logging
+import os
+import string
+import sys
 import wx
 from datetime import datetime
-import os
 from wxasync import WxAsyncApp
-
-# begin wxGlade: dependencies
-# end wxGlade
-
-# begin wxGlade: extracode
-# end wxGlade
 
 
 RAW_FILE_PATTERN = '/home/runna61/DataBuffer/run-%06dx000_%d.raw'     # %(run_number, card_number)
@@ -28,20 +25,23 @@ START_COMMAND_PATTERN = 'echo "START%05d" | nc -w 10 localhost 2345'  # %(run_nu
 STOP_COMMAND = 'echo "STOP      " | nc -w 10 localhost 2345'          # %(run_number)
 LOG_FILE='/home/runna61/RunData/log.txt'
 
-run_number = 15
 
-
-
-class MainFrame(wx.Frame):
+class MainWindow(wx.Frame):
     def __init__(self, *args, **kwds):
-        # begin wxGlade: MainFrame.__init__
+        logging.info("MainFrame.__init__")
+
         kwds["style"] = kwds.get("style", 0) | wx.DEFAULT_FRAME_STYLE
         wx.Frame.__init__(self, *args, **kwds)
         self.SetSize((800, 600))
         self.SetTitle("RUNCONTROL")
 
+        self.CreateLayout()
+        self.Show()
+        
+        self.read_log()
+ 
+    def CreateLayout(self):
         self.panel_1 = wx.Panel(self, wx.ID_ANY)
-
         sizer_1 = wx.BoxSizer(wx.VERTICAL)
 
         label_3 = wx.StaticText(self.panel_1, wx.ID_ANY, "Run control:")
@@ -154,9 +154,6 @@ class MainFrame(wx.Frame):
         self.panel_1.SetSizer(sizer_1)
 
         self.Layout()
-        # end wxGlade
-
-        self.read_log()
 
 
     def on_button_quit(self, event):
@@ -192,16 +189,18 @@ class MainFrame(wx.Frame):
 
 
     def read_log(self):
+        logging.info("read_log")
         try:
             f = open(LOG_FILE, "r")
             lines = f.readlines()
-            (run_number, action, datetime, crew, comment) = lines[-1].split(';')
+            (run_number, action, time, crew, comment) = lines[-1].split(';')
         except (IOError, FileNotFoundError, IndexError) as e:
-            (run_number, action, datetime, crew, comment) = (0, 'none', datetime.now().strftime('%Y-%m-%d %H:%M:%S'), '-', '-')
+            (run_number, action, time, crew, comment) = (0, 'none', datetime.now().strftime('%Y-%m-%d %H:%M:%S'), '-', '-')
 
         self.label_run_number.SetLabelText(str(int(run_number)+1))
         self.text_shift_crew.SetLabelText(crew)
         self.text_comment.SetLabelText(comment)
+        logging.info("done")
 
 
     def write_to_log(self, action=''):
@@ -225,17 +224,18 @@ class MainFrame(wx.Frame):
     
 
 
-# end of class MainFrame
-
 def handler(loop, context):
     print(context)
 
 async def main():
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s | %(levelname)s | %(message)s')
+    
     loop = asyncio.get_event_loop()
     loop.set_exception_handler(handler)
         
     app = WxAsyncApp(False)
-    frame = MainFrame(None)
+    frame = MainWindow(None)
+    
     await app.MainLoop()
 
 if __name__ == '__main__':
