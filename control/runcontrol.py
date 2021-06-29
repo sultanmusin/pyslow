@@ -12,28 +12,41 @@ __status__ = "Development"
 import asyncio
 import logging
 import os
+import re
+import signal
+import stat
 import string
 import sys
 import wx
-from datetime import datetime
-from wxasync import WxAsyncApp
+from datetime import datetime, timedelta
+from wxasync import AsyncBind, WxAsyncApp, StartCoroutine
 
 
-RAW_FILE_PATTERN = '/home/runna61/DataBuffer/run-%06dx000_%d.raw'     # %(run_number, card_number)
+#RAW_FILE_PATTERN = '/home/runna61/DataBuffer/run-%06dx000_%d.raw'     # %(run_number, card_number)
+RAW_FILE_PATTERN = '/home/runna61/DataBuffer/run-%06dx000_*.raw'      # %(run_number)
 DATA_PATH_PATTERN = '/home/runna61/RunData/run-%06d'                  # %(run_number)
 START_COMMAND_PATTERN = 'echo "START%05d" | nc -w 10 localhost 2345'  # %(run_number)
 STOP_COMMAND = 'echo "STOP      " | nc -w 10 localhost 2345'          # %(run_number)
 LOG_FILE='/home/runna61/RunData/log.txt'
+CHECK_RIGHS_PATH='/dev/bus/usb/001/001'
+#DAQ_CMD='ls'
+DAQ_CMD='/home/runna61/DRS_soft/DRS4_USB3_DAQ/install/bin/readout'
+OUTPUT_REGEX = re.compile('.*events: (\d+).*t=(\d+).*')    # ID: 2\tMT: 180\tevents: 166\tt=58743\n
 
+app = None
 
 class MainWindow(wx.Frame):
     def __init__(self, *args, **kwds):
         logging.info("MainFrame.__init__")
+        
+        self.check_rights(CHECK_RIGHS_PATH)
 
         kwds["style"] = kwds.get("style", 0) | wx.DEFAULT_FRAME_STYLE
         wx.Frame.__init__(self, *args, **kwds)
         self.SetSize((800, 600))
         self.SetTitle("RUNCONTROL")
+        
+        self.daq_process = None
 
         self.CreateLayout()
         self.Show()
@@ -41,6 +54,7 @@ class MainWindow(wx.Frame):
         self.read_log()
  
     def CreateLayout(self):
+        global app
         self.panel_1 = wx.Panel(self, wx.ID_ANY)
         sizer_1 = wx.BoxSizer(wx.VERTICAL)
 
@@ -55,18 +69,33 @@ class MainWindow(wx.Frame):
         self.button_quit = wx.Button(self.panel_1, wx.ID_ANY, "Quit")
         self.button_quit.SetFont(wx.Font(14, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, 0, ""))
         sizer_2.Add(self.button_quit, 0, 0, 0)
-        self.button_quit.Bind( wx.EVT_BUTTON, self.on_button_quit )
+        app.AsyncBind( wx.EVT_BUTTON, self.on_button_quit, self.button_quit )
+        #self.button_quit.Bind( wx.EVT_BUTTON, self.on_button_quit )
 
         self.button_start_run = wx.Button(self.panel_1, wx.ID_ANY, "Start run")
         self.button_start_run.SetFont(wx.Font(14, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, 0, ""))
+        self.button_start_run.Disable()
         sizer_2.Add(self.button_start_run, 0, 0, 0)
-        self.button_start_run.Bind( wx.EVT_BUTTON, self.on_button_start_run )
+        app.AsyncBind( wx.EVT_BUTTON, self.on_button_start_run, self.button_start_run )
+#        self.button_start_run.Bind( wx.EVT_BUTTON, self.on_button_start_run )
 
         self.button_stop_run = wx.Button(self.panel_1, wx.ID_ANY, "Stop run")
         self.button_stop_run.SetFont(wx.Font(14, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, 0, ""))
         self.button_stop_run.Disable()
         sizer_2.Add(self.button_stop_run, 0, 0, 0)
         self.button_stop_run.Bind( wx.EVT_BUTTON, self.on_button_stop_run )
+
+        self.button_start_daq = wx.Button(self.panel_1, wx.ID_ANY, "Start daq")
+        self.button_start_daq.SetFont(wx.Font(14, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, 0, ""))
+        sizer_2.Add(self.button_start_daq, 0, 0, 0)
+        app.AsyncBind( wx.EVT_BUTTON, self.on_button_start_daq, self.button_start_daq )
+#        self.button_start_run.Bind( wx.EVT_BUTTON, self.on_button_start_run )
+
+        self.button_kill_daq = wx.Button(self.panel_1, wx.ID_ANY, "Kill daq")
+        self.button_kill_daq.SetFont(wx.Font(14, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, 0, ""))
+        self.button_kill_daq.Disable()
+        sizer_2.Add(self.button_kill_daq, 0, 0, 0)
+        self.button_kill_daq.Bind( wx.EVT_BUTTON, self.on_button_kill_daq )
 
         label_4 = wx.StaticText(self.panel_1, wx.ID_ANY, "Run sheet:")
         label_4.SetForegroundColour(wx.Colour(50, 50, 204))
@@ -156,19 +185,12 @@ class MainWindow(wx.Frame):
         self.Layout()
 
 
-    def on_button_quit(self, event):
+    async def on_button_quit(self, event):
+        self.kill_daq()
         wx.CallAfter(self.Destroy)
 
 
-    def on_button_start_run(self, event):
-        self.start_run()
-
-
-    def on_button_stop_run(self, event):
-        self.stop_run()
-
-
-    def start_run(self):
+    async def on_button_start_run(self, event):
         self.button_start_run.Disable()
         self.write_to_log('START')
         run_number = int(self.label_run_number.GetLabelText())
@@ -176,20 +198,48 @@ class MainWindow(wx.Frame):
         os.system(start_command)
         self.is_run_started = True
         self.button_stop_run.Enable()
+        self.start_run_timer = None
 
 
-    def stop_run(self):
+    def on_button_stop_run(self, event):
         self.button_stop_run.Disable()
         self.write_to_log('STOP')
         os.system(STOP_COMMAND)
-        run_number = int(self.label_run_number.GetLabelText())
-        self.label_run_number.SetLabelText(str(run_number+1))
         self.is_run_started = False
         self.button_start_run.Enable()
+        
+        run_number = int(self.label_run_number.GetLabelText())
+        copy_from = RAW_FILE_PATTERN%(run_number)
+        copy_to = DATA_PATH_PATTERN%(run_number) 
+        os.makedirs(copy_to, exist_ok=True)
+        #print("cp %s %s"%(copy_from, copy_to))
+        os.system("cp %s %s"%(copy_from, copy_to))
+
+        self.label_run_number.SetLabelText(str(run_number+1))
+
+
+    async def on_button_start_daq(self, event):
+        self.button_start_run.Enable()
+        self.button_kill_daq.Enable()
+        await self.run_daq()
+
+
+    def on_button_kill_daq(self, event):
+        self.button_start_run.Disable()
+        self.button_kill_daq.Disable()
+        self.kill_daq()
+
+
+    def check_rights(self, path):
+        st = os.stat(path)
+        if not bool(st.st_mode & stat.S_IREAD):  
+            print('Please enable read access to USB devices, e.g. sudo chmod a+w /dev/bus/usb/*/*')
+            sys.exit(1)     
 
 
     def read_log(self):
         logging.info("read_log")
+        os.makedirs(os.path.dirname(DATA_PATH_PATTERN), exist_ok=True)
         try:
             f = open(LOG_FILE, "r")
             lines = f.readlines()
@@ -222,12 +272,61 @@ class MainWindow(wx.Frame):
 
         f.close()
     
+    
+    async def run_daq(self):
+        if self.daq_process is not None:
+            self.kill_daq()
+
+        self.daq_process = await asyncio.create_subprocess_exec(DAQ_CMD, 
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.STDOUT)
+            
+        await asyncio.wait([self.read_stream(
+            self.daq_process.stdout, 
+            self.on_daq_output
+        )])
+            
+            
+    async def read_stream(self, stream, cb):  
+        while True:
+            line = await stream.readline()
+            if line:
+                cb(line)
+            else:
+                break
+
+    def kill_daq(self):
+        if self.daq_process is not None:
+            print('Killing pid %s'%(self.daq_process.pid))
+            os.kill(self.daq_process.pid, signal.SIGKILL)
+            self.daq_process = None
+        
+    
+    def on_daq_output(self, line):
+        line = line.decode("ascii")
+        print(line, end='')
+        match = re.match(OUTPUT_REGEX, line)
+        if match:
+#            self.text_console.AppendText()
+            self.label_num_events.SetLabel(match[1])
+            
+            timestamp = int(match[2])
+            if self.start_run_timer is None:
+                # first event
+                self.start_run_timer = timestamp
+            
+            time = timestamp - self.start_run_timer
+            time_string = str(timedelta(seconds=time/1000))
+            self.label_elapsed_time.SetLabel(time_string)
+        else:
+            self.text_console.AppendText(line)
 
 
 def handler(loop, context):
     print(context)
 
 async def main():
+    global app
     logging.basicConfig(level=logging.INFO, format='%(asctime)s | %(levelname)s | %(message)s')
     
     loop = asyncio.get_event_loop()
@@ -242,3 +341,4 @@ if __name__ == '__main__':
     #asyncio.run(main(), debug=True)
     print("Staring main loop...")
     asyncio.get_event_loop().run_until_complete(asyncio.wait([main()]))
+    
