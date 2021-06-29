@@ -16,7 +16,7 @@
         <connection>
             <hvsys id='north'>
                     <rate unit="baud">57600</rate>
-                    <port>192.168.0.7</port>
+                    <port>192.168.69.133</port>
                     <dataBits>8</dataBits>
                     <stopBits>1</stopBits>
                     <parity>0</parity>                

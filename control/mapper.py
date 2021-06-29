@@ -23,6 +23,7 @@ import config
 from message import Message
 from detector import *
 from hvsyssupply import HVsysSupply
+from hvsysled import HVsysLED
 
 
 configuration = None
@@ -100,8 +101,8 @@ async def main(argv):
     loop.set_exception_handler(handler)
 
     try:
-        await asyncio.create_task(bus.connect())
-        asyncio.create_task(bus.send())
+        await loop.create_task(bus.connect())
+        loop.create_task(bus.send())
     except OSError as e:
         print("Cannot connect to system module")  
         sys.exit()
@@ -109,12 +110,12 @@ async def main(argv):
     print("Module link ok")
 
     for address in range(from_address, to_address+1):
-        command = Message(Message.READ_SHORT, address, HVsysLED, 'CELL_ID', 0)
+        command = Message(Message.READ_SHORT, address, HVsysLED(None), 'CELL_ID', 0)
 
         print("Request: %s"%(str(command).rstrip()))
-        asyncio.create_task(detector.add_task(bus_id, command, part, on_complete))
+        loop.create_task(detector.add_task(bus_id, command, HVsysLED(None), on_complete))
 
-    await asyncio.sleep(2)
+    await asyncio.sleep(10)
 
 if __name__ == '__main__':
     #asyncio.run(main(), debug=True)
