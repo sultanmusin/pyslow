@@ -11,6 +11,7 @@ __status__ = "Development"
 
 
 import asyncio
+import datetime
 import logging
 import os
 import string
@@ -27,6 +28,7 @@ import config
 from message import Message
 from detector import *
 from hvsyssupply import HVsysSupply
+from hvsyssupply800c import HVsysSupply800c
 from hvsysled import HVsysLED
 from hvstatus import HVStatus
 
@@ -974,7 +976,7 @@ class MainWindow(wx.Frame):
 
         str_value = part.valueToString(capability, value)
 
-        if type(part) is HVsysSupply:
+        if type(part) in [HVsysSupply, HVsysSupply800c]:
             if capability in hv_grid_coords:
                 self.m_gridHV.SetCellValue(hv_grid_coords[capability], str_value)
 
@@ -1068,7 +1070,7 @@ async def main():
 
     logging.basicConfig(
         level=logging.INFO, 
-        format='%(asctime)s | %(levelname)s | %(message)s'
+        format='%(asctime)s | %(levelname)s | %(message)s',
         handlers=[
             logging.StreamHandler(),
             logging.FileHandler(datetime.datetime.now().strftime('logs/dcs_log_%Y-%m-%d-%H-%M-%S.txt'))
@@ -1102,5 +1104,5 @@ async def main():
 if __name__ == '__main__':
     #asyncio.run(main(), debug=True)
     print("Staring main loop...")
-    #asyncio.get_event_loop().run_until_complete(asyncio.wait([main()]))
-    asyncio.get_event_loop().run_until_complete(app.MainLoop())
+    asyncio.get_event_loop().run_until_complete(asyncio.wait([main()]))
+    #asyncio.get_event_loop().run_until_complete(app.MainLoop())
