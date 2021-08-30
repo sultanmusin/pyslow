@@ -25,6 +25,7 @@ from partstate import *
 from config import *
 from hvsys import HVsys
 from hvsyssupply import HVsysSupply
+from hvsyssupply800c import HVsysSupply800c
 
 class HVsysBus:
     IP_PORT = 4001
@@ -43,6 +44,8 @@ class HVsysBus:
         for mc in module_configs:
             for part_name, part_address in mc.addr.items():   # mc.addr be like {'hv':15, 'led':18}
                 part_type = HVsys.catalogus[part_name]        # e.g. HVsysSupply or other part
+                if part_name == 'hv' and mc.version == 'NA61_2_V2':
+                    part_type = HVsysSupply800c               # override default (new) hardware version if the config file says so (for NA61 PSD compatibility)
                 if part_address in self.parts:
                     pass
                     # temp raise ValueError("Duplicate part id = %d for hvsys bus %s" % (part_address, self.id))
