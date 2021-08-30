@@ -20,7 +20,7 @@ class HVsysSupply800c:
 
     MAX_CHANNEL_COUNT = 10
 
-    PEDESTAL_VOLTAGE_BIAS = 1.6       # volts. Set real ped V this much HIGHER so the per-channel voltage settings can tune both ways up and down
+    PEDESTAL_VOLTAGE_BIAS = 0         # volts. Set real ped V this much HIGHER so the per-channel voltage settings can tune both ways up and down. Set to zero for 800c boards.
     PEDESTAL_RESOLUTION = 4096        # counts
     VOLTAGE_RESOLUTION = 4096         # counts
     VOLTAGE_DECIMAL_PLACES = 2        # to 0.01 V
@@ -60,8 +60,8 @@ class HVsysSupply800c:
         "PEDESTAL_VOLTAGE_CALIBRATION": 0x3a,  # Calibration value of pedestal Voltage in 10mV units, i.e. to get Volts one need eePedVmax/100.
 #        "PEDESTAL_VOLTAGE_CALIBRATION_MIN":  not available, single ped calibration for this electronics version, see above
 #        "PEDESTAL_VOLTAGE_CALIBRATION_MAX":  not available, single ped calibration for this electronics version, see above
-        "VERSION_DATE_LOW": 0x3c,
-        "VERSION_DATE_HIGH": 0x3e,
+        "VERSION_DATE_LOW": 0x3c,              # Response = 8212 (0x2014)
+        "VERSION_DATE_HIGH": 0x3e,             # Response = 5121 (0x1401)
         "CELL_ADDRESS": 0x41
     }
 
@@ -137,9 +137,9 @@ class HVsysSupply800c:
         pedestal_voltage = self.pedestalCountsToVolts(self.state["SET_PEDESTAL_VOLTAGE"])
         tmp = float( self.valueToString('TEMPERATURE', self.state['TEMPERATURE']) )
         tmp_corr = -(tmp - self.det_cfg.reference_temperature) * self.det_cfg.temperature_slope / 1000 # minus for normal temperature correction, e.g. config value 60 means "-60mV/C"
-        volts_to_set = tmp_corr - (float(volts) - pedestal_voltage - HVsysSupply800c.PEDESTAL_VOLTAGE_BIAS)  # e.g. -0.5V means we need to go 0.5V lower than pedestal (with positive counts)       
+        volts_to_set = (float(volts) - pedestal_voltage - HVsysSupply800c.PEDESTAL_VOLTAGE_BIAS) - tmp_corr  # e.g. -0.5V means we need to go 0.5V lower than pedestal (with positive counts)       
 
-        logging.debug("coltsToCounts: temperature correction for T=%s is %d V" % (tmp, tmp_corr))
+        logging.debug("voltsToCounts: temperature correction for T=%s is %d V" % (tmp, tmp_corr))
         calib_voltage_slope = self.state["VOLTAGE_CALIBRATION"] / 100.0              #  325 -> -3.25 V (full scale) 
 
         if volts_to_set < 0:
@@ -158,7 +158,7 @@ class HVsysSupply800c:
         if "MEAS_PEDESTAL_VOLTAGE" not in self.state or self.state["MEAS_PEDESTAL_VOLTAGE"] is None: 
             raise ValueError("HVsysSupply800c: cannot translate volts to counts without knowing MEAS_PEDESTAL_VOLTAGE")
         pedestal_voltage = self.pedestalCountsToVolts(self.state["MEAS_PEDESTAL_VOLTAGE"])
-        volts_to_set = -(float(volts) - pedestal_voltage - HVsysSupply800c.PEDESTAL_VOLTAGE_BIAS)  # e.g. -0.5V means we need to go 0.5V lower than pedestal (with positive counts)       
+        volts_to_set = (float(volts) - pedestal_voltage - HVsysSupply800c.PEDESTAL_VOLTAGE_BIAS)  # e.g. -0.5V means we need to go 0.5V lower than pedestal (with positive counts)       
         calib_voltage_slope = self.state["VOLTAGE_CALIBRATION"] / 100.0              #  325 -> -3.25 V (full scale) 
 
         if volts_to_set < 0:
@@ -185,7 +185,7 @@ class HVsysSupply800c:
         tmp = float( self.valueToString('TEMPERATURE', self.state['TEMPERATURE']) )
         tmp_corr = -(tmp - self.det_cfg.reference_temperature) * self.det_cfg.temperature_slope / 1000 # minus for normal termerature correction, e.g. config value 60 means "-60mV/C"
 
-        volts = pedestal_voltage - counts * calib_voltage_slope / (HVsysSupply800c.VOLTAGE_RESOLUTION - 1) + HVsysSupply800c.PEDESTAL_VOLTAGE_BIAS + tmp_corr
+        volts = pedestal_voltage - counts * calib_voltage_slope / (HVsysSupply800c.VOLTAGE_RESOLUTION - 1) + HVsysSupply800c.PEDESTAL_VOLTAGE_BIAS - tmp_corr
         return round(volts, HVsysSupply800c.VOLTAGE_DECIMAL_PLACES)
 
     def measCountsToVolts(self, counts: int) -> str:
