@@ -1066,7 +1066,14 @@ async def main():
     global loop
     global configuration
 
-    logging.basicConfig(level=logging.INFO, format='%(asctime)s | %(levelname)s | %(message)s')
+    logging.basicConfig(
+        level=logging.INFO, 
+        format='%(asctime)s | %(levelname)s | %(message)s'
+        handlers=[
+            logging.StreamHandler(),
+            logging.FileHandler(datetime.datetime.now().strftime('logs/dcs_log_%Y-%m-%d-%H-%M-%S.txt'))
+        ]    
+    )
 
     configuration = config.load("config/PsdSlowControlConfig.xml", schema="config/PsdSlowControlConfig.xsd")
 
