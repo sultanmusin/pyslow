@@ -26,7 +26,7 @@ sudo yum install gtk3-devel python3-devel
 
 Ubuntu:
 
-sudo apt-get install pkg-config libgtk-3-dev buld-essential gcc-5
+sudo apt-get install pkg-config libgtk-3-dev build-essential gcc-5
 
 Then use requirements.txt:
 
