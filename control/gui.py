@@ -591,7 +591,7 @@ class MainWindow(wx.Frame):
             value = part.valueFromString(cap, new_value)
 
             command = Message(Message.WRITE_SHORT, part_address, part, cap, value)
-            asyncio.create_task(detector.add_task(bus_id, command, part, print))
+            asyncio.get_event_loop().create_task(detector.add_task(bus_id, command, part, print))
         """
 
     def OnHVGridChange( self, event ):
@@ -611,7 +611,7 @@ class MainWindow(wx.Frame):
             value = part.valueFromString(cap, new_value)
 
             command = Message(Message.WRITE_SHORT, part_address, part, cap, value)
-            asyncio.create_task(detector.add_task(bus_id, command, part, print))
+            asyncio.get_event_loop().create_task(detector.add_task(bus_id, command, part, print))
 
     def OnLEDGridChange( self, event ):
         global detector
@@ -630,7 +630,7 @@ class MainWindow(wx.Frame):
                 value = part.valueFromString(cap, new_value)
 
                 command = Message(Message.WRITE_SHORT, part_address, part, cap, value)
-                asyncio.create_task(detector.add_task(bus_id, command, part, print))
+                asyncio.get_event_loop().create_task(detector.add_task(bus_id, command, part, print))
 
 
     def SelectFirstOnlineModule(self):
@@ -704,7 +704,7 @@ class MainWindow(wx.Frame):
             # find out which system module interacts with active module
             bus_id = self.config.modules[self.activeModuleId].bus_id
             part = detector.buses[bus_id].getPart(part_address) 
-            asyncio.create_task(detector.add_task(bus_id, command, part, self.ShowQueryResult))
+            asyncio.get_event_loop().create_task(detector.add_task(bus_id, command, part, self.ShowQueryResult))
 
 
     def ShowQueryResult(self, data):
@@ -759,29 +759,29 @@ class MainWindow(wx.Frame):
                     part = detector.buses[bus_id].getPart(part_address) 
                     value = part.valueFromString('SET_PEDESTAL_VOLTAGE', str(module_config.hvPedestal))
                     command = Message(Message.WRITE_SHORT, part_address, part, 'SET_PEDESTAL_VOLTAGE', value)
-                    asyncio.create_task(detector.add_task(bus_id, command, part, print))
+                    asyncio.get_event_loop().create_task(detector.add_task(bus_id, command, part, print))
 
                     for ch, hv in module_config.hv.items():
                         cap = '%s/SET_VOLTAGE'%(ch)
                         value = part.valueFromString(cap, str(hv))
                         command = Message(Message.WRITE_SHORT, part_address, part, cap, value)
-                        asyncio.create_task(detector.add_task(bus_id, command, part, print))
+                        asyncio.get_event_loop().create_task(detector.add_task(bus_id, command, part, print))
 
                 if module_config.has('led'): 
                     part_address = int(self.config.modules[module_id].address('led'))
                     part = detector.buses[bus_id].getPart(part_address) 
                     value = part.valueFromString('AUTOREG', str(module_config.ledAutoTune))
                     command = Message(Message.WRITE_SHORT, part_address, part, 'AUTOREG', value)
-                    asyncio.create_task(detector.add_task(bus_id, command, part, print))
+                    asyncio.get_event_loop().create_task(detector.add_task(bus_id, command, part, print))
                     value = part.valueFromString('SET_FREQUENCY', str(module_config.ledFrequency))
                     command = Message(Message.WRITE_SHORT, part_address, part, 'SET_FREQUENCY', value)
-                    asyncio.create_task(detector.add_task(bus_id, command, part, print))
+                    asyncio.get_event_loop().create_task(detector.add_task(bus_id, command, part, print))
                     value = part.valueFromString('SET_AMPLITUDE', str(module_config.ledBrightness))
                     command = Message(Message.WRITE_SHORT, part_address, part, 'SET_AMPLITUDE', value)
-                    asyncio.create_task(detector.add_task(bus_id, command, part, print))
+                    asyncio.get_event_loop().create_task(detector.add_task(bus_id, command, part, print))
                     value = part.valueFromString('ADC_SET_POINT', str(module_config.ledPinADCSet))
                     command = Message(Message.WRITE_SHORT, part_address, part, 'ADC_SET_POINT', value)
-                    asyncio.create_task(detector.add_task(bus_id, command, part, print))
+                    asyncio.get_event_loop().create_task(detector.add_task(bus_id, command, part, print))
              
         self.UpdateModuleGrid()
         
@@ -812,7 +812,7 @@ class MainWindow(wx.Frame):
                 part = detector.buses[bus_id].getPart(part_address) 
                 command = Message(Message.WRITE_SHORT, part_address, part, 'AUTOREG', value)
                 logging.warning('LED switching!')
-                asyncio.create_task(detector.add_task(bus_id, command, part, print))
+                asyncio.get_event_loop().create_task(detector.add_task(bus_id, command, part, print))
             else:
                 logging.warning('LED autoreg requested for module without LED part')
 
@@ -828,8 +828,8 @@ class MainWindow(wx.Frame):
                 part = detector.buses[bus_id].getPart(part_address) 
                 command = Message(Message.WRITE_SHORT, part_address, part, 'STATUS', state)
                 logging.warning('HV switching!')
-                asyncio.create_task(detector.add_task(bus_id, command, part, print))
-                asyncio.create_task(detector.monitor_ramp_status(bus_id, part, part_address, self.DisplayRampStatus))
+                asyncio.get_event_loop().create_task(detector.add_task(bus_id, command, part, print))
+                asyncio.get_event_loop().create_task(detector.monitor_ramp_status(bus_id, part, part_address, self.DisplayRampStatus))
             else:
                 logging.warning('HV ON requested for module without HV part')
 
@@ -886,7 +886,7 @@ class MainWindow(wx.Frame):
         logging.debug("OnKillFocus: translated to %s" % (reg_value))
         command = Message(Message.WRITE_SHORT, part_address, part, cap, reg_value)
         logging.warning('HV setting!')
-        asyncio.create_task(detector.add_task(bus_id, command, part, print))
+        asyncio.get_event_loop().create_task(detector.add_task(bus_id, command, part, print))
 
                 
     def set_tri_state(self, checkbox, count, total):
@@ -968,7 +968,7 @@ class MainWindow(wx.Frame):
             callback = self.DisplayValueOnComplete
         elif callback == False:
             callback = lambda *args: None  # empty callback; do nothing
-        return asyncio.create_task(detector.poll_module_important(moduleId, callback))
+        return asyncio.get_event_loop().create_task(detector.poll_module_important(moduleId, callback))
 
     def DisplayValueOnComplete(self, part, capability, value):
         

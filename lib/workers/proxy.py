@@ -70,8 +70,8 @@ async def main():
 
     try:
         for id, sm in detector.buses.items():
-            await asyncio.create_task(sm.connect())
-            asyncio.create_task(sm.send())
+            await asyncio.get_event_loop().create_task(sm.connect())
+            asyncio.get_event_loop().create_task(sm.send())
     except OSError as e:
         print("Cannot connect to system module")  
 

@@ -26,6 +26,7 @@ from task import Task
 from partstate import *
 from hvsysbus import *
 from hvsyssupply import *
+from hvsyssupply800c import *
 
 
 
@@ -110,7 +111,7 @@ class Detector:
         all_capabilities = part.priority_capabilities + [p for p in part.capabilities if p not in part.priority_capabilities]
                                                                                                   
         for cap in all_capabilities:
-            if part is not HVsysSupply or cap in important_hv_capabilities:
+            if part not in [HVsysSupply, HVsysSupply800c] or cap in important_hv_capabilities:
                 command = Message(Message.READ_SHORT, address, type(part), cap, 0)
                 await self.add_task(sys_mod_id, command, part, partial(poll_cb, part, cap))
 
