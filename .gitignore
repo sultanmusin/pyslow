@@ -55,3 +55,6 @@ Thumbs.db
 # Vim 
 *.swp
 config/PsdSlowControlConfig.xml
+
+*.dat1
+*.dat2

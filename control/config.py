@@ -46,6 +46,13 @@ class Config:
         self.soup = soup
         self.process_config()
 
+    # remove empty lines from grid [1,1,3,3,5,5,1] => [0,0,1,1,2,2,0]
+    # returns map {1:0, 3:1, 5: 2}
+    def get_tetris(self, xx):
+        ordered_and_unique = sorted(set(xx))
+        new_x_by_old_x = {value:key for (key,value) in enumerate(ordered_and_unique)}
+        return new_x_by_old_x
+
 
     def process_config(self):
         self.buses = {} # dict[str,BusConfig]
@@ -58,10 +65,14 @@ class Config:
 
         xx = list(map(lambda tag: int(tag.text), self.soup.select("config module geometry x")))
         if len(xx) > 0:
+            xx_tetris = self.get_tetris(xx)
+            xx = [xx_tetris[x] for x in xx]
             self.geom_min_x, self.geom_max_x = min(xx), max(xx)
             self.geom_width = self.geom_max_x - self.geom_min_x + 1
 
             yy = list(map(lambda tag: int(tag.text), self.soup.select("config module geometry y")))
+            yy_tetris = self.get_tetris(yy)
+            yy = [yy_tetris[y] for y in yy]
             self.geom_min_y, self.geom_max_y = min(yy), max(yy)
             self.geom_height = self.geom_max_y - self.geom_min_y + 1
 
@@ -69,8 +80,8 @@ class Config:
 
         for mod in self.soup.select("config module"):
             id = mod.attrs['id']
-            x = int(mod.find('x').text) - 1
-            y = int(mod.find('y').text) - 1
+            x = xx_tetris[int(mod.find('x').text)]
+            y = yy_tetris[int(mod.find('y').text)]
             self.modulesOrderedByGeometry[x + y * self.geom_width] = id
             self.modules[id] = ModuleConfig(mod)
 
