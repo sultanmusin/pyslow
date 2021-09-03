@@ -185,7 +185,7 @@ class HVsysSupply800c:
         tmp = float( self.valueToString('TEMPERATURE', self.state['TEMPERATURE']) )
         tmp_corr = -(tmp - self.det_cfg.reference_temperature) * self.det_cfg.temperature_slope / 1000 # minus for normal termerature correction, e.g. config value 60 means "-60mV/C"
 
-        volts = pedestal_voltage - counts * calib_voltage_slope / (HVsysSupply800c.VOLTAGE_RESOLUTION - 1) + HVsysSupply800c.PEDESTAL_VOLTAGE_BIAS - tmp_corr
+        volts = pedestal_voltage + counts * calib_voltage_slope / (HVsysSupply800c.VOLTAGE_RESOLUTION - 1) + HVsysSupply800c.PEDESTAL_VOLTAGE_BIAS - tmp_corr
         return round(volts, HVsysSupply800c.VOLTAGE_DECIMAL_PLACES)
 
     def measCountsToVolts(self, counts: int) -> str:
@@ -199,7 +199,7 @@ class HVsysSupply800c:
         calib_voltage_slope = self.state["VOLTAGE_CALIBRATION"] / 100.0              #  325 -> -3.25 V (full scale) 
         pedestal_voltage = self.pedestalCountsToVolts(self.state["MEAS_PEDESTAL_VOLTAGE"])
 
-        volts = pedestal_voltage - counts * calib_voltage_slope / (HVsysSupply800c.VOLTAGE_RESOLUTION - 1) + HVsysSupply800c.PEDESTAL_VOLTAGE_BIAS
+        volts = pedestal_voltage + counts * calib_voltage_slope / (HVsysSupply800c.VOLTAGE_RESOLUTION - 1) + HVsysSupply800c.PEDESTAL_VOLTAGE_BIAS
         return round(volts, HVsysSupply800c.VOLTAGE_DECIMAL_PLACES)
 
     convertorsFromString = {
