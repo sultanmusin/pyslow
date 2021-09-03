@@ -125,8 +125,8 @@ async def main(argv):
     loop.set_exception_handler(handler)
 
     try:
-        await asyncio.create_task(bus.connect())
-        asyncio.create_task(bus.send())
+        await asyncio.get_event_loop().create_task(bus.connect())
+        asyncio.get_event_loop().create_task(bus.send())
     except OSError as e:
         print("Cannot connect to system module")  
         sys.exit()
@@ -140,7 +140,7 @@ async def main(argv):
             command = Message(Message.WRITE_SHORT, address, part, cap, write)
 
         print("Request: %s"%(str(command).rstrip()))
-        asyncio.create_task(detector.add_task(bus_id, command, part, on_complete))
+        asyncio.get_event_loop().create_task(detector.add_task(bus_id, command, part, on_complete))
 
     await asyncio.sleep(2)
 

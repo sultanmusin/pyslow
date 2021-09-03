@@ -72,8 +72,8 @@ async def main(address, port):
     except OSError as e:
         print("Cannot connect to system module")  
         return
-    task1 = asyncio.create_task(send())
-    task2 = asyncio.create_task(recv())
+    task1 = asyncio.get_event_loop().create_task(send())
+    task2 = asyncio.get_event_loop().create_task(recv())
     await task1
     await task2
 

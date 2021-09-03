@@ -20,7 +20,7 @@ class HVsysSupply800c:
 
     MAX_CHANNEL_COUNT = 10
 
-    PEDESTAL_VOLTAGE_BIAS = 1.6       # volts. Set real ped V this much HIGHER so the per-channel voltage settings can tune both ways up and down
+    PEDESTAL_VOLTAGE_BIAS = 0         # volts. Set real ped V this much HIGHER so the per-channel voltage settings can tune both ways up and down. Set to zero for 800c boards.
     PEDESTAL_RESOLUTION = 4096        # counts
     VOLTAGE_RESOLUTION = 4096         # counts
     VOLTAGE_DECIMAL_PLACES = 2        # to 0.01 V
@@ -60,8 +60,8 @@ class HVsysSupply800c:
         "PEDESTAL_VOLTAGE_CALIBRATION": 0x3a,  # Calibration value of pedestal Voltage in 10mV units, i.e. to get Volts one need eePedVmax/100.
 #        "PEDESTAL_VOLTAGE_CALIBRATION_MIN":  not available, single ped calibration for this electronics version, see above
 #        "PEDESTAL_VOLTAGE_CALIBRATION_MAX":  not available, single ped calibration for this electronics version, see above
-        "VERSION_DATE_LOW": 0x3c,
-        "VERSION_DATE_HIGH": 0x3e,
+        "VERSION_DATE_LOW": 0x3c,              # Response = 8212 (0x2014)
+        "VERSION_DATE_HIGH": 0x3e,             # Response = 5121 (0x1401)
         "CELL_ADDRESS": 0x41
     }
 
@@ -99,15 +99,14 @@ class HVsysSupply800c:
     def __init__(self, det_cfg):
         self.det_cfg = det_cfg
         self.state = {}
-        for cap in HVsysSupply.capabilities:
+        for cap in HVsysSupply800c.capabilities:
             self.state[cap] = None
-
 
     def updateState(self, cap, value):
         self.state[cap] = value # TODO checks 
 
     def pedestalVoltsToCounts(self, volts: str) -> int:                       # also can accept float value
-        volts_to_set = float(volts) + HVsysSupply.PEDESTAL_VOLTAGE_BIAS       # Set real ped V this much HIGHER so the per-channel voltage settings can tune both ways up and down
+        volts_to_set = float(volts) + HVsysSupply800c.PEDESTAL_VOLTAGE_BIAS       # Set real ped V this much HIGHER so the per-channel voltage settings can tune both ways up and down
                                                                               # May be DANGEROUS to set ped V before per-channel V with HV ON
         calib_ped = self.state["PEDESTAL_VOLTAGE_CALIBRATION"] / 100.0     # 6248 -> 62.48 V
 
@@ -115,70 +114,70 @@ class HVsysSupply800c:
         # this_is_ok.jpg
 
         if volts_to_set > calib_ped:
-            print("HVsysSupply: trying to set invalid voltage, %2.2f > %2.2f (upper bound), setting upper bound"%(volts_to_set, calib_ped))
+            print("HVsysSupply800c: trying to set invalid voltage, %2.2f > %2.2f (upper bound), setting upper bound"%(volts_to_set, calib_ped))
             volts_to_set = calib_ped
 
-        return int((HVsysSupply.PEDESTAL_RESOLUTION - 1) * volts_to_set / calib_ped)
+        return int((HVsysSupply800c.PEDESTAL_RESOLUTION - 1) * volts_to_set / calib_ped)
 
 
     def pedestalCountsToVolts(self, counts: int) -> float:
-        if counts < 0: # or counts >= HVsysSupply.PEDESTAL_RESOLUTION:
-            raise ValueError("HVsysSupply: invalid pedestal counts %d >= PEDESTAL_RESOLUTION"%(counts))
+        if counts < 0: # or counts >= HVsysSupply800c.PEDESTAL_RESOLUTION:
+            raise ValueError("HVsysSupply800c: invalid pedestal counts %d >= PEDESTAL_RESOLUTION"%(counts))
 
         calib_ped = self.state["PEDESTAL_VOLTAGE_CALIBRATION"] / 100.0     # 5270 -> 52.70 V
 
-        volts = counts * calib_ped / (HVsysSupply.PEDESTAL_RESOLUTION - 1) - HVsysSupply.PEDESTAL_VOLTAGE_BIAS
-        return round(volts, HVsysSupply.VOLTAGE_DECIMAL_PLACES)
+        volts = counts * calib_ped / (HVsysSupply800c.PEDESTAL_RESOLUTION - 1) - HVsysSupply800c.PEDESTAL_VOLTAGE_BIAS
+        return round(volts, HVsysSupply800c.VOLTAGE_DECIMAL_PLACES)
 
     def voltsToCounts(self, volts: str) -> int:
         if "VOLTAGE_CALIBRATION" not in self.state or self.state["VOLTAGE_CALIBRATION"] is None: 
-            raise ValueError("HVsysSupply: cannot translate volts to counts without knowing VOLTAGE_CALIBRATION")
+            raise ValueError("HVsysSupply800c: cannot translate volts to counts without knowing VOLTAGE_CALIBRATION")
         if "SET_PEDESTAL_VOLTAGE" not in self.state or self.state["SET_PEDESTAL_VOLTAGE"] is None: 
-            raise ValueError("HVsysSupply: cannot translate volts to counts without knowing SET_PEDESTAL_VOLTAGE")
+            raise ValueError("HVsysSupply800c: cannot translate volts to counts without knowing SET_PEDESTAL_VOLTAGE")
         pedestal_voltage = self.pedestalCountsToVolts(self.state["SET_PEDESTAL_VOLTAGE"])
         tmp = float( self.valueToString('TEMPERATURE', self.state['TEMPERATURE']) )
         tmp_corr = -(tmp - self.det_cfg.reference_temperature) * self.det_cfg.temperature_slope / 1000 # minus for normal temperature correction, e.g. config value 60 means "-60mV/C"
-        volts_to_set = tmp_corr - (float(volts) - pedestal_voltage - HVsysSupply.PEDESTAL_VOLTAGE_BIAS)  # e.g. -0.5V means we need to go 0.5V lower than pedestal (with positive counts)       
+        volts_to_set = (float(volts) - pedestal_voltage - HVsysSupply800c.PEDESTAL_VOLTAGE_BIAS) - tmp_corr  # e.g. -0.5V means we need to go 0.5V lower than pedestal (with positive counts)       
 
-        logging.debug("coltsToCounts: temperature correction for T=%s is %d V" % (tmp, tmp_corr))
+        logging.debug("voltsToCounts: temperature correction for T=%s is %d V" % (tmp, tmp_corr))
         calib_voltage_slope = self.state["VOLTAGE_CALIBRATION"] / 100.0              #  325 -> -3.25 V (full scale) 
 
         if volts_to_set < 0:
-            print("HVsysSupply: trying to set invalid voltage, %2.2f < %2.2f (lower bound), setting lower bound"%(volts_to_set, 0))
+            print("HVsysSupply800c: trying to set invalid voltage, %2.2f < %2.2f (lower bound), setting lower bound"%(volts_to_set, 0))
             volts_to_set = 0
 
         if volts_to_set > calib_voltage_slope:
-            print("HVsysSupply: trying to set invalid voltage, %2.2f > %2.2f (upper bound), setting upper bound"%(volts_to_set, calib_voltage_slope))
+            print("HVsysSupply800c: trying to set invalid voltage, %2.2f > %2.2f (upper bound), setting upper bound"%(volts_to_set, calib_voltage_slope))
             volts_to_set = calib_voltage_slope
 
-        return int((HVsysSupply.VOLTAGE_RESOLUTION - 1) * volts_to_set / calib_voltage_slope)
+        return int((HVsysSupply800c.VOLTAGE_RESOLUTION - 1) * volts_to_set / calib_voltage_slope)
 
     def measVoltsToCounts(self, volts: str) -> int:
         if "VOLTAGE_CALIBRATION" not in self.state or self.state["VOLTAGE_CALIBRATION"] is None: 
-            raise ValueError("HVsysSupply: cannot translate volts to counts without knowing VOLTAGE_CALIBRATION")
+            raise ValueError("HVsysSupply800c: cannot translate volts to counts without knowing VOLTAGE_CALIBRATION")
         if "MEAS_PEDESTAL_VOLTAGE" not in self.state or self.state["MEAS_PEDESTAL_VOLTAGE"] is None: 
-            raise ValueError("HVsysSupply: cannot translate volts to counts without knowing MEAS_PEDESTAL_VOLTAGE")
+            raise ValueError("HVsysSupply800c: cannot translate volts to counts without knowing MEAS_PEDESTAL_VOLTAGE")
         pedestal_voltage = self.pedestalCountsToVolts(self.state["MEAS_PEDESTAL_VOLTAGE"])
-        volts_to_set = -(float(volts) - pedestal_voltage - HVsysSupply.PEDESTAL_VOLTAGE_BIAS)  # e.g. -0.5V means we need to go 0.5V lower than pedestal (with positive counts)       
+        volts_to_set = (float(volts) - pedestal_voltage - HVsysSupply800c.PEDESTAL_VOLTAGE_BIAS)  # e.g. -0.5V means we need to go 0.5V lower than pedestal (with positive counts)       
         calib_voltage_slope = self.state["VOLTAGE_CALIBRATION"] / 100.0              #  325 -> -3.25 V (full scale) 
 
         if volts_to_set < 0:
-            print("HVsysSupply: trying to set invalid voltage, %2.2f < %2.2f (lower bound), setting lower bound"%(volts_to_set, 0))
+            print("HVsysSupply800c: trying to set invalid voltage, %2.2f < %2.2f (lower bound), setting lower bound"%(volts_to_set, 0))
             volts_to_set = 0
 
         if volts_to_set > calib_voltage_slope:
-            print("HVsysSupply: trying to set invalid voltage, %2.2f > %2.2f (upper bound), setting upper bound"%(volts_to_set, calib_voltage_slope))
+            print("HVsysSupply800c: trying to set invalid voltage, %2.2f > %2.2f (upper bound), setting upper bound"%(volts_to_set, calib_voltage_slope))
             volts_to_set = calib_voltage_slope
 
-        return int((HVsysSupply.VOLTAGE_RESOLUTION - 1) * volts_to_set / calib_voltage_slope)
+        return int((HVsysSupply800c.VOLTAGE_RESOLUTION - 1) * volts_to_set / calib_voltage_slope)
 
     def countsToVolts(self, counts: int) -> str:
-        if counts < 0 or counts >= HVsysSupply.VOLTAGE_RESOLUTION:
-            raise ValueError("HVsysSupply: invalid voltage counts %d >= VOLTAGE_RESOLUTION"%(counts))
+        if counts < 0 or counts >= HVsysSupply800c.VOLTAGE_RESOLUTION:
+            raise ValueError("HVsysSupply800c: invalid voltage counts %d >= VOLTAGE_RESOLUTION"%(counts))
         if "VOLTAGE_CALIBRATION" not in self.state or self.state["VOLTAGE_CALIBRATION"] is None: 
-            raise ValueError("HVsysSupply: cannot translate counts to volts without knowing VOLTAGE_CALIBRATION")
+            raise ValueError("HVsysSupply800c: cannot translate counts to volts without knowing VOLTAGE_CALIBRATION")
         if "SET_PEDESTAL_VOLTAGE" not in self.state or self.state["SET_PEDESTAL_VOLTAGE"] is None: 
-            raise ValueError("HVsysSupply: cannot translate counts to volts without knowing SET_PEDESTAL_VOLTAGE")
+            raise ValueError("HVsysSupply800c: cannot translate counts to volts without knowing SET_PEDESTAL_VOLTAGE")
 
         calib_voltage_slope = self.state["VOLTAGE_CALIBRATION"] / 100.0              #  325 -> -3.25 V (full scale) 
         pedestal_voltage = self.pedestalCountsToVolts(self.state["SET_PEDESTAL_VOLTAGE"])
@@ -186,22 +185,22 @@ class HVsysSupply800c:
         tmp = float( self.valueToString('TEMPERATURE', self.state['TEMPERATURE']) )
         tmp_corr = -(tmp - self.det_cfg.reference_temperature) * self.det_cfg.temperature_slope / 1000 # minus for normal termerature correction, e.g. config value 60 means "-60mV/C"
 
-        volts = pedestal_voltage - counts * calib_voltage_slope / (HVsysSupply.VOLTAGE_RESOLUTION - 1) + HVsysSupply.PEDESTAL_VOLTAGE_BIAS + tmp_corr
-        return round(volts, HVsysSupply.VOLTAGE_DECIMAL_PLACES)
+        volts = pedestal_voltage - counts * calib_voltage_slope / (HVsysSupply800c.VOLTAGE_RESOLUTION - 1) + HVsysSupply800c.PEDESTAL_VOLTAGE_BIAS - tmp_corr
+        return round(volts, HVsysSupply800c.VOLTAGE_DECIMAL_PLACES)
 
     def measCountsToVolts(self, counts: int) -> str:
-        if counts < 0 or counts >= HVsysSupply.VOLTAGE_RESOLUTION:
-            raise ValueError("HVsysSupply: invalid voltage counts %d >= VOLTAGE_RESOLUTION"%(counts))
+        if counts < 0 or counts >= HVsysSupply800c.VOLTAGE_RESOLUTION:
+            raise ValueError("HVsysSupply800c: invalid voltage counts %d >= VOLTAGE_RESOLUTION"%(counts))
         if "VOLTAGE_CALIBRATION" not in self.state or self.state["VOLTAGE_CALIBRATION"] is None: 
-            raise ValueError("HVsysSupply: cannot translate counts to volts without knowing VOLTAGE_CALIBRATION")
+            raise ValueError("HVsysSupply800c: cannot translate counts to volts without knowing VOLTAGE_CALIBRATION")
         if "SET_PEDESTAL_VOLTAGE" not in self.state or self.state["MEAS_PEDESTAL_VOLTAGE"] is None: 
-            raise ValueError("HVsysSupply: cannot translate counts to volts without knowing MEAS_PEDESTAL_VOLTAGE")
+            raise ValueError("HVsysSupply800c: cannot translate counts to volts without knowing MEAS_PEDESTAL_VOLTAGE")
 
         calib_voltage_slope = self.state["VOLTAGE_CALIBRATION"] / 100.0              #  325 -> -3.25 V (full scale) 
         pedestal_voltage = self.pedestalCountsToVolts(self.state["MEAS_PEDESTAL_VOLTAGE"])
 
-        volts = pedestal_voltage - counts * calib_voltage_slope / (HVsysSupply.VOLTAGE_RESOLUTION - 1) + HVsysSupply.PEDESTAL_VOLTAGE_BIAS
-        return round(volts, HVsysSupply.VOLTAGE_DECIMAL_PLACES)
+        volts = pedestal_voltage - counts * calib_voltage_slope / (HVsysSupply800c.VOLTAGE_RESOLUTION - 1) + HVsysSupply800c.PEDESTAL_VOLTAGE_BIAS
+        return round(volts, HVsysSupply800c.VOLTAGE_DECIMAL_PLACES)
 
     convertorsFromString = {
         "1/SET_VOLTAGE": voltsToCounts,
@@ -256,7 +255,7 @@ class HVsysSupply800c:
     }
 
     def valueToString(self, cap:str, value:int) -> str:
-        if cap in HVsysSupply.convertorsToString:
+        if cap in HVsysSupply800c.convertorsToString:
             method = self.convertorsToString[cap]
             result = method(self, value)
             return str(result)
@@ -264,7 +263,7 @@ class HVsysSupply800c:
             return str(value)
 
     def valueFromString(self, cap:str, string:str) -> int:
-        if cap in HVsysSupply.convertorsToString:
+        if cap in HVsysSupply800c.convertorsToString:
             result = self.convertorsFromString[cap](self, string)
             return result
         else:
@@ -302,5 +301,5 @@ class HVsysSupply800c:
 """
 
 
-#s = HVsysSupply() 
+#s = HVsysSupply800c() 
 #s.

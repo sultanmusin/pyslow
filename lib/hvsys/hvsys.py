@@ -12,15 +12,17 @@ __status__ = "Development"
 
 from hvsysled import HVsysLED
 from hvsyssupply import HVsysSupply
+from hvsyssupply800c import HVsysSupply800c
 from hvsysps import HVsysPS
 from hvsyssm import HVsysSystemBox
 
 class HVsys:
-    catalogus = {
+    catalogus = {   
         'hv': HVsysSupply,
         'led': HVsysLED,
         'ps': HVsysPS,
         'sm': HVsysSystemBox,
+        'hv800c': HVsysSupply800c,
 #        'switch': HVsysSwitch
     }
 

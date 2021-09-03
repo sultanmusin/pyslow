@@ -54,7 +54,7 @@ class Alerter(Worker):
                     command = Message(Message.READ_SHORT, address, part, 'STATUS', 0)
                     print("Request: %s"%(str(command).rstrip()))
                     on_complete = partial(self.on_complete_command, part, 'STATUS')
-                    asyncio.create_task(self.detector.add_task(bus_id, command, part, on_complete))
+                    asyncio.get_event_loop().create_task(self.detector.add_task(bus_id, command, part, on_complete))
 
             await asyncio.sleep(Alerter.TIMEOUT)
 
@@ -89,8 +89,8 @@ async def main():
 
     try:
         for id, sm in detector.buses.items():
-            await asyncio.create_task(sm.connect())
-            asyncio.create_task(sm.send())
+            await asyncio.get_event_loop().create_task(sm.connect())
+            asyncio.get_event_loop().create_task(sm.send())
     except OSError as e:
         print("Cannot connect to system module")  
 

@@ -18,6 +18,7 @@ dist/
 
 # Log files
 *.log
+logs/
 
 # Maven
 target/

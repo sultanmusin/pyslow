@@ -117,6 +117,8 @@ class ModuleConfig:
 
     def __init__(self, soup):
         self.id = soup.attrs['id']
+        self.version = soup['version'] if 'version' in soup.attrs else 'default'
+
         self.parts = []
         self.addr = {}
 
