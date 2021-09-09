@@ -211,6 +211,15 @@ class HVsysSupply:
         volts = pedestal_voltage - counts * calib_voltage_slope / (HVsysSupply.VOLTAGE_RESOLUTION - 1) + HVsysSupply.PEDESTAL_VOLTAGE_BIAS
         return round(volts, HVsysSupply.VOLTAGE_DECIMAL_PLACES)
 
+    def voltageCorrection(self): 
+        if "TEMPERATURE" not in self.state or self.state["TEMPERATURE"] is None: 
+            raise ValueError("HVsysSupply800c: cannot calculate temperature correction without knowing TEMPERATURE")
+        tmp = float( self.valueToString('TEMPERATURE', self.state['TEMPERATURE']) )
+        tmp_corr = (tmp - self.det_cfg.reference_temperature) * self.det_cfg.temperature_slope / 1000 # minus for normal termerature correction, e.g. config value 60 means "-60mV/C"
+
+        logging.debug(round(tmp_corr, HVsysSupply.VOLTAGE_DECIMAL_PLACES))
+        return round(tmp_corr, HVsysSupply.VOLTAGE_DECIMAL_PLACES)
+
     convertorsFromString = {
         "1/SET_VOLTAGE": voltsToCounts,
         "2/SET_VOLTAGE": voltsToCounts,
