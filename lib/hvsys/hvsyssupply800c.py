@@ -135,11 +135,11 @@ class HVsysSupply800c:
         if "SET_PEDESTAL_VOLTAGE" not in self.state or self.state["SET_PEDESTAL_VOLTAGE"] is None: 
             raise ValueError("HVsysSupply800c: cannot translate volts to counts without knowing SET_PEDESTAL_VOLTAGE")
         pedestal_voltage = self.pedestalCountsToVolts(self.state["SET_PEDESTAL_VOLTAGE"])
-        tmp = float( self.valueToString('TEMPERATURE', self.state['TEMPERATURE']) )
-        tmp_corr = -(tmp - self.det_cfg.reference_temperature) * self.det_cfg.temperature_slope / 1000 # minus for normal temperature correction, e.g. config value 60 means "-60mV/C"
-        volts_to_set = (float(volts) - pedestal_voltage - HVsysSupply800c.PEDESTAL_VOLTAGE_BIAS) - tmp_corr  # e.g. -0.5V means we need to go 0.5V lower than pedestal (with positive counts)       
+        # tmp = float( self.valueToString('TEMPERATURE', self.state['TEMPERATURE']) )
+        # tmp_corr = -(tmp - self.det_cfg.reference_temperature) * self.det_cfg.temperature_slope / 1000 # minus for normal temperature correction, e.g. config value 60 means "-60mV/C"
+        volts_to_set = (float(volts) - pedestal_voltage - HVsysSupply800c.PEDESTAL_VOLTAGE_BIAS) # - tmp_corr  # e.g. -0.5V means we need to go 0.5V lower than pedestal (with positive counts)       
 
-        logging.debug("voltsToCounts: temperature correction for T=%s is %d V" % (tmp, tmp_corr))
+        # logging.debug("voltsToCounts: temperature correction for T=%s is %d V" % (tmp, tmp_corr))
         calib_voltage_slope = self.state["VOLTAGE_CALIBRATION"] / 100.0              #  325 -> -3.25 V (full scale) 
 
         if volts_to_set < 0:
@@ -182,10 +182,10 @@ class HVsysSupply800c:
         calib_voltage_slope = self.state["VOLTAGE_CALIBRATION"] / 100.0              #  325 -> -3.25 V (full scale) 
         pedestal_voltage = self.pedestalCountsToVolts(self.state["SET_PEDESTAL_VOLTAGE"])
 
-        tmp = float( self.valueToString('TEMPERATURE', self.state['TEMPERATURE']) )
-        tmp_corr = -(tmp - self.det_cfg.reference_temperature) * self.det_cfg.temperature_slope / 1000 # minus for normal termerature correction, e.g. config value 60 means "-60mV/C"
+        # tmp = float( self.valueToString('TEMPERATURE', self.state['TEMPERATURE']) )
+        # tmp_corr = -(tmp - self.det_cfg.reference_temperature) * self.det_cfg.temperature_slope / 1000 # minus for normal termerature correction, e.g. config value 60 means "-60mV/C"
 
-        volts = pedestal_voltage + counts * calib_voltage_slope / (HVsysSupply800c.VOLTAGE_RESOLUTION - 1) + HVsysSupply800c.PEDESTAL_VOLTAGE_BIAS - tmp_corr
+        volts = pedestal_voltage + counts * calib_voltage_slope / (HVsysSupply800c.VOLTAGE_RESOLUTION - 1) + HVsysSupply800c.PEDESTAL_VOLTAGE_BIAS # - tmp_corr
         return round(volts, HVsysSupply800c.VOLTAGE_DECIMAL_PLACES)
 
     def measCountsToVolts(self, counts: int) -> str:
@@ -201,6 +201,15 @@ class HVsysSupply800c:
 
         volts = pedestal_voltage + counts * calib_voltage_slope / (HVsysSupply800c.VOLTAGE_RESOLUTION - 1) + HVsysSupply800c.PEDESTAL_VOLTAGE_BIAS
         return round(volts, HVsysSupply800c.VOLTAGE_DECIMAL_PLACES)
+
+    def voltageCorrection(self): 
+        if "TEMPERATURE" not in self.state or self.state["TEMPERATURE"] is None: 
+            raise ValueError("HVsysSupply800c: cannot calculate temperature correction without knowing TEMPERATURE")
+        tmp = float( self.valueToString('TEMPERATURE', self.state['TEMPERATURE']) )
+        tmp_corr = (tmp - self.det_cfg.reference_temperature) * self.det_cfg.temperature_slope / 1000 # minus for normal termerature correction, e.g. config value 60 means "-60mV/C"
+
+        logging.debug(round(tmp_corr, HVsysSupply800c.VOLTAGE_DECIMAL_PLACES))
+        return round(tmp_corr, HVsysSupply800c.VOLTAGE_DECIMAL_PLACES)
 
     convertorsFromString = {
         "1/SET_VOLTAGE": voltsToCounts,

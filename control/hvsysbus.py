@@ -113,7 +113,7 @@ class HVsysBus:
                     def update_part_callback(val:str):
                         task.part.state[task.cmd.capability] = val
 
-                    task.append_cb(update_part_callback)
+                    task.prepend_cb(update_part_callback)
 
                     self.writer.write(str(task.cmd).encode())
                     try: 

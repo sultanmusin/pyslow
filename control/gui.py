@@ -64,7 +64,7 @@ GRID_ROWS_LED = 6
 
 # All grids column legend
 GRID_COLUMN_REFERENCE = 0
-GRID_COLUMN_SET = 1
+GRID_COLUMN_CORRECTED = 1
 GRID_COLUMN_MEAS = 2
 GRID_COLUMN_STATE = 3
 GRID_COLUMNS = 4
@@ -83,17 +83,17 @@ hv_grid_coords = {
     "9/REF_VOLTAGE": cc(8,GRID_COLUMN_REFERENCE),
     "10/REF_VOLTAGE": cc(9,GRID_COLUMN_REFERENCE),
 
-    "1/SET_VOLTAGE": cc(0,GRID_COLUMN_SET),
-    "2/SET_VOLTAGE": cc(1,GRID_COLUMN_SET),
-    "3/SET_VOLTAGE": cc(2,GRID_COLUMN_SET),
-    "4/SET_VOLTAGE": cc(3,GRID_COLUMN_SET),
-    "5/SET_VOLTAGE": cc(4,GRID_COLUMN_SET),
-    "6/SET_VOLTAGE": cc(5,GRID_COLUMN_SET),
-    "7/SET_VOLTAGE": cc(6,GRID_COLUMN_SET),
-    "8/SET_VOLTAGE": cc(7,GRID_COLUMN_SET),
-    "9/SET_VOLTAGE": cc(8,GRID_COLUMN_SET),
-    "10/SET_VOLTAGE": cc(9,GRID_COLUMN_SET),
-    "SET_PEDESTAL_VOLTAGE": cc(GRID_ROW_PEDESTAL,GRID_COLUMN_SET),
+    "1/CORR_VOLTAGE": cc(0,GRID_COLUMN_CORRECTED),
+    "2/CORR_VOLTAGE": cc(1,GRID_COLUMN_CORRECTED),
+    "3/CORR_VOLTAGE": cc(2,GRID_COLUMN_CORRECTED),
+    "4/CORR_VOLTAGE": cc(3,GRID_COLUMN_CORRECTED),
+    "5/CORR_VOLTAGE": cc(4,GRID_COLUMN_CORRECTED),
+    "6/CORR_VOLTAGE": cc(5,GRID_COLUMN_CORRECTED),
+    "7/CORR_VOLTAGE": cc(6,GRID_COLUMN_CORRECTED),
+    "8/CORR_VOLTAGE": cc(7,GRID_COLUMN_CORRECTED),
+    "9/CORR_VOLTAGE": cc(8,GRID_COLUMN_CORRECTED),
+    "10/CORR_VOLTAGE": cc(9,GRID_COLUMN_CORRECTED),
+    "CORR_PEDESTAL_VOLTAGE": cc(GRID_ROW_PEDESTAL,GRID_COLUMN_CORRECTED),
     "TEMPERATURE": cc(GRID_ROW_TEMPERATURE,GRID_COLUMN_MEAS),
     "1/MEAS_VOLTAGE": cc(0,GRID_COLUMN_MEAS),
     "2/MEAS_VOLTAGE": cc(1,GRID_COLUMN_MEAS),
@@ -111,12 +111,12 @@ hv_grid_coords = {
 capability_by_hv_grid_coords = {val.Get() : key for key, val in hv_grid_coords.items()}
 
 led_grid_coords = {
-    "SET_FREQUENCY": cc(GRID_ROW_FREQUENCY,GRID_COLUMN_SET),
-    "SET_AMPLITUDE": cc(GRID_ROW_AMPLITUDE,GRID_COLUMN_SET),
-    "ADC_SET_POINT": cc(GRID_ROW_ADC_SET_POINT,GRID_COLUMN_SET),
-    "AVERAGE_POINTS": cc(GRID_ROW_AVERAGE_POINTS,GRID_COLUMN_SET),
-    "AUTOREG": cc(GRID_ROW_AUTOREG,GRID_COLUMN_SET),
-    "AVERAGE_ADC": cc(GRID_ROW_AVERAGE_ADC,GRID_COLUMN_SET),
+    "SET_FREQUENCY": cc(GRID_ROW_FREQUENCY,GRID_COLUMN_CORRECTED),
+    "SET_AMPLITUDE": cc(GRID_ROW_AMPLITUDE,GRID_COLUMN_CORRECTED),
+    "ADC_SET_POINT": cc(GRID_ROW_ADC_SET_POINT,GRID_COLUMN_CORRECTED),
+    "AVERAGE_POINTS": cc(GRID_ROW_AVERAGE_POINTS,GRID_COLUMN_CORRECTED),
+    "AUTOREG": cc(GRID_ROW_AUTOREG,GRID_COLUMN_CORRECTED),
+    "AVERAGE_ADC": cc(GRID_ROW_AVERAGE_ADC,GRID_COLUMN_CORRECTED),
 }
 
 capability_by_led_grid_coords = {val.Get() : key for key, val in led_grid_coords.items()}
@@ -312,7 +312,7 @@ class MainWindow(wx.Frame):
         self.m_gridHV.EnableDragColMove( False )
         self.m_gridHV.EnableDragColSize( True )
         self.m_gridHV.SetColLabelValue( GRID_COLUMN_REFERENCE, u"Reference" )
-        self.m_gridHV.SetColLabelValue( GRID_COLUMN_SET, u"Set" )
+        self.m_gridHV.SetColLabelValue( GRID_COLUMN_CORRECTED, u"Corrected" )
         self.m_gridHV.SetColLabelValue( GRID_COLUMN_MEAS, u"Measured" )
         self.m_gridHV.SetColLabelValue( GRID_COLUMN_STATE, u"State" )
         self.m_gridHV.SetColLabelAlignment( wx.ALIGN_CENTER, wx.ALIGN_CENTER )
@@ -369,7 +369,7 @@ class MainWindow(wx.Frame):
         self.m_gridLED.EnableDragColMove( False )
         self.m_gridLED.EnableDragColSize( True )
         self.m_gridLED.SetColLabelValue( GRID_COLUMN_REFERENCE, u"Reference" )
-        self.m_gridLED.SetColLabelValue( GRID_COLUMN_SET, u"Set" )
+        self.m_gridLED.SetColLabelValue( GRID_COLUMN_CORRECTED, u"Set" )
         self.m_gridLED.SetColLabelValue( GRID_COLUMN_MEAS, u"Measured" )
         self.m_gridLED.SetColLabelAlignment( wx.ALIGN_CENTER, wx.ALIGN_CENTER )
 
@@ -757,13 +757,13 @@ class MainWindow(wx.Frame):
                 if module_config.has('hv'): 
                     part_address = int(self.config.modules[module_id].address('hv'))
                     part = detector.buses[bus_id].getPart(part_address) 
-                    value = part.valueFromString('SET_PEDESTAL_VOLTAGE', str(module_config.hvPedestal))
+                    value = part.valueFromString('SET_PEDESTAL_VOLTAGE', str(module_config.hvPedestal + part.voltageCorrection()))
                     command = Message(Message.WRITE_SHORT, part_address, part, 'SET_PEDESTAL_VOLTAGE', value)
                     asyncio.get_event_loop().create_task(detector.add_task(bus_id, command, part, print))
 
                     for ch, hv in module_config.hv.items():
                         cap = '%s/SET_VOLTAGE'%(ch)
-                        value = part.valueFromString(cap, str(hv))
+                        value = part.valueFromString(cap, str(hv + part.voltageCorrection()))
                         command = Message(Message.WRITE_SHORT, part_address, part, cap, value)
                         asyncio.get_event_loop().create_task(detector.add_task(bus_id, command, part, print))
 
@@ -979,6 +979,19 @@ class MainWindow(wx.Frame):
         if type(part) in [HVsysSupply, HVsysSupply800c]:
             if capability in hv_grid_coords:
                 self.m_gridHV.SetCellValue(hv_grid_coords[capability], str_value)
+            
+            if capability == 'TEMPERATURE':
+                # calculate and display voltage correction (if needed)
+                correction = part.voltageCorrection()
+
+                active_module_config = configuration.modules[self.activeModuleId[0]]
+                if active_module_config.has('hv'):
+                    for ch, hv in active_module_config.hv.items():
+                        #logging.debug(hv)
+                        #logging.debug(correction)
+                        corrected_hv = round(hv + correction, part.VOLTAGE_DECIMAL_PLACES)
+                        self.m_gridHV.SetCellValue(int(ch)-1, GRID_COLUMN_CORRECTED, str(corrected_hv))    
+
 
             if  capability == 'STATUS':
                 status = HVStatus(value)
@@ -1069,7 +1082,7 @@ async def main():
     global configuration
 
     logging.basicConfig(
-        level=logging.INFO, 
+        level=logging.DEBUG, 
         format='%(asctime)s | %(levelname)s | %(message)s',
         handlers=[
             logging.StreamHandler(),
