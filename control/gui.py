@@ -12,6 +12,7 @@ __status__ = "Development"
 
 import asyncio
 import datetime
+import getopt
 import logging
 import os
 import string
@@ -1076,7 +1077,13 @@ loop = None
 def handler(loop, context):
     print(context)
 
-async def main():
+def print_usage():
+    print('Usage: gui.py [-c <configfile>]')
+    print('E.g. : poller.py -c config.xml\n')
+
+    sys.exit()
+
+async def main(argv):
     global detector
     global loop
     global configuration
@@ -1090,7 +1097,16 @@ async def main():
         ]    
     )
 
-    configuration = config.load("config/PsdSlowControlConfig.xml", schema="config/PsdSlowControlConfig.xsd")
+    config_file = "config/PsdSlowControlConfig.xml"
+
+    opts, args = getopt.getopt(argv,"hc:",["config="])
+    for opt, arg in opts:
+        if opt == '-h':
+            print_usage()
+        elif opt in ("-c", "--config"):
+            config_file = arg
+
+    configuration = config.load(config_file, schema="config/PsdSlowControlConfig.xsd")
 
     detector = Detector(configuration)
 
@@ -1117,5 +1133,5 @@ async def main():
 if __name__ == '__main__':
     #asyncio.run(main(), debug=True)
     print("Staring main loop...")
-    asyncio.get_event_loop().run_until_complete(asyncio.wait([main()]))
+    asyncio.get_event_loop().run_until_complete(asyncio.wait([main(sys.argv[1:])]))
     #asyncio.get_event_loop().run_until_complete(app.MainLoop())

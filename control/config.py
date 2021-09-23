@@ -10,6 +10,7 @@ __status__ = "Development"
 
 
 
+import logging
 import sys
 from lxml import etree
 from bs4 import BeautifulSoup
@@ -34,6 +35,7 @@ def validate(xml_path: str, xsd_path: str=None) -> bool:
 
 
 def load(xml_path: str, schema: str=None):
+    logging.info("Loading config: %s"%(xml_path))
     validate(xml_path, schema)
     with open(xml_path, 'r') as f:
         soup = BeautifulSoup(f, 'xml')
