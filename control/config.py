@@ -102,7 +102,8 @@ class Config:
         #print(self.modulesOrderedById)
 
         for mod in self.soup.select("global flags onlineModules"):
-            self.modules[mod.text.strip()].online = True
+            for m in mod.text.strip().split(','):
+                self.modules[m].online = True
 
         self.reference_temperature = float(self.soup.select("global flags refTemp")[0].text)
         self.temperature_slope = float(self.soup.select("global flags tempSlope")[0].text)
