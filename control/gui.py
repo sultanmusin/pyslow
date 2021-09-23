@@ -48,6 +48,7 @@ GRID_COLUMN_HV_ON = 1
 GRID_COLUMN_LEFT_STATE = 2
 
 # HV grid legend
+
 N_SECTIONS = 10
 GRID_ROW_PEDESTAL = N_SECTIONS
 GRID_ROW_TEMPERATURE = N_SECTIONS + 1
@@ -304,7 +305,7 @@ class MainWindow(wx.Frame):
         # Grid
         self.m_gridHV.CreateGrid( GRID_ROWS_HV, GRID_COLUMNS )
         self.m_gridHV.EnableEditing( True )
-        self.m_gridHV.SetDefaultEditor(wx.grid.GridCellFloatEditor(width=3, precision=1))
+        self.m_gridHV.SetDefaultEditor(wx.grid.GridCellFloatEditor(width=3, precision=2))
         self.m_gridHV.EnableGridLines( True )
         self.m_gridHV.EnableDragGridSize( False )
         self.m_gridHV.SetMargins( 0, 0 )
@@ -547,17 +548,18 @@ class MainWindow(wx.Frame):
     def OnModuleGridSelectCell( self, event ):
         global detector
         #self.OnModuleGridRangeSelect( event )
-        self.m_gridModules.SelectRow( event.Row )
+        self.m_gridModules.SelectRow( event.GetRow() )
         logging.info("OnModuleGridSelect: %s"%(event.GetString()))
         
 
 
     def OnModuleGridRangeSelect( self, event ):
         global detector
-        selectedRows = self.m_gridModules.GetSelectedRows()
+        selected_rows = self.m_gridModules.GetSelectedRows()
         #        for index, (title, config) in enumerate(self.config.modules.items()):
-        selected_modules = [list(self.config.modules.keys())[i] for i in selectedRows]
+        selected_modules = [list(self.config.modules.keys())[i] for i in selected_rows]
 
+        logging.info("OnModuleGridRangeSelect: %s"%(selected_rows))
         logging.info("OnModuleGridRangeSelect: %s"%(selected_modules))
         logging.info("OnModuleGridRangeSelect: prev selected %s"%(self.activeModuleId))
         
@@ -641,6 +643,7 @@ class MainWindow(wx.Frame):
                 break
 
     def ShowReferenceParameters(self):
+        logging.info("ShowReferenceParameters: %s" % self.activeModuleId)
         if type(self.activeModuleId) is list and len(self.activeModuleId) == 1:
             active_module_config = configuration.modules[self.activeModuleId[0]]
             if active_module_config.has('hv'):
@@ -738,10 +741,11 @@ class MainWindow(wx.Frame):
 
     def OnButtonSelectAllModulesClick(self, event):
         self.m_gridModules.SelectAll()
-        selectedRows = self.m_gridModules.GetSelectedRows()
+        selected_rows = self.m_gridModules.GetSelectedRows()
         #        for index, (title, config) in enumerate(self.config.modules.items()):
-        selected_modules = [list(self.config.modules.keys())[i] for i in selectedRows]
+        selected_modules = [list(self.config.modules.keys())[i] for i in selected_rows]
 
+        logging.info("OnModuleGridRangeSelect: %s"%(selected_rows))
         logging.info("OnModuleGridRangeSelect: %s"%(selected_modules))
         logging.info("OnModuleGridRangeSelect: prev selected %s"%(self.activeModuleId))
         
@@ -956,6 +960,8 @@ class MainWindow(wx.Frame):
             self.m_checkBoxOnline.SetValue( moduleConfig.online )
             self.m_checkBoxPoll.SetValue( moduleConfig.online )
 
+            self.ShowReferenceParameters()
+            
             if moduleConfig.online:
                 self.pollModule(module_id)
             else:
@@ -1089,7 +1095,7 @@ async def main(argv):
     global configuration
 
     logging.basicConfig(
-        level=logging.DEBUG, 
+        level=logging.INFO, 
         format='%(asctime)s | %(levelname)s | %(message)s',
         handlers=[
             logging.StreamHandler(),

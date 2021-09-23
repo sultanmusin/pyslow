@@ -44,7 +44,7 @@ def handler(loop, context):
     print(context)
 
 def on_complete(value):
-    print('Response = %d (0x%04x)'%(value, value))
+    logging.info('Response = %d (0x%04x)'%(value, value))
 
 async def main(argv):
     opts, args = getopt.getopt(argv,"hb:c:a:r:lw:",["bus=","config=","address=","register=","list","write="])
@@ -128,10 +128,10 @@ async def main(argv):
         await asyncio.get_event_loop().create_task(bus.connect())
         asyncio.get_event_loop().create_task(bus.send())
     except OSError as e:
-        print("Cannot connect to system module")  
+        logging.error("Cannot connect to system module")  
         sys.exit()
 
-    print("Module link ok")
+    logging.debug("Module link ok")
 
     for cap in caps:
         if write is None:
@@ -139,12 +139,13 @@ async def main(argv):
         else:
             command = Message(Message.WRITE_SHORT, address, part, cap, write)
 
-        print("Request: %s"%(str(command).rstrip()))
+        logging.debug("Request: %s"%(str(command).rstrip()))
         asyncio.get_event_loop().create_task(detector.add_task(bus_id, command, part, on_complete))
 
-    await asyncio.sleep(2)
+    await asyncio.sleep(1)
 
 
 
 if __name__ == "__main__":
-   asyncio.run(main(sys.argv[1:]))
+#   asyncio.run(main(sys.argv[1:]))
+   asyncio.get_event_loop().run_until_complete(asyncio.wait([main(sys.argv[1:])]))
