@@ -11,6 +11,7 @@ __email__ = "opetukhov@inr.ru"
 __status__ = "Development"
 
 import logging
+import sys
 
 class HVsysSupply800c:
 
@@ -202,13 +203,16 @@ class HVsysSupply800c:
         volts = pedestal_voltage + counts * calib_voltage_slope / (HVsysSupply800c.VOLTAGE_RESOLUTION - 1) + HVsysSupply800c.PEDESTAL_VOLTAGE_BIAS
         return round(volts, HVsysSupply800c.VOLTAGE_DECIMAL_PLACES)
 
+    def tempCountsToDegrees(self, counts: int) -> float:
+        return round(63.9-0.019*counts, HVsysSupply800c.VOLTAGE_DECIMAL_PLACES)
+
+
     def voltageCorrection(self): 
         if "TEMPERATURE" not in self.state or self.state["TEMPERATURE"] is None: 
             raise ValueError("HVsysSupply800c: cannot calculate temperature correction without knowing TEMPERATURE")
-        tmp = float( self.valueToString('TEMPERATURE', self.state['TEMPERATURE']) )
+        tmp = self.tempCountsToDegrees(self.state['TEMPERATURE'])
         tmp_corr = (tmp - self.det_cfg.reference_temperature) * self.det_cfg.temperature_slope / 1000 # minus for normal termerature correction, e.g. config value 60 means "-60mV/C"
-
-        logging.debug(round(tmp_corr, HVsysSupply800c.VOLTAGE_DECIMAL_PLACES))
+        
         return round(tmp_corr, HVsysSupply800c.VOLTAGE_DECIMAL_PLACES)
 
     convertorsFromString = {
@@ -249,7 +253,7 @@ class HVsysSupply800c:
         "9/SET_VOLTAGE": countsToVolts,
         "10/SET_VOLTAGE": countsToVolts,
         "SET_PEDESTAL_VOLTAGE": pedestalCountsToVolts,
-        "TEMPERATURE": lambda self, s: str(s/100.0),
+        "TEMPERATURE": tempCountsToDegrees,
         "1/MEAS_VOLTAGE": measCountsToVolts,
         "2/MEAS_VOLTAGE": measCountsToVolts,
         "3/MEAS_VOLTAGE": measCountsToVolts,

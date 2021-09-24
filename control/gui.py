@@ -653,6 +653,7 @@ class MainWindow(wx.Frame):
                 self.m_gridHV.SetCellValue(GRID_ROW_PEDESTAL, GRID_COLUMN_REFERENCE, str(active_module_config.hvPedestal))
                 self.m_gridHV.SetCellValue(GRID_ROW_TEMPERATURE, GRID_COLUMN_REFERENCE, str(configuration.reference_temperature))
                 self.m_gridHV.SetCellValue(GRID_ROW_SLOPE, GRID_COLUMN_REFERENCE, str(-configuration.temperature_slope))
+                self.m_gridHV.SetCellValue(GRID_ROW_TEMPERATURE, GRID_COLUMN_STATE, "From: %s"%(str(active_module_config.temperature_from_module)))
 
     def SetReferenceParameters(self):
         pass
