@@ -1,0 +1,2321 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<config xmlns="http://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" created="17.02.2014" id="default" xsi:noNamespaceSchemaLocation="PsdSlowControlConfig.xsd" xsi:schemaLocation="PsdSlowControlConfig.xsd">
+<global>
+        <flags>
+            <onlineModules> 39 </onlineModules>
+<!--
+            <onlineModules> 23 </onlineModules>
+
+            <onlineModules> 24 </onlineModules>
+
+            <onlineModules> 25 </onlineModules>
+
+            <onlineModules> 26 </onlineModules>
+
+            <onlineModules> 27 </onlineModules>
+
+            <onlineModules> 28 </onlineModules>
+
+            <onlineModules> 29 </onlineModules>
+
+            <onlineModules> 30 </onlineModules>
+
+            <onlineModules> 31 </onlineModules>
+
+            <onlineModules> 32 </onlineModules>
+
+            <onlineModules> 33 </onlineModules>
+
+            <onlineModules> 34 </onlineModules>
+
+            <onlineModules> 35 </onlineModules>
+
+            <onlineModules> 36 </onlineModules>
+
+            <onlineModules> 37 </onlineModules>
+
+            <onlineModules> 38 </onlineModules>
+
+            <onlineModules> 39 </onlineModules>
+
+            <onlineModules> 40 </onlineModules>
+
+            <onlineModules> 41 </onlineModules>
+
+            <onlineModules> 42 </onlineModules>
+
+            <onlineModules> 43 </onlineModules>
+	    	    
+            <onlineModules> 44 </onlineModules>
+
+            <onlineModules> 45 </onlineModules>
+
+            <onlineModules> 46 </onlineModules>
+
+            <onlineModules> 47 </onlineModules>
+
+            <onlineModules> 48 </onlineModules>
+
+            <onlineModules> 49 </onlineModules>
+
+
+            <onlineModules> 50 </onlineModules>
+
+
+            <onlineModules> 51 </onlineModules>
+
+            <onlineModules> 52 </onlineModules>
+
+            <onlineModules> 53 </onlineModules>
+
+            <onlineModules> 54 </onlineModules>
+-->
+            <queryDelay unit="sec">0</queryDelay>
+            <verbose> 1 </verbose>
+            <useVoiceNotifications> 0 </useVoiceNotifications>
+            <voiceServer> na61daqt </voiceServer>
+            <monitorHV> 0 </monitorHV>
+            <refTemp> 25 </refTemp>
+            <tempSlope> 60 </tempSlope>
+
+        </flags>
+        <connection>
+        <hvsys id='north'>
+                <rate unit="baud">57600</rate>
+                <!--port>10.18.96.48</port-->
+                <port>192.168.69.204</port>
+                <!--port>localhost</port-->
+                <dataBits>8</dataBits>
+                <stopBits>1</stopBits>
+                <parity>0</parity>                
+        </hvsys>
+        <!-- 
+        <hvsys id='south'>
+                <rate unit="baud">57600</rate>
+                <port>192.168.69.204</port>
+                <dataBits>8</dataBits>
+                <stopBits>1</stopBits>
+                <parity>0</parity>                
+        </hvsys>
+        -->
+
+        </connection>
+        <settings>
+            <hv>
+                <base unit="Volts">64.0</base>
+            </hv>
+        </settings>
+    </global>
+
+    <module id="1">
+        <geometry>
+            <size>1</size>
+            <x>3</x>
+            <y>1</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id="north">
+                <led>
+                    <id>9</id>
+                </led>    
+               
+            </hvsys>
+        </connection>    
+        <settings>
+            <led>
+                <autoTune>0</autoTune>
+                <brightness>1000</brightness>
+                <frequency unit="Hz">100</frequency>
+                <pinADCSet>3</pinADCSet>
+            </led>
+            <hv>
+                <channel id="1" unit="Volts">70.32</channel>
+                <channel id="2" unit="Volts">70.32</channel>
+                <channel id="3" unit="Volts">70.32</channel>
+                <channel id="4" unit="Volts">70.32</channel>
+                <channel id="5" unit="Volts">70.32</channel>
+                <channel id="6" unit="Volts">70.32</channel>
+                <channel id="7" unit="Volts">70.32</channel>
+                <channel id="8" unit="Volts">70.32</channel>
+                <channel id="9" unit="Volts">70.32</channel>
+                <channel id="10" unit="Volts">70.32</channel>
+                <pedestal unit="Volts">70.32</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="2">
+        <geometry>
+            <size>1</size>
+            <x>4</x>
+            <y>1</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id="north">
+                <led>
+                    <id>7</id>
+                </led>    
+                <hv>
+                    <id>8</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <led>
+                <autoTune>0</autoTune>
+                <brightness>1000</brightness>
+                <frequency unit="Hz">100</frequency>
+                <pinADCSet>3</pinADCSet>
+            </led>
+            <hv>
+                <channel id="1" unit="Volts">70.02</channel>
+                <channel id="2" unit="Volts">70.02</channel>
+                <channel id="3" unit="Volts">70.02</channel>
+                <channel id="4" unit="Volts">70.02</channel>
+                <channel id="5" unit="Volts">70.02</channel>
+                <channel id="6" unit="Volts">70.02</channel>
+                <channel id="7" unit="Volts">70.02</channel>
+                <channel id="8" unit="Volts">70.02</channel>
+                <channel id="9" unit="Volts">70.02</channel>
+                <channel id="10" unit="Volts">70.02</channel>
+                <pedestal unit="Volts">70.02</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="3">
+        <geometry>
+            <size>1</size>
+            <x>5</x>
+            <y>1</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id="north">
+                <led>
+                    <id>5</id>
+                </led>    
+                <hv>
+                    <id>6</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <led>
+                <autoTune>0</autoTune>
+                <brightness>1000</brightness>
+                <frequency unit="Hz">100</frequency>
+                <pinADCSet>3</pinADCSet>
+            </led>
+            <hv>
+                <channel id="1" unit="Volts">70.46</channel>
+                <channel id="2" unit="Volts">70.46</channel>
+                <channel id="3" unit="Volts">70.46</channel>
+                <channel id="4" unit="Volts">70.46</channel>
+                <channel id="5" unit="Volts">70.46</channel>
+                <channel id="6" unit="Volts">70.46</channel>
+                <channel id="7" unit="Volts">70.46</channel>
+                <channel id="8" unit="Volts">70.46</channel>
+                <channel id="9" unit="Volts">70.46</channel>
+                <channel id="10" unit="Volts">70.46</channel>
+                <pedestal unit="Volts">70.46</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="4">
+        <geometry>
+            <size>1</size>
+            <x>6</x>
+            <y>1</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id="north">
+                <led>
+                    <id>3</id>
+                </led>    
+                <hv>
+                    <id>4</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <led>
+                <autoTune>0</autoTune>
+                <brightness>1000</brightness>
+                <frequency unit="Hz">100</frequency>
+                <pinADCSet>3</pinADCSet>
+            </led>
+            <hv>
+                <channel id="1" unit="Volts">70.99</channel>
+                <channel id="2" unit="Volts">70.99</channel>
+                <channel id="3" unit="Volts">70.99</channel>
+                <channel id="4" unit="Volts">70.99</channel>
+                <channel id="5" unit="Volts">70.99</channel>
+                <channel id="6" unit="Volts">70.99</channel>
+                <channel id="7" unit="Volts">70.99</channel>
+                <channel id="8" unit="Volts">70.99</channel>
+                <channel id="9" unit="Volts">70.99</channel>
+                <channel id="10" unit="Volts">70.99</channel>
+                <pedestal unit="Volts">70.99</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="5">
+        <geometry>
+            <size>1</size>
+            <x>7</x>
+            <y>1</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id="north">
+                <led>
+                    <id>1</id>
+                </led>    
+                <hv>
+                    <id>2</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <led>
+                <autoTune>0</autoTune>
+                <brightness>1000</brightness>
+                <frequency unit="Hz">100</frequency>
+                <pinADCSet>3</pinADCSet>
+            </led>
+            <hv>
+                <channel id="1" unit="Volts">70.20</channel>
+                <channel id="2" unit="Volts">70.20</channel>
+                <channel id="3" unit="Volts">70.20</channel>
+                <channel id="4" unit="Volts">70.20</channel>
+                <channel id="5" unit="Volts">70.20</channel>
+                <channel id="6" unit="Volts">70.20</channel>
+                <channel id="7" unit="Volts">70.20</channel>
+                <channel id="8" unit="Volts">70.20</channel>
+                <channel id="9" unit="Volts">70.20</channel>
+                <channel id="10" unit="Volts">70.20</channel>
+                <pedestal unit="Volts">70.20</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="6">
+        <geometry>
+            <size>1</size>
+            <x>3</x>
+            <y>2</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id="north">
+                <led>
+                    <id>19</id>
+                </led>    
+                <hv>
+                    <id>20</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <led>
+                <autoTune>0</autoTune>
+                <brightness>1000</brightness>
+                <frequency unit="Hz">100</frequency>
+                <pinADCSet>3</pinADCSet>
+            </led>
+            <hv>
+                <channel id="1" unit="Volts">70.37</channel>
+                <channel id="2" unit="Volts">70.37</channel>
+                <channel id="3" unit="Volts">70.37</channel>
+                <channel id="4" unit="Volts">70.37</channel>
+                <channel id="5" unit="Volts">70.37</channel>
+                <channel id="6" unit="Volts">70.37</channel>
+                <channel id="7" unit="Volts">70.37</channel>
+                <channel id="8" unit="Volts">70.37</channel>
+                <channel id="9" unit="Volts">70.37</channel>
+                <channel id="10" unit="Volts">70.37</channel>
+                <pedestal unit="Volts">70.37</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="7">
+        <geometry>
+            <size>1</size>
+            <x>4</x>
+            <y>2</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id="north">
+                <led>
+                    <id>17</id>
+                </led>    
+                <hv>
+                    <id>18</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <led>
+                <autoTune>0</autoTune>
+                <brightness>1000</brightness>
+                <frequency unit="Hz">100</frequency>
+                <pinADCSet>3</pinADCSet>
+            </led>
+            <hv>
+                <channel id="1" unit="Volts">70.40</channel>
+                <channel id="2" unit="Volts">70.40</channel>
+                <channel id="3" unit="Volts">70.40</channel>
+                <channel id="4" unit="Volts">70.40</channel>
+                <channel id="5" unit="Volts">70.40</channel>
+                <channel id="6" unit="Volts">70.40</channel>
+                <channel id="7" unit="Volts">70.40</channel>
+                <channel id="8" unit="Volts">70.40</channel>
+                <channel id="9" unit="Volts">70.40</channel>
+                <channel id="10" unit="Volts">70.40</channel>
+                <pedestal unit="Volts">70.40</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="8">
+        <geometry>
+            <size>1</size>
+            <x>5</x>
+            <y>2</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id="north">
+                <led>
+                    <id>15</id>
+                </led>    
+                <hv>
+                    <id>16</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <led>
+                <autoTune>0</autoTune>
+                <brightness>1000</brightness>
+                <frequency unit="Hz">100</frequency>
+                <pinADCSet>3</pinADCSet>
+            </led>
+            <hv>
+                <channel id="1" unit="Volts">70.82</channel>
+                <channel id="2" unit="Volts">70.82</channel>
+                <channel id="3" unit="Volts">70.82</channel>
+                <channel id="4" unit="Volts">70.82</channel>
+                <channel id="5" unit="Volts">70.82</channel>
+                <channel id="6" unit="Volts">70.82</channel>
+                <channel id="7" unit="Volts">70.82</channel>
+                <channel id="8" unit="Volts">70.82</channel>
+                <channel id="9" unit="Volts">70.82</channel>
+                <channel id="10" unit="Volts">70.82</channel>
+                <pedestal unit="Volts">70.82</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="9">
+        <geometry>
+            <size>1</size>
+            <x>6</x>
+            <y>2</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id="north">
+                <led>
+                    <id>13</id>
+                </led>    
+                <hv>
+                    <id>14</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <led>
+                <autoTune>0</autoTune>
+                <brightness>1000</brightness>
+                <frequency unit="Hz">100</frequency>
+                <pinADCSet>3</pinADCSet>
+            </led>
+            <hv>
+                <channel id="1" unit="Volts">70.23</channel>
+                <channel id="2" unit="Volts">70.23</channel>
+                <channel id="3" unit="Volts">70.23</channel>
+                <channel id="4" unit="Volts">70.23</channel>
+                <channel id="5" unit="Volts">70.23</channel>
+                <channel id="6" unit="Volts">70.23</channel>
+                <channel id="7" unit="Volts">70.23</channel>
+                <channel id="8" unit="Volts">70.23</channel>
+                <channel id="9" unit="Volts">70.23</channel>
+                <channel id="10" unit="Volts">70.23</channel>
+                <pedestal unit="Volts">70.23</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="10">
+        <geometry>
+            <size>1</size>
+            <x>7</x>
+            <y>2</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id="north">
+                <led>
+                    <id>11</id>
+                </led>    
+                <hv>
+                    <id>12</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <led>
+                <autoTune>0</autoTune>
+                <brightness>1000</brightness>
+                <frequency unit="Hz">100</frequency>
+                <pinADCSet>3</pinADCSet>
+            </led>
+            <hv>
+                <channel id="1" unit="Volts">70.85</channel>
+                <channel id="2" unit="Volts">70.85</channel>
+                <channel id="3" unit="Volts">70.85</channel>
+                <channel id="4" unit="Volts">70.85</channel>
+                <channel id="5" unit="Volts">70.85</channel>
+                <channel id="6" unit="Volts">70.85</channel>
+                <channel id="7" unit="Volts">70.85</channel>
+                <channel id="8" unit="Volts">70.85</channel>
+                <channel id="9" unit="Volts">70.85</channel>
+                <channel id="10" unit="Volts">70.85</channel>
+                <pedestal unit="Volts">70.85</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="11">
+        <geometry>
+            <size>1</size>
+            <x>3</x>
+            <y>3</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id="north">
+                <led>
+                    <id>29</id>
+                </led>    
+                <hv>
+                    <id>30</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <led>
+                <autoTune>0</autoTune>
+                <brightness>1000</brightness>
+                <frequency unit="Hz">100</frequency>
+                <pinADCSet>3</pinADCSet>
+            </led>
+            <hv>
+                <channel id="1" unit="Volts">70.92</channel>
+                <channel id="2" unit="Volts">70.92</channel>
+                <channel id="3" unit="Volts">70.92</channel>
+                <channel id="4" unit="Volts">70.92</channel>
+                <channel id="5" unit="Volts">70.92</channel>
+                <channel id="6" unit="Volts">70.92</channel>
+                <channel id="7" unit="Volts">70.92</channel>
+                <channel id="8" unit="Volts">70.92</channel>
+                <channel id="9" unit="Volts">70.92</channel>
+                <channel id="10" unit="Volts">70.92</channel>
+                <pedestal unit="Volts">70.92</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="12">
+        <geometry>
+            <size>1</size>
+            <x>4</x>
+            <y>3</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id="north">
+                <led>
+                    <id>27</id>
+                </led>    
+                <hv>
+                    <id>28</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <led>
+                <autoTune>0</autoTune>
+                <brightness>1000</brightness>
+                <frequency unit="Hz">100</frequency>
+                <pinADCSet>3</pinADCSet>
+            </led>
+            <hv>
+                <channel id="1" unit="Volts">70.61</channel>
+                <channel id="2" unit="Volts">70.61</channel>
+                <channel id="3" unit="Volts">70.61</channel>
+                <channel id="4" unit="Volts">70.61</channel>
+                <channel id="5" unit="Volts">70.61</channel>
+                <channel id="6" unit="Volts">70.61</channel>
+                <channel id="7" unit="Volts">70.61</channel>
+                <channel id="8" unit="Volts">70.61</channel>
+                <channel id="9" unit="Volts">70.61</channel>
+                <channel id="10" unit="Volts">70.61</channel>
+                <pedestal unit="Volts">70.61</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="13">
+        <geometry>
+            <size>1</size>
+            <x>5</x>
+            <y>3</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id="north">
+                <led>
+                    <id>23</id>
+                </led>    
+                <hv>
+                    <id>24</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <led>
+                <autoTune>0</autoTune>
+                <brightness>1000</brightness>
+                <frequency unit="Hz">100</frequency>
+                <pinADCSet>3</pinADCSet>
+            </led>
+            <hv>
+                <channel id="1" unit="Volts">70.49</channel>
+                <channel id="2" unit="Volts">70.49</channel>
+                <channel id="3" unit="Volts">70.49</channel>
+                <channel id="4" unit="Volts">70.49</channel>
+                <channel id="5" unit="Volts">70.49</channel>
+                <channel id="6" unit="Volts">70.49</channel>
+                <channel id="7" unit="Volts">70.49</channel>
+                <channel id="8" unit="Volts">70.49</channel>
+                <channel id="9" unit="Volts">70.49</channel>
+                <channel id="10" unit="Volts">70.49</channel>
+                <pedestal unit="Volts">70.49</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="14">
+        <geometry>
+            <size>1</size>
+            <x>6</x>
+            <y>3</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id="north">
+                <led>
+                    <id>25</id>
+                </led>    
+                <hv>
+                    <id>26</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <led>
+                <autoTune>0</autoTune>
+                <brightness>1000</brightness>
+                <frequency unit="Hz">100</frequency>
+                <pinADCSet>3</pinADCSet>
+            </led>
+            <hv>
+                <channel id="1" unit="Volts">70.98</channel>
+                <channel id="2" unit="Volts">70.98</channel>
+                <channel id="3" unit="Volts">70.98</channel>
+                <channel id="4" unit="Volts">70.98</channel>
+                <channel id="5" unit="Volts">70.98</channel>
+                <channel id="6" unit="Volts">70.98</channel>
+                <channel id="7" unit="Volts">70.98</channel>
+                <channel id="8" unit="Volts">70.98</channel>
+                <channel id="9" unit="Volts">70.98</channel>
+                <channel id="10" unit="Volts">70.98</channel>
+                <pedestal unit="Volts">70.98</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="15">
+        <geometry>
+            <size>1</size>
+            <x>7</x>
+            <y>3</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id="north">
+                <led>
+                    <id>21</id>
+                </led>    
+                <hv>
+                    <id>22</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <led>
+                <autoTune>0</autoTune>
+                <brightness>1000</brightness>
+                <frequency unit="Hz">100</frequency>
+                <pinADCSet>3</pinADCSet>
+            </led>
+            <hv>
+                <channel id="1" unit="Volts">70.36</channel>
+                <channel id="2" unit="Volts">70.36</channel>
+                <channel id="3" unit="Volts">70.36</channel>
+                <channel id="4" unit="Volts">70.36</channel>
+                <channel id="5" unit="Volts">70.36</channel>
+                <channel id="6" unit="Volts">70.36</channel>
+                <channel id="7" unit="Volts">70.36</channel>
+                <channel id="8" unit="Volts">70.36</channel>
+                <channel id="9" unit="Volts">70.36</channel>
+                <channel id="10" unit="Volts">70.36</channel>
+                <pedestal unit="Volts">70.36</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="16">
+        <geometry>
+            <size>1</size>
+            <x>3</x>
+            <y>4</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id="north">
+                <led>
+                    <id>57</id>
+                </led>    
+                <hv>
+                    <id>58</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <led>
+                <autoTune>0</autoTune>
+                <brightness>1000</brightness>
+                <frequency unit="Hz">100</frequency>
+                <pinADCSet>3</pinADCSet>
+            </led>
+            <hv>
+                <channel id="1" unit="Volts">70.72</channel>
+                <channel id="2" unit="Volts">70.72</channel>
+                <channel id="3" unit="Volts">70.72</channel>
+                <channel id="4" unit="Volts">70.72</channel>
+                <channel id="5" unit="Volts">70.72</channel>
+                <channel id="6" unit="Volts">70.72</channel>
+                <channel id="7" unit="Volts">70.72</channel>
+                <channel id="8" unit="Volts">70.72</channel>
+                <channel id="9" unit="Volts">70.72</channel>
+                <channel id="10" unit="Volts">70.72</channel>
+                <pedestal unit="Volts">70.72</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="17">
+        <geometry>
+            <size>1</size>
+            <x>4</x>
+            <y>4</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id="north">
+                <led>
+                    <id>55</id>
+                </led>    
+                <hv>
+                    <id>56</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <led>
+                <autoTune>0</autoTune>
+                <brightness>1000</brightness>
+                <frequency unit="Hz">100</frequency>
+                <pinADCSet>3</pinADCSet>
+            </led>
+            <hv>
+                <channel id="1" unit="Volts">70.77</channel>
+                <channel id="2" unit="Volts">70.77</channel>
+                <channel id="3" unit="Volts">70.77</channel>
+                <channel id="4" unit="Volts">70.77</channel>
+                <channel id="5" unit="Volts">70.77</channel>
+                <channel id="6" unit="Volts">70.77</channel>
+                <channel id="7" unit="Volts">70.77</channel>
+                <channel id="8" unit="Volts">70.77</channel>
+                <channel id="9" unit="Volts">70.77</channel>
+                <channel id="10" unit="Volts">70.77</channel>
+                <pedestal unit="Volts">70.77</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="18">
+        <geometry>
+            <size>1</size>
+            <x>6</x>
+            <y>4</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id="north">
+                <led>
+                    <id>35</id>
+                </led>    
+                <hv>
+                    <id>36</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <led>
+                <autoTune>0</autoTune>
+                <brightness>1000</brightness>
+                <frequency unit="Hz">100</frequency>
+                <pinADCSet>3</pinADCSet>
+            </led>
+            <hv>
+                <channel id="1" unit="Volts">70.17</channel>
+                <channel id="2" unit="Volts">70.17</channel>
+                <channel id="3" unit="Volts">70.17</channel>
+                <channel id="4" unit="Volts">70.17</channel>
+                <channel id="5" unit="Volts">70.17</channel>
+                <channel id="6" unit="Volts">70.17</channel>
+                <channel id="7" unit="Volts">70.17</channel>
+                <channel id="8" unit="Volts">70.17</channel>
+                <channel id="9" unit="Volts">70.17</channel>
+                <channel id="10" unit="Volts">70.17</channel>
+                <pedestal unit="Volts">70.17</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="19">
+        <geometry>
+            <size>1</size>
+            <x>7</x>
+            <y>4</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id="north">
+                <led>
+                    <id>37</id>
+                </led>    
+                <hv>
+                    <id>38</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <led>
+                <autoTune>0</autoTune>
+                <brightness>1000</brightness>
+                <frequency unit="Hz">100</frequency>
+                <pinADCSet>3</pinADCSet>
+            </led>
+            <hv>
+                <channel id="1" unit="Volts">70.34</channel>
+                <channel id="2" unit="Volts">70.34</channel>
+                <channel id="3" unit="Volts">70.34</channel>
+                <channel id="4" unit="Volts">70.34</channel>
+                <channel id="5" unit="Volts">70.34</channel>
+                <channel id="6" unit="Volts">70.34</channel>
+                <channel id="7" unit="Volts">70.34</channel>
+                <channel id="8" unit="Volts">70.34</channel>
+                <channel id="9" unit="Volts">70.34</channel>
+                <channel id="10" unit="Volts">70.34</channel>
+                <pedestal unit="Volts">70.34</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="20">
+        <geometry>
+            <size>1</size>
+            <x>3</x>
+            <y>5</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id="north">
+                <led>
+                    <id>63</id>
+                </led>    
+                <hv>
+                    <id>64</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <led>
+                <autoTune>0</autoTune>
+                <brightness>1000</brightness>
+                <frequency unit="Hz">100</frequency>
+                <pinADCSet>3</pinADCSet>
+            </led>
+            <hv>
+                <channel id="1" unit="Volts">70.68</channel>
+                <channel id="2" unit="Volts">70.68</channel>
+                <channel id="3" unit="Volts">70.68</channel>
+                <channel id="4" unit="Volts">70.68</channel>
+                <channel id="5" unit="Volts">70.68</channel>
+                <channel id="6" unit="Volts">70.68</channel>
+                <channel id="7" unit="Volts">70.68</channel>
+                <channel id="8" unit="Volts">70.68</channel>
+                <channel id="9" unit="Volts">70.68</channel>
+                <channel id="10" unit="Volts">70.68</channel>
+                <pedestal unit="Volts">70.68</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="21">
+        <geometry>
+            <size>1</size>
+            <x>4</x>
+            <y>5</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id="north">
+                <led>
+                    <id>53</id>
+                </led>    
+                <hv>
+                    <id>54</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <led>
+                <autoTune>0</autoTune>
+                <brightness>1000</brightness>
+                <frequency unit="Hz">100</frequency>
+                <pinADCSet>3</pinADCSet>
+            </led>
+            <hv>
+                <channel id="1" unit="Volts">70.83</channel>
+                <channel id="2" unit="Volts">70.83</channel>
+                <channel id="3" unit="Volts">70.83</channel>
+                <channel id="4" unit="Volts">70.83</channel>
+                <channel id="5" unit="Volts">70.83</channel>
+                <channel id="6" unit="Volts">70.83</channel>
+                <channel id="7" unit="Volts">70.83</channel>
+                <channel id="8" unit="Volts">70.83</channel>
+                <channel id="9" unit="Volts">70.83</channel>
+                <channel id="10" unit="Volts">70.83</channel>
+                <pedestal unit="Volts">70.83</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="22">
+        <geometry>
+            <size>1</size>
+            <x>5</x>
+            <y>5</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id="north">
+                <led>
+                    <id>61</id>
+                </led>    
+                <hv>
+                    <id>62</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <led>
+                <autoTune>0</autoTune>
+                <brightness>1000</brightness>
+                <frequency unit="Hz">100</frequency>
+                <pinADCSet>3</pinADCSet>
+            </led>
+            <hv>
+                <channel id="1" unit="Volts">70.01</channel>
+                <channel id="2" unit="Volts">70.01</channel>
+                <channel id="3" unit="Volts">70.01</channel>
+                <channel id="4" unit="Volts">70.01</channel>
+                <channel id="5" unit="Volts">70.01</channel>
+                <channel id="6" unit="Volts">70.01</channel>
+                <channel id="7" unit="Volts">70.01</channel>
+                <channel id="8" unit="Volts">70.01</channel>
+                <channel id="9" unit="Volts">70.01</channel>
+                <channel id="10" unit="Volts">70.01</channel>
+                <pedestal unit="Volts">70.01</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="23">
+        <geometry>
+            <size>1</size>
+            <x>6</x>
+            <y>5</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id="north">
+                <led>
+                    <id>59</id>
+                </led>    
+                <hv>
+                    <id>60</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <led>
+                <autoTune>0</autoTune>
+                <brightness>1000</brightness>
+                <frequency unit="Hz">100</frequency>
+                <pinADCSet>3</pinADCSet>
+            </led>
+            <hv>
+                <channel id="1" unit="Volts">70.70</channel>
+                <channel id="2" unit="Volts">70.70</channel>
+                <channel id="3" unit="Volts">70.70</channel>
+                <channel id="4" unit="Volts">70.70</channel>
+                <channel id="5" unit="Volts">70.70</channel>
+                <channel id="6" unit="Volts">70.70</channel>
+                <channel id="7" unit="Volts">70.70</channel>
+                <channel id="8" unit="Volts">70.70</channel>
+                <channel id="9" unit="Volts">70.70</channel>
+                <channel id="10" unit="Volts">70.70</channel>
+                <pedestal unit="Volts">70.70</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="24">
+        <geometry>
+            <size>1</size>
+            <x>7</x>
+            <y>5</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id="north">
+                <led>
+                    <id>51</id>
+                </led>    
+                <hv>
+                    <id>52</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <led>
+                <autoTune>0</autoTune>
+                <brightness>1000</brightness>
+                <frequency unit="Hz">100</frequency>
+                <pinADCSet>3</pinADCSet>
+            </led>
+            <hv>
+                <channel id="1" unit="Volts">70.52</channel>
+                <channel id="2" unit="Volts">70.52</channel>
+                <channel id="3" unit="Volts">70.52</channel>
+                <channel id="4" unit="Volts">70.52</channel>
+                <channel id="5" unit="Volts">70.52</channel>
+                <channel id="6" unit="Volts">70.52</channel>
+                <channel id="7" unit="Volts">70.52</channel>
+                <channel id="8" unit="Volts">70.52</channel>
+                <channel id="9" unit="Volts">70.52</channel>
+                <channel id="10" unit="Volts">70.52</channel>
+                <pedestal unit="Volts">70.52</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="25">
+        <geometry>
+            <size>1</size>
+            <x>3</x>
+            <y>6</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id="north">
+                <led>
+                    <id>49</id>
+                </led>    
+                <hv>
+                    <id>50</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <led>
+                <autoTune>0</autoTune>
+                <brightness>1000</brightness>
+                <frequency unit="Hz">100</frequency>
+                <pinADCSet>3</pinADCSet>
+            </led>
+            <hv>
+                <channel id="1" unit="Volts">70.58</channel>
+                <channel id="2" unit="Volts">70.58</channel>
+                <channel id="3" unit="Volts">70.58</channel>
+                <channel id="4" unit="Volts">70.58</channel>
+                <channel id="5" unit="Volts">70.58</channel>
+                <channel id="6" unit="Volts">70.58</channel>
+                <channel id="7" unit="Volts">70.58</channel>
+                <channel id="8" unit="Volts">70.58</channel>
+                <channel id="9" unit="Volts">70.58</channel>
+                <channel id="10" unit="Volts">70.58</channel>
+                <pedestal unit="Volts">70.58</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="26">
+        <geometry>
+            <size>1</size>
+            <x>4</x>
+            <y>6</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id="north">
+                <led>
+                    <id>47</id>
+                </led>    
+                <hv>
+                    <id>48</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <led>
+                <autoTune>0</autoTune>
+                <brightness>1000</brightness>
+                <frequency unit="Hz">100</frequency>
+                <pinADCSet>3</pinADCSet>
+            </led>
+            <hv>
+                <channel id="1" unit="Volts">70.56</channel>
+                <channel id="2" unit="Volts">70.56</channel>
+                <channel id="3" unit="Volts">70.56</channel>
+                <channel id="4" unit="Volts">70.56</channel>
+                <channel id="5" unit="Volts">70.56</channel>
+                <channel id="6" unit="Volts">70.56</channel>
+                <channel id="7" unit="Volts">70.56</channel>
+                <channel id="8" unit="Volts">70.56</channel>
+                <channel id="9" unit="Volts">70.56</channel>
+                <channel id="10" unit="Volts">70.56</channel>
+                <pedestal unit="Volts">70.56</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="27">
+        <geometry>
+            <size>1</size>
+            <x>5</x>
+            <y>6</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id="north">
+                <led>
+                    <id>45</id>
+                </led>    
+                <hv>
+                    <id>46</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <led>
+                <autoTune>0</autoTune>
+                <brightness>1000</brightness>
+                <frequency unit="Hz">100</frequency>
+                <pinADCSet>3</pinADCSet>
+            </led>
+            <hv>
+                <channel id="1" unit="Volts">70.11</channel>
+                <channel id="2" unit="Volts">70.11</channel>
+                <channel id="3" unit="Volts">70.11</channel>
+                <channel id="4" unit="Volts">70.11</channel>
+                <channel id="5" unit="Volts">70.11</channel>
+                <channel id="6" unit="Volts">70.11</channel>
+                <channel id="7" unit="Volts">70.11</channel>
+                <channel id="8" unit="Volts">70.11</channel>
+                <channel id="9" unit="Volts">70.11</channel>
+                <channel id="10" unit="Volts">70.11</channel>
+                <pedestal unit="Volts">70.11</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="28">
+        <geometry>
+            <size>1</size>
+            <x>6</x>
+            <y>6</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id="north">
+                <led>
+                    <id>43</id>
+                </led>    
+                <hv>
+                    <id>44</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <led>
+                <autoTune>0</autoTune>
+                <brightness>1000</brightness>
+                <frequency unit="Hz">100</frequency>
+                <pinADCSet>3</pinADCSet>
+            </led>
+            <hv>
+                <channel id="1" unit="Volts">70.21</channel>
+                <channel id="2" unit="Volts">70.21</channel>
+                <channel id="3" unit="Volts">70.21</channel>
+                <channel id="4" unit="Volts">70.21</channel>
+                <channel id="5" unit="Volts">70.21</channel>
+                <channel id="6" unit="Volts">70.21</channel>
+                <channel id="7" unit="Volts">70.21</channel>
+                <channel id="8" unit="Volts">70.21</channel>
+                <channel id="9" unit="Volts">70.21</channel>
+                <channel id="10" unit="Volts">70.21</channel>
+                <pedestal unit="Volts">70.21</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="29">
+        <geometry>
+            <size>1</size>
+            <x>7</x>
+            <y>6</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id="north">
+                <led>
+                    <id>41</id>
+                </led>    
+                <hv>
+                    <id>42</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <led>
+                <autoTune>0</autoTune>
+                <brightness>1000</brightness>
+                <frequency unit="Hz">100</frequency>
+                <pinADCSet>3</pinADCSet>
+            </led>
+            <hv>
+                <channel id="1" unit="Volts">70.13</channel>
+                <channel id="2" unit="Volts">70.13</channel>
+                <channel id="3" unit="Volts">70.13</channel>
+                <channel id="4" unit="Volts">70.13</channel>
+                <channel id="5" unit="Volts">70.13</channel>
+                <channel id="6" unit="Volts">70.13</channel>
+                <channel id="7" unit="Volts">70.13</channel>
+                <channel id="8" unit="Volts">70.13</channel>
+                <channel id="9" unit="Volts">70.13</channel>
+                <channel id="10" unit="Volts">70.13</channel>
+                <pedestal unit="Volts">70.13</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="30">
+        <geometry>
+            <size>1</size>
+            <x>3</x>
+            <y>7</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id="north">
+                <led>
+                    <id>39</id>
+                </led>    
+                <hv>
+                    <id>40</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <led>
+                <autoTune>0</autoTune>
+                <brightness>1000</brightness>
+                <frequency unit="Hz">100</frequency>
+                <pinADCSet>3</pinADCSet>
+            </led>
+            <hv>
+                <channel id="1" unit="Volts">70.54</channel>
+                <channel id="2" unit="Volts">70.54</channel>
+                <channel id="3" unit="Volts">70.54</channel>
+                <channel id="4" unit="Volts">70.54</channel>
+                <channel id="5" unit="Volts">70.54</channel>
+                <channel id="6" unit="Volts">70.54</channel>
+                <channel id="7" unit="Volts">70.54</channel>
+                <channel id="8" unit="Volts">70.54</channel>
+                <channel id="9" unit="Volts">70.54</channel>
+                <channel id="10" unit="Volts">70.54</channel>
+                <pedestal unit="Volts">70.54</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="31">
+        <geometry>
+            <size>1</size>
+            <x>4</x>
+            <y>7</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id="north">
+                <led>
+                    <id>33</id>
+                </led>    
+                <hv>
+                    <id>34</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <led>
+                <autoTune>0</autoTune>
+                <brightness>1000</brightness>
+                <frequency unit="Hz">100</frequency>
+                <pinADCSet>3</pinADCSet>
+            </led>
+            <hv>
+                <channel id="1" unit="Volts">70.08</channel>
+                <channel id="2" unit="Volts">70.08</channel>
+                <channel id="3" unit="Volts">70.08</channel>
+                <channel id="4" unit="Volts">70.08</channel>
+                <channel id="5" unit="Volts">70.08</channel>
+                <channel id="6" unit="Volts">70.08</channel>
+                <channel id="7" unit="Volts">70.08</channel>
+                <channel id="8" unit="Volts">70.08</channel>
+                <channel id="9" unit="Volts">70.08</channel>
+                <channel id="10" unit="Volts">70.08</channel>
+                <pedestal unit="Volts">70.08</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="32">
+        <geometry>
+            <size>1</size>
+            <x>5</x>
+            <y>7</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id="north">
+                <led>
+                    <id>31</id>
+                </led>    
+                <hv>
+                    <id>32</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <led>
+                <autoTune>0</autoTune>
+                <brightness>1000</brightness>
+                <frequency unit="Hz">100</frequency>
+                <pinADCSet>3</pinADCSet>
+            </led>
+            <hv>
+                <channel id="1" unit="Volts">70.05</channel>
+                <channel id="2" unit="Volts">70.05</channel>
+                <channel id="3" unit="Volts">70.05</channel>
+                <channel id="4" unit="Volts">70.05</channel>
+                <channel id="5" unit="Volts">70.05</channel>
+                <channel id="6" unit="Volts">70.05</channel>
+                <channel id="7" unit="Volts">70.05</channel>
+                <channel id="8" unit="Volts">70.05</channel>
+                <channel id="9" unit="Volts">70.05</channel>
+                <channel id="10" unit="Volts">70.05</channel>
+                <pedestal unit="Volts">70.05</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="33">
+        <geometry>
+            <size>1</size>
+            <x>6</x>
+            <y>7</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id="north">
+                <led>
+                    <id>65</id>
+                </led>    
+                <hv>
+                    <id>66</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <led>
+                <autoTune>0</autoTune>
+                <brightness>1000</brightness>
+                <frequency unit="Hz">100</frequency>
+                <pinADCSet>3</pinADCSet>
+            </led>
+            <hv>
+                <channel id="1" unit="Volts">70.87</channel>
+                <channel id="2" unit="Volts">70.87</channel>
+                <channel id="3" unit="Volts">70.87</channel>
+                <channel id="4" unit="Volts">70.87</channel>
+                <channel id="5" unit="Volts">70.87</channel>
+                <channel id="6" unit="Volts">70.87</channel>
+                <channel id="7" unit="Volts">70.87</channel>
+                <channel id="8" unit="Volts">70.87</channel>
+                <channel id="9" unit="Volts">70.87</channel>
+                <channel id="10" unit="Volts">70.87</channel>
+                <pedestal unit="Volts">70.87</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="34">
+        <geometry>
+            <size>1</size>
+            <x>7</x>
+            <y>7</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id="north">
+                <led>
+                    <id>67</id>
+                </led>    
+                <hv>
+                    <id>68</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <led>
+                <autoTune>0</autoTune>
+                <brightness>1000</brightness>
+                <frequency unit="Hz">100</frequency>
+                <pinADCSet>3</pinADCSet>
+            </led>
+            <hv>
+                <channel id="1" unit="Volts">70.68</channel>
+                <channel id="2" unit="Volts">70.68</channel>
+                <channel id="3" unit="Volts">70.68</channel>
+                <channel id="4" unit="Volts">70.68</channel>
+                <channel id="5" unit="Volts">70.68</channel>
+                <channel id="6" unit="Volts">70.68</channel>
+                <channel id="7" unit="Volts">70.68</channel>
+                <channel id="8" unit="Volts">70.68</channel>
+                <channel id="9" unit="Volts">70.68</channel>
+                <channel id="10" unit="Volts">70.68</channel>
+                <pedestal unit="Volts">70.68</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="35">
+        <geometry>
+            <size>1</size>
+            <x>1</x>
+            <y>2</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id="north">
+                <led>
+                    <id>95</id>
+                </led>    
+                <hv>
+                    <id>96</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <led>
+                <autoTune>0</autoTune>
+                <brightness>1000</brightness>
+                <frequency unit="Hz">100</frequency>
+                <pinADCSet>3</pinADCSet>
+            </led>
+            <hv>
+                <channel id="1" unit="Volts">70.63</channel>
+                <channel id="2" unit="Volts">70.63</channel>
+                <channel id="3" unit="Volts">70.63</channel>
+                <channel id="4" unit="Volts">70.63</channel>
+                <channel id="5" unit="Volts">70.63</channel>
+                <channel id="6" unit="Volts">70.63</channel>
+                <channel id="7" unit="Volts">70.63</channel>
+                <channel id="8" unit="Volts">70.63</channel>
+                <channel id="9" unit="Volts">70.63</channel>
+                <channel id="10" unit="Volts">70.63</channel>
+                <pedestal unit="Volts">70.63</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="36">
+        <geometry>
+            <size>1</size>
+            <x>2</x>
+            <y>2</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id="north">
+                <led>
+                    <id>93</id>
+                </led>    
+                <hv>
+                    <id>94</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <led>
+                <autoTune>0</autoTune>
+                <brightness>1000</brightness>
+                <frequency unit="Hz">100</frequency>
+                <pinADCSet>3</pinADCSet>
+            </led>
+            <hv>
+                <channel id="1" unit="Volts">71.65</channel>
+                <channel id="2" unit="Volts">71.65</channel>
+                <channel id="3" unit="Volts">71.65</channel>
+                <channel id="4" unit="Volts">71.65</channel>
+                <channel id="5" unit="Volts">71.65</channel>
+                <channel id="6" unit="Volts">71.65</channel>
+                <channel id="7" unit="Volts">71.65</channel>
+                <channel id="8" unit="Volts">71.65</channel>
+                <channel id="9" unit="Volts">71.65</channel>
+                <channel id="10" unit="Volts">71.65</channel>
+                <pedestal unit="Volts">71.65</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="37">
+        <geometry>
+            <size>1</size>
+            <x>1</x>
+            <y>3</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id="north">
+                <led>
+                    <id>99</id>
+                </led>    
+                <hv>
+                    <id>100</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <led>
+                <autoTune>0</autoTune>
+                <brightness>1000</brightness>
+                <frequency unit="Hz">100</frequency>
+                <pinADCSet>3</pinADCSet>
+            </led>
+            <hv>
+                <channel id="1" unit="Volts">71.30</channel>
+                <channel id="2" unit="Volts">71.30</channel>
+                <channel id="3" unit="Volts">71.30</channel>
+                <channel id="4" unit="Volts">71.30</channel>
+                <channel id="5" unit="Volts">71.30</channel>
+                <channel id="6" unit="Volts">71.30</channel>
+                <channel id="7" unit="Volts">71.30</channel>
+                <channel id="8" unit="Volts">71.30</channel>
+                <channel id="9" unit="Volts">71.30</channel>
+                <channel id="10" unit="Volts">71.30</channel>
+                <pedestal unit="Volts">71.30</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="38">
+        <geometry>
+            <size>1</size>
+            <x>2</x>
+            <y>3</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id="north">
+                <led>
+                    <id>97</id>
+                </led>    
+                <hv>
+                    <id>98</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <led>
+                <autoTune>0</autoTune>
+                <brightness>1000</brightness>
+                <frequency unit="Hz">100</frequency>
+                <pinADCSet>3</pinADCSet>
+            </led>
+            <hv>
+                <channel id="1" unit="Volts">71.42</channel>
+                <channel id="2" unit="Volts">71.42</channel>
+                <channel id="3" unit="Volts">71.42</channel>
+                <channel id="4" unit="Volts">71.42</channel>
+                <channel id="5" unit="Volts">71.42</channel>
+                <channel id="6" unit="Volts">71.42</channel>
+                <channel id="7" unit="Volts">71.42</channel>
+                <channel id="8" unit="Volts">71.42</channel>
+                <channel id="9" unit="Volts">71.42</channel>
+                <channel id="10" unit="Volts">71.42</channel>
+                <pedestal unit="Volts">71.42</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="39" version="NA61_2_V2">
+        <geometry>
+            <size>1</size>
+            <x>1</x>
+            <y>4</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id="north">
+                <led>
+                    <id>77</id>
+                </led>    
+                <hv>
+                    <id>78</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <led>
+                <autoTune>0</autoTune>
+                <brightness>1000</brightness>
+                <frequency unit="Hz">100</frequency>
+                <pinADCSet>3</pinADCSet>
+            </led>
+            <hv>
+                <channel id="1" unit="Volts">71.35</channel>
+                <channel id="2" unit="Volts">71.35</channel>
+                <channel id="3" unit="Volts">71.35</channel>
+                <channel id="4" unit="Volts">71.35</channel>
+                <channel id="5" unit="Volts">71.35</channel>
+                <channel id="6" unit="Volts">71.35</channel>
+                <channel id="7" unit="Volts">71.35</channel>
+                <channel id="8" unit="Volts">71.35</channel>
+                <channel id="9" unit="Volts">71.35</channel>
+                <channel id="10" unit="Volts">71.35</channel>
+                <pedestal unit="Volts">71.35</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="40">
+        <geometry>
+            <size>1</size>
+            <x>2</x>
+            <y>4</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id="north">
+                <led>
+                    <id>101</id>
+                </led>    
+                <hv>
+                    <id>102</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <led>
+                <autoTune>0</autoTune>
+                <brightness>1000</brightness>
+                <frequency unit="Hz">100</frequency>
+                <pinADCSet>3</pinADCSet>
+            </led>
+            <hv>
+                <channel id="1" unit="Volts">71.33</channel>
+                <channel id="2" unit="Volts">71.33</channel>
+                <channel id="3" unit="Volts">71.33</channel>
+                <channel id="4" unit="Volts">71.33</channel>
+                <channel id="5" unit="Volts">71.33</channel>
+                <channel id="6" unit="Volts">71.33</channel>
+                <channel id="7" unit="Volts">71.33</channel>
+                <channel id="8" unit="Volts">71.33</channel>
+                <channel id="9" unit="Volts">71.33</channel>
+                <channel id="10" unit="Volts">71.33</channel>
+                <pedestal unit="Volts">71.33</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="41">
+        <geometry>
+            <size>1</size>
+            <x>1</x>
+            <y>5</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id="north">
+                <led>
+                    <id>105</id>
+                </led>    
+                <hv>
+                    <id>106</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <led>
+                <autoTune>0</autoTune>
+                <brightness>1000</brightness>
+                <frequency unit="Hz">100</frequency>
+                <pinADCSet>3</pinADCSet>
+            </led>
+            <hv>
+                <channel id="1" unit="Volts">71.40</channel>
+                <channel id="2" unit="Volts">71.40</channel>
+                <channel id="3" unit="Volts">71.40</channel>
+                <channel id="4" unit="Volts">71.40</channel>
+                <channel id="5" unit="Volts">71.40</channel>
+                <channel id="6" unit="Volts">71.40</channel>
+                <channel id="7" unit="Volts">71.40</channel>
+                <channel id="8" unit="Volts">71.40</channel>
+                <channel id="9" unit="Volts">71.40</channel>
+                <channel id="10" unit="Volts">71.40</channel>
+                <pedestal unit="Volts">71.40</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="42">
+        <geometry>
+            <size>1</size>
+            <x>2</x>
+            <y>5</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id="north">
+                <led>
+                    <id>107</id>
+                </led>    
+                <hv>
+                    <id>108</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <led>
+                <autoTune>0</autoTune>
+                <brightness>1000</brightness>
+                <frequency unit="Hz">100</frequency>
+                <pinADCSet>3</pinADCSet>
+            </led>
+            <hv>
+                <channel id="1" unit="Volts">71.13</channel>
+                <channel id="2" unit="Volts">71.13</channel>
+                <channel id="3" unit="Volts">71.13</channel>
+                <channel id="4" unit="Volts">71.13</channel>
+                <channel id="5" unit="Volts">71.13</channel>
+                <channel id="6" unit="Volts">71.13</channel>
+                <channel id="7" unit="Volts">71.13</channel>
+                <channel id="8" unit="Volts">71.13</channel>
+                <channel id="9" unit="Volts">71.13</channel>
+                <channel id="10" unit="Volts">71.13</channel>
+                <pedestal unit="Volts">71.13</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="43">
+        <geometry>
+            <size>1</size>
+            <x>1</x>
+            <y>6</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id="north">
+                <led>
+                    <id>111</id>
+                </led>    
+                <hv>
+                    <id>112</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <led>
+                <autoTune>0</autoTune>
+                <brightness>1000</brightness>
+                <frequency unit="Hz">100</frequency>
+                <pinADCSet>3</pinADCSet>
+            </led>
+            <hv>
+                <channel id="1" unit="Volts">71.20</channel>
+                <channel id="2" unit="Volts">71.20</channel>
+                <channel id="3" unit="Volts">71.20</channel>
+                <channel id="4" unit="Volts">71.20</channel>
+                <channel id="5" unit="Volts">71.20</channel>
+                <channel id="6" unit="Volts">71.20</channel>
+                <channel id="7" unit="Volts">71.20</channel>
+                <channel id="8" unit="Volts">71.20</channel>
+                <channel id="9" unit="Volts">71.20</channel>
+                <channel id="10" unit="Volts">71.20</channel>
+                <pedestal unit="Volts">71.20</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="44">
+        <geometry>
+            <size>1</size>
+            <x>2</x>
+            <y>6</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id="north">
+                <led>
+                    <id>109</id>
+                </led>    
+                <hv>
+                    <id>110</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <led>
+                <autoTune>0</autoTune>
+                <brightness>1000</brightness>
+                <frequency unit="Hz">100</frequency>
+                <pinADCSet>3</pinADCSet>
+            </led>
+            <hv>
+                <channel id="1" unit="Volts">71.24</channel>
+                <channel id="2" unit="Volts">71.24</channel>
+                <channel id="3" unit="Volts">71.24</channel>
+                <channel id="4" unit="Volts">71.24</channel>
+                <channel id="5" unit="Volts">71.24</channel>
+                <channel id="6" unit="Volts">71.24</channel>
+                <channel id="7" unit="Volts">71.24</channel>
+                <channel id="8" unit="Volts">71.24</channel>
+                <channel id="9" unit="Volts">71.24</channel>
+                <channel id="10" unit="Volts">71.24</channel>
+                <pedestal unit="Volts">71.24</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="45">
+        <geometry>
+            <size>1</size>
+            <x>8</x>
+            <y>2</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id="north">
+                <led>
+                    <id>75</id>
+                </led>    
+                <hv>
+                    <id>76</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <led>
+                <autoTune>0</autoTune>
+                <brightness>1000</brightness>
+                <frequency unit="Hz">100</frequency>
+                <pinADCSet>3</pinADCSet>
+            </led>
+            <hv>
+                <channel id="1" unit="Volts">71.04</channel>
+                <channel id="2" unit="Volts">71.04</channel>
+                <channel id="3" unit="Volts">71.04</channel>
+                <channel id="4" unit="Volts">71.04</channel>
+                <channel id="5" unit="Volts">71.04</channel>
+                <channel id="6" unit="Volts">71.04</channel>
+                <channel id="7" unit="Volts">71.04</channel>
+                <channel id="8" unit="Volts">71.04</channel>
+                <channel id="9" unit="Volts">71.04</channel>
+                <channel id="10" unit="Volts">71.04</channel>
+                <pedestal unit="Volts">71.04</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="46"> <!--r4a52x -->
+        <geometry>
+            <size>1</size>
+            <x>9</x>
+            <y>2</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id="north">
+                <led>
+                    <id>73</id>
+                </led>    
+                <hv>
+                    <id>74</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <led>
+                <autoTune>0</autoTune>
+                <brightness>1000</brightness>
+                <frequency unit="Hz">100</frequency>
+                <pinADCSet>3</pinADCSet>
+            </led>
+            <hv>
+                <channel id="1" unit="Volts">71.08</channel>
+                <channel id="2" unit="Volts">71.08</channel>
+                <channel id="3" unit="Volts">71.08</channel>
+                <channel id="4" unit="Volts">71.08</channel>
+                <channel id="5" unit="Volts">71.08</channel>
+                <channel id="6" unit="Volts">71.08</channel>
+                <channel id="7" unit="Volts">71.08</channel>
+                <channel id="8" unit="Volts">71.08</channel>
+                <channel id="9" unit="Volts">71.08</channel>
+                <channel id="10" unit="Volts">71.08</channel>
+                <pedestal unit="Volts">71.08</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="47">
+        <geometry>
+            <size>1</size>
+            <x>8</x>
+            <y>3</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id="north">
+                <led>
+                    <id>79</id>
+                </led>    
+                <hv>
+                    <id>80</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <led>
+                <autoTune>0</autoTune>
+                <brightness>1000</brightness>
+                <frequency unit="Hz">100</frequency>
+                <pinADCSet>3</pinADCSet>
+            </led>
+            <hv>
+                <channel id="1" unit="Volts">70.50</channel>
+                <channel id="2" unit="Volts">70.50</channel>
+                <channel id="3" unit="Volts">70.50</channel>
+                <channel id="4" unit="Volts">70.50</channel>
+                <channel id="5" unit="Volts">70.50</channel>
+                <channel id="6" unit="Volts">70.50</channel>
+                <channel id="7" unit="Volts">70.50</channel>
+                <channel id="8" unit="Volts">70.50</channel>
+                <channel id="9" unit="Volts">70.50</channel>
+                <channel id="10" unit="Volts">70.50</channel>
+                <pedestal unit="Volts">70.50</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="48">
+        <geometry>
+            <size>1</size>
+            <x>9</x>
+            <y>3</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id="north">
+                <led>
+                    <id>77</id>
+                </led>    
+                <hv>
+                    <id>78</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <led>
+                <autoTune>0</autoTune>
+                <brightness>1000</brightness>
+                <frequency unit="Hz">100</frequency>
+                <pinADCSet>3</pinADCSet>
+            </led>
+            <hv>
+                <channel id="1" unit="Volts">71.35</channel>
+                <channel id="2" unit="Volts">71.35</channel>
+                <channel id="3" unit="Volts">71.35</channel>
+                <channel id="4" unit="Volts">71.35</channel>
+                <channel id="5" unit="Volts">71.35</channel>
+                <channel id="6" unit="Volts">71.35</channel>
+                <channel id="7" unit="Volts">71.35</channel>
+                <channel id="8" unit="Volts">71.35</channel>
+                <channel id="9" unit="Volts">71.35</channel>
+                <channel id="10" unit="Volts">71.35</channel>
+                <pedestal unit="Volts">71.35</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="49">
+        <geometry>
+            <size>1</size>
+            <x>8</x>
+            <y>4</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id="north">
+                <led>
+                    <id>83</id>
+                </led>    
+                <hv>
+                    <id>84</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <led>
+                <autoTune>0</autoTune>
+                <brightness>1000</brightness>
+                <frequency unit="Hz">100</frequency>
+                <pinADCSet>3</pinADCSet>
+            </led>
+            <hv>
+                <channel id="1" unit="Volts">70.29</channel>
+                <channel id="2" unit="Volts">70.29</channel>
+                <channel id="3" unit="Volts">70.29</channel>
+                <channel id="4" unit="Volts">70.29</channel>
+                <channel id="5" unit="Volts">70.29</channel>
+                <channel id="6" unit="Volts">70.29</channel>
+                <channel id="7" unit="Volts">70.29</channel>
+                <channel id="8" unit="Volts">70.29</channel>
+                <channel id="9" unit="Volts">70.29</channel>
+                <channel id="10" unit="Volts">70.29</channel>
+                <pedestal unit="Volts">70.29</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="50">
+        <geometry>
+            <size>1</size>
+            <x>9</x>
+            <y>4</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id="north">
+                <led>
+                    <id>81</id>
+                </led>    
+                <hv>
+                    <id>82</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <led>
+                <autoTune>0</autoTune>
+                <brightness>1000</brightness>
+                <frequency unit="Hz">100</frequency>
+                <pinADCSet>3</pinADCSet>
+            </led>
+            <hv>
+                <channel id="1" unit="Volts">70.44</channel>
+                <channel id="2" unit="Volts">70.44</channel>
+                <channel id="3" unit="Volts">70.44</channel>
+                <channel id="4" unit="Volts">70.44</channel>
+                <channel id="5" unit="Volts">70.44</channel>
+                <channel id="6" unit="Volts">70.44</channel>
+                <channel id="7" unit="Volts">70.44</channel>
+                <channel id="8" unit="Volts">70.44</channel>
+                <channel id="9" unit="Volts">70.44</channel>
+                <channel id="10" unit="Volts">70.44</channel>
+                <pedestal unit="Volts">70.44</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="51">
+        <geometry>
+            <size>1</size>
+            <x>8</x>
+            <y>5</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id="north">
+                <led>
+                    <id>87</id>
+                </led>    
+                <hv>
+                    <id>88</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <led>
+                <autoTune>0</autoTune>
+                <brightness>1000</brightness>
+                <frequency unit="Hz">100</frequency>
+                <pinADCSet>3</pinADCSet>
+            </led>
+            <hv>
+                <channel id="1" unit="Volts">70.61</channel>
+                <channel id="2" unit="Volts">70.61</channel>
+                <channel id="3" unit="Volts">70.61</channel>
+                <channel id="4" unit="Volts">70.61</channel>
+                <channel id="5" unit="Volts">70.61</channel>
+                <channel id="6" unit="Volts">70.61</channel>
+                <channel id="7" unit="Volts">70.61</channel>
+                <channel id="8" unit="Volts">70.61</channel>
+                <channel id="9" unit="Volts">70.61</channel>
+                <channel id="10" unit="Volts">70.61</channel>
+                <pedestal unit="Volts">70.61</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="52">
+        <geometry>
+            <size>1</size>
+            <x>9</x>
+            <y>5</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id="north">
+                <led>
+                    <id>85</id>
+                </led>    
+                <hv>
+                    <id>86</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <led>
+                <autoTune>0</autoTune>
+                <brightness>1000</brightness>
+                <frequency unit="Hz">100</frequency>
+                <pinADCSet>3</pinADCSet>
+            </led>
+            <hv>
+                <channel id="1" unit="Volts">71.60</channel>
+                <channel id="2" unit="Volts">71.60</channel>
+                <channel id="3" unit="Volts">71.60</channel>
+                <channel id="4" unit="Volts">71.60</channel>
+                <channel id="5" unit="Volts">71.60</channel>
+                <channel id="6" unit="Volts">71.60</channel>
+                <channel id="7" unit="Volts">71.60</channel>
+                <channel id="8" unit="Volts">71.60</channel>
+                <channel id="9" unit="Volts">71.60</channel>
+                <channel id="10" unit="Volts">71.60</channel>
+                <pedestal unit="Volts">71.60</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="53">
+        <geometry>
+            <size>1</size>
+            <x>8</x>
+            <y>6</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id="north">
+                <led>
+                    <id>91</id>
+                </led>    
+                <hv>
+                    <id>92</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <led>
+                <autoTune>0</autoTune>
+                <brightness>1000</brightness>
+                <frequency unit="Hz">100</frequency>
+                <pinADCSet>3</pinADCSet>
+            </led>
+            <hv>
+                <channel id="1" unit="Volts">70.41</channel>
+                <channel id="2" unit="Volts">70.41</channel>
+                <channel id="3" unit="Volts">70.41</channel>
+                <channel id="4" unit="Volts">70.41</channel>
+                <channel id="5" unit="Volts">70.41</channel>
+                <channel id="6" unit="Volts">70.41</channel>
+                <channel id="7" unit="Volts">70.41</channel>
+                <channel id="8" unit="Volts">70.41</channel>
+                <channel id="9" unit="Volts">70.41</channel>
+                <channel id="10" unit="Volts">70.41</channel>
+                <pedestal unit="Volts">70.41</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="54">
+        <geometry>
+            <size>1</size>
+            <x>9</x>
+            <y>6</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id="north">
+                <led>
+                    <id>89</id>
+                </led>    
+                <hv>
+                    <id>90</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <led>
+                <autoTune>0</autoTune>
+                <brightness>1000</brightness>
+                <frequency unit="Hz">100</frequency>
+                <pinADCSet>3</pinADCSet>
+            </led>
+            <hv>
+                <channel id="1" unit="Volts">71.71</channel>
+                <channel id="2" unit="Volts">71.71</channel>
+                <channel id="3" unit="Volts">71.71</channel>
+                <channel id="4" unit="Volts">71.71</channel>
+                <channel id="5" unit="Volts">71.71</channel>
+                <channel id="6" unit="Volts">71.71</channel>
+                <channel id="7" unit="Volts">71.71</channel>
+                <channel id="8" unit="Volts">71.71</channel>
+                <channel id="9" unit="Volts">71.71</channel>
+                <channel id="10" unit="Volts">71.71</channel>
+                <pedestal unit="Volts">71.71</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+</config>
