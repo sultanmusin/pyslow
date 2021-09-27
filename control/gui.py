@@ -281,7 +281,6 @@ class MainWindow(wx.Frame):
         self.m_checkBoxTemperatureControl = wx.CheckBox( self.m_panelMulti, wx.ID_ANY, u"Temperature Control", wx.DefaultPosition, wx.DefaultSize, wx.CHK_3STATE )
         bSizerMulti.Add( self.m_checkBoxTemperatureControl, 0, wx.ALL, 5 )
         self.m_checkBoxTemperatureControl.SetValue(True)
-        self.m_checkBoxTemperatureControl.Disable()
 
         self.m_checkBoxAlertsEnabled = wx.CheckBox( self.m_panelMulti, wx.ID_ANY, u"Alerts Enabled", wx.DefaultPosition, wx.DefaultSize, wx.CHK_3STATE )
         bSizerMulti.Add( self.m_checkBoxAlertsEnabled, 0, wx.ALL, 5 )
@@ -1015,7 +1014,9 @@ class MainWindow(wx.Frame):
                     self.m_gridHV.SetCellValue(GRID_ROW_TEMPERATURE, GRID_COLUMN_CORRECTED, "%+.2f V"%(float(correction)))
                     for ch, hv in active_module_config.hv.items():
                         corrected_hv = round(hv + correction, part.VOLTAGE_DECIMAL_PLACES)
-                        self.m_gridHV.SetCellValue(int(ch)-1, GRID_COLUMN_CORRECTED, str(corrected_hv))    
+                        self.m_gridHV.SetCellValue(int(ch)-1, GRID_COLUMN_CORRECTED, str(corrected_hv))  
+
+                logging.INFO('part %s temperature = %s'%(part, str_value))  
     
 
             if  capability == 'STATUS':
