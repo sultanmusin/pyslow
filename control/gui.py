@@ -324,11 +324,16 @@ class MainWindow(wx.Frame):
             self.m_gridHV.SetRowLabelValue(row, "Section %d"%(row+1))
             for col in range(GRID_COLUMNS):
                 self.m_gridHV.SetReadOnly(row, col, True)
-                self.m_gridHV.SetCellValue(row, col, "0.0")
+                self.m_gridHV.SetCellValue(row, col, "")
 
             self.m_gridHV.SetReadOnly(row, 0, False)
             self.m_gridHV.SetReadOnly(row, 1, False)
             self.m_gridHV.SetCellValue(row, 3, "OK")
+
+        self.m_gridHV.SetReadOnly(GRID_ROW_TEMPERATURE, GRID_COLUMN_REFERENCE, True)
+        self.m_gridHV.SetReadOnly(GRID_ROW_TEMPERATURE, GRID_COLUMN_CORRECTED, True)
+        self.m_gridHV.SetReadOnly(GRID_ROW_SLOPE, GRID_COLUMN_REFERENCE, True)
+        self.m_gridHV.SetReadOnly(GRID_ROW_SLOPE, GRID_COLUMN_CORRECTED, True)
 
         self.m_gridHV.EnableDragRowSize( False )
         self.m_gridHV.SetRowLabelSize( 100 )
@@ -336,13 +341,6 @@ class MainWindow(wx.Frame):
         self.m_gridHV.SetRowLabelValue( GRID_ROW_TEMPERATURE, u"Temperature" )
         self.m_gridHV.SetRowLabelValue( GRID_ROW_SLOPE, u"Slope" )
         self.m_gridHV.SetRowLabelAlignment( wx.ALIGN_LEFT, wx.ALIGN_CENTER )
-
-        self.m_gridHV.SetCellValue(GRID_ROW_PEDESTAL, 3, "")
-        self.m_gridHV.SetCellValue(GRID_ROW_TEMPERATURE, 3, "")
-        self.m_gridHV.SetCellValue(GRID_ROW_SLOPE, 3, "")
-
-
-        # Label Appearance
 
         # Cell Defaults
         self.m_gridHV.SetDefaultCellAlignment( wx.ALIGN_LEFT, wx.ALIGN_TOP )
@@ -670,7 +668,7 @@ class MainWindow(wx.Frame):
 
                 self.m_gridHV.SetCellValue(GRID_ROW_PEDESTAL, GRID_COLUMN_REFERENCE, str(active_module_config.hvPedestal))
                 self.m_gridHV.SetCellValue(GRID_ROW_TEMPERATURE, GRID_COLUMN_REFERENCE, "%.2f °C"%(configuration.reference_temperature))
-                self.m_gridHV.SetCellValue(GRID_ROW_SLOPE, GRID_COLUMN_REFERENCE, "%+f mV/°C"%(-configuration.temperature_slope))
+                self.m_gridHV.SetCellValue(GRID_ROW_SLOPE, GRID_COLUMN_REFERENCE, "%+.0f mV/°C"%(-configuration.temperature_slope))
                 self.m_gridHV.SetCellValue(GRID_ROW_TEMPERATURE, GRID_COLUMN_STATE, "From: %s"%(str(active_module_config.temperature_from_module)))
 
     def SetReferenceParameters(self):
