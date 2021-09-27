@@ -526,13 +526,31 @@ class MainWindow(wx.Frame):
 
 
     def OnPollTimer(self, event):
+        global detector
         logging.info("Poll timer fired!")
-        #print(event)
-        #for module_id in self.activeModuleId:
+
         for module_id, config in self.config.modules.items():
             if config.online:
                 self.pollModule(module_id)
-        
+                if config.has('hv') and self.m_checkBoxTemperatureControl.GetValue():
+                    # do the temperature HV correction 
+                    # select the part
+                    bus_id = config.bus_id
+                    part_address = int(config.address('hv'))
+                    part = detector.buses[bus_id].getPart(part_address) 
+                    
+                    # get the reference (or user-entered) ped v
+                    pedestal_voltage = float(self.m_gridHV.GetCellValue(GRID_ROW_PEDESTAL, GRID_COLUMN_REFERENCE))
+                    # get the corrected ped v
+                    correction = part.voltageCorrection()
+                    set_pedestal_voltage = pedestal_voltage + correction
+                    # fire
+                    cap = 'SET_PEDESTAL_VOLTAGE'
+                    value = part.valueFromString(cap, set_pedestal_voltage)
+                    command = Message(Message.WRITE_SHORT, part_address, part, cap, value)
+                    logging.debug('Going to set corrected ped v of module %s to %s (%s)'%(module_id, set_pedestal_voltage, value))
+#                    asyncio.get_event_loop().create_task(detector.add_task(bus_id, command, part, print))
+
         self.UpdateModuleGrid()
 
 
@@ -989,20 +1007,18 @@ class MainWindow(wx.Frame):
                 self.m_gridHV.SetCellValue(hv_grid_coords[capability], str_value)
             
             if capability == 'TEMPERATURE':
-                v_correction = part.voltageCorrection()
-                self.m_gridHV.SetCellValue(GRID_ROW_TEMPERATURE, GRID_COLUMN_CORRECTED, "%+.2f V"%(float(v_correction)))
                 self.m_gridHV.SetCellValue(GRID_ROW_TEMPERATURE, GRID_COLUMN_MEAS, "%.2f °C"%(float(str_value)))
+
                 # calculate and display voltage correction (if needed)
-                correction = part.voltageCorrection()
 
                 active_module_config = configuration.modules[self.activeModuleId[0]]
                 if active_module_config.has('hv'):
+                    correction = part.voltageCorrection()
+                    self.m_gridHV.SetCellValue(GRID_ROW_TEMPERATURE, GRID_COLUMN_CORRECTED, "%+.2f V"%(float(correction)))
                     for ch, hv in active_module_config.hv.items():
-                        #logging.debug(hv)
-                        #logging.debug(correction)
                         corrected_hv = round(hv + correction, part.VOLTAGE_DECIMAL_PLACES)
                         self.m_gridHV.SetCellValue(int(ch)-1, GRID_COLUMN_CORRECTED, str(corrected_hv))    
-
+    
 
             if  capability == 'STATUS':
                 status = HVStatus(value)
@@ -1089,7 +1105,7 @@ def handler(loop, context):
 
 def print_usage():
     print('Usage: gui.py [-c <configfile>]')
-    print('E.g. : poller.py -c config.xml\n')
+    print('E.g. : gui.py -c config.xml\n')
 
     sys.exit()
 
