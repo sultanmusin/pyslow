@@ -1016,7 +1016,7 @@ class MainWindow(wx.Frame):
                         corrected_hv = round(hv + correction, part.VOLTAGE_DECIMAL_PLACES)
                         self.m_gridHV.SetCellValue(int(ch)-1, GRID_COLUMN_CORRECTED, str(corrected_hv))  
 
-                logging.INFO('part %s temperature = %s'%(part, str_value))  
+                logging.info('part %s temperature = %s'%(part, str_value))  
     
 
             if  capability == 'STATUS':
