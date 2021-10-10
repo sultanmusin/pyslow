@@ -18,7 +18,8 @@ dist/
 
 # Log files
 *.log
-logs/*
+logs/*.txt
+logs/*.log
 
 # Maven
 target/
