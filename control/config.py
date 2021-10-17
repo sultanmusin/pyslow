@@ -85,7 +85,7 @@ class Config:
             x = xx_tetris[int(mod.find('x').text)]
             y = yy_tetris[int(mod.find('y').text)]
             self.modulesOrderedByGeometry[x + y * self.geom_width] = id
-            self.modules[id] = ModuleConfig(mod)
+            self.modules[id] = ModuleConfig(mod, self)
 
         #print(self.modulesOrderedByGeometry)
 
@@ -118,8 +118,9 @@ class Config:
 class ModuleConfig:
     possible_parts = list(HVsys.catalogus.keys())
 
-    def __init__(self, soup):
+    def __init__(self, soup, detector):
         self.id = soup.attrs['id']
+        self.detector = detector
         self.version = soup['version'] if 'version' in soup.attrs else 'default'
 
         self.parts = []
@@ -133,13 +134,15 @@ class ModuleConfig:
 
         connectionNode = soup.find('connection').find('hvsys')
         self.bus_id = connectionNode.attrs['id'] if 'id' in connectionNode.attrs else HVsysBus.DefaultBusId
+        self.bus = detector.buses[self.bus_id]
 
         hvConfigNode = soup.find('connection').find('hv')
         if self.has('hv'):
             self.hv = {}
             for chan in soup.select("settings hv channel"):
                 self.hv[chan.attrs['id']] = float(chan.text)
-            self.hvPedestal = float(soup.find('settings').find('hv').find('pedestal').text)
+            self.n_channels = len(soup.select("settings hv channel"))
+            self.hv_pedestal = float(soup.find('settings').find('hv').find('pedestal').text)
             self.temperature_from_module = hvConfigNode.attrs['temperature_from_module'] if 'temperature_from_module' in connectionNode.attrs else self.id
 
         ledConfigNode = soup.find('connection').find('led')
