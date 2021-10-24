@@ -223,7 +223,10 @@ class HVsysSupply:
         return round(volts, HVsysSupply.VOLTAGE_DECIMAL_PLACES)
 
     def tempCountsToDegrees(self, counts: int) -> float:
-        return round(63.9-0.019*counts, HVsysSupply.VOLTAGE_DECIMAL_PLACES)
+        if self.config.temperature_from_module == 'FAKE':
+            return self.config.reference_temperature - 1
+        else:
+            return round(63.9-0.019*counts, HVsysSupply.VOLTAGE_DECIMAL_PLACES)
 
     def voltage_correction(self): 
         if "TEMPERATURE" not in self.state or self.state["TEMPERATURE"] is None: 

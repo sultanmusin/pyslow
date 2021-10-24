@@ -218,8 +218,12 @@ class HVsysSupply800c:
         volts = pedestal_voltage + counts * calib_voltage_slope / (HVsysSupply800c.VOLTAGE_RESOLUTION - 1) + HVsysSupply800c.PEDESTAL_VOLTAGE_BIAS
         return round(volts, HVsysSupply800c.VOLTAGE_DECIMAL_PLACES)
 
+
     def tempCountsToDegrees(self, counts: int) -> float:
-        return round(63.9-0.019*counts, HVsysSupply800c.VOLTAGE_DECIMAL_PLACES)
+        if self.config.temperature_from_module == 'FAKE':
+            return self.config.reference_temperature - 1
+        else:
+            return round(63.9-0.019*counts, HVsysSupply800c.VOLTAGE_DECIMAL_PLACES)
 
 
     def tempDegreesToCounts(self, degrees: float) -> int:
