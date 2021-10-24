@@ -84,7 +84,7 @@ hv_grid_coords = {
     "8/REF_VOLTAGE": cc(7,GRID_COLUMN_REFERENCE),
     "9/REF_VOLTAGE": cc(8,GRID_COLUMN_REFERENCE),
     "10/REF_VOLTAGE": cc(9,GRID_COLUMN_REFERENCE),
-
+    "REF_PEDESTAL_VOLTAGE": cc(GRID_ROW_PEDESTAL,GRID_COLUMN_REFERENCE),
     "1/CORR_VOLTAGE": cc(0,GRID_COLUMN_CORRECTED),
     "2/CORR_VOLTAGE": cc(1,GRID_COLUMN_CORRECTED),
     "3/CORR_VOLTAGE": cc(2,GRID_COLUMN_CORRECTED),
@@ -269,6 +269,7 @@ class MainWindow(wx.Frame):
         bSizerMulti.Add( self.m_checkBoxOnline, 0, wx.ALL, 5 )
 
         self.m_checkBoxHvOn = wx.CheckBox( self.m_panelMulti, wx.ID_ANY, u"HV ON", wx.DefaultPosition, wx.DefaultSize, wx.CHK_3STATE )
+        self.m_checkBoxHvOn.Disable()
         bSizerMulti.Add( self.m_checkBoxHvOn, 0, wx.ALL, 5 )
 
         self.m_checkBoxLedAuto = wx.CheckBox( self.m_panelMulti, wx.ID_ANY, u"LED Auto", wx.DefaultPosition, wx.DefaultSize, wx.CHK_3STATE )
@@ -286,8 +287,14 @@ class MainWindow(wx.Frame):
         bSizerMulti.Add( self.m_checkBoxAlertsEnabled, 0, wx.ALL, 5 )
         self.m_checkBoxAlertsEnabled.Disable()
 
-        self.m_buttonApplyReference = wx.Button( self.m_panelMulti, wx.ID_ANY, u"Apply reference HV", wx.DefaultPosition, wx.DefaultSize, wx.CHK_3STATE )
+        self.m_buttonApplyReference = wx.Button( self.m_panelMulti, wx.ID_ANY, u"Apply Reference HV", wx.DefaultPosition, wx.DefaultSize, wx.CHK_3STATE )
         bSizerMulti.Add( self.m_buttonApplyReference, 0, wx.ALL, 5 )
+
+        self.m_buttonHvOn = wx.Button( self.m_panelMulti, wx.ID_ANY, u"Set HV On", wx.DefaultPosition, wx.DefaultSize, wx.CHK_3STATE )
+        bSizerMulti.Add( self.m_buttonHvOn, 0, wx.ALL, 5 )
+
+        self.m_buttonHvOff = wx.Button( self.m_panelMulti, wx.ID_ANY, u"Set HV Off", wx.DefaultPosition, wx.DefaultSize, wx.CHK_3STATE )
+        bSizerMulti.Add( self.m_buttonHvOff, 0, wx.ALL, 5 )
 
 
         self.m_panelMulti.SetSizer( bSizerMulti )
@@ -312,7 +319,7 @@ class MainWindow(wx.Frame):
         # Columns
         self.m_gridHV.EnableDragColMove( False )
         self.m_gridHV.EnableDragColSize( True )
-        self.m_gridHV.SetColLabelValue( GRID_COLUMN_REFERENCE, u"Reference" )
+        self.m_gridHV.SetColLabelValue( GRID_COLUMN_REFERENCE, u"Requested" )
         self.m_gridHV.SetColLabelValue( GRID_COLUMN_CORRECTED, u"Corrected" )
         self.m_gridHV.SetColLabelValue( GRID_COLUMN_MEAS, u"Measured" )
         self.m_gridHV.SetColLabelValue( GRID_COLUMN_STATE, u"State" )
@@ -326,7 +333,7 @@ class MainWindow(wx.Frame):
                 self.m_gridHV.SetCellValue(row, col, "")
 
             self.m_gridHV.SetReadOnly(row, 0, False)
-            self.m_gridHV.SetReadOnly(row, 1, False)
+#            self.m_gridHV.SetReadOnly(row, 1, False)
             self.m_gridHV.SetCellValue(row, 3, "OK")
 
         self.m_gridHV.SetReadOnly(GRID_ROW_TEMPERATURE, GRID_COLUMN_REFERENCE, True)
@@ -450,12 +457,15 @@ class MainWindow(wx.Frame):
         # Connect Events
 
         self.m_checkBoxOnline.Bind( wx.EVT_CHECKBOX, self.OnCheckBoxOnlineChange )
-        self.m_checkBoxHvOn.Bind( wx.EVT_CHECKBOX, self.OnCheckBoxHVChange )
+        #self.m_checkBoxHvOn.Bind( wx.EVT_CHECKBOX, self.OnCheckBoxHVChange )
         self.m_checkBoxLedAuto.Bind( wx.EVT_CHECKBOX, self.OnCheckBoxLEDChange )
         self.m_checkBoxPoll.Bind( wx.EVT_CHECKBOX, self.OnCheckBoxPollChange )
         self.m_buttonApplyReference.Bind( wx.EVT_BUTTON, self.OnButtonApplyReferenceClick )
+        self.m_buttonHvOn.Bind( wx.EVT_BUTTON, self.OnButtonHvOnClick )
+        self.m_buttonHvOff.Bind( wx.EVT_BUTTON, self.OnButtonHvOffClick )
 
-        self.m_gridHV.Bind( wx.grid.EVT_GRID_CELL_CHANGED, self.OnHVGridChange )
+        self.m_gridHV.Bind( wx.grid.EVT_GRID_CELL_CHANGING, self.OnHVGridChanging )
+        self.m_gridHV.Bind( wx.grid.EVT_GRID_CELL_CHANGED, self.OnHVGridChanged )
         self.m_gridLED.Bind( wx.grid.EVT_GRID_CELL_CHANGED, self.OnLEDGridChange )
 
         self.m_gridModules.Bind( wx.grid.EVT_GRID_RANGE_SELECT, self.OnModuleGridRangeSelect )   
@@ -539,7 +549,7 @@ class MainWindow(wx.Frame):
                     # get the reference (or user-entered) ped v
                     pedestal_voltage = float(self.m_gridHV.GetCellValue(GRID_ROW_PEDESTAL, GRID_COLUMN_REFERENCE))
                     # get the corrected ped v
-                    correction = part.voltageCorrection()
+                    correction = part.voltage_correction()
                     set_pedestal_voltage = pedestal_voltage + correction
                     # fire
                     cap = 'SET_PEDESTAL_VOLTAGE'
@@ -612,10 +622,40 @@ class MainWindow(wx.Frame):
             asyncio.get_event_loop().create_task(detector.add_task(bus_id, command, part, print))
         """
 
-    def OnHVGridChange( self, event ):
+    def OnHVGridChanging( self, event ):
+        global detector
+        logging.info("OnHVGridChanging: %s"%(event.GetString()))
+
+        desired_value = event.GetString()
+
+        moduleId = self.activeModuleId[0]
+        moduleConfig = self.config.modules[moduleId]
+
+        if moduleConfig.has('hv'): 
+            bus_id = self.config.modules[moduleId].bus_id
+            part_address = int(self.config.modules[moduleId].address('hv'))
+            part = detector.buses[bus_id].getPart(part_address) 
+
+            cap = capability_by_hv_grid_coords[(event.Row, event.Col)]
+            try: 
+                value = part.valueFromString(cap, desired_value)
+                corrected_value = float(desired_value) + part.voltage_correction()
+                self.m_gridHV.SetCellValue(hv_grid_coords[cap.replace('REF', 'CORR')], "%.2f"%(corrected_value))
+            except ValueError as e:
+                logging.info("OnHVGridChanging: ValueError, ignoring value %s: %s"%(desired_value, e))
+                event.Veto()
+            else:
+                # do request the voltage change      
+                # tell the part the new voltage, so it returns the command to run on the bus      
+                command = part.request_voltage_change(cap, value)
+                # fire the command on the bus, scheduling module polling after it has completed
+                asyncio.get_event_loop().create_task(detector.add_task(bus_id, command, part, lambda response: self.pollModule(moduleId)))
+
+
+    def OnHVGridChanged( self, event ):
         global detector
         logging.info("OnHVGridChange: %s"%(event.GetString()))
-
+        """
         moduleId = self.activeModuleId[0]
         moduleConfig = self.config.modules[moduleId]
         
@@ -630,6 +670,8 @@ class MainWindow(wx.Frame):
 
             command = Message(Message.WRITE_SHORT, part_address, part, cap, value)
             asyncio.get_event_loop().create_task(detector.add_task(bus_id, command, part, print))
+        """
+
 
     def OnLEDGridChange( self, event ):
         global detector
@@ -665,7 +707,7 @@ class MainWindow(wx.Frame):
                 for ch, hv in active_module_config.hv.items():
                     self.m_gridHV.SetCellValue(int(ch)-1, GRID_COLUMN_REFERENCE, str(hv))    
 
-                self.m_gridHV.SetCellValue(GRID_ROW_PEDESTAL, GRID_COLUMN_REFERENCE, str(active_module_config.hvPedestal))
+                self.m_gridHV.SetCellValue(GRID_ROW_PEDESTAL, GRID_COLUMN_REFERENCE, str(active_module_config.hv_pedestal))
                 self.m_gridHV.SetCellValue(GRID_ROW_TEMPERATURE, GRID_COLUMN_REFERENCE, "%.2f °C"%(configuration.reference_temperature))
                 self.m_gridHV.SetCellValue(GRID_ROW_SLOPE, GRID_COLUMN_REFERENCE, "%+.0f mV/°C"%(-configuration.temperature_slope))
                 self.m_gridHV.SetCellValue(GRID_ROW_TEMPERATURE, GRID_COLUMN_STATE, "From: %s"%(str(active_module_config.temperature_from_module)))
@@ -778,13 +820,13 @@ class MainWindow(wx.Frame):
                 if module_config.has('hv'): 
                     part_address = int(self.config.modules[module_id].address('hv'))
                     part = detector.buses[bus_id].getPart(part_address) 
-                    value = part.valueFromString('SET_PEDESTAL_VOLTAGE', str(module_config.hvPedestal + part.voltageCorrection()))
+                    value = part.valueFromString('SET_PEDESTAL_VOLTAGE', str(module_config.hv_pedestal + part.voltage_correction()))
                     command = Message(Message.WRITE_SHORT, part_address, part, 'SET_PEDESTAL_VOLTAGE', value)
                     asyncio.get_event_loop().create_task(detector.add_task(bus_id, command, part, print))
 
                     for ch, hv in module_config.hv.items():
                         cap = '%s/SET_VOLTAGE'%(ch)
-                        value = part.valueFromString(cap, str(hv + part.voltageCorrection()))
+                        value = part.valueFromString(cap, str(hv + part.voltage_correction()))
                         command = Message(Message.WRITE_SHORT, part_address, part, cap, value)
                         asyncio.get_event_loop().create_task(detector.add_task(bus_id, command, part, print))
 
@@ -817,8 +859,17 @@ class MainWindow(wx.Frame):
         
 
     def OnCheckBoxHVChange(self, event):
-        value = HVsysSupply.POWER_ON if self.m_checkBoxHvOn.GetValue() > 0 else HVsysSupply.POWER_OFF
-        self.SwitchHV(value)
+        pass # replaced with buttons
+        #value = HVsysSupply.POWER_ON if self.m_checkBoxHvOn.GetValue() > 0 else HVsysSupply.POWER_OFF
+        #self.SwitchHV(value)
+
+    def OnButtonHvOnClick(self, event):
+        self.SwitchHV(HVsysSupply.POWER_ON)
+
+
+    def OnButtonHvOffClick(self, event):
+        self.SwitchHV(HVsysSupply.POWER_OFF)
+
 
     def OnCheckBoxLEDChange(self, event):
         global detector
@@ -852,7 +903,7 @@ class MainWindow(wx.Frame):
                 asyncio.get_event_loop().create_task(detector.add_task(bus_id, command, part, print))
                 asyncio.get_event_loop().create_task(detector.monitor_ramp_status(bus_id, part, part_address, self.DisplayRampStatus))
             else:
-                logging.warning('HV ON requested for module without HV part')
+                logging.warning('HV switch requested for module without HV part')
 
     def OnSwitchOnHV(self, e):
         self.SwitchHV(HVsysSupply.POWER_ON)
@@ -863,7 +914,7 @@ class MainWindow(wx.Frame):
     def DisplayRampStatus(self, part, progress, value):
         logging.info("DisplayRampStatus: %d", value)
         status = HVStatus(value)
-        for ch in range(1,11):
+        for ch in range(1, part.config.n_channels+1):
             description = status.channel_description(ch)
             self.m_gridHV.SetCellValue(ch-1, GRID_COLUMN_STATE, description)
             if status.is_ramp():
@@ -1010,9 +1061,11 @@ class MainWindow(wx.Frame):
 
                 active_module_config = configuration.modules[self.activeModuleId[0]]
                 if active_module_config.has('hv'):
-                    correction = part.voltageCorrection()
+                    correction = part.voltage_correction()
                     self.m_gridHV.SetCellValue(GRID_ROW_TEMPERATURE, GRID_COLUMN_CORRECTED, "%+.2f V"%(float(correction)))
-                    for ch, hv in active_module_config.hv.items():
+                    #for ch, hv in active_module_config.hv.items():
+                    for ch in range(1, part.config.n_channels+1):
+                        hv = part.state[f'{ch}/REF_VOLTAGE']
                         corrected_hv = round(hv + correction, part.VOLTAGE_DECIMAL_PLACES)
                         self.m_gridHV.SetCellValue(int(ch)-1, GRID_COLUMN_CORRECTED, str(corrected_hv))  
 
@@ -1122,7 +1175,8 @@ async def main(argv):
         ]    
     )
 
-    config_file = "config/PsdSlowControlConfig.xml"
+    config_file = dir_path = os.path.dirname(os.path.realpath(__file__)) + "/../config/PsdSlowControlConfig.xml"
+    schema_path = dir_path = os.path.dirname(os.path.realpath(__file__)) + "/../config/PsdSlowControlConfig.xsd"
 
     opts, args = getopt.getopt(argv,"hc:",["config="])
     for opt, arg in opts:
@@ -1131,7 +1185,7 @@ async def main(argv):
         elif opt in ("-c", "--config"):
             config_file = arg
 
-    configuration = config.load(config_file, schema="config/PsdSlowControlConfig.xsd")
+    configuration = config.load(config_file, schema=schema_path)
 
     detector = Detector(configuration)
 
@@ -1140,15 +1194,14 @@ async def main(argv):
     loop.set_exception_handler(handler)
     
     try:
-        print("Staring bus listeners...")
+        logging.info("Staring bus listeners...")
         for id, sm in detector.buses.items():
             await loop.create_task(sm.connect())
             loop.create_task(sm.send())
+            logging.info(f"Bus '{id}' started.")
     except OSError as e:
         print("Cannot connect to system module: %s"%(str(e)))  
 
-    print("Module link ok")
-    
     app = WxAsyncApp(False)
     frame = MainWindow(None, "FHcal DCS")
     await frame.pollOnlineModules()
@@ -1156,7 +1209,6 @@ async def main(argv):
 
 
 if __name__ == '__main__':
-    #asyncio.run(main(), debug=True)
     print("Staring main loop...")
+    asyncio.get_event_loop().set_debug(True)
     asyncio.get_event_loop().run_until_complete(asyncio.wait([main(sys.argv[1:])]))
-    #asyncio.get_event_loop().run_until_complete(app.MainLoop())

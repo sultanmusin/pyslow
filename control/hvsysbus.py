@@ -50,7 +50,7 @@ class HVsysBus:
                     pass
                     # temp raise ValueError("Duplicate part id = %d for hvsys bus %s" % (part_address, self.id))
                 else:
-                    self.parts[part_address] = part_type(bus_config.det_cfg)        # now create the instance of the part connected to our bus 
+                    self.parts[part_address] = part_type(mc)        # now create the instance of the part connected to our bus 
 
     def getPartCache(self, addr:int, part_type: type) -> PartState:
         if addr not in self.part_cache: 

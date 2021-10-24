@@ -65,7 +65,7 @@ async def main():
             hv_addr = mod_cfg.address('hv')
             hv_part = sm.getPart(hv_addr)
 
-            val = hv_part.valueFromString('SET_PEDESTAL_VOLTAGE', mod_cfg.hvPedestal)
+            val = hv_part.valueFromString('SET_PEDESTAL_VOLTAGE', mod_cfg.hv_pedestal)
             msg = Message(Message.WRITE_SHORT, hv_addr, hv_part, 'SET_PEDESTAL_VOLTAGE', val)
             await sm.add_task(msg, hv_part, partial(set_pedestal_cb, mod_id))
     while not all(flag == True for flag in pedestal_flags.values()):

@@ -59,6 +59,11 @@ class Config:
     def process_config(self):
         self.buses = {} # dict[str,BusConfig]
 
+        self.reference_temperature = float(self.soup.select("global flags refTemp")[0].text)
+        self.temperature_slope = float(self.soup.select("global flags tempSlope")[0].text)
+        self.verbose = bool(int(self.soup.select("global flags verbose")[0].text))
+        self.query_delay = int(self.soup.select("global flags queryDelay")[0].text)
+
         for sys_mod in self.soup.select("global connection hvsys"):
             id = sys_mod.attrs['id'] if 'id' in sys_mod.attrs else HVsysBus.DefaultBusId
             self.buses[id] = BusConfig(self, sys_mod)
@@ -107,10 +112,6 @@ class Config:
             for m in mod.text.strip().split(','):
                 self.modules[m].online = True
 
-        self.reference_temperature = float(self.soup.select("global flags refTemp")[0].text)
-        self.temperature_slope = float(self.soup.select("global flags tempSlope")[0].text)
-        self.verbose = bool(int(self.soup.select("global flags verbose")[0].text))
-        self.query_delay = int(self.soup.select("global flags queryDelay")[0].text)
 
 
 
@@ -121,6 +122,8 @@ class ModuleConfig:
     def __init__(self, soup, detector):
         self.id = soup.attrs['id']
         self.detector = detector
+        self.reference_temperature = detector.reference_temperature
+        self.temperature_slope = detector.temperature_slope
         self.version = soup['version'] if 'version' in soup.attrs else 'default'
 
         self.parts = []

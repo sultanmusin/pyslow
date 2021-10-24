@@ -1,0 +1,12 @@
+Old filtered NA61 control box
+192.168.69.133           ether   00:90:e8:39:a4:2f   
+
+Old small noisy
+192.168.69.204           ether   00:90:e8:56:8e:51          
+
+Small FPSD
+192.168.69.204           ether   00:90:e8:56:8e:45          DHCP (NA61)   10.0.9.4
+
+Large PSD
+                         ether                              DHCP (NA61)   10.0.9.3
+                         

@@ -78,7 +78,7 @@ class Action(Enum):
     
     @staticmethod
     async def set_ped(assets:ModuleAssets, cmd:RemoteCmd) -> str:
-        assets.mod_cfg.hvPedestal = cmd.val
+        assets.mod_cfg.hv_pedestal = cmd.val
         await assets.submitAction('SET_PEDESTAL_VOLTAGE', cmd.val)
         return '{}'
     

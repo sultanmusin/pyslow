@@ -12,6 +12,9 @@ __status__ = "Development"
 
 import logging
 import sys
+sys.path.append('.')
+sys.path.append('lib/hvsys')
+from message import Message
 
 class HVsysSupply800c:
 
@@ -96,12 +99,20 @@ class HVsysSupply800c:
     ]
 
 
-#    def __init__(self, det_cfg:config.Config):
-    def __init__(self, det_cfg):
-        self.det_cfg = det_cfg
+#    def __init__(self, config:config.Config):
+    def __init__(self, config):
+        self.config = config
         self.state = {}
         for cap in HVsysSupply800c.capabilities:
             self.state[cap] = None
+
+        self.state['REF_PEDESTAL_VOLTAGE'] = self.config.hv_pedestal
+        for ch in range(1,self.config.n_channels+1):
+            self.state[f"{ch}/REF_VOLTAGE"] = self.config.hv[str(ch)]
+
+    def reference_voltage_caps(self):
+        return [f"{ch}/REF_VOLTAGE" for ch in range(1, self.config.n_channels+1)] + ['REF_PEDESTAL_VOLTAGE']
+
 
     def updateState(self, cap, value):
         self.state[cap] = value # TODO checks 
@@ -133,11 +144,12 @@ class HVsysSupply800c:
     def voltsToCounts(self, volts: str) -> int:
         if "VOLTAGE_CALIBRATION" not in self.state or self.state["VOLTAGE_CALIBRATION"] is None: 
             raise ValueError("HVsysSupply800c: cannot translate volts to counts without knowing VOLTAGE_CALIBRATION")
-        if "SET_PEDESTAL_VOLTAGE" not in self.state or self.state["SET_PEDESTAL_VOLTAGE"] is None: 
-            raise ValueError("HVsysSupply800c: cannot translate volts to counts without knowing SET_PEDESTAL_VOLTAGE")
-        pedestal_voltage = self.pedestalCountsToVolts(self.state["SET_PEDESTAL_VOLTAGE"])
+        #if "SET_PEDESTAL_VOLTAGE" not in self.state or self.state["SET_PEDESTAL_VOLTAGE"] is None: 
+        #    raise ValueError("HVsysSupply800c: cannot translate volts to counts without knowing SET_PEDESTAL_VOLTAGE")
+        #pedestal_voltage = self.pedestalCountsToVolts(self.state["SET_PEDESTAL_VOLTAGE"])
+        pedestal_voltage = self.state['REF_PEDESTAL_VOLTAGE']
         # tmp = float( self.valueToString('TEMPERATURE', self.state['TEMPERATURE']) )
-        # tmp_corr = -(tmp - self.det_cfg.reference_temperature) * self.det_cfg.temperature_slope / 1000 # minus for normal temperature correction, e.g. config value 60 means "-60mV/C"
+        # tmp_corr = -(tmp - self.config.reference_temperature) * self.config.temperature_slope / 1000 # minus for normal temperature correction, e.g. config value 60 means "-60mV/C"
         volts_to_set = (float(volts) - pedestal_voltage - HVsysSupply800c.PEDESTAL_VOLTAGE_BIAS) # - tmp_corr  # e.g. -0.5V means we need to go 0.5V lower than pedestal (with positive counts)       
 
         # logging.debug("voltsToCounts: temperature correction for T=%s is %d V" % (tmp, tmp_corr))
@@ -159,6 +171,7 @@ class HVsysSupply800c:
         if "MEAS_PEDESTAL_VOLTAGE" not in self.state or self.state["MEAS_PEDESTAL_VOLTAGE"] is None: 
             raise ValueError("HVsysSupply800c: cannot translate volts to counts without knowing MEAS_PEDESTAL_VOLTAGE")
         pedestal_voltage = self.pedestalCountsToVolts(self.state["MEAS_PEDESTAL_VOLTAGE"])
+        #pedestal_voltage = self.state['REF_PEDESTAL_VOLTAGE']
         volts_to_set = (float(volts) - pedestal_voltage - HVsysSupply800c.PEDESTAL_VOLTAGE_BIAS)  # e.g. -0.5V means we need to go 0.5V lower than pedestal (with positive counts)       
         calib_voltage_slope = self.state["VOLTAGE_CALIBRATION"] / 100.0              #  325 -> -3.25 V (full scale) 
 
@@ -177,14 +190,15 @@ class HVsysSupply800c:
             raise ValueError("HVsysSupply800c: invalid voltage counts %d >= VOLTAGE_RESOLUTION"%(counts))
         if "VOLTAGE_CALIBRATION" not in self.state or self.state["VOLTAGE_CALIBRATION"] is None: 
             raise ValueError("HVsysSupply800c: cannot translate counts to volts without knowing VOLTAGE_CALIBRATION")
-        if "SET_PEDESTAL_VOLTAGE" not in self.state or self.state["SET_PEDESTAL_VOLTAGE"] is None: 
-            raise ValueError("HVsysSupply800c: cannot translate counts to volts without knowing SET_PEDESTAL_VOLTAGE")
+        #if "SET_PEDESTAL_VOLTAGE" not in self.state or self.state["SET_PEDESTAL_VOLTAGE"] is None: 
+        #    raise ValueError("HVsysSupply800c: cannot translate counts to volts without knowing SET_PEDESTAL_VOLTAGE")
 
         calib_voltage_slope = self.state["VOLTAGE_CALIBRATION"] / 100.0              #  325 -> -3.25 V (full scale) 
-        pedestal_voltage = self.pedestalCountsToVolts(self.state["SET_PEDESTAL_VOLTAGE"])
+        #pedestal_voltage = self.pedestalCountsToVolts(self.state["SET_PEDESTAL_VOLTAGE"])
+        pedestal_voltage = self.state['REF_PEDESTAL_VOLTAGE']
 
         # tmp = float( self.valueToString('TEMPERATURE', self.state['TEMPERATURE']) )
-        # tmp_corr = -(tmp - self.det_cfg.reference_temperature) * self.det_cfg.temperature_slope / 1000 # minus for normal termerature correction, e.g. config value 60 means "-60mV/C"
+        # tmp_corr = -(tmp - self.config.reference_temperature) * self.config.temperature_slope / 1000 # minus for normal termerature correction, e.g. config value 60 means "-60mV/C"
 
         volts = pedestal_voltage + counts * calib_voltage_slope / (HVsysSupply800c.VOLTAGE_RESOLUTION - 1) + HVsysSupply800c.PEDESTAL_VOLTAGE_BIAS # - tmp_corr
         return round(volts, HVsysSupply800c.VOLTAGE_DECIMAL_PLACES)
@@ -199,6 +213,7 @@ class HVsysSupply800c:
 
         calib_voltage_slope = self.state["VOLTAGE_CALIBRATION"] / 100.0              #  325 -> -3.25 V (full scale) 
         pedestal_voltage = self.pedestalCountsToVolts(self.state["MEAS_PEDESTAL_VOLTAGE"])
+        #pedestal_voltage = self.state['REF_PEDESTAL_VOLTAGE']
 
         volts = pedestal_voltage + counts * calib_voltage_slope / (HVsysSupply800c.VOLTAGE_RESOLUTION - 1) + HVsysSupply800c.PEDESTAL_VOLTAGE_BIAS
         return round(volts, HVsysSupply800c.VOLTAGE_DECIMAL_PLACES)
@@ -207,15 +222,32 @@ class HVsysSupply800c:
         return round(63.9-0.019*counts, HVsysSupply800c.VOLTAGE_DECIMAL_PLACES)
 
 
-    def voltageCorrection(self): 
+    def tempDegreesToCounts(self, degrees: float) -> int:
+        # we'll probably never need setting the temperature...
+        return int((63.9-degrees)/0.019)
+
+
+    def voltage_correction(self): 
         if "TEMPERATURE" not in self.state or self.state["TEMPERATURE"] is None: 
             raise ValueError("HVsysSupply800c: cannot calculate temperature correction without knowing TEMPERATURE")
         tmp = self.tempCountsToDegrees(self.state['TEMPERATURE'])
-        tmp_corr = (tmp - self.det_cfg.reference_temperature) * self.det_cfg.temperature_slope / 1000 # minus for normal termerature correction, e.g. config value 60 means "-60mV/C"
+        tmp_corr = (tmp - self.config.reference_temperature) * self.config.temperature_slope / 1000 # minus for normal termerature correction, e.g. config value 60 means "-60mV/C"
         
         return round(tmp_corr, HVsysSupply800c.VOLTAGE_DECIMAL_PLACES)
 
     convertorsFromString = {
+        "TEMPERATURE": tempDegreesToCounts,
+        "1/REF_VOLTAGE": voltsToCounts,
+        "2/REF_VOLTAGE": voltsToCounts,
+        "3/REF_VOLTAGE": voltsToCounts,
+        "4/REF_VOLTAGE": voltsToCounts,
+        "5/REF_VOLTAGE": voltsToCounts,
+        "6/REF_VOLTAGE": voltsToCounts,
+        "7/REF_VOLTAGE": voltsToCounts,
+        "8/REF_VOLTAGE": voltsToCounts,
+        "9/REF_VOLTAGE": voltsToCounts,
+        "10/REF_VOLTAGE": voltsToCounts,
+        "REF_PEDESTAL_VOLTAGE": pedestalVoltsToCounts,
         "1/SET_VOLTAGE": voltsToCounts,
         "2/SET_VOLTAGE": voltsToCounts,
         "3/SET_VOLTAGE": voltsToCounts,
@@ -227,7 +259,6 @@ class HVsysSupply800c:
         "9/SET_VOLTAGE": voltsToCounts,
         "10/SET_VOLTAGE": voltsToCounts,
         "SET_PEDESTAL_VOLTAGE": pedestalVoltsToCounts,
-        "TEMPERATURE": lambda self, val: int(float(val*100)),
         "1/MEAS_VOLTAGE": measVoltsToCounts,
         "2/MEAS_VOLTAGE": measVoltsToCounts,
         "3/MEAS_VOLTAGE": measVoltsToCounts,
@@ -242,6 +273,18 @@ class HVsysSupply800c:
     }
 
     convertorsToString = {
+        "TEMPERATURE": tempCountsToDegrees,
+        "1/REF_VOLTAGE": countsToVolts,
+        "2/REF_VOLTAGE": countsToVolts,
+        "3/REF_VOLTAGE": countsToVolts,
+        "4/REF_VOLTAGE": countsToVolts,
+        "5/REF_VOLTAGE": countsToVolts,
+        "6/REF_VOLTAGE": countsToVolts,
+        "7/REF_VOLTAGE": countsToVolts,
+        "8/REF_VOLTAGE": countsToVolts,
+        "9/REF_VOLTAGE": countsToVolts,
+        "10/REF_VOLTAGE": countsToVolts,
+        "REF_PEDESTAL_VOLTAGE": pedestalCountsToVolts,
         "1/SET_VOLTAGE": countsToVolts,
         "2/SET_VOLTAGE": countsToVolts,
         "3/SET_VOLTAGE": countsToVolts,
@@ -253,7 +296,6 @@ class HVsysSupply800c:
         "9/SET_VOLTAGE": countsToVolts,
         "10/SET_VOLTAGE": countsToVolts,
         "SET_PEDESTAL_VOLTAGE": pedestalCountsToVolts,
-        "TEMPERATURE": tempCountsToDegrees,
         "1/MEAS_VOLTAGE": measCountsToVolts,
         "2/MEAS_VOLTAGE": measCountsToVolts,
         "3/MEAS_VOLTAGE": measCountsToVolts,
@@ -286,6 +328,30 @@ class HVsysSupply800c:
     def has_reference_voltage(self):
         return True
 
+    def request_voltage_change(self, cap, new_voltage) -> Message:
+        # cap should be one of N/REF_VOLTAGE or REF_PEDESTAL_VOLTAGE
+        if cap not in self.reference_voltage_caps(): 
+            return None
+
+        old_voltage = self.state[cap]
+        self.state[cap] = new_voltage
+        corrected_voltage = new_voltage + self.voltage_correction()
+
+        if cap == 'REF_PEDESTAL_VOLTAGE':     # also update all the channel voltages
+            for ch in range(1, self.config.n_channels+1):
+                self.state[f'{ch}/REF_VOLTAGE'] += (new_voltage - old_voltage)
+        
+        set_cap = cap.replace('REF', 'SET')     # 4/REF_VOLTAGE -> 4/SET_VOLTAGE to construct the command
+        set_value = self.valueFromString(set_cap, corrected_voltage)
+        command = Message(Message.WRITE_SHORT, self.config.addr['hv'], self, set_cap, set_value)
+        return command
+
+    def request_voltage_correction(self) -> Message:
+        set_value = self.valueFromString('SET_PEDESTAL_VOLTAGE', self.state['REQ_PEDESTAL_VOLTAGE'])
+        command = Message(Message.WRITE_SHORT, self.config.addr['hv'], self, 'SET_PEDESTAL_VOLTAGE', set_value)
+        return command
+
+
 """ Doc
 	
 	// Sub-addresses (register offsets) in na61ps10c memory
@@ -312,7 +378,3 @@ class HVsysSupply800c:
 	public static byte ADDR_NEW_CELL_ADDRESS = 0x41;
 	public static int swapChannels(int id) { return 9 - ((id+9) % 10); }
 """
-
-
-#s = HVsysSupply800c() 
-#s.

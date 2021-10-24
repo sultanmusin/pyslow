@@ -84,15 +84,6 @@ class Detector:
         # temporarily (sic) have a list of important hv registers here (to optimize polling speed skipping the rest)
         important_hv_capabilities = [
         "STATUS",               
-        "1/SET_VOLTAGE",
-        "2/SET_VOLTAGE",
-        "3/SET_VOLTAGE",
-        "4/SET_VOLTAGE",
-        "5/SET_VOLTAGE",
-        "6/SET_VOLTAGE",
-        "7/SET_VOLTAGE",
-        "8/SET_VOLTAGE",
-        "SET_PEDESTAL_VOLTAGE",
         "1/MEAS_VOLTAGE",
         "2/MEAS_VOLTAGE",
         "3/MEAS_VOLTAGE",
@@ -101,9 +92,12 @@ class Detector:
         "6/MEAS_VOLTAGE",
         "7/MEAS_VOLTAGE",
         "8/MEAS_VOLTAGE",
+        "9/MEAS_VOLTAGE",
+        "10/MEAS_VOLTAGE",
         "MEAS_PEDESTAL_VOLTAGE",
         "TEMPERATURE",
         "VOLTAGE_CALIBRATION",
+        "PEDESTAL_VOLTAGE_CALIBRATION", 
         "PEDESTAL_VOLTAGE_CALIBRATION_MIN", 
         "PEDESTAL_VOLTAGE_CALIBRATION_MAX",
         ]
@@ -111,13 +105,13 @@ class Detector:
         all_capabilities = part.priority_capabilities + [p for p in part.capabilities if p not in part.priority_capabilities]
                                                                                                   
         for cap in all_capabilities:
-            if part not in [HVsysSupply, HVsysSupply800c] or cap in important_hv_capabilities:
+            if type(part) not in [HVsysSupply, HVsysSupply800c] or cap in important_hv_capabilities:
                 command = Message(Message.READ_SHORT, address, type(part), cap, 0)
                 await self.add_task(sys_mod_id, command, part, partial(poll_cb, part, cap))
 
     async def monitor_ramp_status(self, bus_id, part, address, callback):
         command = Message(Message.READ_SHORT, address, part, "STATUS", 0)
-        for i in range(0,10):
+        for i in range(0,part.config.n_channels):
             await self.add_task(bus_id, command, part, partial(callback, part, i))
             await asyncio.sleep(1)
 
