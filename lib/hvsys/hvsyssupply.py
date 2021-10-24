@@ -11,6 +11,10 @@ __email__ = "opetukhov@inr.ru"
 __status__ = "Development"
 
 import logging
+import sys
+sys.path.append('.')
+sys.path.append('lib/hvsys')
+from message import Message
 
 class HVsysSupply:
 
@@ -103,6 +107,13 @@ class HVsysSupply:
         self.state = {}
         for cap in HVsysSupply.capabilities:
             self.state[cap] = None
+
+        self.state['REF_PEDESTAL_VOLTAGE'] = self.config.hv_pedestal
+        for ch in range(1,self.config.n_channels+1):
+            self.state[f"{ch}/REF_VOLTAGE"] = self.config.hv[str(ch)]
+
+    def reference_voltage_caps(self):
+        return [f"{ch}/REF_VOLTAGE" for ch in range(1, self.config.n_channels+1)] + ['REF_PEDESTAL_VOLTAGE']
 
 
     def updateState(self, cap, value):
@@ -293,6 +304,30 @@ class HVsysSupply:
 
     def has_reference_voltage(self):
         return True
+
+
+    def request_voltage_change(self, cap, new_voltage) -> Message:
+        # cap should be one of N/REF_VOLTAGE or REF_PEDESTAL_VOLTAGE
+        if cap not in self.reference_voltage_caps(): 
+            return None
+
+        old_voltage = self.state[cap]
+        self.state[cap] = new_voltage
+        corrected_voltage = new_voltage + self.voltage_correction()
+
+        if cap == 'REF_PEDESTAL_VOLTAGE':     # also update all the channel voltages
+            for ch in range(1, self.config.n_channels+1):
+                self.state[f'{ch}/REF_VOLTAGE'] += (new_voltage - old_voltage)
+        
+        set_cap = cap.replace('REF', 'SET')     # 4/REF_VOLTAGE -> 4/SET_VOLTAGE to construct the command
+        set_value = self.valueFromString(set_cap, corrected_voltage)
+        command = Message(Message.WRITE_SHORT, self.config.addr['hv'], self, set_cap, set_value)
+        return command
+
+    def request_voltage_correction(self) -> Message:
+        set_value = self.valueFromString('SET_PEDESTAL_VOLTAGE', self.state['REQ_PEDESTAL_VOLTAGE'])
+        command = Message(Message.WRITE_SHORT, self.config.addr['hv'], self, 'SET_PEDESTAL_VOLTAGE', set_value)
+        return command
 
 """ Doc
 	
