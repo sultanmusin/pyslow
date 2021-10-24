@@ -159,7 +159,7 @@ class HVsysSupply:
         tmp_corr = -(tmp - self.config.reference_temperature) * self.config.temperature_slope / 1000 # minus for normal termerature correction, e.g. config value 60 means "-60mV/C"
         volts_to_set = tmp_corr - (float(volts) - pedestal_voltage - HVsysSupply.PEDESTAL_VOLTAGE_BIAS)  # e.g. -0.5V means we need to go 0.5V lower than pedestal (with positive counts)       
 
-        logging.debug("coltsToCounts: temperature correction for T=%s is %d V" % (tmp, tmp_corr))
+        logging.debug("voltsToCounts: temperature correction for T=%s is %d V" % (tmp, tmp_corr))
         calib_voltage_slope = self.state["VOLTAGE_CALIBRATION"] / 100.0              #  325 -> -3.25 V (full scale) 
 
         if volts_to_set < 0:
@@ -235,6 +235,18 @@ class HVsysSupply:
         return round(tmp_corr, HVsysSupply.VOLTAGE_DECIMAL_PLACES)
 
     convertorsFromString = {
+        "TEMPERATURE": tempDegreesToCounts,
+        "1/REF_VOLTAGE": voltsToCounts,
+        "2/REF_VOLTAGE": voltsToCounts,
+        "3/REF_VOLTAGE": voltsToCounts,
+        "4/REF_VOLTAGE": voltsToCounts,
+        "5/REF_VOLTAGE": voltsToCounts,
+        "6/REF_VOLTAGE": voltsToCounts,
+        "7/REF_VOLTAGE": voltsToCounts,
+        "8/REF_VOLTAGE": voltsToCounts,
+        "9/REF_VOLTAGE": voltsToCounts,
+        "10/REF_VOLTAGE": voltsToCounts,
+        "REF_PEDESTAL_VOLTAGE": pedestalVoltsToCounts,
         "1/SET_VOLTAGE": voltsToCounts,
         "2/SET_VOLTAGE": voltsToCounts,
         "3/SET_VOLTAGE": voltsToCounts,
@@ -246,7 +258,6 @@ class HVsysSupply:
         "9/SET_VOLTAGE": voltsToCounts,
         "10/SET_VOLTAGE": voltsToCounts,
         "SET_PEDESTAL_VOLTAGE": pedestalVoltsToCounts,
-        "TEMPERATURE": lambda self, val: int(float(val*100)),
         "1/MEAS_VOLTAGE": measVoltsToCounts,
         "2/MEAS_VOLTAGE": measVoltsToCounts,
         "3/MEAS_VOLTAGE": measVoltsToCounts,
@@ -261,6 +272,18 @@ class HVsysSupply:
     }
 
     convertorsToString = {
+        "TEMPERATURE": tempCountsToDegrees,
+        "1/REF_VOLTAGE": countsToVolts,
+        "2/REF_VOLTAGE": countsToVolts,
+        "3/REF_VOLTAGE": countsToVolts,
+        "4/REF_VOLTAGE": countsToVolts,
+        "5/REF_VOLTAGE": countsToVolts,
+        "6/REF_VOLTAGE": countsToVolts,
+        "7/REF_VOLTAGE": countsToVolts,
+        "8/REF_VOLTAGE": countsToVolts,
+        "9/REF_VOLTAGE": countsToVolts,
+        "10/REF_VOLTAGE": countsToVolts,
+        "REF_PEDESTAL_VOLTAGE": pedestalCountsToVolts,
         "1/SET_VOLTAGE": countsToVolts,
         "2/SET_VOLTAGE": countsToVolts,
         "3/SET_VOLTAGE": countsToVolts,
@@ -272,7 +295,6 @@ class HVsysSupply:
         "9/SET_VOLTAGE": countsToVolts,
         "10/SET_VOLTAGE": countsToVolts,
         "SET_PEDESTAL_VOLTAGE": pedestalCountsToVolts,
-        "TEMPERATURE": tempCountsToDegrees,
         "1/MEAS_VOLTAGE": measCountsToVolts,
         "2/MEAS_VOLTAGE": measCountsToVolts,
         "3/MEAS_VOLTAGE": measCountsToVolts,
