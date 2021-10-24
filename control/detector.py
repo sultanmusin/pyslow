@@ -84,6 +84,7 @@ class Detector:
         # temporarily (sic) have a list of important hv registers here (to optimize polling speed skipping the rest)
         important_hv_capabilities = [
         "STATUS",               
+        "SET_PEDESTAL_VOLTAGE",
         "1/MEAS_VOLTAGE",
         "2/MEAS_VOLTAGE",
         "3/MEAS_VOLTAGE",
