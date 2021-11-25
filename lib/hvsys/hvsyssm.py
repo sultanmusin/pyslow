@@ -11,7 +11,7 @@ __status__ = "Development"
 
 
 class HVsysSystemBox:
-    cell_id = 0x800e
+    CELL_ID = 0x800e
 
     DESCRIPTION = "System Box"
 

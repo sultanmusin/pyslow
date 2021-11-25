@@ -17,7 +17,7 @@ class HVsysPS:
 
     priority_capabilities = []
 
-    cell_id = 0x8000 # not really
+    CELL_ID = 0x8000 # not really
 
 
 

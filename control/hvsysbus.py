@@ -36,7 +36,7 @@ class HVsysBus:
         self.id = bus_config.id
         self.port = bus_config.port
         self.task_queue = asyncio.Queue(10000)
-        self.timeout = 3 # sec
+        self.timeout = 0.04 # sec
         self.loop = asyncio.get_event_loop()
         self.part_cache = {} # dict[int, PartState]
         self.parts = {} # dict[int, any hvsys part class]
@@ -118,9 +118,9 @@ class HVsysBus:
                     self.writer.write(str(task.cmd).encode())
                     try: 
                         await asyncio.wait_for(self.recv(task.cb, task.timestamp), self.timeout)
-                    except TimeoutError:
+                    except asyncio.TimeoutError as e:
                         logging.warning("No response in timeout=%fs" % (self.timeout))
-
+ 
                     # Notify the queue that the "work item" has been processed.
                     self.task_queue.task_done()
                     logging.debug("send_worker: task done")

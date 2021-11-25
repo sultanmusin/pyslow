@@ -27,8 +27,8 @@ class HVsys:
     }
 
     def find_device_by_cell_id(cell_id: int):
-        for (id, device) in catalogus:
-            if device.cell_id == cell_id:
+        for (id, device) in HVsys.catalogus.items():
+            if device.CELL_ID == cell_id:
                 return device
         
         return None

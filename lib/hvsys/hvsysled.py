@@ -13,7 +13,7 @@ __status__ = "Development"
 #from config import Config
 
 class HVsysLED:
-    cell_id = 0x8006
+    CELL_ID = 0x8006
 
     DESCRIPTION = "LED Driver"
 

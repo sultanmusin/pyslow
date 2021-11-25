@@ -45,6 +45,7 @@ def handler(loop, context):
 def on_complete(value):
     print('Response = %d (0x%04x)'%(value, value))
     device = HVsys.find_device_by_cell_id(value)
+    print("FOUND!\n")
     print(device.DESCRIPTION if device is not None else 'na61ps10c')
 
 
@@ -54,6 +55,7 @@ async def main(argv):
     bus_id = None
     address = None
     config_file = '../config/MapperConfig.xml'
+    config_file = 'config/MapperConfig.xml'
     from_address = 0
     to_address = 255
 
@@ -120,4 +122,8 @@ async def main(argv):
 if __name__ == '__main__':
     #asyncio.run(main(), debug=True)
     print("Staring main loop...")
-    asyncio.get_event_loop().run_until_complete(asyncio.wait([main(sys.argv[1:])]))
+    try: 
+        logging.info("Go!")
+        asyncio.get_event_loop().run_until_complete(asyncio.wait([main(sys.argv[1:])]))
+    except asyncio.TimeoutError as e:
+        logging.warning("Timeout.")
