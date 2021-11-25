@@ -641,6 +641,7 @@ class MainWindow(wx.Frame):
                 value = part.valueFromString(cap, desired_value)
                 corrected_value = float(desired_value) + part.voltage_correction()
                 self.m_gridHV.SetCellValue(hv_grid_coords[cap.replace('REF', 'CORR')], "%.2f"%(corrected_value))
+                logging.info("OnHVGridChanging: desired = %s correction = %s corrected = %s"%(desired_value, part.voltage_correction(), corrected_value))
             except ValueError as e:
                 logging.info("OnHVGridChanging: ValueError, ignoring value %s: %s"%(desired_value, e))
                 event.Veto()
