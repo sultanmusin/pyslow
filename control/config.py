@@ -146,7 +146,7 @@ class ModuleConfig:
                 self.hv[chan.attrs['id']] = float(chan.text)
             self.n_channels = len(soup.select("settings hv channel"))
             self.hv_pedestal = float(soup.find('settings').find('hv').find('pedestal').text)
-            self.temperature_from_module = hvConfigNode.attrs['temperature_from_module'] if 'temperature_from_module' in connectionNode.attrs else self.id
+            self.temperature_from_module = soup['temperature_from_module'] if 'temperature_from_module' in soup.attrs else self.id
 
         ledConfigNode = soup.find('connection').find('led')
         if self.has('led'):

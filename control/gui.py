@@ -894,7 +894,7 @@ class MainWindow(wx.Frame):
         for moduleId in self.activeModuleId:
             moduleConfig = self.config.modules[moduleId]
             
-            if moduleConfig.has('hv'): 
+            if moduleConfig.online and moduleConfig.has('hv'): 
                 bus_id = self.config.modules[moduleId].bus_id
                 part_address = int(self.config.modules[moduleId].address('hv'))
                 part = detector.buses[bus_id].getPart(part_address) 

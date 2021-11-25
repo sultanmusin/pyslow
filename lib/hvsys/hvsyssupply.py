@@ -228,6 +228,11 @@ class HVsysSupply:
         else:
             return round(63.9-0.019*counts, HVsysSupply.VOLTAGE_DECIMAL_PLACES)
 
+    def tempDegreesToCounts(self, degrees: float) -> int:
+        # we'll probably never need setting the temperature...
+        return int((63.9-degrees)/0.019)
+
+
     def voltage_correction(self): 
         if "TEMPERATURE" not in self.state or self.state["TEMPERATURE"] is None: 
             raise ValueError("HVsysSupply800c: cannot calculate temperature correction without knowing TEMPERATURE")
