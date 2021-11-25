@@ -830,7 +830,7 @@ class MainWindow(wx.Frame):
                         command = Message(Message.WRITE_SHORT, part_address, part, cap, value)
                         asyncio.get_event_loop().create_task(detector.add_task(bus_id, command, part, print))
 
-                if module_config.has('led'): 
+                if False: # module_config.has('led'): # disable led settings applying
                     part_address = int(self.config.modules[module_id].address('led'))
                     part = detector.buses[bus_id].getPart(part_address) 
                     value = part.valueFromString('AUTOREG', str(module_config.ledAutoTune))
@@ -904,6 +904,8 @@ class MainWindow(wx.Frame):
                 asyncio.get_event_loop().create_task(detector.monitor_ramp_status(bus_id, part, part_address, self.DisplayRampStatus))
             else:
                 logging.warning('HV switch requested for module without HV part')
+        
+        self.m_checkBoxHvOn.SetValue(state)
 
     def OnSwitchOnHV(self, e):
         self.SwitchHV(HVsysSupply.POWER_ON)
