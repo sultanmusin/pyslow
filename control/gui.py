@@ -1064,13 +1064,14 @@ class MainWindow(wx.Frame):
 
                 active_module_config = configuration.modules[self.activeModuleId[0]]
                 if active_module_config.has('hv'):
-                    correction = part.voltage_correction()
+                    correction = float(part.voltage_correction())
                     self.m_gridHV.SetCellValue(GRID_ROW_TEMPERATURE, GRID_COLUMN_CORRECTED, "%+.2f V"%(float(correction)))
                     #for ch, hv in active_module_config.hv.items():
                     for ch in range(1, part.config.n_channels+1):
-                        hv = part.state[f'{ch}/REF_VOLTAGE']
+                        hv = float(part.state[f'{ch}/REF_VOLTAGE'])
                         corrected_hv = round(hv + correction, part.VOLTAGE_DECIMAL_PLACES)
                         self.m_gridHV.SetCellValue(int(ch)-1, GRID_COLUMN_CORRECTED, str(corrected_hv))  
+                        logging.info("DisplayValueOnComplete temp: desired = %s corrected = %s correction = %s"%(hv, corrected_hv, correction))
 
                 logging.info('part %s temperature = %s'%(part, str_value))  
     
