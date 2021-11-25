@@ -1059,21 +1059,23 @@ class MainWindow(wx.Frame):
             
             if capability == 'TEMPERATURE':
                 self.m_gridHV.SetCellValue(GRID_ROW_TEMPERATURE, GRID_COLUMN_MEAS, "%.2f °C"%(float(str_value)))
-
-                # calculate and display voltage correction (if needed)
-
-                active_module_config = configuration.modules[self.activeModuleId[0]]
-                if active_module_config.has('hv'):
-                    correction = float(part.voltage_correction())
-                    self.m_gridHV.SetCellValue(GRID_ROW_TEMPERATURE, GRID_COLUMN_CORRECTED, "%+.2f V"%(float(correction)))
-                    #for ch, hv in active_module_config.hv.items():
-                    for ch in range(1, part.config.n_channels+1):
-                        hv = part.countsToVolts(part.state[f'{ch}/REF_VOLTAGE'])
-                        corrected_hv = round(hv + correction, part.VOLTAGE_DECIMAL_PLACES)
-                        self.m_gridHV.SetCellValue(int(ch)-1, GRID_COLUMN_CORRECTED, str(corrected_hv))  
-                        logging.info("DisplayValueOnComplete temp: desired = %s corrected = %s correction = %s"%(hv, corrected_hv, correction))
-
                 logging.info('part %s temperature = %s'%(part, str_value))  
+
+                # calculate and display voltage correction (if needed and capable - first times will fail without knowing calibration)
+
+                try:
+                    active_module_config = configuration.modules[self.activeModuleId[0]]
+                    if active_module_config.has('hv'):
+                        correction = float(part.voltage_correction())
+                        self.m_gridHV.SetCellValue(GRID_ROW_TEMPERATURE, GRID_COLUMN_CORRECTED, "%+.2f V"%(float(correction)))
+                        #for ch, hv in active_module_config.hv.items():
+                        for ch in range(1, part.config.n_channels+1):
+                            hv = part.countsToVolts(part.state[f'{ch}/REF_VOLTAGE'])
+                            corrected_hv = round(hv + correction, part.VOLTAGE_DECIMAL_PLACES)
+                            self.m_gridHV.SetCellValue(int(ch)-1, GRID_COLUMN_CORRECTED, str(corrected_hv))  
+                            #logging.info("DisplayValueOnComplete temp: desired = %s corrected = %s correction = %s"%(hv, corrected_hv, correction))
+                except ValueError as e:
+                    pass
     
 
             if  capability == 'STATUS':
