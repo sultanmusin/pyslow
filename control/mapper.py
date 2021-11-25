@@ -55,7 +55,6 @@ async def main(argv):
     bus_id = None
     address = None
     config_file = '../config/MapperConfig.xml'
-    config_file = 'config/MapperConfig.xml'
     from_address = 0
     to_address = 255
 
