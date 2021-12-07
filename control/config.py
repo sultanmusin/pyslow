@@ -170,3 +170,4 @@ class BusConfig:
         self.det_cfg = det_cfg
         self.id = soup.attrs['id'] if 'id' in soup.attrs else HVsysBus.DefaultBusId
         self.port = soup.find("port").text
+        self.timeout = float(soup.attrs['timeout']) if 'timeout' in soup.attrs else HVsysBus.DefaultTimeout
