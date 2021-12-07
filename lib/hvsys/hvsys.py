@@ -13,6 +13,7 @@ __status__ = "Development"
 from hvsysled import HVsysLED
 from hvsyssupply import HVsysSupply
 from hvsyssupply800c import HVsysSupply800c
+from hvsyswall import HVsysWall
 from hvsysps import HVsysPS
 from hvsyssm import HVsysSystemBox
 
@@ -23,6 +24,7 @@ class HVsys:
         'ps': HVsysPS,
         'sm': HVsysSystemBox,
         'hv800c': HVsysSupply800c,
+        'wall': HVsysWall,
 #        'switch': HVsysSwitch
     }
 
