@@ -30,6 +30,7 @@ from message import Message
 from detector import *
 from hvsyssupply import HVsysSupply
 from hvsyssupply800c import HVsysSupply800c
+from hvsyswall import HVsysWall
 from hvsysled import HVsysLED
 from hvstatus import HVStatus
 
@@ -49,7 +50,7 @@ GRID_COLUMN_LEFT_STATE = 2
 
 # HV grid legend
 
-N_SECTIONS = 10
+N_SECTIONS = 16
 GRID_ROW_PEDESTAL = N_SECTIONS
 GRID_ROW_TEMPERATURE = N_SECTIONS + 1
 GRID_ROW_SLOPE = N_SECTIONS + 2
@@ -84,6 +85,12 @@ hv_grid_coords = {
     "8/REF_VOLTAGE": cc(7,GRID_COLUMN_REFERENCE),
     "9/REF_VOLTAGE": cc(8,GRID_COLUMN_REFERENCE),
     "10/REF_VOLTAGE": cc(9,GRID_COLUMN_REFERENCE),
+    "11/REF_VOLTAGE": cc(10,GRID_COLUMN_REFERENCE),
+    "12/REF_VOLTAGE": cc(11,GRID_COLUMN_REFERENCE),
+    "13/REF_VOLTAGE": cc(12,GRID_COLUMN_REFERENCE),
+    "14/REF_VOLTAGE": cc(13,GRID_COLUMN_REFERENCE),
+    "15/REF_VOLTAGE": cc(14,GRID_COLUMN_REFERENCE),
+    "16/REF_VOLTAGE": cc(15,GRID_COLUMN_REFERENCE),
     "REF_PEDESTAL_VOLTAGE": cc(GRID_ROW_PEDESTAL,GRID_COLUMN_REFERENCE),
     "1/CORR_VOLTAGE": cc(0,GRID_COLUMN_CORRECTED),
     "2/CORR_VOLTAGE": cc(1,GRID_COLUMN_CORRECTED),
@@ -95,6 +102,12 @@ hv_grid_coords = {
     "8/CORR_VOLTAGE": cc(7,GRID_COLUMN_CORRECTED),
     "9/CORR_VOLTAGE": cc(8,GRID_COLUMN_CORRECTED),
     "10/CORR_VOLTAGE": cc(9,GRID_COLUMN_CORRECTED),
+    "11/CORR_VOLTAGE": cc(10,GRID_COLUMN_CORRECTED),
+    "12/CORR_VOLTAGE": cc(11,GRID_COLUMN_CORRECTED),
+    "13/CORR_VOLTAGE": cc(12,GRID_COLUMN_CORRECTED),
+    "14/CORR_VOLTAGE": cc(13,GRID_COLUMN_CORRECTED),
+    "15/CORR_VOLTAGE": cc(14,GRID_COLUMN_CORRECTED),
+    "16/CORR_VOLTAGE": cc(15,GRID_COLUMN_CORRECTED),
     "CORR_PEDESTAL_VOLTAGE": cc(GRID_ROW_PEDESTAL,GRID_COLUMN_CORRECTED),
     "TEMPERATURE": cc(GRID_ROW_TEMPERATURE,GRID_COLUMN_MEAS),
     "1/MEAS_VOLTAGE": cc(0,GRID_COLUMN_MEAS),
@@ -107,6 +120,12 @@ hv_grid_coords = {
     "8/MEAS_VOLTAGE": cc(7,GRID_COLUMN_MEAS),
     "9/MEAS_VOLTAGE": cc(8,GRID_COLUMN_MEAS),
     "10/MEAS_VOLTAGE": cc(9,GRID_COLUMN_MEAS),        
+    "11/MEAS_VOLTAGE": cc(10,GRID_COLUMN_MEAS),        
+    "12/MEAS_VOLTAGE": cc(11,GRID_COLUMN_MEAS),        
+    "13/MEAS_VOLTAGE": cc(12,GRID_COLUMN_MEAS),        
+    "14/MEAS_VOLTAGE": cc(13,GRID_COLUMN_MEAS),        
+    "15/MEAS_VOLTAGE": cc(14,GRID_COLUMN_MEAS),        
+    "16/MEAS_VOLTAGE": cc(15,GRID_COLUMN_MEAS),        
     "MEAS_PEDESTAL_VOLTAGE": cc(GRID_ROW_PEDESTAL,GRID_COLUMN_MEAS),
 }
 
@@ -1053,7 +1072,10 @@ class MainWindow(wx.Frame):
 
         str_value = part.valueToString(capability, value)
 
-        if type(part) in [HVsysSupply, HVsysSupply800c]:
+        if type(part) in [HVsysSupply, HVsysSupply800c, HVsysWall]:
+            if type(part) is HVsysWall:
+                capability = capability.replace('SET', 'MEAS')
+
             if capability in hv_grid_coords:
                 self.m_gridHV.SetCellValue(hv_grid_coords[capability], str_value)
             
@@ -1070,10 +1092,11 @@ class MainWindow(wx.Frame):
                         self.m_gridHV.SetCellValue(GRID_ROW_TEMPERATURE, GRID_COLUMN_CORRECTED, "%+.2f V"%(float(correction)))
                         #for ch, hv in active_module_config.hv.items():
                         for ch in range(1, part.config.n_channels+1):
-                            hv = part.countsToVolts(part.state[f'{ch}/REF_VOLTAGE'])
+#                            hv = part.countsToVolts(part.state[f'{ch}/REF_VOLTAGE'])
+                            hv = float(part.state[f'{ch}/REF_VOLTAGE'])
                             corrected_hv = round(hv + correction, part.VOLTAGE_DECIMAL_PLACES)
                             self.m_gridHV.SetCellValue(int(ch)-1, GRID_COLUMN_CORRECTED, str(corrected_hv))  
-                            #logging.info("DisplayValueOnComplete temp: desired = %s corrected = %s correction = %s"%(hv, corrected_hv, correction))
+                            logging.info("DisplayValueOnComplete temp: desired = %s corrected = %s correction = %s"%(hv, corrected_hv, correction))
                 except ValueError as e:
                     pass
     
