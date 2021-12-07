@@ -337,10 +337,10 @@ class HVsysSupply800c:
         if cap not in self.reference_voltage_caps(): 
             return None
 
-        old_voltage = self.state[cap]
-        self.state[cap] = new_voltage
+        old_voltage = self.countsToVolts(self.state[cap])
+        self.state[cap] = self.voltsToCounts(new_voltage)
         corrected_voltage = new_voltage + self.voltage_correction()
-
+        
         if cap == 'REF_PEDESTAL_VOLTAGE':     # also update all the channel voltages
             for ch in range(1, self.config.n_channels+1):
                 self.state[f'{ch}/REF_VOLTAGE'] += (new_voltage - old_voltage)
