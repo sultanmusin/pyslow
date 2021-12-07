@@ -32,12 +32,13 @@ class HVsysBus:
     IP_PORT = 4001
     MAX_BURST_COMMANDS = 1
     DefaultBusId = 'default'
+    DefaultTimeout = 0.5 # sec
 
     def __init__(self, bus_config, module_configs:list):
         self.id = bus_config.id
         self.port = bus_config.port
         self.task_queue = asyncio.Queue(10000)
-        self.timeout = 0.5 # sec
+        self.timeout = bus_config.timeout # sec
         self.loop = asyncio.get_event_loop()
         self.part_cache = {} # dict[int, PartState]
         self.parts = {} # dict[int, any hvsys part class]
