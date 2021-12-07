@@ -26,6 +26,7 @@ from config import *
 from hvsys import HVsys
 from hvsyssupply import HVsysSupply
 from hvsyssupply800c import HVsysSupply800c
+from hvsyswall import HVsysWall
 
 class HVsysBus:
     IP_PORT = 4001
@@ -36,7 +37,7 @@ class HVsysBus:
         self.id = bus_config.id
         self.port = bus_config.port
         self.task_queue = asyncio.Queue(10000)
-        self.timeout = 0.04 # sec
+        self.timeout = 0.5 # sec
         self.loop = asyncio.get_event_loop()
         self.part_cache = {} # dict[int, PartState]
         self.parts = {} # dict[int, any hvsys part class]
@@ -46,6 +47,8 @@ class HVsysBus:
                 part_type = HVsys.catalogus[part_name]        # e.g. HVsysSupply or other part
                 if part_name == 'hv' and mc.version == 'NA61_2_V2':
                     part_type = HVsysSupply800c               # override default (new) hardware version if the config file says so (for NA61 PSD compatibility)
+                elif part_name == 'hv' and mc.version == 'DM64_V2':
+                    part_type = HVsysWall                     # override default (new) hardware version if the config file says so (for Wall compatibility)
                 if part_address in self.parts:
                     pass
                     # temp raise ValueError("Duplicate part id = %d for hvsys bus %s" % (part_address, self.id))
