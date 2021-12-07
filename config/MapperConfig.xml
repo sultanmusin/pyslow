@@ -14,7 +14,7 @@
             <tempSlope> 60 </tempSlope>
         </flags>
         <connection>
-            <hvsys id='north'>
+            <hvsys id='north' timeout="0.035">
                     <rate unit="baud">57600</rate>
                     <port>192.168.0.101</port>
                     <dataBits>8</dataBits>
