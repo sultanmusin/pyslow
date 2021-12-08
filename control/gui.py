@@ -667,7 +667,7 @@ class MainWindow(wx.Frame):
             else:
                 # do request the voltage change      
                 # tell the part the new voltage, so it returns the command to run on the bus      
-                command = part.request_voltage_change(cap, value)
+                command = part.request_voltage_change(cap, desired_value)
                 # fire the command on the bus, scheduling module polling after it has completed
                 asyncio.get_event_loop().create_task(detector.add_task(bus_id, command, part, lambda response: self.pollModule(moduleId)))
 
@@ -921,7 +921,7 @@ class MainWindow(wx.Frame):
                 command = Message(Message.WRITE_SHORT, part_address, part, 'STATUS', state)
                 logging.warning('HV switching!')
                 asyncio.get_event_loop().create_task(detector.add_task(bus_id, command, part, print))
-                asyncio.get_event_loop().create_task(detector.monitor_ramp_status(bus_id, part, part_address, self.DisplayRampStatus))
+                # TODO fix asyncio.get_event_loop().create_task(detector.monitor_ramp_status(bus_id, part, part_address, self.DisplayRampStatus))
             else:
                 logging.warning('HV switch requested for module without HV part')
         

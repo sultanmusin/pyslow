@@ -134,9 +134,9 @@ class HVsysWall:
     def voltsToCounts(self, volts: str) -> int:
         if "VOLTAGE_CALIBRATION" not in self.state or self.state["VOLTAGE_CALIBRATION"] is None: 
             raise ValueError("HVsysWall: cannot translate volts to counts without knowing VOLTAGE_CALIBRATION")
-        if "SET_PEDESTAL_VOLTAGE" not in self.state or self.state["SET_PEDESTAL_VOLTAGE"] is None: 
-            raise ValueError("HVsysWall: cannot translate volts to counts without knowing SET_PEDESTAL_VOLTAGE")
-        pedestal_voltage = self.pedestalCountsToVolts(self.state["SET_PEDESTAL_VOLTAGE"])
+        if "REF_PEDESTAL_VOLTAGE" not in self.state or self.state["REF_PEDESTAL_VOLTAGE"] is None: 
+            raise ValueError("HVsysWall: cannot translate volts to counts without knowing REF_PEDESTAL_VOLTAGE")
+        pedestal_voltage = float(self.state["REF_PEDESTAL_VOLTAGE"])
         tmp = float( self.valueToString('TEMPERATURE', self.state['TEMPERATURE']) )
         tmp_corr = -(tmp - self.config.reference_temperature) * self.config.temperature_slope / 1000 # minus for normal termerature correction, e.g. config value 60 means "-60mV/C"
         volts_to_set = tmp_corr - (float(volts) - pedestal_voltage - HVsysWall.PEDESTAL_VOLTAGE_BIAS)  # e.g. -0.5V means we need to go 0.5V lower than pedestal (with positive counts)       
@@ -359,9 +359,9 @@ class HVsysWall:
         if cap not in self.reference_voltage_caps(): 
             return None
 
-        old_voltage = self.countsToVolts(self.state[cap])
-        self.state[cap] = self.voltsToCounts(new_voltage)
-        corrected_voltage = new_voltage + self.voltage_correction()
+        old_voltage = float(self.state[cap])
+        self.state[cap] = new_voltage
+        corrected_voltage = float(new_voltage) + self.voltage_correction()
 
         if cap == 'REF_PEDESTAL_VOLTAGE':     # also update all the channel voltages
             for ch in range(1, self.config.n_channels+1):
