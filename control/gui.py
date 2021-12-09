@@ -722,12 +722,19 @@ class MainWindow(wx.Frame):
     def ShowReferenceParameters(self):
         logging.info("ShowReferenceParameters: %s" % self.activeModuleId)
         if type(self.activeModuleId) is list and len(self.activeModuleId) == 1:
-            active_module_config = configuration.modules[self.activeModuleId[0]]
+            module_id = self.activeModuleId[0]
+            active_module_config = configuration.modules[module_id]
             if active_module_config.has('hv'):
-                for ch, hv in active_module_config.hv.items():
+                bus_id = self.config.modules[module_id].bus_id
+                part_address = int(self.config.modules[module_id].address('hv'))
+                part = detector.buses[bus_id].getPart(part_address) 
+
+                for ch in active_module_config.hv.keys():
+                    hv = part.state[f'{ch}/REF_VOLTAGE'] 
                     self.m_gridHV.SetCellValue(int(ch)-1, GRID_COLUMN_REFERENCE, str(hv))    
 
-                self.m_gridHV.SetCellValue(GRID_ROW_PEDESTAL, GRID_COLUMN_REFERENCE, str(active_module_config.hv_pedestal))
+                ped_v = part.state['REF_PEDESTAL_VOLTAGE']
+                self.m_gridHV.SetCellValue(GRID_ROW_PEDESTAL, GRID_COLUMN_REFERENCE, str(ped_v))
                 self.m_gridHV.SetCellValue(GRID_ROW_TEMPERATURE, GRID_COLUMN_REFERENCE, "%.2f °C"%(configuration.reference_temperature))
                 self.m_gridHV.SetCellValue(GRID_ROW_SLOPE, GRID_COLUMN_REFERENCE, "%+.0f mV/°C"%(-configuration.temperature_slope))
                 self.m_gridHV.SetCellValue(GRID_ROW_TEMPERATURE, GRID_COLUMN_STATE, "From: %s"%(str(active_module_config.temperature_from_module)))
