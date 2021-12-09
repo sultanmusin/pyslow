@@ -14,7 +14,7 @@
             <hvsys id='01'>
                 <rate unit="baud">57600</rate>
                 <!--port>10.18.96.48</port-->
-                <port>192.168.0.119</port>
+                <port>192.168.0.78</port>
                 <!--port>localhost</port-->
                 <dataBits>8</dataBits>
                 <stopBits>1</stopBits>
