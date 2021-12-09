@@ -11,11 +11,23 @@
 
         </flags>
         <connection>
-            <hvsys id='01'>
+            <hvsys id='04'>
                 <rate unit="baud">57600</rate>
-                <!--port>10.18.96.48</port-->
-                <port>192.168.0.78</port>
-                <!--port>localhost</port-->
+                <port>10.18.88.101</port>
+                <dataBits>8</dataBits>
+                <stopBits>1</stopBits>
+                <parity>0</parity>                
+            </hvsys>
+            <hvsys id='03'>
+                <rate unit="baud">57600</rate>
+                <port>10.18.88.102</port>
+                <dataBits>8</dataBits>
+                <stopBits>1</stopBits>
+                <parity>0</parity>                
+            </hvsys>
+            <hvsys id='02'>
+                <rate unit="baud">57600</rate>
+                <port>10.18.88.103</port>
                 <dataBits>8</dataBits>
                 <stopBits>1</stopBits>
                 <parity>0</parity>                
@@ -36,7 +48,7 @@
         </geometry>
                  
         <connection>
-            <hvsys id='01'>
+            <hvsys id='04'>
                 <hv>
                     <id>1</id>
                 </hv>               
@@ -74,7 +86,7 @@
         </geometry>
                  
         <connection>
-            <hvsys id='01'>
+            <hvsys id='04'>
                 <hv>
                     <id>2</id>
                 </hv>
@@ -112,7 +124,7 @@
         </geometry>
                  
         <connection>
-            <hvsys id='01'>
+            <hvsys id='04'>
                 <hv>
                     <id>3</id>
                 </hv>
@@ -150,7 +162,309 @@
         </geometry>
                  
         <connection>
-            <hvsys id='01'>
+            <hvsys id='04'>
+                <hv>
+                    <id>4</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <hv>
+                <channel id="1" unit="Volts">42.00</channel>
+                <channel id="2" unit="Volts">42.00</channel>
+                <channel id="3" unit="Volts">42.00</channel>
+                <channel id="4" unit="Volts">42.00</channel>
+                <channel id="5" unit="Volts">42.00</channel>
+                <channel id="6" unit="Volts">42.00</channel>
+                <channel id="7" unit="Volts">42.00</channel>
+                <channel id="8" unit="Volts">42.00</channel>
+                <channel id="9" unit="Volts">42.00</channel>
+                <channel id="10" unit="Volts">42.00</channel>
+                <channel id="11" unit="Volts">42.00</channel>
+                <channel id="12" unit="Volts">42.00</channel>
+                <channel id="13" unit="Volts">42.00</channel>
+                <channel id="14" unit="Volts">42.00</channel>
+                <channel id="15" unit="Volts">42.00</channel>
+                <channel id="16" unit="Volts">42.00</channel>
+                <pedestal unit="Volts">42.00</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+    <module id="5" version="DM64_V2">
+        <geometry>
+            <size>1</size>
+            <x>3</x>
+            <y>2</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id='03'>
+                <hv>
+                    <id>1</id>
+                </hv>               
+            </hvsys>
+        </connection>    
+        <settings>
+            <hv>
+                <channel id="1" unit="Volts">42.00</channel>
+                <channel id="2" unit="Volts">42.00</channel>
+                <channel id="3" unit="Volts">42.00</channel>
+                <channel id="4" unit="Volts">42.00</channel>
+                <channel id="5" unit="Volts">42.00</channel>
+                <channel id="6" unit="Volts">42.00</channel>
+                <channel id="7" unit="Volts">42.00</channel>
+                <channel id="8" unit="Volts">42.00</channel>
+                <channel id="9" unit="Volts">42.00</channel>
+                <channel id="10" unit="Volts">42.00</channel>
+                <channel id="11" unit="Volts">42.00</channel>
+                <channel id="12" unit="Volts">42.00</channel>
+                <channel id="13" unit="Volts">42.00</channel>
+                <channel id="14" unit="Volts">42.00</channel>
+                <channel id="15" unit="Volts">42.00</channel>
+                <channel id="16" unit="Volts">42.00</channel>
+                <pedestal unit="Volts">42.00</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="6" version="DM64_V2">
+        <geometry>
+            <size>1</size>
+            <x>4</x>
+            <y>2</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id='03'>
+                <hv>
+                    <id>2</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <hv>
+                <channel id="1" unit="Volts">42.00</channel>
+                <channel id="2" unit="Volts">42.00</channel>
+                <channel id="3" unit="Volts">42.00</channel>
+                <channel id="4" unit="Volts">42.00</channel>
+                <channel id="5" unit="Volts">42.00</channel>
+                <channel id="6" unit="Volts">42.00</channel>
+                <channel id="7" unit="Volts">42.00</channel>
+                <channel id="8" unit="Volts">42.00</channel>
+                <channel id="9" unit="Volts">42.00</channel>
+                <channel id="10" unit="Volts">42.00</channel>
+                <channel id="11" unit="Volts">42.00</channel>
+                <channel id="12" unit="Volts">42.00</channel>
+                <channel id="13" unit="Volts">42.00</channel>
+                <channel id="14" unit="Volts">42.00</channel>
+                <channel id="15" unit="Volts">42.00</channel>
+                <channel id="16" unit="Volts">42.00</channel>
+                <pedestal unit="Volts">42.00</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="7" version="DM64_V2">
+        <geometry>
+            <size>1</size>
+            <x>5</x>
+            <y>2</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id='03'>
+                <hv>
+                    <id>3</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <hv>
+                <channel id="1" unit="Volts">42.00</channel>
+                <channel id="2" unit="Volts">42.00</channel>
+                <channel id="3" unit="Volts">42.00</channel>
+                <channel id="4" unit="Volts">42.00</channel>
+                <channel id="5" unit="Volts">42.00</channel>
+                <channel id="6" unit="Volts">42.00</channel>
+                <channel id="7" unit="Volts">42.00</channel>
+                <channel id="8" unit="Volts">42.00</channel>
+                <channel id="9" unit="Volts">42.00</channel>
+                <channel id="10" unit="Volts">42.00</channel>
+                <channel id="11" unit="Volts">42.00</channel>
+                <channel id="12" unit="Volts">42.00</channel>
+                <channel id="13" unit="Volts">42.00</channel>
+                <channel id="14" unit="Volts">42.00</channel>
+                <channel id="15" unit="Volts">42.00</channel>
+                <channel id="16" unit="Volts">42.00</channel>
+                <pedestal unit="Volts">42.00</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="8" version="DM64_V2">
+        <geometry>
+            <size>1</size>
+            <x>6</x>
+            <y>2</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id='03'>
+                <hv>
+                    <id>4</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <hv>
+                <channel id="1" unit="Volts">42.00</channel>
+                <channel id="2" unit="Volts">42.00</channel>
+                <channel id="3" unit="Volts">42.00</channel>
+                <channel id="4" unit="Volts">42.00</channel>
+                <channel id="5" unit="Volts">42.00</channel>
+                <channel id="6" unit="Volts">42.00</channel>
+                <channel id="7" unit="Volts">42.00</channel>
+                <channel id="8" unit="Volts">42.00</channel>
+                <channel id="9" unit="Volts">42.00</channel>
+                <channel id="10" unit="Volts">42.00</channel>
+                <channel id="11" unit="Volts">42.00</channel>
+                <channel id="12" unit="Volts">42.00</channel>
+                <channel id="13" unit="Volts">42.00</channel>
+                <channel id="14" unit="Volts">42.00</channel>
+                <channel id="15" unit="Volts">42.00</channel>
+                <channel id="16" unit="Volts">42.00</channel>
+                <pedestal unit="Volts">42.00</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+    <module id="9" version="DM64_V2">
+        <geometry>
+            <size>1</size>
+            <x>3</x>
+            <y>3</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id='02'>
+                <hv>
+                    <id>1</id>
+                </hv>               
+            </hvsys>
+        </connection>    
+        <settings>
+            <hv>
+                <channel id="1" unit="Volts">42.00</channel>
+                <channel id="2" unit="Volts">42.00</channel>
+                <channel id="3" unit="Volts">42.00</channel>
+                <channel id="4" unit="Volts">42.00</channel>
+                <channel id="5" unit="Volts">42.00</channel>
+                <channel id="6" unit="Volts">42.00</channel>
+                <channel id="7" unit="Volts">42.00</channel>
+                <channel id="8" unit="Volts">42.00</channel>
+                <channel id="9" unit="Volts">42.00</channel>
+                <channel id="10" unit="Volts">42.00</channel>
+                <channel id="11" unit="Volts">42.00</channel>
+                <channel id="12" unit="Volts">42.00</channel>
+                <channel id="13" unit="Volts">42.00</channel>
+                <channel id="14" unit="Volts">42.00</channel>
+                <channel id="15" unit="Volts">42.00</channel>
+                <channel id="16" unit="Volts">42.00</channel>
+                <pedestal unit="Volts">42.00</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="10" version="DM64_V2">
+        <geometry>
+            <size>1</size>
+            <x>4</x>
+            <y>3</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id='02'>
+                <hv>
+                    <id>2</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <hv>
+                <channel id="1" unit="Volts">42.00</channel>
+                <channel id="2" unit="Volts">42.00</channel>
+                <channel id="3" unit="Volts">42.00</channel>
+                <channel id="4" unit="Volts">42.00</channel>
+                <channel id="5" unit="Volts">42.00</channel>
+                <channel id="6" unit="Volts">42.00</channel>
+                <channel id="7" unit="Volts">42.00</channel>
+                <channel id="8" unit="Volts">42.00</channel>
+                <channel id="9" unit="Volts">42.00</channel>
+                <channel id="10" unit="Volts">42.00</channel>
+                <channel id="11" unit="Volts">42.00</channel>
+                <channel id="12" unit="Volts">42.00</channel>
+                <channel id="13" unit="Volts">42.00</channel>
+                <channel id="14" unit="Volts">42.00</channel>
+                <channel id="15" unit="Volts">42.00</channel>
+                <channel id="16" unit="Volts">42.00</channel>
+                <pedestal unit="Volts">42.00</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="11" version="DM64_V2">
+        <geometry>
+            <size>1</size>
+            <x>5</x>
+            <y>3</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id='02'>
+                <hv>
+                    <id>3</id>
+                </hv>
+            </hvsys>
+        </connection>    
+        <settings>
+            <hv>
+                <channel id="1" unit="Volts">42.00</channel>
+                <channel id="2" unit="Volts">42.00</channel>
+                <channel id="3" unit="Volts">42.00</channel>
+                <channel id="4" unit="Volts">42.00</channel>
+                <channel id="5" unit="Volts">42.00</channel>
+                <channel id="6" unit="Volts">42.00</channel>
+                <channel id="7" unit="Volts">42.00</channel>
+                <channel id="8" unit="Volts">42.00</channel>
+                <channel id="9" unit="Volts">42.00</channel>
+                <channel id="10" unit="Volts">42.00</channel>
+                <channel id="11" unit="Volts">42.00</channel>
+                <channel id="12" unit="Volts">42.00</channel>
+                <channel id="13" unit="Volts">42.00</channel>
+                <channel id="14" unit="Volts">42.00</channel>
+                <channel id="15" unit="Volts">42.00</channel>
+                <channel id="16" unit="Volts">42.00</channel>
+                <pedestal unit="Volts">42.00</pedestal>
+            </hv>
+        </settings> 
+        
+    </module>
+
+    <module id="12" version="DM64_V2">
+        <geometry>
+            <size>1</size>
+            <x>6</x>
+            <y>3</y>
+        </geometry>
+                 
+        <connection>
+            <hvsys id='02'>
                 <hv>
                     <id>4</id>
                 </hv>
