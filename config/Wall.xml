@@ -2,7 +2,7 @@
 <config xmlns="http://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" created="17.02.2014" id="default" xsi:noNamespaceSchemaLocation="PsdSlowControlConfig.xsd" xsi:schemaLocation="PsdSlowControlConfig.xsd">
 <global>
         <flags>
-            <onlineModules> 1,2,3,4 </onlineModules>
+            <onlineModules> 1,2,3,4,5,6,7,8,9,10,11,12 </onlineModules>
             <queryDelay unit="sec">600</queryDelay>
             <verbose> 1 </verbose>
             <monitorHV> 0 </monitorHV>
