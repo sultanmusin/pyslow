@@ -566,16 +566,17 @@ class MainWindow(wx.Frame):
                     part = detector.buses[bus_id].getPart(part_address) 
                     
                     # get the reference (or user-entered) ped v
-                    pedestal_voltage = float(self.m_gridHV.GetCellValue(GRID_ROW_PEDESTAL, GRID_COLUMN_REFERENCE))
+                    # pedestal_voltage = float(self.m_gridHV.GetCellValue(GRID_ROW_PEDESTAL, GRID_COLUMN_REFERENCE))
+                    pedestal_voltage = float(part.state['REF_PEDESTAL_VOLTAGE'])
                     # get the corrected ped v
                     correction = part.voltage_correction()
                     set_pedestal_voltage = pedestal_voltage + correction
                     # fire
                     cap = 'SET_PEDESTAL_VOLTAGE'
-                    value = part.valueFromString(cap, set_pedestal_voltage)
+                    value = part.valueFromString(cap, str(set_pedestal_voltage))
                     command = Message(Message.WRITE_SHORT, part_address, part, cap, value)
-                    logging.debug('Going to set corrected ped v of module %s to %s (%s)'%(module_id, set_pedestal_voltage, value))
-#                    asyncio.get_event_loop().create_task(detector.add_task(bus_id, command, part, print))
+                    logging.info('Going to set corrected ped v of module %s to %s (%s)'%(module_id, set_pedestal_voltage, value))
+                    asyncio.get_event_loop().create_task(detector.add_task(bus_id, command, part, print))
 
         self.UpdateModuleGrid()
 
