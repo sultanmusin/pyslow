@@ -95,7 +95,7 @@ class HVsysWall:
         for ch in range(1,self.config.n_channels+1):
             self.state[f"{ch}/REF_VOLTAGE"] = self.config.hv[str(ch)]
         
-        if temperature_sensor in config:
+        if hasattr(config, 'temperature_sensor'):
             self.temperature_sensor = config.temperature_sensor
         else:
             self.temperature_sensor = self
