@@ -94,6 +94,11 @@ class HVsysWall:
         self.state['REF_PEDESTAL_VOLTAGE'] = self.config.hv_pedestal
         for ch in range(1,self.config.n_channels+1):
             self.state[f"{ch}/REF_VOLTAGE"] = self.config.hv[str(ch)]
+        
+        if temperature_sensor in config:
+            self.temperature_sensor = config.temperature_sensor
+        else:
+            self.temperature_sensor = self
 
     def reference_voltage_caps(self):
         return [f"{ch}/REF_VOLTAGE" for ch in range(1, self.config.n_channels+1)] + ['REF_PEDESTAL_VOLTAGE']
@@ -138,7 +143,7 @@ class HVsysWall:
         if "REF_PEDESTAL_VOLTAGE" not in self.state or self.state["REF_PEDESTAL_VOLTAGE"] is None: 
             raise ValueError("HVsysWall: cannot translate volts to counts without knowing REF_PEDESTAL_VOLTAGE")
         pedestal_voltage = float(self.state["REF_PEDESTAL_VOLTAGE"])
-        tmp = float( self.valueToString('TEMPERATURE', self.state['TEMPERATURE']) )
+        tmp = float( self.valueToString('TEMPERATURE', self.temperature_sensor.state['TEMPERATURE']) )
         tmp_corr = -(tmp - self.config.reference_temperature) * self.config.temperature_slope / 1000 # minus for normal termerature correction, e.g. config value 60 means "-60mV/C"
         volts_to_set = tmp_corr - (float(volts) - pedestal_voltage - HVsysWall.PEDESTAL_VOLTAGE_BIAS)  # e.g. -0.5V means we need to go 0.5V lower than pedestal (with positive counts)       
 
@@ -185,7 +190,7 @@ class HVsysWall:
         calib_voltage_slope = self.state["VOLTAGE_CALIBRATION"] / 100.0              #  325 -> -3.25 V (full scale) 
         pedestal_voltage = self.pedestalCountsToVolts(self.state["SET_PEDESTAL_VOLTAGE"])
 
-        tmp = float( self.valueToString('TEMPERATURE', self.state['TEMPERATURE']) )
+        tmp = float( self.valueToString('TEMPERATURE', self.temperature_sensor.state['TEMPERATURE']) )
         tmp_corr = -(tmp - self.config.reference_temperature) * self.config.temperature_slope / 1000 # minus for normal termerature correction, e.g. config value 60 means "-60mV/C"
 
         volts = pedestal_voltage - counts * calib_voltage_slope / (HVsysWall.VOLTAGE_RESOLUTION - 1) + HVsysWall.PEDESTAL_VOLTAGE_BIAS + tmp_corr
@@ -217,9 +222,9 @@ class HVsysWall:
 
 
     def voltage_correction(self): 
-        if "TEMPERATURE" not in self.state or self.state["TEMPERATURE"] is None: 
+        if "TEMPERATURE" not in self.temperature_sensor.state or self.temperature_sensor.state["TEMPERATURE"] is None: 
             raise ValueError("HVsysWall800c: cannot calculate temperature correction without knowing TEMPERATURE")
-        tmp = self.tempCountsToDegrees(self.state['TEMPERATURE'])
+        tmp = self.tempCountsToDegrees(self.temperature_sensor.state['TEMPERATURE'])
         tmp_corr = (tmp - self.config.reference_temperature) * self.config.temperature_slope / 1000 # minus for normal termerature correction, e.g. config value 60 means "-60mV/C"
 
         #logging.debug(round(tmp_corr, HVsysWall.VOLTAGE_DECIMAL_PLACES))

@@ -62,7 +62,7 @@ class HVsysBus:
                         if len(sources) > 0:
                             address = sources[0].address('hv')
                             mc.temperature_sensor = self.parts[address]
-                            logging.debug(f'Setting temperature sensor for module {mc.id} to module {sources[0].id} (bus {self.id} address {address}')
+                            logging.info(f'Setting temperature sensor for module {mc.id} to module {sources[0].id} (bus {self.id} address {address})')
                     self.parts[part_address] = part_type(mc)        # now create the instance of the part connected to our bus 
                     if mc.online:
                         self.online = True
