@@ -853,7 +853,8 @@ class MainWindow(wx.Frame):
 
                     for ch, hv in module_config.hv.items():
                         cap = '%s/SET_VOLTAGE'%(ch)
-                        value = part.valueFromString(cap, str(hv + part.voltage_correction()))
+#                        value = part.valueFromString(cap, str(hv + part.voltage_correction()))
+                        value = part.valueFromString(cap, str(hv))
                         command = Message(Message.WRITE_SHORT, part_address, part, cap, value)
                         asyncio.get_event_loop().create_task(detector.add_task(bus_id, command, part, print))
 
@@ -1073,6 +1074,7 @@ class MainWindow(wx.Frame):
             callback = lambda *args: None  # empty callback; do nothing
         return asyncio.get_event_loop().create_task(detector.poll_module_important(moduleId, callback))
 
+
     def DisplayValueOnComplete(self, part, capability, value):
         
         print("DisplayValueOnComplete: %s=%s"%(capability, value))
@@ -1231,10 +1233,10 @@ async def main(argv):
     
     try:
         logging.info("Staring bus listeners...")
-        for id, sm in detector.buses.items():
-            await loop.create_task(sm.connect())
-            loop.create_task(sm.send())
-            logging.info(f"Bus '{id}' started.")
+        for id, bus in detector.buses.items():
+            await loop.create_task(bus.connect())
+            loop.create_task(bus.send())
+            logging.info("Bus '%s' %s."%(id, "online" if bus.online else "offline"))
     except OSError as e:
         print("Cannot connect to system module: %s"%(str(e)))  
 
