@@ -42,12 +42,11 @@ class ModuleState(Enum):
 class Detector:
     
     def __init__(self, config:Config):
+        self.config = config
         self.buses = {} # dict[str,HVsysBus]
         for id, cfg in config.buses.items():
             this_bus_module_configs = [c for c in config.modules.values() if c.bus_id == id]# fetch the list of module connected to certain bus
-            self.buses[id] = HVsysBus(cfg, this_bus_module_configs)
-
-        self.config = config
+            self.buses[id] = HVsysBus(cfg, this_bus_module_configs, self)
 
     async def poll_online(self):
         pass

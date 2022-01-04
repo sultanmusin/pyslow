@@ -34,7 +34,7 @@ class HVsysBus:
     DefaultBusId = 'default'
     DefaultTimeout = 0.5 # sec
 
-    def __init__(self, bus_config, module_configs:list):
+    def __init__(self, bus_config, module_configs:list, detector):
         self.id = bus_config.id
         self.port = bus_config.port
         self.task_queue = asyncio.Queue(10000)
@@ -42,7 +42,9 @@ class HVsysBus:
         self.loop = asyncio.get_event_loop()
         self.part_cache = {} # dict[int, PartState]
         self.parts = {} # dict[int, any hvsys part class]
+        self.detector = detector
         self.online = False
+        self.module_configs = module_configs
 
         for mc in module_configs:
             for part_name, part_address in mc.addr.items():   # mc.addr be like {'hv':15, 'led':18}
@@ -58,11 +60,14 @@ class HVsysBus:
                 else:
                     if part_type in [HVsysSupply, HVsysSupply800c, HVsysWall] and mc.temperature_from_module not in (mc.id, 'FAKE'):
                         # find the source module
-                        sources = [c for c in module_configs if c.id == mc.temperature_from_module]
+                        bus_id = detector.config.modules[mc.temperature_from_module].bus_id
+                        bus = self if bus_id == self.id else self.detector.buses[bus_id]
+
+                        sources = [c for c in bus.module_configs if c.id == mc.temperature_from_module]
                         if len(sources) > 0:
                             address = sources[0].address('hv')
-                            mc.temperature_sensor = self.parts[address]
-                            logging.info(f'Setting temperature sensor for module {mc.id} to module {sources[0].id} (bus {self.id} address {address})')
+                            mc.temperature_sensor = bus.parts[address]
+                            logging.info(f'Setting temperature sensor for module {mc.id} to module {sources[0].id} (bus {bus.id} address {address})')
                     self.parts[part_address] = part_type(mc)        # now create the instance of the part connected to our bus 
                     if mc.online:
                         self.online = True
