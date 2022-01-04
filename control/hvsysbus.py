@@ -42,6 +42,7 @@ class HVsysBus:
         self.loop = asyncio.get_event_loop()
         self.part_cache = {} # dict[int, PartState]
         self.parts = {} # dict[int, any hvsys part class]
+        self.online = False
 
         for mc in module_configs:
             for part_name, part_address in mc.addr.items():   # mc.addr be like {'hv':15, 'led':18}
@@ -50,11 +51,21 @@ class HVsysBus:
                     part_type = HVsysSupply800c               # override default (new) hardware version if the config file says so (for NA61 PSD compatibility)
                 elif part_name == 'hv' and mc.version == 'DM64_V2':
                     part_type = HVsysWall                     # override default (new) hardware version if the config file says so (for Wall compatibility)
+
                 if part_address in self.parts:
                     pass
                     # temp raise ValueError("Duplicate part id = %d for hvsys bus %s" % (part_address, self.id))
                 else:
+                    if part_type in [HVsysSupply, HVsysSupply800c, HVsysWall] and mc.temperature_from_module not in (mc.id, 'FAKE'):
+                        # find the source module
+                        sources = [c for c in module_configs if c.id == mc.temperature_from_module]
+                        if len(sources) > 0:
+                            address = sources[0].address('hv')
+                            mc.temperature_sensor = self.parts[address]
+                            logging.debug(f'Setting temperature sensor for module {mc.id} to module {sources[0].id} (bus {self.id} address {address}')
                     self.parts[part_address] = part_type(mc)        # now create the instance of the part connected to our bus 
+                    if mc.online:
+                        self.online = True
 
     def getPartCache(self, addr:int, part_type: type) -> PartState:
         if addr not in self.part_cache: 
@@ -70,7 +81,13 @@ class HVsysBus:
 
 
     async def connect(self):
-        self.reader, self.writer = await asyncio.open_connection(self.port, HVsysBus.IP_PORT)
+        fut = asyncio.open_connection(self.port, HVsysBus.IP_PORT)
+        try:
+            # Wait for 3 seconds, then raise TimeoutError
+            self.reader, self.writer = await asyncio.wait_for(fut, timeout=3)
+        except asyncio.TimeoutError:
+            self.online = False
+            logging.warning(f"Cannot connect to {self.port}")
 
     async def disconnect(self):
         self.writer.close()
@@ -96,38 +113,42 @@ class HVsysBus:
             # Get a "work item" out of the queue.
             #TODO for  MAX_BURST_COMMANDS:
             if not self.task_queue.empty():
-                logging.debug("send_worker: get item 1 of %d" % (self.task_queue.qsize()))
-                #await asyncio.sleep(0.1)
-                task = await self.task_queue.get()
-
-                message = task.cmd
-                # Check cache of the specified part here
-                part_cache = self.getPartCache(message.address, message.device)
-                if message.is_read_command() and message.capability not in message.device.volatile and part_cache.isRecent(message.capability):
-                    response = part_cache.getState(message.capability)
-                    logging.info("Found recent value in cache, skipping request! %s/%d/%s == %d"%(message.device.DESCRIPTION, message.address, message.capability, response))
-                    task.cb(response)
+                if not self.online:
+                    logging.debug("send_worker: bus %s offline, not sending command." % (self.id))
+                    await asyncio.sleep(0.1)
                 else:
-                    logging.info("Polling hardware... %s/%d/%s: %s"%(message.device.DESCRIPTION, message.address, message.capability, str(task.cmd).rstrip()))
-                    # create a function that will take int and update particular part_cache
-                    update_cache_callback = partial(part_cache.updateState, task.part, task.cmd.capability) 
-                    # and reqister it to be called after the device responds
-                    task.append_cb(update_cache_callback)
+                    logging.debug("send_worker: get item 1 of %d" % (self.task_queue.qsize()))
+                    #await asyncio.sleep(0.1)
+                    task = await self.task_queue.get()
 
-                    def update_part_callback(val:str):
-                        task.part.state[task.cmd.capability] = val
+                    message = task.cmd
+                    # Check cache of the specified part here
+                    part_cache = self.getPartCache(message.address, message.device)
+                    if message.is_read_command() and message.capability not in message.device.volatile and part_cache.isRecent(message.capability):
+                        response = part_cache.getState(message.capability)
+                        logging.info("Found recent value in cache, skipping request! %s/%d/%s == %d"%(message.device.DESCRIPTION, message.address, message.capability, response))
+                        task.cb(response)
+                    else:
+                        logging.info("Polling hardware... %s/%d/%s: %s"%(message.device.DESCRIPTION, message.address, message.capability, str(task.cmd).rstrip()))
+                        # create a function that will take int and update particular part_cache
+                        update_cache_callback = partial(part_cache.updateState, task.part, task.cmd.capability) 
+                        # and reqister it to be called after the device responds
+                        task.append_cb(update_cache_callback)
 
-                    task.prepend_cb(update_part_callback)
+                        def update_part_callback(val:str):
+                            task.part.state[task.cmd.capability] = val
 
-                    self.writer.write(str(task.cmd).encode())
-                    try: 
-                        await asyncio.wait_for(self.recv(task.cb, task.timestamp), self.timeout)
-                    except asyncio.TimeoutError as e:
-                        logging.warning("No response in timeout=%fs" % (self.timeout))
- 
-                    # Notify the queue that the "work item" has been processed.
-                    self.task_queue.task_done()
-                    logging.debug("send_worker: task done")
+                        task.prepend_cb(update_part_callback)
+
+                        self.writer.write(str(task.cmd).encode())
+                        try: 
+                            await asyncio.wait_for(self.recv(task.cb, task.timestamp), self.timeout)
+                        except asyncio.TimeoutError as e:
+                            logging.warning("No response in timeout=%fs" % (self.timeout))
+    
+                        # Notify the queue that the "work item" has been processed.
+                        self.task_queue.task_done()
+                        logging.debug("send_worker: task done")
             else:
 #                print("send_worker: no item")
                 await asyncio.sleep(0.1)

@@ -55,7 +55,7 @@ class HVsysWall:
         "RAMP_TIME": 0x26,
         "TEMPERATURE": 0x28,
         "CHECK_CRC": 0x2a,
-        "RUD_PEDESTAL_VOLTAGE": 0x4e,
+        "MEAS_PEDESTAL_VOLTAGE": 0x4e,
         "VOLTAGE_CALIBRATION": 0x50,           # Calibration value of channels Voltage in 10mV units, i.e. to get Volts one need Vmax/100.
         "PEDESTAL_VOLTAGE_CALIBRATION_MAX": 0x52,   # Calibration value of MAX pedestal Voltage in 10mV units, i.e. to get Volts one need PedVmax/100
         "PEDESTAL_VOLTAGE_CALIBRATION_MIN": 0x54,   # Calibration value of MAX pedestal Voltage in 10mV units, i.e. to get Volts one need PedVmax/100
@@ -73,6 +73,7 @@ class HVsysWall:
         "PEDESTAL_VOLTAGE_CALIBRATION_MAX", 
         "PEDESTAL_VOLTAGE_CALIBRATION_MIN", 
         "SET_PEDESTAL_VOLTAGE",
+        "MEAS_PEDESTAL_VOLTAGE",
         "VOLTAGE_CALIBRATION"
     ]
 
@@ -298,22 +299,22 @@ class HVsysWall:
         "15/REF_VOLTAGE": countsToVolts,
         "16/REF_VOLTAGE": countsToVolts,
         "REF_PEDESTAL_VOLTAGE": pedestalCountsToVolts,
-        "1/SET_VOLTAGE": countsToVolts,
-        "2/SET_VOLTAGE": countsToVolts,
-        "3/SET_VOLTAGE": countsToVolts,
-        "4/SET_VOLTAGE": countsToVolts,
-        "5/SET_VOLTAGE": countsToVolts,
-        "6/SET_VOLTAGE": countsToVolts,
-        "7/SET_VOLTAGE": countsToVolts,
-        "8/SET_VOLTAGE": countsToVolts,
-        "9/SET_VOLTAGE": countsToVolts,
-        "10/SET_VOLTAGE": countsToVolts,
-        "11/SET_VOLTAGE": countsToVolts,
-        "12/SET_VOLTAGE": countsToVolts,
-        "13/SET_VOLTAGE": countsToVolts,
-        "14/SET_VOLTAGE": countsToVolts,
-        "15/SET_VOLTAGE": countsToVolts,
-        "16/SET_VOLTAGE": countsToVolts,
+        "1/SET_VOLTAGE": measCountsToVolts,
+        "2/SET_VOLTAGE": measCountsToVolts,
+        "3/SET_VOLTAGE": measCountsToVolts,
+        "4/SET_VOLTAGE": measCountsToVolts,
+        "5/SET_VOLTAGE": measCountsToVolts,
+        "6/SET_VOLTAGE": measCountsToVolts,
+        "7/SET_VOLTAGE": measCountsToVolts,
+        "8/SET_VOLTAGE": measCountsToVolts,
+        "9/SET_VOLTAGE": measCountsToVolts,
+        "10/SET_VOLTAGE": measCountsToVolts,
+        "11/SET_VOLTAGE": measCountsToVolts,
+        "12/SET_VOLTAGE": measCountsToVolts,
+        "13/SET_VOLTAGE": measCountsToVolts,
+        "14/SET_VOLTAGE": measCountsToVolts,
+        "15/SET_VOLTAGE": measCountsToVolts,
+        "16/SET_VOLTAGE": measCountsToVolts,
         "SET_PEDESTAL_VOLTAGE": pedestalCountsToVolts,
         "1/MEAS_VOLTAGE": measCountsToVolts,
         "2/MEAS_VOLTAGE": measCountsToVolts,
@@ -365,7 +366,7 @@ class HVsysWall:
 
         if cap == 'REF_PEDESTAL_VOLTAGE':     # also update all the channel voltages
             for ch in range(1, self.config.n_channels+1):
-                self.state[f'{ch}/REF_VOLTAGE'] += (new_voltage - old_voltage)
+                self.state[f'{ch}/REF_VOLTAGE'] += (float(new_voltage) - old_voltage)
         
         set_cap = cap.replace('REF', 'SET')     # 4/REF_VOLTAGE -> 4/SET_VOLTAGE to construct the command
         set_value = self.valueFromString(set_cap, corrected_voltage)
