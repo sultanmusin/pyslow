@@ -59,6 +59,7 @@ class Config:
     def process_config(self):
         self.buses = {} # dict[str,BusConfig]
 
+        self.title = str(self.soup.select("global title")[0].text) if len(self.soup.select("global title")) > 0 else "DCS"
         self.reference_temperature = float(self.soup.select("global flags refTemp")[0].text)
         self.temperature_slope = float(self.soup.select("global flags tempSlope")[0].text)
         self.verbose = bool(int(self.soup.select("global flags verbose")[0].text))
@@ -90,7 +91,7 @@ class Config:
             x = xx_tetris[int(mod.find('x').text)]
             y = yy_tetris[int(mod.find('y').text)]
             self.modulesOrderedByGeometry[x + y * self.geom_width] = id
-            self.modules[id] = ModuleConfig(mod, self)
+            self.modules[id] = ModuleConfig(mod, self, x, y)
 
         #print(self.modulesOrderedByGeometry)
 
@@ -119,11 +120,13 @@ class Config:
 class ModuleConfig:
     possible_parts = list(HVsys.catalogus.keys())
 
-    def __init__(self, soup, detector):
+    def __init__(self, soup, detector, x, y):
         self.id = soup.attrs['id']
         self.detector = detector
         self.reference_temperature = detector.reference_temperature
         self.temperature_slope = detector.temperature_slope
+        self.x = x
+        self.y = y
         self.version = soup['version'] if 'version' in soup.attrs else 'default'
 
         self.parts = []
