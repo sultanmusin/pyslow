@@ -19,9 +19,8 @@ import qasync
 from qasync import asyncSlot, asyncClose, QApplication
 from PyQt5 import QtWidgets, uic, QtGui
 from PyQt5.QtGui import QPainter, QColor, QPen, QBrush
-from PyQt5.QtCore import QItemSelectionModel, QTimer
+from PyQt5.QtCore import QItemSelectionModel, QTimer, Qt
 
-from PySide2.QtCore import Qt
 import string
 import sys
 

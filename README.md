@@ -8,17 +8,15 @@ DCS for Forward Hadron Calorimeters based on HVsys hardware
 
 Get python 3.6+ running 
 
-Sorry, the more recent python versions (3.10+) are currently not supported due to conflist with wheels of numpy / wxpython (?)
-
 * Dependencies
 
 CentOS 7:
 
-sudo yum install gtk3-devel python3-devel
+sudo yum install gtk3-devel python3-devel qt5-qtbase-devel
 
 Fedora:
 
-sudo yum install gtk3-devel python3-devel subversion python3.8
+sudo yum install gtk3-devel python3-devel subversion python3.8 qt5-qtbase-devel
 
 You also might need: 
 
@@ -33,8 +31,6 @@ Then use requirements.txt:
 python3 -m ensurepip
 python3 -m pip install pip --upgrade
 python3 -m pip install -r requirements.txt
-
-Wxpython installation will take *a while*.
 
 ### Run! ###
 

@@ -1,8 +1,7 @@
-numpy==1.16
-python-config
 lxml
 bs4
-wxasync
+PyQt5
+qasync
 
 
 
