@@ -724,7 +724,7 @@ class MainWindow(wx.Frame):
         logging.info("ShowReferenceParameters: %s" % self.activeModuleId)
         if type(self.activeModuleId) is list and len(self.activeModuleId) == 1:
             module_id = self.activeModuleId[0]
-            active_module_config = configuration.modules[module_id]
+            active_module_config = self.config.modules[module_id]
             if active_module_config.has('hv'):
                 bus_id = self.config.modules[module_id].bus_id
                 part_address = int(self.config.modules[module_id].address('hv'))
@@ -736,8 +736,8 @@ class MainWindow(wx.Frame):
 
                 ped_v = part.state['REF_PEDESTAL_VOLTAGE']
                 self.m_gridHV.SetCellValue(GRID_ROW_PEDESTAL, GRID_COLUMN_REFERENCE, str(ped_v))
-                self.m_gridHV.SetCellValue(GRID_ROW_TEMPERATURE, GRID_COLUMN_REFERENCE, "%.2f °C"%(configuration.reference_temperature))
-                self.m_gridHV.SetCellValue(GRID_ROW_SLOPE, GRID_COLUMN_REFERENCE, "%+.0f mV/°C"%(-configuration.temperature_slope))
+                self.m_gridHV.SetCellValue(GRID_ROW_TEMPERATURE, GRID_COLUMN_REFERENCE, "%.2f °C"%(self.config.reference_temperature))
+                self.m_gridHV.SetCellValue(GRID_ROW_SLOPE, GRID_COLUMN_REFERENCE, "%+.0f mV/°C"%(-self.config.temperature_slope))
                 self.m_gridHV.SetCellValue(GRID_ROW_TEMPERATURE, GRID_COLUMN_STATE, "From: %s"%(str(active_module_config.temperature_from_module)))
 
     def SetReferenceParameters(self):
@@ -803,8 +803,6 @@ class MainWindow(wx.Frame):
 
 
     def OnWrite(self,e):
-        global detector
-
         part_address = self.GetActivePartAddress()
         part_type = self.GetActivePartType()
 
@@ -817,8 +815,6 @@ class MainWindow(wx.Frame):
 
 
     async def pollOnlineModules(self):
-        global detector
-        
         last_task = None
         for module_id, module_config in self.config.modules.items():
             if module_config.online:
