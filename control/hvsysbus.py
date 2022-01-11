@@ -34,7 +34,7 @@ class HVsysBus:
     DefaultBusId = 'default'
     DefaultTimeout = 0.5 # sec
 
-    def __init__(self, bus_config, module_configs:list, detector):
+    def __init__(self, bus_config, module_configs:list, detector, global_response_callback=None):
         self.id = bus_config.id
         self.port = bus_config.port
         self.task_queue = asyncio.Queue(10000)
@@ -45,6 +45,7 @@ class HVsysBus:
         self.detector = detector
         self.online = False
         self.module_configs = module_configs
+        self.global_response_callback = global_response_callback
 
         for mc in module_configs:
             for part_name, part_address in mc.addr.items():   # mc.addr be like {'hv':15, 'led':18}
@@ -62,7 +63,6 @@ class HVsysBus:
                         # find the source module
                         bus_id = detector.config.modules[mc.temperature_from_module].bus_id
                         bus = self if bus_id == self.id else self.detector.buses[bus_id]
-
                         sources = [c for c in bus.module_configs if c.id == mc.temperature_from_module]
                         if len(sources) > 0:
                             address = sources[0].address('hv')
@@ -71,6 +71,9 @@ class HVsysBus:
                     self.parts[part_address] = part_type(mc)        # now create the instance of the part connected to our bus 
                     if mc.online:
                         self.online = True
+
+    def register_global_response_callback(self, cb):
+        self.global_response_callback = cb
 
     def getPartCache(self, addr:int, part_type: type) -> PartState:
         if addr not in self.part_cache: 
@@ -95,10 +98,12 @@ class HVsysBus:
             logging.warning(f"Cannot connect to {self.port}")
 
     async def disconnect(self):
-        self.writer.close()
-        logging.info("Disconnecting from system module...")    
-        await self.writer.wait_closed()
-        logging.info("Done.")    
+        if hasattr(self, 'writer') and self.writer is not None:
+            self.writer.close()
+            logging.info("Disconnecting from system module...")    
+            await self.writer.wait_closed()
+            self.writer = None
+            logging.info("Done.")    
 
     async def recv(self, cb, start_time:float):
         logging.debug("recv: wait for line")
@@ -108,7 +113,10 @@ class HVsysBus:
         logging.debug('%s task success in %.3f sec: %s' % (self.id, time.time()-start_time, resp))    
         #TODO checksum control @ resp[5]
         int_value = int(resp[0:4], 16)
-        cb(int_value)
+        if self.global_response_callback is not None:
+            self.global_response_callback(self, value)
+        if cb is not None: 
+            cb(int_value)
 
         logging.debug("recv: task done")
 
@@ -150,6 +158,8 @@ class HVsysBus:
                             await asyncio.wait_for(self.recv(task.cb, task.timestamp), self.timeout)
                         except asyncio.TimeoutError as e:
                             logging.warning("No response in timeout=%fs" % (self.timeout))
+                            if self.global_response_callback is not None:
+                                self.global_response_callback(self, None)
     
                         # Notify the queue that the "work item" has been processed.
                         self.task_queue.task_done()
