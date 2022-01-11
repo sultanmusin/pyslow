@@ -20,6 +20,10 @@ Fedora:
 
 sudo yum install gtk3-devel python3-devel subversion python3.8
 
+You also might need: 
+
+sudo yum install g++ blis-devel blas-devel openblas-devel numpy lapack python3-distutils-extra
+
 Ubuntu:
 
 sudo apt-get install pkg-config libgtk-3-dev build-essential gcc-5
