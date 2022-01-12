@@ -594,6 +594,9 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def busTimerFired(self):
         logging.info(self.sender().property('bus_id'))
+        for index, (title, config) in enumerate(self.config.buses.items()):
+            if title == self.sender().property('bus_id'):
+                logging.info(self.sender().property(f'bus index {index}'))
 
 
     @asyncClose
