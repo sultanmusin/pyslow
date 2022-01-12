@@ -600,7 +600,8 @@ class MainWindow(QtWidgets.QMainWindow):
         for index, (title, config) in enumerate(self.config.buses.items()):
             logging.info(f"Timer: {title}")
             if title == self.sender().property('bus_id'):
-                logging.info(self.sender().property('bus_id')
+                logging.info(index)
+                self.busGrid.item(index,GRID_COLUMN_LEFT_STATE).setForeground(QBrush(COLOR_OFFLINE))
         self.sender().stop()
 
 
