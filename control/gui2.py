@@ -527,7 +527,7 @@ class MainWindow(QtWidgets.QMainWindow):
 #                            hv = part.countsToVolts(part.state[f'{ch}/REF_VOLTAGE'])
                             hv = float(part.state[f'{ch}/REF_VOLTAGE'])
                             corrected_hv = round(hv + correction, part.VOLTAGE_DECIMAL_PLACES)
-                            self.tableHV.item(int(ch)-1, GRID_COLUMN_CORRECTED)setText(str(corrected_hv))  
+                            self.tableHV.item(int(ch)-1, GRID_COLUMN_CORRECTED).setText(str(corrected_hv))  
                             logging.info("DisplayValueOnComplete temp: desired = %s corrected = %s correction = %s"%(hv, corrected_hv, correction))
                 except ValueError as e:
                     pass
