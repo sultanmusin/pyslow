@@ -157,6 +157,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # select first online module (if any...)
         self.SelectFirstOnlineModule()
         self.ShowReferenceParameters()
+        self.pollAllStatus()
         #self.SetReferenceParameters()
         #self.UpdateModuleGrid()
 
