@@ -516,7 +516,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 # calculate and display voltage correction (if needed and capable - first times will fail without knowing calibration)
 
                 try:
-                    active_module_config = configuration.modules[self.activeModuleId[0]]
+                    active_module_config = self.config.modules[self.activeModuleId[0]]
                     if active_module_config.has('hv'):
                         correction = float(part.voltage_correction())
                         self.tableHV.item(GRID_ROW_TEMPERATURE, GRID_COLUMN_CORRECTED).setText("%+.2f V"%(float(correction)))
