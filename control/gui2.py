@@ -527,16 +527,14 @@ class MainWindow(QtWidgets.QMainWindow):
 
             if  capability == 'STATUS':
                 status = HVStatus(value)
-                is_on = status.is_on()
-                self.m_checkBoxHvOn.SetValue( is_on )
+                self.checkBoxHvOn.setChecked( Qt.Checked if status.is_on() else Qt.Unchecked )
         elif type(part) is HVsysLED:
             if capability in led_grid_coords:
                 (row, col) = hv_grid_coords[capability] 
                 self.tableLED.item(row, col).setText(str_value)
 
             if capability == 'AUTOREG':   
-                is_on = (value > 0)
-                self.checkBoxLedAuto.setChecked( is_on )
+                self.checkBoxLedAuto.setChecked( Qt.Checked if value > 0 else Qt.Unchecked )
         
         self.UpdateModuleGrid()  # will switch off if this gets too heavy
         self.statusBar.showMessage('%d'%(self.detector.queue_length()), 1)
