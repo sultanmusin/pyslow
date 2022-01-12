@@ -588,7 +588,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def busResponseReceived(self, bus, data):
         for index, (title, config) in enumerate(self.config.buses.items()):
             if title == bus.id:
-                self.busGrid.item(index,2).setText(bus.queue_length()) 
+                self.busGrid.item(index,2).setText(str(bus.queue_length()))
                 self.busGrid.item(index,GRID_COLUMN_LEFT_STATE).setForeground(QBrush(COLOR_ONLINE if data is not None else COLOR_ERROR))
                 self.busTimers[title].start(50)
 
