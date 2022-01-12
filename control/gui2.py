@@ -491,7 +491,7 @@ class MainWindow(QtWidgets.QMainWindow):
         return asyncio.get_event_loop().create_task(self.detector.poll_module_important(moduleId, callback))
 
 
-    def pollAllStatus(self, moduleId, callback=None):
+    def pollAllStatus(self, callback=None):
         if callback is None:
             callback = self.DisplayValueOnComplete
         elif callback == False:
