@@ -490,6 +490,14 @@ class MainWindow(QtWidgets.QMainWindow):
         return asyncio.get_event_loop().create_task(self.detector.poll_module_important(moduleId, callback))
 
 
+    def pollAllStatus(self, moduleId, callback=None):
+        if callback is None:
+            callback = self.DisplayValueOnComplete
+        elif callback == False:
+            callback = lambda *args: None  # empty callback; do nothing
+        return asyncio.get_event_loop().create_task(self.detector.poll_all_status(callback))
+
+
     def DisplayValueOnComplete(self, part, capability, value):        
         print("DisplayValueOnComplete: %s=%s"%(capability, value))
 
@@ -528,6 +536,7 @@ class MainWindow(QtWidgets.QMainWindow):
             if  capability == 'STATUS':
                 status = HVStatus(value)
                 self.checkBoxHvOn.setChecked( Qt.Checked if status.is_on() else Qt.Unchecked )
+                self.UpdateModuleGrid() # test remove this if it is too heavy
         elif type(part) is HVsysLED:
             if capability in led_grid_coords:
                 (row, col) = hv_grid_coords[capability] 
@@ -576,7 +585,7 @@ class MainWindow(QtWidgets.QMainWindow):
             else:
                 logging.warning('HV switch requested for module without HV part')
         
-        self.checkBoxHvOn.SetValue(state)
+        self.checkBoxHvOn.setChecked(Qt.Checked if state > 0 else Qt.Unchecked)
 
     def busResponseReceived(self, bus, data):
         for index, (title, config) in enumerate(self.config.buses.items()):

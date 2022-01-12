@@ -51,6 +51,16 @@ class Detector:
     async def poll_online(self):
         pass
 
+    async def poll_all_status(self, poll_cb):
+        for module_config in self.config.modules.values():  # for all modules
+            if module_config.online:
+                bus = self.buses[module_config.bus_id]     # then we get to which bus it is connected
+                if module_config.has('hv'):
+                    address = module_config.address('hv')  # get hv part address
+                    part = bus.getPart(address)            # get the part object (stored by the bus) 
+                    command = Message(Message.READ_SHORT, address, type(part), 'STATUS', 0)
+                    await self.add_task(module_config.bus_id, command, part, partial(poll_cb, part, cap))
+
     async def poll_module(self, id, poll_cb):
         module_config = self.config.modules[id]    # first we get the module config by its id
         bus = self.buses[module_config.bus_id]            # then we get to which bus it is connected
