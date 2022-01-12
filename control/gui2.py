@@ -209,16 +209,16 @@ class MainWindow(QtWidgets.QMainWindow):
         self.busGrid.setRowCount(len(self.config.buses))
         self.busGrid.setVerticalHeaderLabels([id for id in self.config.buses])
 
-        self.busGridTimers = {}
+        self.busTimers = {}
 
         for index, (title, config) in enumerate(self.config.buses.items()):
             self.busGrid.setItem(index, 0, QtWidgets.QTableWidgetItem(config.port)) 
             self.busGrid.setItem(index, 1, QtWidgets.QTableWidgetItem("0")) 
             self.busGrid.setItem(index, GRID_COLUMN_LEFT_STATE, QtWidgets.QTableWidgetItem("⬤")) 
             self.busGrid.item(index,2).setForeground(QBrush(COLOR_OFFLINE))
-            self.busGridTimers[title] = QTimer()
-            self.busGridTimers[title].timeout.connect(self.busTimerFired)
-            self.busGridTimers[title].setProperty('bus_id', title)
+            self.busTimers[title] = QTimer()
+            self.busTimers[title].timeout.connect(self.busTimerFired)
+            self.busTimers[title].setProperty('bus_id', title)
 
         self.groupBoxControl = self.findChild(QtWidgets.QGroupBox, 'groupBoxControl') 
 
@@ -588,7 +588,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def busResponseReceived(self, bus, data):
         for index, (title, config) in enumerate(self.config.buses.items()):
             if title == bus.id:
-                self.busGrid.item(index,2).setText(str(bus.queue_length()))
+                self.busGrid.item(index,1).setText(str(bus.queue_length()))
                 self.busGrid.item(index,GRID_COLUMN_LEFT_STATE).setForeground(QBrush(COLOR_ONLINE if data is not None else COLOR_ERROR))
                 self.busTimers[title].start(50)
 
