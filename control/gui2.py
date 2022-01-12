@@ -200,8 +200,10 @@ class MainWindow(QtWidgets.QMainWindow):
             self.moduleList.item(index,GRID_COLUMN_HV_ON).setForeground(QBrush(COLOR_OFFLINE))
             self.moduleList.setItem(index, GRID_COLUMN_LEFT_STATE, QtWidgets.QTableWidgetItem("⬤")) 
             self.moduleList.item(index,GRID_COLUMN_LEFT_STATE).setForeground(QBrush(COLOR_OFFLINE))
-            self.moduleGrid.setItem(config.y, config.x, QtWidgets.QTableWidgetItem(title))
-            self.moduleGrid.item(config.y, config.x).setTextAlignment(Qt.AlignCenter)
+
+            item = QtWidgets.QTableWidgetItem(title)
+            item.setTextAlignment(Qt.AlignCenter)
+            self.moduleGrid.setItem(config.y, config.x, QtWidgets.QTableWidgetItem(item))
 
         self.busGrid = self.findChild(QtWidgets.QTableWidget, 'busGrid') 
         self.busGrid.setColumnCount(3)
@@ -393,11 +395,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def UpdateModuleGrid(self):
         for index, (title, config) in enumerate(self.config.modules.items()):
-            if config.online:
-                self.moduleList.SetCellValue(index, GRID_COLUMN_ONLINE, "1")
-            else:
-                self.moduleList.SetCellValue(index, GRID_COLUMN_ONLINE, "0")
-                self.moduleList.SetCellBackgroundColour(index, GRID_COLUMN_LEFT_STATE, COLOR_OFFLINE)    
+            self.moduleList.item(index, GRID_COLUMN_ONLINE).setForeground(QBrush(COLOR_ONLINE if config.online is not None else COLOR_OFFLINE))
 
             if config.has('hv'): 
                 bus_id = config.bus_id
@@ -408,29 +406,27 @@ class MainWindow(QtWidgets.QMainWindow):
 
                 if 'STATUS' in part.state and part.state['STATUS'] is not None:
                     status = HVStatus(part.state['STATUS'])
-                    self.moduleList.SetCellValue(index, GRID_COLUMN_LEFT_STATE, str(status))
+                    self.moduleList.item(index, GRID_COLUMN_LEFT_STATE).setText(str(status))
                     if status.is_on():
-                        self.moduleList.SetCellValue(index, GRID_COLUMN_HV_ON, "1")
-                        self.moduleList.SetCellBackgroundColour(index, GRID_COLUMN_LEFT_STATE, COLOR_OK)    
+                        self.moduleList.item(index, GRID_COLUMN_HV_ON.setForeground(QBrush(COLOR_OK))    
                     else:
-                        self.moduleList.SetCellValue(index, GRID_COLUMN_HV_ON, "0")
-                        self.moduleList.SetCellBackgroundColour(index, GRID_COLUMN_LEFT_STATE, COLOR_HV_OFF)    
+                        self.moduleList.item(index, GRID_COLUMN_HV_ON.setForeground(QBrush(COLOR_HV_OFF))    
                     if status.is_error():
-                        self.moduleList.SetCellBackgroundColour(index, GRID_COLUMN_LEFT_STATE, COLOR_ERROR)    
+                        self.moduleList.item(index, GRID_COLUMN_LEFT_STATE.setForeground(QBrush(COLOR_ERROR))  
                     if not part.has_reference_voltage():
-                        self.moduleList.SetCellBackgroundColour(index, GRID_COLUMN_LEFT_STATE, COLOR_NOT_REFERENCE)   
+                        self.moduleList.item(index, GRID_COLUMN_LEFT_STATE.setForeground(QBrush(COLOR_NOT_REFERENCE))  
                     if status.is_ramp():
-                        self.moduleList.SetCellBackgroundColour(index, GRID_COLUMN_LEFT_STATE, COLOR_RAMP)   
+                        self.moduleList.item(index, GRID_COLUMN_LEFT_STATE.setForeground(QBrush(COLOR_RAMP))  
 
                 else:
                     # not polled yet, strange
-                    self.moduleList.SetCellValue(index, GRID_COLUMN_LEFT_STATE, "unknown" if config.online else "offline")
-                    self.moduleList.SetCellValue(index, GRID_COLUMN_HV_ON, "0")
-                    self.moduleList.SetCellBackgroundColour(index, GRID_COLUMN_LEFT_STATE, COLOR_OFFLINE)    
+                    self.moduleList.item(index, GRID_COLUMN_LEFT_STATE).setText("unknown" if config.online else "offline")
+                    self.moduleList.item(index, GRID_COLUMN_HV_ON.setForeground(QBrush(COLOR_HV_OFF))    
+                    self.moduleList.item(index, GRID_COLUMN_LEFT_STATE.setForeground(QBrush(COLOR_OFFLINE))  
             else:
-                self.moduleList.SetCellValue(index, GRID_COLUMN_HV_ON, "0")
-                self.moduleList.SetReadOnly(index, GRID_COLUMN_HV_ON, True)
-                self.moduleList.SetCellValue(index, GRID_COLUMN_LEFT_STATE, "unknown")
+                # no HV 
+                self.moduleList.item(index, GRID_COLUMN_HV_ON.setForeground(QBrush(COLOR_HV_OFF))    
+                self.moduleList.item(index, GRID_COLUMN_LEFT_STATE).setText("no HV" if config.online else "offline")
 
     def SelectModule(self, module_ids):
         print("SelectModule: %s" % (module_ids))
@@ -594,11 +590,11 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.busTimers[title].start(50)
 
     def busTimerFired(self):
-        logging.info(self.sender().property('bus_id'))
+        #logging.info(self.sender().property('bus_id'))
         for index, (title, config) in enumerate(self.config.buses.items()):
-            logging.info(f"Timer: {title}")
+            #logging.info(f"Timer: {title}")
             if title == self.sender().property('bus_id'):
-                logging.info(index)
+                #logging.info(index)
                 self.busGrid.item(index,GRID_COLUMN_LEFT_STATE).setForeground(QBrush(COLOR_OFFLINE))
         self.sender().stop()
 
