@@ -408,24 +408,24 @@ class MainWindow(QtWidgets.QMainWindow):
                     status = HVStatus(part.state['STATUS'])
                     self.moduleList.item(index, GRID_COLUMN_LEFT_STATE).setText(str(status))
                     if status.is_on():
-                        self.moduleList.item(index, GRID_COLUMN_HV_ON.setForeground(QBrush(COLOR_OK))    
+                        self.moduleList.item(index, GRID_COLUMN_HV_ON).setForeground(QBrush(COLOR_OK))   
                     else:
-                        self.moduleList.item(index, GRID_COLUMN_HV_ON.setForeground(QBrush(COLOR_HV_OFF))    
+                        self.moduleList.item(index, GRID_COLUMN_HV_ON).setForeground(QBrush(COLOR_HV_OFF))    
                     if status.is_error():
-                        self.moduleList.item(index, GRID_COLUMN_LEFT_STATE.setForeground(QBrush(COLOR_ERROR))  
+                        self.moduleList.item(index, GRID_COLUMN_LEFT_STATE).setForeground(QBrush(COLOR_ERROR))  
                     if not part.has_reference_voltage():
-                        self.moduleList.item(index, GRID_COLUMN_LEFT_STATE.setForeground(QBrush(COLOR_NOT_REFERENCE))  
+                        self.moduleList.item(index, GRID_COLUMN_LEFT_STATE).setForeground(QBrush(COLOR_NOT_REFERENCE))  
                     if status.is_ramp():
-                        self.moduleList.item(index, GRID_COLUMN_LEFT_STATE.setForeground(QBrush(COLOR_RAMP))  
+                        self.moduleList.item(index, GRID_COLUMN_LEFT_STATE).setForeground(QBrush(COLOR_RAMP))  
 
                 else:
                     # not polled yet, strange
                     self.moduleList.item(index, GRID_COLUMN_LEFT_STATE).setText("unknown" if config.online else "offline")
-                    self.moduleList.item(index, GRID_COLUMN_HV_ON.setForeground(QBrush(COLOR_HV_OFF))    
-                    self.moduleList.item(index, GRID_COLUMN_LEFT_STATE.setForeground(QBrush(COLOR_OFFLINE))  
+                    self.moduleList.item(index, GRID_COLUMN_HV_ON).setForeground(QBrush(COLOR_HV_OFF))    
+                    self.moduleList.item(index, GRID_COLUMN_LEFT_STATE).setForeground(QBrush(COLOR_OFFLINE))  
             else:
                 # no HV 
-                self.moduleList.item(index, GRID_COLUMN_HV_ON.setForeground(QBrush(COLOR_HV_OFF))    
+                self.moduleList.item(index, GRID_COLUMN_HV_ON).setForeground(QBrush(COLOR_HV_OFF))    
                 self.moduleList.item(index, GRID_COLUMN_LEFT_STATE).setText("no HV" if config.online else "offline")
 
     def SelectModule(self, module_ids):
