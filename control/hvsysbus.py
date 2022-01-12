@@ -114,7 +114,7 @@ class HVsysBus:
         #TODO checksum control @ resp[5]
         int_value = int(resp[0:4], 16)
         if self.global_response_callback is not None:
-            self.global_response_callback(self, value)
+            self.global_response_callback(self, int_value)
         if cb is not None: 
             cb(int_value)
 
