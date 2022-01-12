@@ -284,6 +284,7 @@ class MainWindow(QtWidgets.QMainWindow):
             "Autoregulation on/off", 
             "Average ADC readout" ])
 
+        self.statusBar = self.findChild(QtWidgets.QStatusBar, 'statusBar') 
 
     def buttonSelectAllPressed(self):
         self.moduleList.selectAll()
@@ -507,10 +508,11 @@ class MainWindow(QtWidgets.QMainWindow):
                 capability = capability.replace('SET', 'MEAS')
 
             if capability in hv_grid_coords:
-                self.m_gridHV.SetCellValue(hv_grid_coords[capability], str_value)
+                (row, col) = hv_grid_coords[capability] 
+                self.tableHV.item(row, col).setText(str_value)
             
             if capability == 'TEMPERATURE':
-                self.m_gridHV.SetCellValue(GRID_ROW_TEMPERATURE, GRID_COLUMN_MEAS, "%.2f °C"%(float(str_value)))
+                self.tableHV.item(GRID_ROW_TEMPERATURE, GRID_COLUMN_MEAS).setText("%.2f °C"%(float(str_value)))
                 logging.info('part %s temperature = %s'%(part, str_value))  
 
                 # calculate and display voltage correction (if needed and capable - first times will fail without knowing calibration)
@@ -519,13 +521,13 @@ class MainWindow(QtWidgets.QMainWindow):
                     active_module_config = configuration.modules[self.activeModuleId[0]]
                     if active_module_config.has('hv'):
                         correction = float(part.voltage_correction())
-                        self.m_gridHV.SetCellValue(GRID_ROW_TEMPERATURE, GRID_COLUMN_CORRECTED, "%+.2f V"%(float(correction)))
+                        self.tableHV.item(GRID_ROW_TEMPERATURE, GRID_COLUMN_CORRECTED).setText("%+.2f V"%(float(correction)))
                         #for ch, hv in active_module_config.hv.items():
                         for ch in range(1, part.config.n_channels+1):
 #                            hv = part.countsToVolts(part.state[f'{ch}/REF_VOLTAGE'])
                             hv = float(part.state[f'{ch}/REF_VOLTAGE'])
                             corrected_hv = round(hv + correction, part.VOLTAGE_DECIMAL_PLACES)
-                            self.m_gridHV.SetCellValue(int(ch)-1, GRID_COLUMN_CORRECTED, str(corrected_hv))  
+                            self.tableHV.item(int(ch)-1, GRID_COLUMN_CORRECTED)setText(str(corrected_hv))  
                             logging.info("DisplayValueOnComplete temp: desired = %s corrected = %s correction = %s"%(hv, corrected_hv, correction))
                 except ValueError as e:
                     pass
@@ -537,14 +539,15 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.m_checkBoxHvOn.SetValue( is_on )
         elif type(part) is HVsysLED:
             if capability in led_grid_coords:
-                self.m_gridLED.SetCellValue(led_grid_coords[capability], str_value)
+                (row, col) = hv_grid_coords[capability] 
+                self.tableLED.item(row, col).setText(str_value)
 
             if capability == 'AUTOREG':   
                 is_on = (value > 0)
-                self.m_checkBoxLedAuto.SetValue( is_on )
+                self.checkBoxLedAuto.setChecked( is_on )
         
         self.UpdateModuleGrid()  # will switch off if this gets too heavy
-        self.m_statusBar1.SetStatusText('TODO: %d'%(self.detector.queue_length()), 1)
+        self.statusBar.showMessage('%d'%(self.detector.queue_length()), 1)
 
 
     def ShowReferenceParameters(self):
