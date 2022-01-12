@@ -259,19 +259,15 @@ class MainWindow(QtWidgets.QMainWindow):
         # Rows
         self.tableHV.setVerticalHeaderLabels(["Section %d"%(row+1) for row in range(GRID_ROWS_HV-3)] + ['Pedestal', 'Temperature', 'Slope'])
 
+        # Create items, some of them readonly
         for row in range(GRID_ROWS_HV):
-        #    for col in range(GRID_COLUMNS):
-        #        self.m_gridHV.SetReadOnly(row, col, True)
-        #        self.m_gridHV.SetCellValue(row, col, "")
+            for col in range(GRID_COLUMNS):
+                item = QtWidgets.QTableWidgetItem("")
+                self.tableHV.setItem(row, col, item)
+                if col>0 or row in [GRID_ROW_TEMPERATURE, GRID_ROW_SLOPE]: 
+                    item.setFlags(item.flags() & ~Qt.ItemIsEditable)
 
-        #    self.m_gridHV.SetReadOnly(row, 0, False)
-#            self.m_gridHV.SetReadOnly(row, 1, False)
             self.tableHV.setItem(row, GRID_COLUMN_STATE, QtWidgets.QTableWidgetItem("OK"))
-
-        #self.m_gridHV.SetReadOnly(GRID_ROW_TEMPERATURE, GRID_COLUMN_REFERENCE, True)
-        #self.m_gridHV.SetReadOnly(GRID_ROW_TEMPERATURE, GRID_COLUMN_CORRECTED, True)
-        #self.m_gridHV.SetReadOnly(GRID_ROW_SLOPE, GRID_COLUMN_REFERENCE, True)
-        #self.m_gridHV.SetReadOnly(GRID_ROW_SLOPE, GRID_COLUMN_CORRECTED, True)
 
         self.tableLED = self.findChild(QtWidgets.QTableWidget, 'tableLED') 
         self.tableLED.setHorizontalHeaderLabels(['Requested', 'Set', 'Measured'])
@@ -283,6 +279,8 @@ class MainWindow(QtWidgets.QMainWindow):
             "Average points", 
             "Autoregulation on/off", 
             "Average ADC readout" ])
+
+        # TODO create led grid items
 
         self.statusBar = self.findChild(QtWidgets.QStatusBar, 'statusBar') 
 
