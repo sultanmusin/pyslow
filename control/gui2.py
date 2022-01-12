@@ -402,8 +402,6 @@ class MainWindow(QtWidgets.QMainWindow):
                 part_address = int(config.address('hv'))
                 part = self.detector.buses[bus_id].getPart(part_address) 
 
-                self.moduleList.SetReadOnly(index, GRID_COLUMN_HV_ON, False)
-
                 if 'STATUS' in part.state and part.state['STATUS'] is not None:
                     status = HVStatus(part.state['STATUS'])
                     self.moduleList.item(index, GRID_COLUMN_LEFT_STATE).setText(str(status))
