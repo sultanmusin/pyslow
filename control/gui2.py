@@ -158,6 +158,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.SelectFirstOnlineModule()
         self.ShowReferenceParameters()
         self.pollAllStatus()
+        self.pollAllTemperature(False) # no callbacks
         #self.SetReferenceParameters()
         #self.UpdateModuleGrid()
 
@@ -535,6 +536,14 @@ class MainWindow(QtWidgets.QMainWindow):
         elif callback == False:
             callback = lambda *args: None  # empty callback; do nothing
         return asyncio.get_event_loop().create_task(self.detector.poll_all_status(callback))
+
+
+    def pollAllTemperature(self, callback=None):
+        if callback is None:
+            callback = self.DisplayValueOnComplete
+        elif callback == False:
+            callback = lambda *args: None  # empty callback; do nothing
+        return asyncio.get_event_loop().create_task(self.detector.poll_all_temperature(callback))
 
 
     def DisplayValueOnComplete(self, part, capability, value):        
