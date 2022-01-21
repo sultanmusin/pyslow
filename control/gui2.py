@@ -208,7 +208,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.busGrid = self.findChild(QtWidgets.QTableWidget, 'busGrid') 
         self.busGrid.setColumnCount(3)
-        self.busGrid.setHorizontalHeaderLabels(['Address', 'Queue', 'State'])
+        self.busGrid.setHorizontalHeaderLabels(['Address', 'Queue', 'Link'])
         self.busGrid.setRowCount(len(self.config.buses))
         self.busGrid.setVerticalHeaderLabels([id for id in self.config.buses])
 
@@ -271,6 +271,8 @@ class MainWindow(QtWidgets.QMainWindow):
                     item.setFlags(item.flags() & ~Qt.ItemIsEditable)
 
             self.tableHV.setItem(row, GRID_COLUMN_STATE, QtWidgets.QTableWidgetItem("OK"))
+        
+        self.tableHV.itemChanged.connect(self.tableHVitemChanged)
 
         self.tableLED = self.findChild(QtWidgets.QTableWidget, 'tableLED') 
         self.tableLED.setHorizontalHeaderLabels(['Requested', 'Set', 'Measured'])
@@ -392,6 +394,40 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def buttonSetHvOffPressed(self):
         self.SwitchHV(HVsysSupply.POWER_OFF)
+
+
+    def tableHVitemChanged(self, item):
+        logging.debug(f'Changed: {item.row()} x {item.column()} = {item.text()}')
+        module_id = self.activeModuleId[0]
+        active_module_config = self.config.modules[module_id]
+        if active_module_config.has('hv'):
+            bus_id = self.config.modules[module_id].bus_id
+            part_address = int(self.config.modules[module_id].address('hv'))
+            part = self.detector.buses[bus_id].getPart(part_address) 
+            try:
+                if item.column() == GRID_COLUMN_REFERENCE and item.row() <= GRID_ROW_PEDESTAL:
+                    new_value = float(item.text())
+                    section = item.row() + 1
+                    cap = 'REF_PEDESTAL_VOLTAGE' if item.row() == GRID_ROW_PEDESTAL else f'{section}/REF_VOLTAGE'
+                    logging.info(f'Changed: {cap} reference change request')
+                    command = part.request_voltage_change(cap, new_value)
+                    logging.info(f'Sending as: {command}')
+                    asyncio.get_event_loop().create_task(self.detector.add_task(bus_id, command, part, self.DisplayValueOnComplete))
+                else:
+                    logging.info("No action")
+            except ValueError as e:
+                logging.warning(e)
+                self.tableHV.itemChanged.disconnect()  #remove the handler temporarily
+
+                if item.row() == GRID_ROW_PEDESTAL:
+                    ped_v = part.state['REF_PEDESTAL_VOLTAGE']
+                    item.setText(str(ped_v))
+                elif item.row() < N_SECTIONS:
+                    ch = item.row()
+                    hv = part.state[f'{ch}/REF_VOLTAGE'] 
+                    item.setText(str(hv))
+                
+                self.tableHV.itemChanged.connect(self.tableHVitemChanged)  # ... and restore the handler
 
 
     def UpdateModuleGrid(self):
@@ -560,6 +596,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 part_address = int(self.config.modules[module_id].address('hv'))
                 part = self.detector.buses[bus_id].getPart(part_address) 
 
+                self.tableHV.itemChanged.disconnect()
+
                 for ch in active_module_config.hv.keys():
                     hv = part.state[f'{ch}/REF_VOLTAGE'] 
                     self.tableHV.setItem(int(ch)-1, GRID_COLUMN_REFERENCE, QtWidgets.QTableWidgetItem(str(hv)))    
@@ -568,7 +606,9 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.tableHV.setItem(GRID_ROW_PEDESTAL, GRID_COLUMN_REFERENCE, QtWidgets.QTableWidgetItem(str(ped_v)))
                 self.tableHV.setItem(GRID_ROW_TEMPERATURE, GRID_COLUMN_REFERENCE, QtWidgets.QTableWidgetItem("%.2f °C"%(self.config.reference_temperature)))
                 self.tableHV.setItem(GRID_ROW_SLOPE, GRID_COLUMN_REFERENCE, QtWidgets.QTableWidgetItem("%+.0f mV/°C"%(-self.config.temperature_slope)))
-                self.tableHV.setItem(GRID_ROW_TEMPERATURE, GRID_COLUMN_STATE, QtWidgets.QTableWidgetItem("From: %s"%(str(active_module_config.temperature_from_module))))
+                self.tableHV.setItem(GRID_ROW_TEMPERATURE, GRID_COLUMN_STATE, QtWidgets.QTableWidgetItem("Sensor: %s"%(str(active_module_config.temperature_from_module))))
+
+                self.tableHV.itemChanged.connect(self.tableHVitemChanged)
 
 
     def SwitchHV(self,state):
@@ -593,7 +633,7 @@ class MainWindow(QtWidgets.QMainWindow):
             if title == bus.id:
                 self.busGrid.item(index,1).setText(str(bus.queue_length()))
                 self.busGrid.item(index,GRID_COLUMN_LEFT_STATE).setForeground(QBrush(COLOR_ONLINE if data is not None else COLOR_ERROR))
-                self.busTimers[title].start(50)
+                self.busTimers[title].start(100)
 
     def busTimerFired(self):
         #logging.info(self.sender().property('bus_id'))

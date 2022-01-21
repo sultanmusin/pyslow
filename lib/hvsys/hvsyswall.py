@@ -223,7 +223,7 @@ class HVsysWall:
 
     def voltage_correction(self): 
         if "TEMPERATURE" not in self.temperature_sensor.state or self.temperature_sensor.state["TEMPERATURE"] is None: 
-            raise ValueError("HVsysWall800c: cannot calculate temperature correction without knowing TEMPERATURE")
+            raise ValueError(f"HVsysWall800c id={self.config.id} addr={self.config.address('hv')}: cannot calculate correction without knowing TEMPERATURE (sensor id={self.temperature_sensor.config.id} addr={self.temperature_sensor.config.address('hv')})")
         tmp = self.tempCountsToDegrees(self.temperature_sensor.state['TEMPERATURE'])
         tmp_corr = (tmp - self.config.reference_temperature) * self.config.temperature_slope / 1000 # minus for normal termerature correction, e.g. config value 60 means "-60mV/C"
 
