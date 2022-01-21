@@ -369,6 +369,8 @@ class HVsysWall:
         self.state[cap] = new_voltage
         corrected_voltage = float(new_voltage) + self.voltage_correction()
 
+        logging.info(f"Request {cap} change (id={self.config.id}) old={old_voltage} new={new_voltage} corrected={corrected_voltage}")
+
         if cap == 'REF_PEDESTAL_VOLTAGE':     # also update all the channel voltages
             for ch in range(1, self.config.n_channels+1):
                 self.state[f'{ch}/REF_VOLTAGE'] += (float(new_voltage) - old_voltage)
