@@ -130,12 +130,12 @@ hv_grid_coords = {
 capability_by_hv_grid_coords = {val : key for key, val in hv_grid_coords.items()}
 
 led_grid_coords = {
-    "SET_FREQUENCY": (GRID_ROW_FREQUENCY,GRID_COLUMN_CORRECTED),
-    "SET_AMPLITUDE": (GRID_ROW_AMPLITUDE,GRID_COLUMN_CORRECTED),
-    "ADC_SET_POINT": (GRID_ROW_ADC_SET_POINT,GRID_COLUMN_CORRECTED),
-    "AVERAGE_POINTS": (GRID_ROW_AVERAGE_POINTS,GRID_COLUMN_CORRECTED),
-    "AUTOREG": (GRID_ROW_AUTOREG,GRID_COLUMN_CORRECTED),
-    "AVERAGE_ADC": (GRID_ROW_AVERAGE_ADC,GRID_COLUMN_CORRECTED),
+    "SET_FREQUENCY": (GRID_ROW_FREQUENCY,GRID_COLUMN_REFERENCE),
+    "SET_AMPLITUDE": (GRID_ROW_AMPLITUDE,GRID_COLUMN_REFERENCE),
+    "ADC_SET_POINT": (GRID_ROW_ADC_SET_POINT,GRID_COLUMN_REFERENCE),
+    "AVERAGE_POINTS": (GRID_ROW_AVERAGE_POINTS,GRID_COLUMN_REFERENCE),
+    "AUTOREG": (GRID_ROW_AUTOREG,GRID_COLUMN_REFERENCE),
+    "AVERAGE_ADC": (GRID_ROW_AVERAGE_ADC,GRID_COLUMN_REFERENCE),
 }
 
 capability_by_led_grid_coords = {val : key for key, val in led_grid_coords.items()}
@@ -286,7 +286,17 @@ class MainWindow(QtWidgets.QMainWindow):
             "Autoregulation on/off", 
             "Average ADC readout" ])
 
-        # TODO create led grid items
+        # Create items, some of them readonly
+        for row in range(GRID_ROWS_LED):
+            for col in range(GRID_COLUMNS_LED):
+                item = QtWidgets.QTableWidgetItem("")
+                self.tableLED.setItem(row, col, item)
+                if col>0: 
+                    item.setFlags(item.flags() & ~Qt.ItemIsEditable)
+
+            self.tableLED.setItem(row, GRID_COLUMN_STATE, QtWidgets.QTableWidgetItem("OK"))
+        
+        self.tableLED.itemChanged.connect(self.tableLEDitemChanged)
 
         self.statusBar = self.findChild(QtWidgets.QStatusBar, 'statusBar') 
 
@@ -432,6 +442,34 @@ class MainWindow(QtWidgets.QMainWindow):
                 
                 self.tableHV.itemChanged.connect(self.tableHVitemChanged)  # ... and restore the handler
 
+    def tableLEDitemChanged(self, item):
+        logging.debug(f'LED Changed: {item.row()} x {item.column()} = {item.text()}')
+        module_id = self.activeModuleId[0]
+        active_module_config = self.config.modules[module_id]
+        if active_module_config.has('led'):
+            bus_id = self.config.modules[module_id].bus_id
+            part_address = int(self.config.modules[module_id].address('led'))
+            part = self.detector.buses[bus_id].getPart(part_address) 
+            try:
+                if item.column() == GRID_COLUMN_REFERENCE:
+                    cap = capability_by_led_grid_coords[(item.row(), item.column())]
+                    logging.info(f'LED Changed: {cap} reference change request')
+                    new_value = float(item.text())
+                    command = part.request_voltage_change(cap, new_value)
+                    self.ShowReferenceParameters()
+                    logging.info(f'Sending as: {command}')
+                    asyncio.get_event_loop().create_task(self.detector.add_task(bus_id, command, part, print))
+                    self.pollModule(module_id)
+                else:
+                    logging.info("No action")
+            except ValueError as e:
+                logging.warning(e)
+                self.tableLED.itemChanged.disconnect()  #remove the handler temporarily
+
+                val = part.state[cap]
+                item.setText(str(val))
+                
+                self.tableLED.itemChanged.connect(self.tableLEDitemChanged)  # ... and restore the handler
 
     def UpdateModuleGrid(self):
         for index, (title, config) in enumerate(self.config.modules.items()):
@@ -551,9 +589,9 @@ class MainWindow(QtWidgets.QMainWindow):
 
         str_value = part.valueToString(capability, value)
 
-        self.tableHV.itemChanged.disconnect(self.tableHVitemChanged)  # temporarily disable the handler as we change the table values
 
         if type(part) in [HVsysSupply, HVsysSupply800c, HVsysWall]:
+            self.tableHV.itemChanged.disconnect(self.tableHVitemChanged)  # temporarily disable the handler as we change the table values
             if type(part) is HVsysWall:
                 capability = capability.replace('SET', 'MEAS')
 
@@ -566,38 +604,39 @@ class MainWindow(QtWidgets.QMainWindow):
                 logging.info('part %s temperature = %s'%(part, str_value))  
 
                 # calculate and display voltage correction (if needed and capable - first times will fail without knowing calibration)
-
                 try:
                     active_module_config = self.config.modules[self.activeModuleId[0]]
                     if active_module_config.has('hv'):
                         correction = float(part.voltage_correction())
                         self.tableHV.item(GRID_ROW_TEMPERATURE, GRID_COLUMN_CORRECTED).setText("%+.2f V"%(float(correction)))
-                        #for ch, hv in active_module_config.hv.items():
                         for ch in range(1, part.config.n_channels+1):
-#                            hv = part.countsToVolts(part.state[f'{ch}/REF_VOLTAGE'])
                             hv = float(part.state[f'{ch}/REF_VOLTAGE'])
                             corrected_hv = round(hv + correction, part.VOLTAGE_DECIMAL_PLACES)
                             self.tableHV.item(int(ch)-1, GRID_COLUMN_CORRECTED).setText(str(corrected_hv))  
                             logging.info("DisplayValueOnComplete temp: desired = %s corrected = %s correction = %s"%(hv, corrected_hv, correction))
                 except ValueError as e:
                     pass
-    
 
             if  capability == 'STATUS':
                 status = HVStatus(value)
                 self.checkBoxHvOn.setChecked( Qt.Checked if status.is_on() else Qt.Unchecked )
                 self.UpdateModuleGrid() # test remove this if it is too heavy
+
+            self.tableHV.itemChanged.connect(self.tableHVitemChanged)  # ... and restore the handler
+
         elif type(part) is HVsysLED:
+            self.tableLED.itemChanged.disconnect()  # ... and restore the handler
             if capability in led_grid_coords:
                 (row, col) = led_grid_coords[capability] 
                 self.tableLED.item(row, col).setText(str_value)
 
             if capability == 'AUTOREG':   
                 self.checkBoxLedAuto.setChecked( Qt.Checked if value > 0 else Qt.Unchecked )
+
+            self.tableLED.itemChanged.connect(self.tableLEDitemChanged)  # ... and restore the handler
         
         self.UpdateModuleGrid()  # will switch off if this gets too heavy
         self.statusBar.showMessage('%d'%(self.detector.queue_length()), 1)
-        self.tableHV.itemChanged.connect(self.tableHVitemChanged)  # ... and restore the handler
 
 
     def ShowReferenceParameters(self):
@@ -611,6 +650,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 part = self.detector.buses[bus_id].getPart(part_address) 
 
                 self.tableHV.itemChanged.disconnect()
+                self.tableLED.itemChanged.disconnect()
 
                 for ch in active_module_config.hv.keys():
                     hv = part.state[f'{ch}/REF_VOLTAGE'] 
@@ -623,6 +663,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.tableHV.setItem(GRID_ROW_TEMPERATURE, GRID_COLUMN_STATE, QtWidgets.QTableWidgetItem("Sensor: %s"%(str(active_module_config.temperature_from_module))))
 
                 self.tableHV.itemChanged.connect(self.tableHVitemChanged)
+                self.tableLED.itemChanged.connect(self.tableLEDitemChanged)
 
     def SwitchHV(self,state):
         for moduleId in self.activeModuleId:
