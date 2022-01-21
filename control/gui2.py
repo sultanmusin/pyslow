@@ -540,6 +540,8 @@ class MainWindow(QtWidgets.QMainWindow):
 
         str_value = part.valueToString(capability, value)
 
+        self.tableHV.itemChanged.disconnect(self.tableHVitemChanged)  # temporarily disable the handler as we change the table values
+
         if type(part) in [HVsysSupply, HVsysSupply800c, HVsysWall]:
             if type(part) is HVsysWall:
                 capability = capability.replace('SET', 'MEAS')
@@ -584,6 +586,7 @@ class MainWindow(QtWidgets.QMainWindow):
         
         self.UpdateModuleGrid()  # will switch off if this gets too heavy
         self.statusBar.showMessage('%d'%(self.detector.queue_length()), 1)
+        self.tableHV.itemChanged.connect(self.tableHVitemChanged)  # ... and restore the handler
 
 
     def ShowReferenceParameters(self):
