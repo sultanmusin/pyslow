@@ -158,7 +158,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.SelectFirstOnlineModule()
         self.ShowReferenceParameters()
         self.pollAllStatus()
-        await self.pollOnlineModules()
         #self.pollAllTemperature(False) # no callbacks
         #self.SetReferenceParameters()
         #self.UpdateModuleGrid()
@@ -727,6 +726,7 @@ async def main(argv):
             await loop.create_task(bus.connect())
             loop.create_task(bus.send())
             logging.info("Bus '%s' %s."%(id, "online" if bus.online else "offline"))
+        await mainWindow.pollOnlineModules()
     except OSError as e:
         logging.info("Cannot connect to system module: %s"%(str(e)))  
     except asyncio.exceptions.CancelledError:
