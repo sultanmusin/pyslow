@@ -411,6 +411,7 @@ class MainWindow(QtWidgets.QMainWindow):
                     cap = 'REF_PEDESTAL_VOLTAGE' if item.row() == GRID_ROW_PEDESTAL else f'{section}/REF_VOLTAGE'
                     logging.info(f'Changed: {cap} reference change request')
                     command = part.request_voltage_change(cap, new_value)
+                    self.ShowReferenceParameters()
                     logging.info(f'Sending as: {command}')
                     asyncio.get_event_loop().create_task(self.detector.add_task(bus_id, command, part, partial(self.DisplayValueOnComplete, part, cap)))
                 else:
@@ -612,7 +613,6 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.tableHV.setItem(GRID_ROW_TEMPERATURE, GRID_COLUMN_STATE, QtWidgets.QTableWidgetItem("Sensor: %s"%(str(active_module_config.temperature_from_module))))
 
                 self.tableHV.itemChanged.connect(self.tableHVitemChanged)
-
 
     def SwitchHV(self,state):
         for moduleId in self.activeModuleId:
