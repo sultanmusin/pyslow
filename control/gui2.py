@@ -589,7 +589,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.UpdateModuleGrid() # test remove this if it is too heavy
         elif type(part) is HVsysLED:
             if capability in led_grid_coords:
-                (row, col) = hv_grid_coords[capability] 
+                (row, col) = led_grid_coords[capability] 
                 self.tableLED.item(row, col).setText(str_value)
 
             if capability == 'AUTOREG':   
