@@ -414,7 +414,7 @@ class MainWindow(QtWidgets.QMainWindow):
                     command = part.request_voltage_change(cap, new_value)
                     self.ShowReferenceParameters()
                     logging.info(f'Sending as: {command}')
-                    asyncio.get_event_loop().create_task(self.detector.add_task(bus_id, command, part, partial(self.DisplayValueOnComplete, part, cap)))
+                    asyncio.get_event_loop().create_task(self.detector.add_task(bus_id, command, part, print))
                     self.pollModule(module_id)
                 else:
                     logging.info("No action")
