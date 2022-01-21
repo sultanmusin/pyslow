@@ -143,19 +143,16 @@ class HVsysWall:
         if "REF_PEDESTAL_VOLTAGE" not in self.state or self.state["REF_PEDESTAL_VOLTAGE"] is None: 
             raise ValueError("HVsysWall: cannot translate volts to counts without knowing REF_PEDESTAL_VOLTAGE")
         pedestal_voltage = float(self.state["REF_PEDESTAL_VOLTAGE"])
-        #tmp = float( self.valueToString('TEMPERATURE', self.temperature_sensor.state['TEMPERATURE']) )
-        #tmp_corr = -(tmp - self.config.reference_temperature) * self.config.temperature_slope / 1000 # minus for normal termerature correction, e.g. config value 60 means "-60mV/C"
         volts_to_set = pedestal_voltage + HVsysWall.PEDESTAL_VOLTAGE_BIAS - float(volts)  # e.g. -0.5V means we need to go 0.5V lower than pedestal (with positive counts)       
 
-        # logging.debug("voltsToCounts: temperature correction for T=%s is %d V" % (tmp, tmp_corr))
         calib_voltage_slope = self.state["VOLTAGE_CALIBRATION"] / 100.0              #  325 -> -3.25 V (full scale) 
 
         if volts_to_set < 0:
-            print("HVsysWall: trying to set invalid voltage, %2.2f < %2.2f (lower bound), setting lower bound"%(volts_to_set, 0))
+            logging.warning(f"HVsysWall id={self.config.id}: trying to set invalid voltage, {volts_to_set} < 0 (lower bound), setting lower bound")
             volts_to_set = 0
 
         if volts_to_set > calib_voltage_slope:
-            print("HVsysWall: trying to set invalid voltage, %2.2f > %2.2f (upper bound), setting upper bound"%(volts_to_set, calib_voltage_slope))
+            print(f"HVsysWall id={self.config.id}: trying to set invalid voltage, {volts_to_set} > {calib_voltage_slope} (upper bound), setting upper bound")
             volts_to_set = calib_voltage_slope
 
         return int((HVsysWall.VOLTAGE_RESOLUTION - 1) * volts_to_set / calib_voltage_slope)
@@ -223,7 +220,7 @@ class HVsysWall:
 
     def voltage_correction(self): 
         if "TEMPERATURE" not in self.temperature_sensor.state or self.temperature_sensor.state["TEMPERATURE"] is None: 
-            raise ValueError(f"HVsysWall800c id={self.config.id} addr={self.config.address('hv')}: cannot calculate correction without knowing TEMPERATURE (sensor id={self.temperature_sensor.config.id} addr={self.temperature_sensor.config.address('hv')})")
+            raise ValueError(f"HVsysWall id={self.config.id} addr={self.config.address('hv')}: cannot calculate correction without knowing TEMPERATURE (sensor id={self.temperature_sensor.config.id} addr={self.temperature_sensor.config.address('hv')})")
         tmp = self.tempCountsToDegrees(self.temperature_sensor.state['TEMPERATURE'])
         tmp_corr = (tmp - self.config.reference_temperature) * self.config.temperature_slope / 1000 # minus for normal termerature correction, e.g. config value 60 means "-60mV/C"
 
