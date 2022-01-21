@@ -376,7 +376,7 @@ class HVsysWall:
                 self.state[f'{ch}/REF_VOLTAGE'] += (float(new_voltage) - old_voltage)
         
         set_cap = cap.replace('REF', 'SET')     # 4/REF_VOLTAGE -> 4/SET_VOLTAGE to construct the command
-        set_value = self.valueFromString(set_cap, corrected_voltage)
+        set_value = self.valueFromString(set_cap, new_voltage)  # correction will be applied here inside the convertor
         command = Message(Message.WRITE_SHORT, self.config.addr['hv'], self, set_cap, set_value)
         return command
 
