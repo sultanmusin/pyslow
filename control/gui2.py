@@ -307,7 +307,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
                     for ch, hv in module_config.hv.items():
                         cap = '%s/SET_VOLTAGE'%(ch)
-                        value = part.valueFromString(cap, str(hv)) + part.voltage_correction()))
+                        value = part.valueFromString(cap, str(hv)) # + part.voltage_correction()))
                         command = Message(Message.WRITE_SHORT, part_address, part, cap, value)
                         asyncio.get_event_loop().create_task(self.detector.add_task(bus_id, command, part, print))
 
