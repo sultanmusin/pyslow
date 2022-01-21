@@ -158,7 +158,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.SelectFirstOnlineModule()
         self.ShowReferenceParameters()
         self.pollAllStatus()
-        self.pollOnlineModules()
+        await self.pollOnlineModules()
         #self.pollAllTemperature(False) # no callbacks
         #self.SetReferenceParameters()
         #self.UpdateModuleGrid()
