@@ -412,7 +412,7 @@ class MainWindow(QtWidgets.QMainWindow):
                     logging.info(f'Changed: {cap} reference change request')
                     command = part.request_voltage_change(cap, new_value)
                     logging.info(f'Sending as: {command}')
-                    asyncio.get_event_loop().create_task(self.detector.add_task(bus_id, command, part, self.DisplayValueOnComplete))
+                    asyncio.get_event_loop().create_task(self.detector.add_task(bus_id, command, part, partial(self.DisplayValueOnComplete, part, cap))
                 else:
                     logging.info("No action")
             except ValueError as e:
