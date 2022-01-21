@@ -455,7 +455,8 @@ class MainWindow(QtWidgets.QMainWindow):
                     cap = capability_by_led_grid_coords[(item.row(), item.column())]
                     logging.info(f'LED Changed: {cap} reference change request')
                     new_value = float(item.text())
-                    command = part.request_voltage_change(cap, new_value)
+                    part.state[cap] = new_value
+                    command = Message(Message.WRITE_SHORT, part_address, part, cap, new_value)
                     self.ShowReferenceParameters()
                     logging.info(f'Sending as: {command}')
                     asyncio.get_event_loop().create_task(self.detector.add_task(bus_id, command, part, print))
