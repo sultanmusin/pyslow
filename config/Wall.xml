@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <config xmlns="http://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" created="17.02.2014" id="default" xsi:noNamespaceSchemaLocation="PsdSlowControlConfig.xsd" xsi:schemaLocation="PsdSlowControlConfig.xsd">
 <global>
-        <flags>
+	<title>Wall DCS</title>
+	<flags>
             <onlineModules> 1,2,3,4,5,6,7,8,9,10,11,12 </onlineModules>
             <queryDelay unit="sec">600</queryDelay>
             <verbose> 1 </verbose>
             <monitorHV> 0 </monitorHV>
             <refTemp> 25 </refTemp>
-            <tempSlope> 0 </tempSlope>
+            <tempSlope> 60 </tempSlope>
 
         </flags>
         <connection>
@@ -56,23 +57,23 @@
         </connection>    
         <settings>
             <hv>
-                <channel id="1" unit="Volts">42.00</channel>
-                <channel id="2" unit="Volts">42.00</channel>
-                <channel id="3" unit="Volts">42.00</channel>
-                <channel id="4" unit="Volts">42.00</channel>
-                <channel id="5" unit="Volts">42.00</channel>
-                <channel id="6" unit="Volts">42.00</channel>
-                <channel id="7" unit="Volts">42.00</channel>
-                <channel id="8" unit="Volts">42.00</channel>
-                <channel id="9" unit="Volts">42.00</channel>
-                <channel id="10" unit="Volts">42.00</channel>
-                <channel id="11" unit="Volts">42.00</channel>
-                <channel id="12" unit="Volts">42.00</channel>
-                <channel id="13" unit="Volts">42.00</channel>
-                <channel id="14" unit="Volts">42.00</channel>
-                <channel id="15" unit="Volts">42.00</channel>
-                <channel id="16" unit="Volts">42.00</channel>
-                <pedestal unit="Volts">42.00</pedestal>
+                <channel id="1" unit="Volts">43.00</channel>
+                <channel id="2" unit="Volts">43.00</channel>
+                <channel id="3" unit="Volts">43.00</channel>
+                <channel id="4" unit="Volts">43.00</channel>
+                <channel id="5" unit="Volts">43.00</channel>
+                <channel id="6" unit="Volts">43.00</channel>
+                <channel id="7" unit="Volts">43.00</channel>
+                <channel id="8" unit="Volts">43.00</channel>
+                <channel id="9" unit="Volts">43.00</channel>
+                <channel id="10" unit="Volts">43.00</channel>
+                <channel id="11" unit="Volts">43.00</channel>
+                <channel id="12" unit="Volts">43.00</channel>
+                <channel id="13" unit="Volts">43.00</channel>
+                <channel id="14" unit="Volts">43.00</channel>
+                <channel id="15" unit="Volts">43.00</channel>
+                <channel id="16" unit="Volts">43.00</channel>
+                <pedestal unit="Volts">43.00</pedestal>
             </hv>
         </settings> 
         
@@ -94,23 +95,23 @@
         </connection>    
         <settings>
             <hv>
-                <channel id="1" unit="Volts">42.00</channel>
-                <channel id="2" unit="Volts">42.00</channel>
-                <channel id="3" unit="Volts">42.00</channel>
-                <channel id="4" unit="Volts">42.00</channel>
-                <channel id="5" unit="Volts">42.00</channel>
-                <channel id="6" unit="Volts">42.00</channel>
-                <channel id="7" unit="Volts">42.00</channel>
-                <channel id="8" unit="Volts">42.00</channel>
-                <channel id="9" unit="Volts">42.00</channel>
-                <channel id="10" unit="Volts">42.00</channel>
-                <channel id="11" unit="Volts">42.00</channel>
-                <channel id="12" unit="Volts">42.00</channel>
-                <channel id="13" unit="Volts">42.00</channel>
-                <channel id="14" unit="Volts">42.00</channel>
-                <channel id="15" unit="Volts">42.00</channel>
-                <channel id="16" unit="Volts">42.00</channel>
-                <pedestal unit="Volts">42.00</pedestal>
+                <channel id="1" unit="Volts">43.00</channel>
+                <channel id="2" unit="Volts">43.00</channel>
+                <channel id="3" unit="Volts">43.00</channel>
+                <channel id="4" unit="Volts">43.00</channel>
+                <channel id="5" unit="Volts">43.00</channel>
+                <channel id="6" unit="Volts">43.00</channel>
+                <channel id="7" unit="Volts">43.00</channel>
+                <channel id="8" unit="Volts">43.00</channel>
+                <channel id="9" unit="Volts">43.00</channel>
+                <channel id="10" unit="Volts">43.00</channel>
+                <channel id="11" unit="Volts">43.00</channel>
+                <channel id="12" unit="Volts">43.00</channel>
+                <channel id="13" unit="Volts">43.00</channel>
+                <channel id="14" unit="Volts">43.00</channel>
+                <channel id="15" unit="Volts">43.00</channel>
+                <channel id="16" unit="Volts">43.00</channel>
+                <pedestal unit="Volts">43.00</pedestal>
             </hv>
         </settings> 
         
@@ -132,23 +133,23 @@
         </connection>    
         <settings>
             <hv>
-                <channel id="1" unit="Volts">42.00</channel>
-                <channel id="2" unit="Volts">42.00</channel>
-                <channel id="3" unit="Volts">42.00</channel>
-                <channel id="4" unit="Volts">42.00</channel>
-                <channel id="5" unit="Volts">42.00</channel>
-                <channel id="6" unit="Volts">42.00</channel>
-                <channel id="7" unit="Volts">42.00</channel>
-                <channel id="8" unit="Volts">42.00</channel>
-                <channel id="9" unit="Volts">42.00</channel>
-                <channel id="10" unit="Volts">42.00</channel>
-                <channel id="11" unit="Volts">42.00</channel>
-                <channel id="12" unit="Volts">42.00</channel>
-                <channel id="13" unit="Volts">42.00</channel>
-                <channel id="14" unit="Volts">42.00</channel>
-                <channel id="15" unit="Volts">42.00</channel>
-                <channel id="16" unit="Volts">42.00</channel>
-                <pedestal unit="Volts">42.00</pedestal>
+                <channel id="1" unit="Volts">43.00</channel>
+                <channel id="2" unit="Volts">43.00</channel>
+                <channel id="3" unit="Volts">43.00</channel>
+                <channel id="4" unit="Volts">43.00</channel>
+                <channel id="5" unit="Volts">43.00</channel>
+                <channel id="6" unit="Volts">43.00</channel>
+                <channel id="7" unit="Volts">43.00</channel>
+                <channel id="8" unit="Volts">43.00</channel>
+                <channel id="9" unit="Volts">43.00</channel>
+                <channel id="10" unit="Volts">43.00</channel>
+                <channel id="11" unit="Volts">43.00</channel>
+                <channel id="12" unit="Volts">43.00</channel>
+                <channel id="13" unit="Volts">43.00</channel>
+                <channel id="14" unit="Volts">43.00</channel>
+                <channel id="15" unit="Volts">43.00</channel>
+                <channel id="16" unit="Volts">43.00</channel>
+                <pedestal unit="Volts">43.00</pedestal>
             </hv>
         </settings> 
         
@@ -170,23 +171,23 @@
         </connection>    
         <settings>
             <hv>
-                <channel id="1" unit="Volts">42.00</channel>
-                <channel id="2" unit="Volts">42.00</channel>
-                <channel id="3" unit="Volts">42.00</channel>
-                <channel id="4" unit="Volts">42.00</channel>
-                <channel id="5" unit="Volts">42.00</channel>
-                <channel id="6" unit="Volts">42.00</channel>
-                <channel id="7" unit="Volts">42.00</channel>
-                <channel id="8" unit="Volts">42.00</channel>
-                <channel id="9" unit="Volts">42.00</channel>
-                <channel id="10" unit="Volts">42.00</channel>
-                <channel id="11" unit="Volts">42.00</channel>
-                <channel id="12" unit="Volts">42.00</channel>
-                <channel id="13" unit="Volts">42.00</channel>
-                <channel id="14" unit="Volts">42.00</channel>
-                <channel id="15" unit="Volts">42.00</channel>
-                <channel id="16" unit="Volts">42.00</channel>
-                <pedestal unit="Volts">42.00</pedestal>
+                <channel id="1" unit="Volts">43.00</channel>
+                <channel id="2" unit="Volts">43.00</channel>
+                <channel id="3" unit="Volts">43.00</channel>
+                <channel id="4" unit="Volts">43.00</channel>
+                <channel id="5" unit="Volts">43.00</channel>
+                <channel id="6" unit="Volts">43.00</channel>
+                <channel id="7" unit="Volts">43.00</channel>
+                <channel id="8" unit="Volts">43.00</channel>
+                <channel id="9" unit="Volts">43.00</channel>
+                <channel id="10" unit="Volts">43.00</channel>
+                <channel id="11" unit="Volts">43.00</channel>
+                <channel id="12" unit="Volts">43.00</channel>
+                <channel id="13" unit="Volts">43.00</channel>
+                <channel id="14" unit="Volts">43.00</channel>
+                <channel id="15" unit="Volts">43.00</channel>
+                <channel id="16" unit="Volts">43.00</channel>
+                <pedestal unit="Volts">43.00</pedestal>
             </hv>
         </settings> 
         
@@ -207,23 +208,23 @@
         </connection>    
         <settings>
             <hv>
-                <channel id="1" unit="Volts">42.00</channel>
-                <channel id="2" unit="Volts">42.00</channel>
-                <channel id="3" unit="Volts">42.00</channel>
-                <channel id="4" unit="Volts">42.00</channel>
-                <channel id="5" unit="Volts">42.00</channel>
-                <channel id="6" unit="Volts">42.00</channel>
-                <channel id="7" unit="Volts">42.00</channel>
-                <channel id="8" unit="Volts">42.00</channel>
-                <channel id="9" unit="Volts">42.00</channel>
-                <channel id="10" unit="Volts">42.00</channel>
-                <channel id="11" unit="Volts">42.00</channel>
-                <channel id="12" unit="Volts">42.00</channel>
-                <channel id="13" unit="Volts">42.00</channel>
-                <channel id="14" unit="Volts">42.00</channel>
-                <channel id="15" unit="Volts">42.00</channel>
-                <channel id="16" unit="Volts">42.00</channel>
-                <pedestal unit="Volts">42.00</pedestal>
+                <channel id="1" unit="Volts">43.00</channel>
+                <channel id="2" unit="Volts">43.00</channel>
+                <channel id="3" unit="Volts">43.00</channel>
+                <channel id="4" unit="Volts">43.00</channel>
+                <channel id="5" unit="Volts">43.00</channel>
+                <channel id="6" unit="Volts">43.00</channel>
+                <channel id="7" unit="Volts">43.00</channel>
+                <channel id="8" unit="Volts">43.00</channel>
+                <channel id="9" unit="Volts">43.00</channel>
+                <channel id="10" unit="Volts">43.00</channel>
+                <channel id="11" unit="Volts">43.00</channel>
+                <channel id="12" unit="Volts">43.00</channel>
+                <channel id="13" unit="Volts">43.00</channel>
+                <channel id="14" unit="Volts">43.00</channel>
+                <channel id="15" unit="Volts">43.00</channel>
+                <channel id="16" unit="Volts">43.00</channel>
+                <pedestal unit="Volts">43.00</pedestal>
             </hv>
         </settings> 
         
@@ -245,23 +246,23 @@
         </connection>    
         <settings>
             <hv>
-                <channel id="1" unit="Volts">42.00</channel>
-                <channel id="2" unit="Volts">42.00</channel>
-                <channel id="3" unit="Volts">42.00</channel>
-                <channel id="4" unit="Volts">42.00</channel>
-                <channel id="5" unit="Volts">42.00</channel>
-                <channel id="6" unit="Volts">42.00</channel>
-                <channel id="7" unit="Volts">42.00</channel>
-                <channel id="8" unit="Volts">42.00</channel>
-                <channel id="9" unit="Volts">42.00</channel>
-                <channel id="10" unit="Volts">42.00</channel>
-                <channel id="11" unit="Volts">42.00</channel>
-                <channel id="12" unit="Volts">42.00</channel>
-                <channel id="13" unit="Volts">42.00</channel>
-                <channel id="14" unit="Volts">42.00</channel>
-                <channel id="15" unit="Volts">42.00</channel>
-                <channel id="16" unit="Volts">42.00</channel>
-                <pedestal unit="Volts">42.00</pedestal>
+                <channel id="1" unit="Volts">43.00</channel>
+                <channel id="2" unit="Volts">43.00</channel>
+                <channel id="3" unit="Volts">43.00</channel>
+                <channel id="4" unit="Volts">43.00</channel>
+                <channel id="5" unit="Volts">43.00</channel>
+                <channel id="6" unit="Volts">43.00</channel>
+                <channel id="7" unit="Volts">43.00</channel>
+                <channel id="8" unit="Volts">43.00</channel>
+                <channel id="9" unit="Volts">43.00</channel>
+                <channel id="10" unit="Volts">43.00</channel>
+                <channel id="11" unit="Volts">43.00</channel>
+                <channel id="12" unit="Volts">43.00</channel>
+                <channel id="13" unit="Volts">43.00</channel>
+                <channel id="14" unit="Volts">43.00</channel>
+                <channel id="15" unit="Volts">43.00</channel>
+                <channel id="16" unit="Volts">43.00</channel>
+                <pedestal unit="Volts">43.00</pedestal>
             </hv>
         </settings> 
         
@@ -283,23 +284,23 @@
         </connection>    
         <settings>
             <hv>
-                <channel id="1" unit="Volts">42.00</channel>
-                <channel id="2" unit="Volts">42.00</channel>
-                <channel id="3" unit="Volts">42.00</channel>
-                <channel id="4" unit="Volts">42.00</channel>
-                <channel id="5" unit="Volts">42.00</channel>
-                <channel id="6" unit="Volts">42.00</channel>
-                <channel id="7" unit="Volts">42.00</channel>
-                <channel id="8" unit="Volts">42.00</channel>
-                <channel id="9" unit="Volts">42.00</channel>
-                <channel id="10" unit="Volts">42.00</channel>
-                <channel id="11" unit="Volts">42.00</channel>
-                <channel id="12" unit="Volts">42.00</channel>
-                <channel id="13" unit="Volts">42.00</channel>
-                <channel id="14" unit="Volts">42.00</channel>
-                <channel id="15" unit="Volts">42.00</channel>
-                <channel id="16" unit="Volts">42.00</channel>
-                <pedestal unit="Volts">42.00</pedestal>
+                <channel id="1" unit="Volts">43.00</channel>
+                <channel id="2" unit="Volts">43.00</channel>
+                <channel id="3" unit="Volts">43.00</channel>
+                <channel id="4" unit="Volts">43.00</channel>
+                <channel id="5" unit="Volts">43.00</channel>
+                <channel id="6" unit="Volts">43.00</channel>
+                <channel id="7" unit="Volts">43.00</channel>
+                <channel id="8" unit="Volts">43.00</channel>
+                <channel id="9" unit="Volts">43.00</channel>
+                <channel id="10" unit="Volts">43.00</channel>
+                <channel id="11" unit="Volts">43.00</channel>
+                <channel id="12" unit="Volts">43.00</channel>
+                <channel id="13" unit="Volts">43.00</channel>
+                <channel id="14" unit="Volts">43.00</channel>
+                <channel id="15" unit="Volts">43.00</channel>
+                <channel id="16" unit="Volts">43.00</channel>
+                <pedestal unit="Volts">43.00</pedestal>
             </hv>
         </settings> 
         
@@ -321,28 +322,28 @@
         </connection>    
         <settings>
             <hv>
-                <channel id="1" unit="Volts">42.00</channel>
-                <channel id="2" unit="Volts">42.00</channel>
-                <channel id="3" unit="Volts">42.00</channel>
-                <channel id="4" unit="Volts">42.00</channel>
-                <channel id="5" unit="Volts">42.00</channel>
-                <channel id="6" unit="Volts">42.00</channel>
-                <channel id="7" unit="Volts">42.00</channel>
-                <channel id="8" unit="Volts">42.00</channel>
-                <channel id="9" unit="Volts">42.00</channel>
-                <channel id="10" unit="Volts">42.00</channel>
-                <channel id="11" unit="Volts">42.00</channel>
-                <channel id="12" unit="Volts">42.00</channel>
-                <channel id="13" unit="Volts">42.00</channel>
-                <channel id="14" unit="Volts">42.00</channel>
-                <channel id="15" unit="Volts">42.00</channel>
-                <channel id="16" unit="Volts">42.00</channel>
-                <pedestal unit="Volts">42.00</pedestal>
+                <channel id="1" unit="Volts">43.00</channel>
+                <channel id="2" unit="Volts">43.00</channel>
+                <channel id="3" unit="Volts">43.00</channel>
+                <channel id="4" unit="Volts">43.00</channel>
+                <channel id="5" unit="Volts">43.00</channel>
+                <channel id="6" unit="Volts">43.00</channel>
+                <channel id="7" unit="Volts">43.00</channel>
+                <channel id="8" unit="Volts">43.00</channel>
+                <channel id="9" unit="Volts">43.00</channel>
+                <channel id="10" unit="Volts">43.00</channel>
+                <channel id="11" unit="Volts">43.00</channel>
+                <channel id="12" unit="Volts">43.00</channel>
+                <channel id="13" unit="Volts">43.00</channel>
+                <channel id="14" unit="Volts">43.00</channel>
+                <channel id="15" unit="Volts">43.00</channel>
+                <channel id="16" unit="Volts">43.00</channel>
+                <pedestal unit="Volts">43.00</pedestal>
             </hv>
         </settings> 
         
     </module>
-    <module id="9" version="DM64_V2">
+    <module id="9" version="DM64_V2" temperature_from_module="3">
         <geometry>
             <size>1</size>
             <x>3</x>
@@ -358,23 +359,23 @@
         </connection>    
         <settings>
             <hv>
-                <channel id="1" unit="Volts">42.00</channel>
-                <channel id="2" unit="Volts">42.00</channel>
-                <channel id="3" unit="Volts">42.00</channel>
-                <channel id="4" unit="Volts">42.00</channel>
-                <channel id="5" unit="Volts">42.00</channel>
-                <channel id="6" unit="Volts">42.00</channel>
-                <channel id="7" unit="Volts">42.00</channel>
-                <channel id="8" unit="Volts">42.00</channel>
-                <channel id="9" unit="Volts">42.00</channel>
-                <channel id="10" unit="Volts">42.00</channel>
-                <channel id="11" unit="Volts">42.00</channel>
-                <channel id="12" unit="Volts">42.00</channel>
-                <channel id="13" unit="Volts">42.00</channel>
-                <channel id="14" unit="Volts">42.00</channel>
-                <channel id="15" unit="Volts">42.00</channel>
-                <channel id="16" unit="Volts">42.00</channel>
-                <pedestal unit="Volts">42.00</pedestal>
+                <channel id="1" unit="Volts">43.00</channel>
+                <channel id="2" unit="Volts">43.00</channel>
+                <channel id="3" unit="Volts">43.00</channel>
+                <channel id="4" unit="Volts">43.00</channel>
+                <channel id="5" unit="Volts">43.00</channel>
+                <channel id="6" unit="Volts">43.00</channel>
+                <channel id="7" unit="Volts">43.00</channel>
+                <channel id="8" unit="Volts">43.00</channel>
+                <channel id="9" unit="Volts">43.00</channel>
+                <channel id="10" unit="Volts">43.00</channel>
+                <channel id="11" unit="Volts">43.00</channel>
+                <channel id="12" unit="Volts">43.00</channel>
+                <channel id="13" unit="Volts">43.00</channel>
+                <channel id="14" unit="Volts">43.00</channel>
+                <channel id="15" unit="Volts">43.00</channel>
+                <channel id="16" unit="Volts">43.00</channel>
+                <pedestal unit="Volts">43.00</pedestal>
             </hv>
         </settings> 
         
@@ -396,23 +397,23 @@
         </connection>    
         <settings>
             <hv>
-                <channel id="1" unit="Volts">42.00</channel>
-                <channel id="2" unit="Volts">42.00</channel>
-                <channel id="3" unit="Volts">42.00</channel>
-                <channel id="4" unit="Volts">42.00</channel>
-                <channel id="5" unit="Volts">42.00</channel>
-                <channel id="6" unit="Volts">42.00</channel>
-                <channel id="7" unit="Volts">42.00</channel>
-                <channel id="8" unit="Volts">42.00</channel>
-                <channel id="9" unit="Volts">42.00</channel>
-                <channel id="10" unit="Volts">42.00</channel>
-                <channel id="11" unit="Volts">42.00</channel>
-                <channel id="12" unit="Volts">42.00</channel>
-                <channel id="13" unit="Volts">42.00</channel>
-                <channel id="14" unit="Volts">42.00</channel>
-                <channel id="15" unit="Volts">42.00</channel>
-                <channel id="16" unit="Volts">42.00</channel>
-                <pedestal unit="Volts">42.00</pedestal>
+                <channel id="1" unit="Volts">43.00</channel>
+                <channel id="2" unit="Volts">43.00</channel>
+                <channel id="3" unit="Volts">43.00</channel>
+                <channel id="4" unit="Volts">43.00</channel>
+                <channel id="5" unit="Volts">43.00</channel>
+                <channel id="6" unit="Volts">43.00</channel>
+                <channel id="7" unit="Volts">43.00</channel>
+                <channel id="8" unit="Volts">43.00</channel>
+                <channel id="9" unit="Volts">43.00</channel>
+                <channel id="10" unit="Volts">43.00</channel>
+                <channel id="11" unit="Volts">43.00</channel>
+                <channel id="12" unit="Volts">43.00</channel>
+                <channel id="13" unit="Volts">43.00</channel>
+                <channel id="14" unit="Volts">43.00</channel>
+                <channel id="15" unit="Volts">43.00</channel>
+                <channel id="16" unit="Volts">43.00</channel>
+                <pedestal unit="Volts">43.00</pedestal>
             </hv>
         </settings> 
         
@@ -434,23 +435,23 @@
         </connection>    
         <settings>
             <hv>
-                <channel id="1" unit="Volts">42.00</channel>
-                <channel id="2" unit="Volts">42.00</channel>
-                <channel id="3" unit="Volts">42.00</channel>
-                <channel id="4" unit="Volts">42.00</channel>
-                <channel id="5" unit="Volts">42.00</channel>
-                <channel id="6" unit="Volts">42.00</channel>
-                <channel id="7" unit="Volts">42.00</channel>
-                <channel id="8" unit="Volts">42.00</channel>
-                <channel id="9" unit="Volts">42.00</channel>
-                <channel id="10" unit="Volts">42.00</channel>
-                <channel id="11" unit="Volts">42.00</channel>
-                <channel id="12" unit="Volts">42.00</channel>
-                <channel id="13" unit="Volts">42.00</channel>
-                <channel id="14" unit="Volts">42.00</channel>
-                <channel id="15" unit="Volts">42.00</channel>
-                <channel id="16" unit="Volts">42.00</channel>
-                <pedestal unit="Volts">42.00</pedestal>
+                <channel id="1" unit="Volts">43.00</channel>
+                <channel id="2" unit="Volts">43.00</channel>
+                <channel id="3" unit="Volts">43.00</channel>
+                <channel id="4" unit="Volts">43.00</channel>
+                <channel id="5" unit="Volts">43.00</channel>
+                <channel id="6" unit="Volts">43.00</channel>
+                <channel id="7" unit="Volts">43.00</channel>
+                <channel id="8" unit="Volts">43.00</channel>
+                <channel id="9" unit="Volts">43.00</channel>
+                <channel id="10" unit="Volts">43.00</channel>
+                <channel id="11" unit="Volts">43.00</channel>
+                <channel id="12" unit="Volts">43.00</channel>
+                <channel id="13" unit="Volts">43.00</channel>
+                <channel id="14" unit="Volts">43.00</channel>
+                <channel id="15" unit="Volts">43.00</channel>
+                <channel id="16" unit="Volts">43.00</channel>
+                <pedestal unit="Volts">43.00</pedestal>
             </hv>
         </settings> 
         
@@ -472,23 +473,23 @@
         </connection>    
         <settings>
             <hv>
-                <channel id="1" unit="Volts">42.00</channel>
-                <channel id="2" unit="Volts">42.00</channel>
-                <channel id="3" unit="Volts">42.00</channel>
-                <channel id="4" unit="Volts">42.00</channel>
-                <channel id="5" unit="Volts">42.00</channel>
-                <channel id="6" unit="Volts">42.00</channel>
-                <channel id="7" unit="Volts">42.00</channel>
-                <channel id="8" unit="Volts">42.00</channel>
-                <channel id="9" unit="Volts">42.00</channel>
-                <channel id="10" unit="Volts">42.00</channel>
-                <channel id="11" unit="Volts">42.00</channel>
-                <channel id="12" unit="Volts">42.00</channel>
-                <channel id="13" unit="Volts">42.00</channel>
-                <channel id="14" unit="Volts">42.00</channel>
-                <channel id="15" unit="Volts">42.00</channel>
-                <channel id="16" unit="Volts">42.00</channel>
-                <pedestal unit="Volts">42.00</pedestal>
+                <channel id="1" unit="Volts">43.00</channel>
+                <channel id="2" unit="Volts">43.00</channel>
+                <channel id="3" unit="Volts">43.00</channel>
+                <channel id="4" unit="Volts">43.00</channel>
+                <channel id="5" unit="Volts">43.00</channel>
+                <channel id="6" unit="Volts">43.00</channel>
+                <channel id="7" unit="Volts">43.00</channel>
+                <channel id="8" unit="Volts">43.00</channel>
+                <channel id="9" unit="Volts">43.00</channel>
+                <channel id="10" unit="Volts">43.00</channel>
+                <channel id="11" unit="Volts">43.00</channel>
+                <channel id="12" unit="Volts">43.00</channel>
+                <channel id="13" unit="Volts">43.00</channel>
+                <channel id="14" unit="Volts">43.00</channel>
+                <channel id="15" unit="Volts">43.00</channel>
+                <channel id="16" unit="Volts">43.00</channel>
+                <pedestal unit="Volts">43.00</pedestal>
             </hv>
         </settings> 
         
