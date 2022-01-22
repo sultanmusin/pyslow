@@ -158,7 +158,7 @@ class HVsysSupply:
             raise ValueError("HVsysSupply: cannot translate volts to counts without knowing VOLTAGE_CALIBRATION")
         if "SET_PEDESTAL_VOLTAGE" not in self.state or self.state["REF_PEDESTAL_VOLTAGE"] is None: 
             raise ValueError("HVsysSupply: cannot translate volts to counts without knowing REF_PEDESTAL_VOLTAGE")
-        pedestal_voltage = self.pedestalCountsToVolts(self.state["REF_PEDESTAL_VOLTAGE"])
+        pedestal_voltage = float(self.state["REF_PEDESTAL_VOLTAGE"])
         volts_to_set = pedestal_voltage + HVsysSupply.PEDESTAL_VOLTAGE_BIAS - float(volts)  # e.g. -0.5V means we need to go 0.5V lower than pedestal (with positive counts)       
 
         calib_voltage_slope = self.state["VOLTAGE_CALIBRATION"] / 100.0              #  325 -> -3.25 V (full scale) 
