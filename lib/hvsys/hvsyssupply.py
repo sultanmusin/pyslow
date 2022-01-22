@@ -156,7 +156,7 @@ class HVsysSupply:
     def voltsToCounts(self, volts: str) -> int:
         if "VOLTAGE_CALIBRATION" not in self.state or self.state["VOLTAGE_CALIBRATION"] is None: 
             raise ValueError("HVsysSupply: cannot translate volts to counts without knowing VOLTAGE_CALIBRATION")
-        if "SET_PEDESTAL_VOLTAGE" not in self.state or self.state["REF_PEDESTAL_VOLTAGE"] is None: 
+        if "REF_PEDESTAL_VOLTAGE" not in self.state or self.state["REF_PEDESTAL_VOLTAGE"] is None: 
             raise ValueError("HVsysSupply: cannot translate volts to counts without knowing REF_PEDESTAL_VOLTAGE")
         pedestal_voltage = float(self.state["REF_PEDESTAL_VOLTAGE"])
         volts_to_set = pedestal_voltage + HVsysSupply.PEDESTAL_VOLTAGE_BIAS - float(volts)  # e.g. -0.5V means we need to go 0.5V lower than pedestal (with positive counts)       
@@ -235,7 +235,7 @@ class HVsysSupply:
 
 
     def voltage_correction(self): 
-        if "TEMPERATURE" not in self.state or self.state["TEMPERATURE"] is None: 
+        if "TEMPERATURE" not in self.temperature_sensor.state or self.temperature_sensor.state["TEMPERATURE"] is None: 
             raise ValueError(f"HVsysSupply id={self.config.id} addr={self.config.address('hv')}: cannot calculate correction without knowing TEMPERATURE (sensor id={self.temperature_sensor.config.id} addr={self.temperature_sensor.config.address('hv')})")
         tmp = self.tempCountsToDegrees(self.temperature_sensor.state['TEMPERATURE'])
         tmp_corr = (tmp - self.config.reference_temperature) * self.config.temperature_slope / 1000 # minus for normal termerature correction, e.g. config value 60 means "-60mV/C"
