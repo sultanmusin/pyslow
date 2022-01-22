@@ -342,18 +342,21 @@ class HVsysSupply:
         if cap not in self.reference_voltage_caps(): 
             return None
 
-        old_voltage = self.countsToVolts(self.state[cap])
-        self.state[cap] = self.voltsToCounts(new_voltage)
-        corrected_voltage = new_voltage + self.voltage_correction()
-        
+        old_voltage = float(self.state[cap])
+        self.state[cap] = new_voltage
+        corrected_voltage = float(new_voltage) + self.voltage_correction()
+
+        logging.info(f"Request {cap} change (id={self.config.id}) old={old_voltage} new={new_voltage} corrected={corrected_voltage}")
+
         if cap == 'REF_PEDESTAL_VOLTAGE':     # also update all the channel voltages
             for ch in range(1, self.config.n_channels+1):
-                self.state[f'{ch}/REF_VOLTAGE'] += (new_voltage - old_voltage)
+                self.state[f'{ch}/REF_VOLTAGE'] += (float(new_voltage) - old_voltage)
         
         set_cap = cap.replace('REF', 'SET')     # 4/REF_VOLTAGE -> 4/SET_VOLTAGE to construct the command
-        set_value = self.valueFromString(set_cap, corrected_voltage)
+        set_value = self.valueFromString(set_cap, corrected_voltage if cap == 'REF_PEDESTAL_VOLTAGE' else new_voltage) # apply correction ONLY to pedestal
         command = Message(Message.WRITE_SHORT, self.config.addr['hv'], self, set_cap, set_value)
         return command
+
 
     def request_voltage_correction(self) -> Message:
         set_value = self.valueFromString('SET_PEDESTAL_VOLTAGE', self.state['REQ_PEDESTAL_VOLTAGE'])
