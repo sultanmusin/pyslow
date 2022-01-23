@@ -150,6 +150,7 @@ class ModuleConfig:
             self.n_channels = len(soup.select("settings hv channel"))
             self.hv_pedestal = float(soup.find('settings').find('hv').find('pedestal').text)
             self.temperature_from_module = soup['temperature_from_module'] if 'temperature_from_module' in soup.attrs else self.id
+            logging.info(f'Config: temperature from module {self.id} set to {self.temperature_from_module}.');
 
         ledConfigNode = soup.find('connection').find('led')
         if self.has('led'):

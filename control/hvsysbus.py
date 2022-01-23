@@ -56,8 +56,7 @@ class HVsysBus:
                     part_type = HVsysWall                     # override default (new) hardware version if the config file says so (for Wall compatibility)
 
                 if part_address in self.parts:
-                    pass
-                    # temp raise ValueError("Duplicate part id = %d for hvsys bus %s" % (part_address, self.id))
+                    raise ValueError("Duplicate part id = %d for hvsys bus %s" % (part_address, self.id))
                 else:
                     if part_type in [HVsysSupply, HVsysSupply800c, HVsysWall] and mc.temperature_from_module not in (mc.id, 'FAKE'):
                         # find the source module
