@@ -116,6 +116,11 @@ class HVsysSupply:
         else:
             self.temperature_sensor = self
 
+    # set another module (can be any object with state['TEMPERATURE'] property) as the source for this module temp correction
+    def set_temperature_sensor(self, temperature_sensor):
+        self.temperature_sensor = temperature_sensor
+
+
     def reference_voltage_caps(self):
         return [f"{ch}/REF_VOLTAGE" for ch in range(1, self.config.n_channels+1)] + ['REF_PEDESTAL_VOLTAGE']
 

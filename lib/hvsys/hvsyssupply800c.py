@@ -110,6 +110,11 @@ class HVsysSupply800c:
         for ch in range(1,self.config.n_channels+1):
             self.state[f"{ch}/REF_VOLTAGE"] = self.config.hv[str(ch)]
 
+    # set another module (can be any object with state['TEMPERATURE'] property) as the source for this module temp correction
+    def set_temperature_sensor(self, temperature_sensor):
+        self.temperature_sensor = config.temperature_sensor
+
+
     def reference_voltage_caps(self):
         return [f"{ch}/REF_VOLTAGE" for ch in range(1, self.config.n_channels+1)] + ['REF_PEDESTAL_VOLTAGE']
 

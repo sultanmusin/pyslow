@@ -58,15 +58,6 @@ class HVsysBus:
                 if part_address in self.parts:
                     raise ValueError("Duplicate part id = %d for hvsys bus %s" % (part_address, self.id))
                 else:
-                    if part_type in [HVsysSupply, HVsysSupply800c, HVsysWall] and mc.temperature_from_module not in (mc.id, 'FAKE'):
-                        # find the source module
-                        bus_id = detector.config.modules[mc.temperature_from_module].bus_id
-                        bus = self if bus_id == self.id else self.detector.buses[bus_id]
-                        sources = [c for c in bus.module_configs if c.id == mc.temperature_from_module]
-                        if len(sources) > 0:
-                            address = sources[0].address('hv')
-                            mc.temperature_sensor = bus.parts[address]
-                            logging.info(f'Setting temperature sensor for module {mc.id} to module {sources[0].id} (bus {bus.id} address {address})')
                     self.parts[part_address] = part_type(mc)        # now create the instance of the part connected to our bus 
                     if mc.online:
                         self.online = True

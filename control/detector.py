@@ -47,6 +47,24 @@ class Detector:
         for id, cfg in config.buses.items():
             this_bus_module_configs = [c for c in config.modules.values() if c.bus_id == id]# fetch the list of module connected to certain bus
             self.buses[id] = HVsysBus(cfg, this_bus_module_configs, self)
+        
+        logging.info("Detector: setting temperature sensors...")
+        # As we now have all the buses and their modules populated, we can set the temperature sensors in second pass
+        for id, cfg in config.buses.items():
+            bus = self.buses[id]
+            for part_address, part in bus.parts.items():                
+                if type(part) in [HVsysSupply, HVsysSupply800c, HVsysWall] and part.config.temperature_from_module not in (part.config.id, 'FAKE'):
+                    # find the sensor module
+                    sensor_bus_id = self.config.modules[part.config.temperature_from_module].bus_id
+                    sensor_bus = self.buses[sensor_bus_id]
+                    sensors = [c for c in sensor_bus.module_configs if c.id == part.config.temperature_from_module]
+                    if len(sensors) > 0:
+                        address = sensors[0].address('hv')
+                        logging.info(f'Setting temperature sensor for module {part.config.id} to module {sensors[0].id} (bus {sensor_bus_id} address {address})')
+                        part.set_temperature_sensor(sensor_bus.parts[address])
+
+        logging.info("Done.")
+
 
     async def poll_online(self):
         pass
