@@ -88,7 +88,7 @@
         
     </module>
 
-    <module id="143" temperature_from_module="141">
+    <module id="143" temperature_from_module="144">
         <geometry>
             <size>1</size>
             <x>3</x>
@@ -118,7 +118,7 @@
         
     </module>
 
-    <module id="144" temperature_from_module="144">
+    <module id="144">
         <geometry>
             <size>1</size>
             <x>4</x>
