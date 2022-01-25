@@ -14,7 +14,8 @@
         <connection>
             <hvsys id='05'>
                 <rate unit="baud">57600</rate>
-                <port>10.18.88.104</port>
+                <host>10.18.88.104</host>
+                <port>4001</port>
                 <dataBits>8</dataBits>
                 <stopBits>1</stopBits>
                 <parity>0</parity>                

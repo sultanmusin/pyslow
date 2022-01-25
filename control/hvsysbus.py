@@ -36,6 +36,7 @@ class HVsysBus:
 
     def __init__(self, bus_config, module_configs:list, detector, global_response_callback=None):
         self.id = bus_config.id
+        self.host = bus_config.host
         self.port = bus_config.port
         self.task_queue = asyncio.Queue(10000)
         self.timeout = bus_config.timeout # sec
@@ -79,13 +80,13 @@ class HVsysBus:
 
 
     async def connect(self):
-        fut = asyncio.open_connection(self.port, HVsysBus.IP_PORT)
+        fut = asyncio.open_connection(self.host, self.port)
         try:
             # Wait for 3 seconds, then raise TimeoutError
             self.reader, self.writer = await asyncio.wait_for(fut, timeout=3)
         except asyncio.TimeoutError:
             self.online = False
-            logging.warning(f"Cannot connect to {self.port}")
+            logging.warning(f"Cannot connect to {self.host}:{self.port}")
 
     async def disconnect(self):
         if hasattr(self, 'writer') and self.writer is not None:
