@@ -18,7 +18,7 @@ import os
 import qasync
 from qasync import asyncSlot, asyncClose, QApplication
 from PyQt5 import QtWidgets, uic, QtGui
-from PyQt5.QtGui import QPainter, QColor, QPen, QBrush
+from PyQt5.QtGui import QPainter, QColor, QPen, QBrush, QKeySequence
 from PyQt5.QtCore import QItemSelectionModel, QTimer, Qt
 
 import string
@@ -175,7 +175,12 @@ class MainWindow(QtWidgets.QMainWindow):
 
         #TODO statusbar
         #TODO menu events
-        
+
+        self.shortcut_refresh = QtWidgets.QShortcut(QKeySequence('F5'), self)
+        self.shortcut_refresh.activated.connect(self.on_refresh)
+        self.shortcut_refresh2 = QtWidgets.QShortcut(QKeySequence('Ctrl+R'), self)
+        self.shortcut_refresh2.activated.connect(self.on_refresh)
+
         self.buttonSelectAll = self.findChild(QtWidgets.QPushButton, 'buttonSelectAll') 
         self.buttonSelectAll.clicked.connect(self.buttonSelectAllPressed) 
 
@@ -186,6 +191,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.moduleList.setVerticalHeaderLabels([f'Module {id}' for id in self.config.modules])
 
         self.moduleList.itemSelectionChanged.connect(self.moduleListSelectionChanged)
+        vh = self.moduleList.verticalHeader()
+        vhi = self.moduleList.verticalHeaderItem(0)
+        vh.sectionClicked.connect(self.moduleListHeaderClicked)
 
         self.moduleGrid = self.findChild(QtWidgets.QTableWidget, 'moduleGrid') 
         self.moduleGrid.setRowCount(self.config.geom_height)
@@ -300,6 +308,13 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.statusBar = self.findChild(QtWidgets.QStatusBar, 'statusBar') 
 
+    def on_refresh(self):
+        for module_id in self.activeModuleId:
+            module_config = self.config.modules[module_id]
+            if module_config.online:
+                self.pollModule(module_id)
+
+
     def buttonSelectAllPressed(self):
         self.moduleList.selectAll()
 
@@ -339,7 +354,10 @@ class MainWindow(QtWidgets.QMainWindow):
                     asyncio.get_event_loop().create_task(self.detector.add_task(bus_id, command, part, print))
              
         self.UpdateModuleGrid()
-    
+
+    def moduleListHeaderClicked(self, index):
+        logging.info(f"clicked: {index}")
+
     def moduleListSelectionChanged(self):
         selected_rows = list(set([self.moduleList.row(x) for x in self.moduleList.selectedItems()]))
         if len(selected_rows) > 0:
