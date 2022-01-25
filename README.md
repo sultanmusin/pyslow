@@ -8,34 +8,32 @@ DCS for Forward Hadron Calorimeters based on HVsys hardware
 
 Get python 3.6+ running 
 
-* Dependencies
+* Install Dependencies (sudo required)
 
-CentOS 7:
+Fedora / CentOS 7:
 
-sudo yum install gtk3-devel python3-devel qt5-qtbase-devel
+sudo yum install python3-devel qt5-qtbase-devel
 
-Fedora:
-
-sudo yum install gtk3-devel python3-devel subversion python3.8 qt5-qtbase-devel
-
-You also might need: 
-
-sudo yum install g++ blis-devel blas-devel openblas-devel numpy lapack python3-distutils-extra
 
 Ubuntu:
 
-sudo apt-get install pkg-config libgtk-3-dev build-essential gcc-5
+sudo apt-get install python3-dev qt5-default
 
-Then use requirements.txt:
 
-python3 -m ensurepip
+* Install python libraries
+
+Use requirements.txt:
+
+[python3 -m ensurepip]
 python3 -m pip install pip --upgrade
 python3 -m pip install -r requirements.txt
+
 
 ### Run! ###
 
 Run gui: 
-python3 control/gui.py
+python3 control/gui2.py -c config/file_of_your_choice.xml
+
 
 Run certain standalone worker: 
 python3 lib/workers/alerter.py
