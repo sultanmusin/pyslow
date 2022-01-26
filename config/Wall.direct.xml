@@ -14,24 +14,24 @@
         <connection>
             <hvsys id='04'>
                 <rate unit="baud">57600</rate>
-                <host>127.0.0.1</host>
-                <port>4101</port>
+                <host>10.18.88.101</host>
+                <port>4001</port>
                 <dataBits>8</dataBits>
                 <stopBits>1</stopBits>
                 <parity>0</parity>                
             </hvsys>
             <hvsys id='03'>
                 <rate unit="baud">57600</rate>
-                <host>127.0.0.1</host>
-                <port>4102</port>
+                <host>10.18.88.102</host>
+                <port>4001</port>
                 <dataBits>8</dataBits>
                 <stopBits>1</stopBits>
                 <parity>0</parity>                
             </hvsys>
             <hvsys id='02'>
                 <rate unit="baud">57600</rate>
-                <host>127.0.0.1</host>
-                <port>4103</port>
+                <host>10.18.88.103</host>
+                <port>4001</port>
                 <dataBits>8</dataBits>
                 <stopBits>1</stopBits>
                 <parity>0</parity>                
