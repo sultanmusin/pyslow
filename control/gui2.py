@@ -557,6 +557,11 @@ class MainWindow(QtWidgets.QMainWindow):
             )
             self.groupBoxControl.setTitle("Module %s [%s]" % (moduleConfig.id, partsText))
 
+            for ch in range(moduleConfig.n_channels):
+                self.tableHV.showRow(ch)
+            for ch in range(moduleConfig.n_channels, N_SECTIONS):
+                self.tableHV.hideRow(ch)
+
             self.checkBoxOnline.setChecked(Qt.Checked if moduleConfig.online else Qt.Unchecked)
 
             self.checkBoxOnline.setChecked(Qt.Checked if moduleConfig.online else Qt.Unchecked)
