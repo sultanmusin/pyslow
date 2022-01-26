@@ -108,7 +108,7 @@
           <number>3</number>
          </property>
          <attribute name="horizontalHeaderDefaultSectionSize">
-          <number>60</number>
+          <number>55</number>
          </attribute>
          <attribute name="verticalHeaderMinimumSectionSize">
           <number>22</number>
@@ -157,7 +157,7 @@
          </property>
          <property name="font">
           <font>
-           <weight>75</weight>
+           <weight>70</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -230,8 +230,8 @@
          <property name="editTriggers">
           <set>QAbstractItemView::NoEditTriggers</set>
          </property>
-         <property name="selectionBehavior">
-          <enum>QAbstractItemView::SelectRows</enum>
+         <property name="selectionMode">
+          <enum>QAbstractItemView::NoSelection</enum>
          </property>
          <property name="rowCount">
           <number>3</number>
@@ -240,7 +240,7 @@
           <number>3</number>
          </property>
          <attribute name="horizontalHeaderDefaultSectionSize">
-          <number>60</number>
+          <number>70</number>
          </attribute>
          <attribute name="verticalHeaderMinimumSectionSize">
           <number>22</number>
