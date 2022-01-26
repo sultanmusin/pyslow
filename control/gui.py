@@ -1244,6 +1244,9 @@ async def main(argv):
 
 
 if __name__ == '__main__':
-    print("Staring main loop...")
+    print("This gui is deprecated. Use at your own risk or use the qt5 version (gui2.py)")
+    sys.exit(1)
+    
+    print("Staring main loop...")    
     asyncio.get_event_loop().set_debug(True)
     asyncio.get_event_loop().run_until_complete(asyncio.wait([main(sys.argv[1:])]))
