@@ -61,9 +61,6 @@
                 <channel id="5" unit="Volts">70.32</channel>
                 <channel id="6" unit="Volts">70.32</channel>
                 <channel id="7" unit="Volts">70.32</channel>
-                <channel id="8" unit="Volts">70.32</channel>
-                <channel id="9" unit="Volts">70.32</channel>
-                <channel id="10" unit="Volts">70.32</channel>
                 <pedestal unit="Volts">70.32</pedestal>
             </hv>
         </settings> 
@@ -102,9 +99,6 @@
                 <channel id="5" unit="Volts">70.02</channel>
                 <channel id="6" unit="Volts">70.02</channel>
                 <channel id="7" unit="Volts">70.02</channel>
-                <channel id="8" unit="Volts">70.02</channel>
-                <channel id="9" unit="Volts">70.02</channel>
-                <channel id="10" unit="Volts">70.02</channel>
                 <pedestal unit="Volts">70.02</pedestal>
             </hv>
         </settings> 
@@ -135,19 +129,6 @@
                 <frequency unit="Hz">100</frequency>
                 <pinADCSet>3</pinADCSet>
             </led>
-            <!--hv>
-                <channel id="1" unit="Volts">70.46</channel>
-                <channel id="2" unit="Volts">70.46</channel>
-                <channel id="3" unit="Volts">70.46</channel>
-                <channel id="4" unit="Volts">70.46</channel>
-                <channel id="5" unit="Volts">70.46</channel>
-                <channel id="6" unit="Volts">70.46</channel>
-                <channel id="7" unit="Volts">70.46</channel>
-                <channel id="8" unit="Volts">70.46</channel>
-                <channel id="9" unit="Volts">70.46</channel>
-                <channel id="10" unit="Volts">70.46</channel>
-                <pedestal unit="Volts">70.46</pedestal>
-            </hv-->
             <hv>
                 <channel id="1" unit="Volts">70.66</channel>
                 <channel id="2" unit="Volts">70.66</channel>
@@ -156,9 +137,6 @@
                 <channel id="5" unit="Volts">70.66</channel>
                 <channel id="6" unit="Volts">70.66</channel>
                 <channel id="7" unit="Volts">70.66</channel>
-                <channel id="8" unit="Volts">70.66</channel>
-                <channel id="9" unit="Volts">70.66</channel>
-                <channel id="10" unit="Volts">70.66</channel>
                 <pedestal unit="Volts">70.66</pedestal>
             </hv>
         </settings> 
@@ -197,9 +175,6 @@
                 <channel id="5" unit="Volts">70.99</channel>
                 <channel id="6" unit="Volts">70.99</channel>
                 <channel id="7" unit="Volts">70.99</channel>
-                <channel id="8" unit="Volts">70.99</channel>
-                <channel id="9" unit="Volts">70.99</channel>
-                <channel id="10" unit="Volts">70.99</channel>
                 <pedestal unit="Volts">70.99</pedestal>
             </hv>
         </settings> 
@@ -238,9 +213,6 @@
                 <channel id="5" unit="Volts">70.20</channel>
                 <channel id="6" unit="Volts">70.20</channel>
                 <channel id="7" unit="Volts">70.20</channel>
-                <channel id="8" unit="Volts">70.20</channel>
-                <channel id="9" unit="Volts">70.20</channel>
-                <channel id="10" unit="Volts">70.20</channel>
                 <pedestal unit="Volts">70.20</pedestal>
             </hv>
         </settings> 
@@ -279,9 +251,6 @@
                 <channel id="5" unit="Volts">70.37</channel>
                 <channel id="6" unit="Volts">70.37</channel>
                 <channel id="7" unit="Volts">70.37</channel>
-                <channel id="8" unit="Volts">70.37</channel>
-                <channel id="9" unit="Volts">70.37</channel>
-                <channel id="10" unit="Volts">70.37</channel>
                 <pedestal unit="Volts">70.37</pedestal>
             </hv>
         </settings> 
@@ -320,9 +289,6 @@
                 <channel id="5" unit="Volts">70.40</channel>
                 <channel id="6" unit="Volts">70.40</channel>
                 <channel id="7" unit="Volts">70.40</channel>
-                <channel id="8" unit="Volts">70.40</channel>
-                <channel id="9" unit="Volts">70.40</channel>
-                <channel id="10" unit="Volts">70.40</channel>
                 <pedestal unit="Volts">70.40</pedestal>
             </hv>
         </settings> 
@@ -361,9 +327,6 @@
                 <channel id="5" unit="Volts">70.82</channel>
                 <channel id="6" unit="Volts">70.82</channel>
                 <channel id="7" unit="Volts">70.82</channel>
-                <channel id="8" unit="Volts">70.82</channel>
-                <channel id="9" unit="Volts">70.82</channel>
-                <channel id="10" unit="Volts">70.82</channel>
                 <pedestal unit="Volts">70.82</pedestal>
             </hv>
         </settings> 
@@ -402,9 +365,6 @@
                 <channel id="5" unit="Volts">70.23</channel>
                 <channel id="6" unit="Volts">70.23</channel>
                 <channel id="7" unit="Volts">70.23</channel>
-                <channel id="8" unit="Volts">70.23</channel>
-                <channel id="9" unit="Volts">70.23</channel>
-                <channel id="10" unit="Volts">70.23</channel>
                 <pedestal unit="Volts">70.23</pedestal>
             </hv>
         </settings> 
@@ -443,9 +403,6 @@
                 <channel id="5" unit="Volts">70.85</channel>
                 <channel id="6" unit="Volts">70.85</channel>
                 <channel id="7" unit="Volts">70.85</channel>
-                <channel id="8" unit="Volts">70.85</channel>
-                <channel id="9" unit="Volts">70.85</channel>
-                <channel id="10" unit="Volts">70.85</channel>
                 <pedestal unit="Volts">70.85</pedestal>
             </hv>
         </settings> 
@@ -484,9 +441,6 @@
                 <channel id="5" unit="Volts">70.92</channel>
                 <channel id="6" unit="Volts">70.92</channel>
                 <channel id="7" unit="Volts">70.92</channel>
-                <channel id="8" unit="Volts">70.92</channel>
-                <channel id="9" unit="Volts">70.92</channel>
-                <channel id="10" unit="Volts">70.92</channel>
                 <pedestal unit="Volts">70.92</pedestal>
             </hv>
         </settings> 
@@ -525,9 +479,6 @@
                 <channel id="5" unit="Volts">70.61</channel>
                 <channel id="6" unit="Volts">70.61</channel>
                 <channel id="7" unit="Volts">70.61</channel>
-                <channel id="8" unit="Volts">70.61</channel>
-                <channel id="9" unit="Volts">70.61</channel>
-                <channel id="10" unit="Volts">70.61</channel>
                 <pedestal unit="Volts">70.61</pedestal>
             </hv>
         </settings> 
@@ -566,9 +517,6 @@
                 <channel id="5" unit="Volts">70.49</channel>
                 <channel id="6" unit="Volts">70.49</channel>
                 <channel id="7" unit="Volts">70.49</channel>
-                <channel id="8" unit="Volts">70.49</channel>
-                <channel id="9" unit="Volts">70.49</channel>
-                <channel id="10" unit="Volts">70.49</channel>
                 <pedestal unit="Volts">70.49</pedestal>
             </hv>
         </settings> 
@@ -607,9 +555,6 @@
                 <channel id="5" unit="Volts">70.98</channel>
                 <channel id="6" unit="Volts">70.98</channel>
                 <channel id="7" unit="Volts">70.98</channel>
-                <channel id="8" unit="Volts">70.98</channel>
-                <channel id="9" unit="Volts">70.98</channel>
-                <channel id="10" unit="Volts">70.98</channel>
                 <pedestal unit="Volts">70.98</pedestal>
             </hv>
         </settings> 
@@ -648,9 +593,6 @@
                 <channel id="5" unit="Volts">70.36</channel>
                 <channel id="6" unit="Volts">70.36</channel>
                 <channel id="7" unit="Volts">70.36</channel>
-                <channel id="8" unit="Volts">70.36</channel>
-                <channel id="9" unit="Volts">70.36</channel>
-                <channel id="10" unit="Volts">70.36</channel>
                 <pedestal unit="Volts">70.36</pedestal>
             </hv>
         </settings> 
@@ -689,9 +631,6 @@
                 <channel id="5" unit="Volts">70.72</channel>
                 <channel id="6" unit="Volts">70.72</channel>
                 <channel id="7" unit="Volts">70.72</channel>
-                <channel id="8" unit="Volts">70.72</channel>
-                <channel id="9" unit="Volts">70.72</channel>
-                <channel id="10" unit="Volts">70.72</channel>
                 <pedestal unit="Volts">70.72</pedestal>
             </hv>
         </settings> 
@@ -730,9 +669,6 @@
                 <channel id="5" unit="Volts">70.77</channel>
                 <channel id="6" unit="Volts">70.77</channel>
                 <channel id="7" unit="Volts">70.77</channel>
-                <channel id="8" unit="Volts">70.77</channel>
-                <channel id="9" unit="Volts">70.77</channel>
-                <channel id="10" unit="Volts">70.77</channel>
                 <pedestal unit="Volts">70.77</pedestal>
             </hv>
         </settings> 
@@ -771,9 +707,6 @@
                 <channel id="5" unit="Volts">70.17</channel>
                 <channel id="6" unit="Volts">70.17</channel>
                 <channel id="7" unit="Volts">70.17</channel>
-                <channel id="8" unit="Volts">70.17</channel>
-                <channel id="9" unit="Volts">70.17</channel>
-                <channel id="10" unit="Volts">70.17</channel>
                 <pedestal unit="Volts">70.17</pedestal>
             </hv>
         </settings> 
@@ -812,9 +745,6 @@
                 <channel id="5" unit="Volts">70.34</channel>
                 <channel id="6" unit="Volts">70.34</channel>
                 <channel id="7" unit="Volts">70.34</channel>
-                <channel id="8" unit="Volts">70.34</channel>
-                <channel id="9" unit="Volts">70.34</channel>
-                <channel id="10" unit="Volts">70.34</channel>
                 <pedestal unit="Volts">70.34</pedestal>
             </hv>
         </settings> 
@@ -853,9 +783,6 @@
                 <channel id="5" unit="Volts">70.46</channel>
                 <channel id="6" unit="Volts">70.46</channel>
                 <channel id="7" unit="Volts">70.46</channel>
-                <channel id="8" unit="Volts">70.46</channel>
-                <channel id="9" unit="Volts">70.46</channel>
-                <channel id="10" unit="Volts">70.46</channel>
                 <pedestal unit="Volts">70.46</pedestal>
             </hv>
         </settings> 
@@ -894,9 +821,6 @@
                 <channel id="5" unit="Volts">70.83</channel>
                 <channel id="6" unit="Volts">70.83</channel>
                 <channel id="7" unit="Volts">70.83</channel>
-                <channel id="8" unit="Volts">70.83</channel>
-                <channel id="9" unit="Volts">70.83</channel>
-                <channel id="10" unit="Volts">70.83</channel>
                 <pedestal unit="Volts">70.83</pedestal>
             </hv>
         </settings> 
@@ -935,9 +859,6 @@
                 <channel id="5" unit="Volts">70.01</channel>
                 <channel id="6" unit="Volts">70.01</channel>
                 <channel id="7" unit="Volts">70.01</channel>
-                <channel id="8" unit="Volts">70.01</channel>
-                <channel id="9" unit="Volts">70.01</channel>
-                <channel id="10" unit="Volts">70.01</channel>
                 <pedestal unit="Volts">70.01</pedestal>
             </hv>
         </settings> 
@@ -976,9 +897,6 @@
                 <channel id="5" unit="Volts">70.70</channel>
                 <channel id="6" unit="Volts">70.70</channel>
                 <channel id="7" unit="Volts">70.70</channel>
-                <channel id="8" unit="Volts">70.70</channel>
-                <channel id="9" unit="Volts">70.70</channel>
-                <channel id="10" unit="Volts">70.70</channel>
                 <pedestal unit="Volts">70.70</pedestal>
             </hv>
         </settings> 
@@ -1017,9 +935,6 @@
                 <channel id="5" unit="Volts">70.52</channel>
                 <channel id="6" unit="Volts">70.52</channel>
                 <channel id="7" unit="Volts">70.52</channel>
-                <channel id="8" unit="Volts">70.52</channel>
-                <channel id="9" unit="Volts">70.52</channel>
-                <channel id="10" unit="Volts">70.52</channel>
                 <pedestal unit="Volts">70.52</pedestal>
             </hv>
         </settings> 
@@ -1058,9 +973,6 @@
                 <channel id="5" unit="Volts">70.58</channel>
                 <channel id="6" unit="Volts">70.58</channel>
                 <channel id="7" unit="Volts">70.58</channel>
-                <channel id="8" unit="Volts">70.58</channel>
-                <channel id="9" unit="Volts">70.58</channel>
-                <channel id="10" unit="Volts">70.58</channel>
                 <pedestal unit="Volts">70.58</pedestal>
             </hv>
         </settings> 
@@ -1099,9 +1011,6 @@
                 <channel id="5" unit="Volts">70.56</channel>
                 <channel id="6" unit="Volts">70.56</channel>
                 <channel id="7" unit="Volts">70.56</channel>
-                <channel id="8" unit="Volts">70.56</channel>
-                <channel id="9" unit="Volts">70.56</channel>
-                <channel id="10" unit="Volts">70.56</channel>
                 <pedestal unit="Volts">70.56</pedestal>
             </hv>
         </settings> 
@@ -1140,9 +1049,6 @@
                 <channel id="5" unit="Volts">70.11</channel>
                 <channel id="6" unit="Volts">70.11</channel>
                 <channel id="7" unit="Volts">70.11</channel>
-                <channel id="8" unit="Volts">70.11</channel>
-                <channel id="9" unit="Volts">70.11</channel>
-                <channel id="10" unit="Volts">70.11</channel>
                 <pedestal unit="Volts">70.11</pedestal>
             </hv>
         </settings> 
@@ -1181,9 +1087,6 @@
                 <channel id="5" unit="Volts">70.21</channel>
                 <channel id="6" unit="Volts">70.21</channel>
                 <channel id="7" unit="Volts">70.21</channel>
-                <channel id="8" unit="Volts">70.21</channel>
-                <channel id="9" unit="Volts">70.21</channel>
-                <channel id="10" unit="Volts">70.21</channel>
                 <pedestal unit="Volts">70.21</pedestal>
             </hv>
         </settings> 
@@ -1222,9 +1125,6 @@
                 <channel id="5" unit="Volts">70.13</channel>
                 <channel id="6" unit="Volts">70.13</channel>
                 <channel id="7" unit="Volts">70.13</channel>
-                <channel id="8" unit="Volts">70.13</channel>
-                <channel id="9" unit="Volts">70.13</channel>
-                <channel id="10" unit="Volts">70.13</channel>
                 <pedestal unit="Volts">70.13</pedestal>
             </hv>
         </settings> 
@@ -1263,9 +1163,6 @@
                 <channel id="5" unit="Volts">70.54</channel>
                 <channel id="6" unit="Volts">70.54</channel>
                 <channel id="7" unit="Volts">70.54</channel>
-                <channel id="8" unit="Volts">70.54</channel>
-                <channel id="9" unit="Volts">70.54</channel>
-                <channel id="10" unit="Volts">70.54</channel>
                 <pedestal unit="Volts">70.54</pedestal>
             </hv>
         </settings> 
@@ -1304,9 +1201,6 @@
                 <channel id="5" unit="Volts">70.08</channel>
                 <channel id="6" unit="Volts">70.08</channel>
                 <channel id="7" unit="Volts">70.08</channel>
-                <channel id="8" unit="Volts">70.08</channel>
-                <channel id="9" unit="Volts">70.08</channel>
-                <channel id="10" unit="Volts">70.08</channel>
                 <pedestal unit="Volts">70.08</pedestal>
             </hv>
         </settings> 
@@ -1345,9 +1239,6 @@
                 <channel id="5" unit="Volts">70.05</channel>
                 <channel id="6" unit="Volts">70.05</channel>
                 <channel id="7" unit="Volts">70.05</channel>
-                <channel id="8" unit="Volts">70.05</channel>
-                <channel id="9" unit="Volts">70.05</channel>
-                <channel id="10" unit="Volts">70.05</channel>
                 <pedestal unit="Volts">70.05</pedestal>
             </hv>
         </settings> 
@@ -1386,9 +1277,6 @@
                 <channel id="5" unit="Volts">70.87</channel>
                 <channel id="6" unit="Volts">70.87</channel>
                 <channel id="7" unit="Volts">70.87</channel>
-                <channel id="8" unit="Volts">70.87</channel>
-                <channel id="9" unit="Volts">70.87</channel>
-                <channel id="10" unit="Volts">70.87</channel>
                 <pedestal unit="Volts">70.87</pedestal>
             </hv>
         </settings> 
@@ -1427,9 +1315,6 @@
                 <channel id="5" unit="Volts">70.68</channel>
                 <channel id="6" unit="Volts">70.68</channel>
                 <channel id="7" unit="Volts">70.68</channel>
-                <channel id="8" unit="Volts">70.68</channel>
-                <channel id="9" unit="Volts">70.68</channel>
-                <channel id="10" unit="Volts">70.68</channel>
                 <pedestal unit="Volts">70.68</pedestal>
             </hv>
         </settings> 
