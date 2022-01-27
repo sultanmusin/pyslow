@@ -15,7 +15,7 @@
         <connection>
         <hvsys id="fhcal">
                 <rate unit="baud">57600</rate>
-                <host>127.0.01</host>
+                <host>127.0.0.1</host>
                 <port>4134</port>
                 <dataBits>8</dataBits>
                 <stopBits>1</stopBits>
