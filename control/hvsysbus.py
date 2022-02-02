@@ -157,12 +157,14 @@ class HVsysBus:
                             try: 
                                 await asyncio.wait_for(self.recv(task.cb, task.timestamp), self.timeout)
                                 success = True
+                                if retry_number > 1:
+                                    logging.info(f"Success with retry={retry_number}/{self.retry}")
                             except asyncio.TimeoutError as e:        
-                                logging.warning(f"No response in timeout={self.timeout}s, retry={retry_number}")
+                                logging.warning(f"No response in timeout={self.timeout}s, retry={retry_number}/{self.retry}")
                                 if self.global_response_callback is not None:
                                     self.global_response_callback(self, None)
                             except ValueError as e:
-                                logging.warning(f"Invalid response, retry={retry_number}") # occurs on invalid bus response (e.g. empty line)
+                                logging.warning(f"Invalid response, retry={retry_number}/{self.retry}") # occurs on invalid bus response (e.g. empty line)
                                 if self.global_response_callback is not None:
                                     self.global_response_callback(self, None)
                             if success:
