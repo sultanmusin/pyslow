@@ -539,8 +539,8 @@ class MainWindow(QtWidgets.QMainWindow):
             n_selected = len(module_ids)
             n_online = len([id for id in module_ids if self.config.modules[id].online])
             n_hv_on = 0 #TODO
-            self.checkBoxOnline.setChecked(Qt.Unchecked if n_online == 0 else Qt.Checked if n_online == n_selected else Qt.PartuallyChecked)
-            self.checkBoxPoll.setChecked(Qt.Unchecked if n_online == 0 else Qt.Checked if n_online == n_selected else Qt.PartuallyChecked)
+            self.checkBoxOnline.setChecked(Qt.Unchecked if n_online == 0 else Qt.Checked if n_online == n_selected else Qt.PartiallyChecked)
+            self.checkBoxPoll.setChecked(Qt.Unchecked if n_online == 0 else Qt.Checked if n_online == n_selected else Qt.PartiallyChecked)
 
             self.groupBoxControl.setTitle( "Modules %s " % (', '.join(module_ids)) )
                 
