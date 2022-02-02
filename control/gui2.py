@@ -661,7 +661,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.tableLED.itemChanged.connect(self.tableLEDitemChanged)  # ... and restore the handler
         
         self.UpdateModuleGrid()  # will switch off if this gets too heavy
-        self.statusBar.showMessage('%d'%(self.detector.queue_length()), 1)
+        #self.statusBar.showMessage('%d'%(self.detector.queue_length()), 1)
 
 
     def ShowReferenceParameters(self):
