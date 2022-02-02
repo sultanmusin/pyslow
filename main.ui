@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>850</width>
+    <width>845</width>
     <height>910</height>
    </rect>
   </property>
@@ -108,7 +108,7 @@
           <number>3</number>
          </property>
          <attribute name="horizontalHeaderDefaultSectionSize">
-          <number>55</number>
+          <number>60</number>
          </attribute>
          <attribute name="verticalHeaderMinimumSectionSize">
           <number>22</number>
@@ -157,7 +157,7 @@
          </property>
          <property name="font">
           <font>
-           <weight>50</weight>
+           <pointsize>8</pointsize>
            <bold>false</bold>
           </font>
          </property>
@@ -230,17 +230,17 @@
          <property name="editTriggers">
           <set>QAbstractItemView::NoEditTriggers</set>
          </property>
-         <property name="selectionMode">
-          <enum>QAbstractItemView::NoSelection</enum>
+         <property name="selectionBehavior">
+          <enum>QAbstractItemView::SelectRows</enum>
          </property>
          <property name="rowCount">
           <number>3</number>
          </property>
          <property name="columnCount">
-          <number>3</number>
+          <number>4</number>
          </property>
          <attribute name="horizontalHeaderDefaultSectionSize">
-          <number>70</number>
+          <number>60</number>
          </attribute>
          <attribute name="verticalHeaderMinimumSectionSize">
           <number>22</number>
@@ -251,6 +251,7 @@
          <row/>
          <row/>
          <row/>
+         <column/>
          <column/>
          <column/>
          <column/>
@@ -595,7 +596,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>850</width>
+     <width>845</width>
      <height>20</height>
     </rect>
    </property>
@@ -618,7 +619,7 @@
    <addaction name="menuFile"/>
    <addaction name="menuHelp"/>
   </widget>
-  <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QStatusBar" name="statusbar"/>
   <action name="actionOpen">
    <property name="text">
     <string>&amp;Open</string>
