@@ -33,6 +33,7 @@ class HVsysBus:
     MAX_BURST_COMMANDS = 1
     DefaultBusId = 'default'
     DefaultTimeout = 0.5 # sec
+    DefaultRetry = 3     # Setting 0 or less will disable data exchange, will not recommend
     LatencyBuffer = 10
 
     def __init__(self, bus_config, module_configs:list, detector, global_response_callback=None):
@@ -42,6 +43,7 @@ class HVsysBus:
         self.task_queue = asyncio.Queue(10000)
         self.latency_queue = []
         self.timeout = bus_config.timeout # sec
+        self.retry = bus_config.retry  
         self.loop = asyncio.get_event_loop()
         self.part_cache = {} # dict[int, PartState]
         self.parts = {} # dict[int, any hvsys part class]
@@ -148,14 +150,24 @@ class HVsysBus:
 
                         task.prepend_cb(update_part_callback)
 
-                        self.writer.write(str(task.cmd).encode())
-                        try: 
-                            await asyncio.wait_for(self.recv(task.cb, task.timestamp), self.timeout)
-                        except asyncio.TimeoutError as e:
-                            logging.warning("No response in timeout=%fs" % (self.timeout))
-                            if self.global_response_callback is not None:
-                                self.global_response_callback(self, None)
-    
+                        # And finally send and receive
+                        for retry_number in range(1, 1+self.retry):
+                            success = False
+                            self.writer.write(str(task.cmd).encode())
+                            try: 
+                                await asyncio.wait_for(self.recv(task.cb, task.timestamp), self.timeout)
+                                success = True
+                            except asyncio.TimeoutError as e:        
+                                logging.warning(f"No response in timeout={self.timeout}s, retry={retry_number}")
+                                if self.global_response_callback is not None:
+                                    self.global_response_callback(self, None)
+                            except ValueError as e:
+                                logging.warning(f"Invalid response, retry={retry_number}") # occurs on invalid bus response (e.g. empty line)
+                                if self.global_response_callback is not None:
+                                    self.global_response_callback(self, None)
+                            if success:
+                                break # for
+
                         # Notify the queue that the "work item" has been processed.
                         self.task_queue.task_done()
                         logging.debug("send_worker: task done")

@@ -176,8 +176,12 @@ class BusConfig:
         self.host = soup.find("host").text
         self.port = int(soup.find("port").text) 
         self.timeout = float(soup.attrs['timeout']) if 'timeout' in soup.attrs else HVsysBus.DefaultTimeout
+        self.retry = float(soup.attrs['retry']) if 'retry' in soup.attrs else HVsysBus.DefaultRetry
 
-# Example:
-#  f = open('config/FHCal.xml', 'r')
-# soup = BeautifulSoup(f, 'xml')
-# [(int(m.attrs['id']), int(m.select('connection hvsys hv id')[0].text)) for m in soup.select('config module')]
+""" 
+Example:
+from bs4 import BeautifulSoup
+f = open('config/FHCal.xml', 'r')
+soup = BeautifulSoup(f, 'xml')
+[(int(m.attrs['id']), int(m.select('connection hvsys hv id')[0].text)) for m in soup.select('config module')]
+"""
