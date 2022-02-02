@@ -126,7 +126,7 @@ class HVsysBus:
                     await asyncio.sleep(0.1)
                 else:
                     logging.debug("send_worker: get item 1 of %d" % (self.task_queue.qsize()))
-                    #await asyncio.sleep(0.1)
+                    await asyncio.sleep(0.1)
                     task = await self.task_queue.get()
 
                     message = task.cmd
@@ -173,8 +173,8 @@ class HVsysBus:
 
     def store_latency(self, latency: float):
         while len(self.latency_queue) >= self.LatencyBuffer:
-            a.pop()
-        a.insert(0, latency)
+            self.latency_queue.pop()
+        self.latency_queue.insert(0, latency)
         
     def latency(self):
-        avg_latency = sum(self.latency_queue) / len(self.latency_queue)
+        return sum(self.latency_queue) / len(self.latency_queue) if len(self.latency_queue) > 0 else 0 
