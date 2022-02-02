@@ -171,7 +171,7 @@ class HVsysBus:
     def queue_length(self):
         return self.task_queue.qsize()
 
-    def store_latency(self, latency: float)
+    def store_latency(self, latency: float):
         while len(self.latency_queue) >= self.LatencyBuffer:
             a.pop()
         a.insert(0, latency)
