@@ -157,7 +157,7 @@
          </property>
          <property name="font">
           <font>
-           <weight>70</weight>
+           <weight>60</weight>
            <bold>true</bold>
           </font>
          </property>
