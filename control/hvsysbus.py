@@ -33,12 +33,14 @@ class HVsysBus:
     MAX_BURST_COMMANDS = 1
     DefaultBusId = 'default'
     DefaultTimeout = 0.5 # sec
+    LatencyBuffer = 10
 
     def __init__(self, bus_config, module_configs:list, detector, global_response_callback=None):
         self.id = bus_config.id
         self.host = bus_config.host
         self.port = bus_config.port
         self.task_queue = asyncio.Queue(10000)
+        self.latency_queue = []
         self.timeout = bus_config.timeout # sec
         self.loop = asyncio.get_event_loop()
         self.part_cache = {} # dict[int, PartState]
@@ -101,7 +103,9 @@ class HVsysBus:
         resp = await self.reader.readline()
         logging.debug("recv: line ok")
 
-        logging.debug('%s task success in %.3f sec: %s' % (self.id, time.time()-start_time, resp))    
+        latency = time.time()-start_time
+        self.store_latency(latency)
+        logging.debug('%s task success in %.3f sec: %s' % (self.id, latency, resp))    
         #TODO checksum control @ resp[5]
         int_value = int(resp[0:4], 16)
         if self.global_response_callback is not None:
@@ -166,3 +170,11 @@ class HVsysBus:
 
     def queue_length(self):
         return self.task_queue.qsize()
+
+    def store_latency(self, latency: float)
+        while len(self.latency_queue) >= self.LatencyBuffer:
+            a.pop()
+        a.insert(0, latency)
+        
+    def latency(self):
+        avg_latency = sum(self.latency_queue) / len(self.latency_queue)
