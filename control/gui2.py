@@ -216,8 +216,8 @@ class MainWindow(QtWidgets.QMainWindow):
             self.moduleGrid.setItem(config.y, config.x, QtWidgets.QTableWidgetItem(item))
 
         self.busGrid = self.findChild(QtWidgets.QTableWidget, 'busGrid') 
-        self.busGrid.setColumnCount(3)
-        self.busGrid.setHorizontalHeaderLabels(['Address', 'Queue', 'Link'])
+        self.busGrid.setColumnCount(4)
+        self.busGrid.setHorizontalHeaderLabels(['Address', 'Queue', 'Link', 'Latency'])
         self.busGrid.setRowCount(len(self.config.buses))
         self.busGrid.setVerticalHeaderLabels([id for id in self.config.buses])
 
@@ -711,6 +711,7 @@ class MainWindow(QtWidgets.QMainWindow):
             if title == bus.id:
                 self.busGrid.item(index,1).setText(str(bus.queue_length()))
                 self.busGrid.item(index,GRID_COLUMN_LEFT_STATE).setForeground(QBrush(COLOR_ONLINE if data is not None else COLOR_ERROR))
+                self.busGrid.item(index,3).setText(str(bus.latency()))
                 self.busTimers[title].start(100)
 
     def busTimerFired(self):
