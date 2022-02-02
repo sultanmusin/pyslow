@@ -227,6 +227,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.busGrid.setItem(index, 0, QtWidgets.QTableWidgetItem(config.port)) 
             self.busGrid.setItem(index, 1, QtWidgets.QTableWidgetItem("0")) 
             self.busGrid.setItem(index, GRID_COLUMN_LEFT_STATE, QtWidgets.QTableWidgetItem("⬤")) 
+            self.busGrid.setItem(index, 3, QtWidgets.QTableWidgetItem("")) 
             self.busGrid.item(index,2).setForeground(QBrush(COLOR_OFFLINE))
             self.busTimers[title] = QTimer()
             self.busTimers[title].timeout.connect(self.busTimerFired)
