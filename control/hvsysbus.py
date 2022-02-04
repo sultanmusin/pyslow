@@ -155,7 +155,8 @@ class HVsysBus:
                             success = False
                             self.writer.write(str(task.cmd).encode())
                             try: 
-                                await asyncio.wait_for(self.recv(task.cb, task.timestamp), self.timeout)
+#                                await asyncio.wait_for(self.recv(task.cb, task.timestamp), self.timeout)
+                                await asyncio.wait_for(self.recv(task.cb, time.time()), self.timeout)
                                 success = True
                                 if retry_number > 1:
                                     logging.info(f"Success with retry={retry_number}/{self.retry}")
