@@ -60,6 +60,7 @@ class Config:
         self.buses = {} # dict[str,BusConfig]
 
         self.title = str(self.soup.select("global title")[0].text) if len(self.soup.select("global title")) > 0 else "DCS"
+        self.logo = str(self.soup.select("global logo")[0].text) if len(self.soup.select("global logo")) > 0 else None
         self.reference_temperature = float(self.soup.select("global flags refTemp")[0].text)
         self.temperature_slope = float(self.soup.select("global flags tempSlope")[0].text)
         self.verbose = bool(int(self.soup.select("global flags verbose")[0].text))
