@@ -224,7 +224,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.busTimers = {}
 
         for index, (title, config) in enumerate(self.config.buses.items()):
-            self.busGrid.setItem(index, 0, QtWidgets.QTableWidgetItem(config.port)) 
+            self.busGrid.setItem(index, 0, QtWidgets.QTableWidgetItem(f" {config.host}:{config.port} ")) 
             self.busGrid.setItem(index, 1, QtWidgets.QTableWidgetItem("0")) 
             self.busGrid.setItem(index, GRID_COLUMN_LEFT_STATE, QtWidgets.QTableWidgetItem("⬤")) 
             self.busGrid.setItem(index, 3, QtWidgets.QTableWidgetItem("")) 
@@ -233,6 +233,8 @@ class MainWindow(QtWidgets.QMainWindow):
             self.busTimers[title].timeout.connect(self.busTimerFired)
             self.busTimers[title].setProperty('bus_id', title)
 
+        self.busGrid.resizeColumnsToContents()
+        
         self.groupBoxControl = self.findChild(QtWidgets.QGroupBox, 'groupBoxControl') 
 
         self.checkBoxOnline = self.findChild(QtWidgets.QCheckBox, 'checkBoxOnline') 
@@ -306,6 +308,9 @@ class MainWindow(QtWidgets.QMainWindow):
             self.tableLED.setItem(row, GRID_COLUMN_STATE, QtWidgets.QTableWidgetItem("OK"))
         
         self.tableLED.itemChanged.connect(self.tableLEDitemChanged)
+
+        self.splitter = self.findChild(QtWidgets.QSplitter, 'splitter')
+        self.splitter.setSizes([400,400]) 
 
         self.statusBar = self.findChild(QtWidgets.QStatusBar, 'statusBar') 
 
