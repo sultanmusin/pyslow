@@ -324,6 +324,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.statusBar = self.findChild(QtWidgets.QStatusBar, 'statusBar') 
 
     def on_refresh(self):
+        if len(self.activeModuleId) == 1:
+            self.ShowReferenceParameters()
+
         for module_id in self.activeModuleId:
             module_config = self.config.modules[module_id]
             if module_config.online:
@@ -342,6 +345,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 if module_config.has('hv'): 
                     part_address = int(self.config.modules[module_id].address('hv'))
                     part = self.detector.buses[bus_id].getPart(part_address) 
+                    part.state['REF_PEDESTAL_VOLTAGE'] = module_config.hv_pedestal
                     value = part.valueFromString('SET_PEDESTAL_VOLTAGE', str(module_config.hv_pedestal + part.voltage_correction()))
                     command = Message(Message.WRITE_SHORT, part_address, part, 'SET_PEDESTAL_VOLTAGE', value)
                     asyncio.get_event_loop().create_task(self.detector.add_task(bus_id, command, part, print))
@@ -349,6 +353,7 @@ class MainWindow(QtWidgets.QMainWindow):
                     for ch, hv in module_config.hv.items():
                         cap = '%s/SET_VOLTAGE'%(ch)
                         value = part.valueFromString(cap, str(hv)) # + part.voltage_correction()))
+                        part.state[f'{ch}/REF_VOLTAGE'] = hv
                         command = Message(Message.WRITE_SHORT, part_address, part, cap, value)
                         asyncio.get_event_loop().create_task(self.detector.add_task(bus_id, command, part, print))
 
@@ -368,6 +373,9 @@ class MainWindow(QtWidgets.QMainWindow):
                     command = Message(Message.WRITE_SHORT, part_address, part, 'ADC_SET_POINT', value)
                     asyncio.get_event_loop().create_task(self.detector.add_task(bus_id, command, part, print))
              
+        if len(self.activeModuleId) == 1:
+            self.ShowReferenceParameters()
+
         self.UpdateModuleGrid()
 
     def moduleListHeaderClicked(self, index):
