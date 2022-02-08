@@ -249,8 +249,15 @@ class MainWindow(QtWidgets.QMainWindow):
         self.checkBoxOnline = self.findChild(QtWidgets.QCheckBox, 'checkBoxOnline') 
         self.checkBoxHvOn = self.findChild(QtWidgets.QCheckBox, 'checkBoxHvOn') 
         self.checkBoxPoll = self.findChild(QtWidgets.QCheckBox, 'checkBoxPoll') 
+        self.checkBoxPoll.stateChanged.connect(self.OnCheckBoxPollChanged)
         self.checkBoxLedAuto = self.findChild(QtWidgets.QCheckBox, 'checkBoxLedAuto') 
         self.checkBoxTemperatureControl = self.findChild(QtWidgets.QCheckBox, 'checkBoxTemperatureControl') 
+        self.labelLastCorrection = self.findChild(QtWidgets.QLabel, 'labelLastCorrection') 
+        self.labelNextCorrection = self.findChild(QtWidgets.QLabel, 'labelNextCorrection') 
+        self.spinBoxCorrectionInterval = self.findChild(QtWidgets.QSpinBox, 'spinBoxCorrectionInterval') 
+        self.spinBoxCorrectionInterval.setValue(self.config.query_delay)
+        self.spinBoxCorrectionInterval.valueChanged.connect(self.spinBoxCorrectionIntervalValueChanged)
+
 
         self.buttonApplyReferenceHV = self.findChild(QtWidgets.QPushButton, 'buttonApplyReferenceHV') 
         self.buttonApplyReferenceHV.clicked.connect(self.buttonApplyReferenceHVPressed) 
@@ -322,6 +329,18 @@ class MainWindow(QtWidgets.QMainWindow):
         self.splitter.setSizes([400,400]) 
 
         self.statusBar = self.findChild(QtWidgets.QStatusBar, 'statusBar') 
+        
+        self.pollTimer = QTimer()
+        self.pollTimer.timeout.connect(self.pollTimerFired)
+        if self.config.query_delay > 0:
+            self.pollTimer.start(self.config.query_delay * 1000)
+            logging.info("First poll timer start!")
+
+        self.guiTimer = QTimer()
+        self.guiTimer.timeout.connect(self.guiTimerFired)
+        self.guiTimer.start(1000)
+
+
 
     def on_refresh(self):
         if len(self.activeModuleId) == 1:
@@ -372,7 +391,7 @@ class MainWindow(QtWidgets.QMainWindow):
                     value = part.valueFromString('ADC_SET_POINT', str(module_config.ledPinADCSet))
                     command = Message(Message.WRITE_SHORT, part_address, part, 'ADC_SET_POINT', value)
                     asyncio.get_event_loop().create_task(self.detector.add_task(bus_id, command, part, print))
-             
+
         if len(self.activeModuleId) == 1:
             self.ShowReferenceParameters()
 
@@ -429,7 +448,24 @@ class MainWindow(QtWidgets.QMainWindow):
         self.spinBoxAdjust.hide()
         self.buttonFinishAdjust.hide()
         self.buttonCancelAdjust.hide() 
-        logging.info(f"buttonFinishAdjustPressed: {self.spinBoxAdjust.value()}")
+        adjustment = float(self.spinBoxAdjust.value())
+        logging.info(f"buttonFinishAdjustPressed: {adjustment}")
+
+        for module_id in self.activeModuleId:
+            active_module_config = self.config.modules[module_id]
+            if active_module_config.has('hv'):
+                bus_id = self.config.modules[module_id].bus_id
+                part_address = int(self.config.modules[module_id].address('hv'))
+                part = self.detector.buses[bus_id].getPart(part_address) 
+                old_ped_v = part.state['REF_PEDESTAL_VOLTAGE']
+                new_value = float(old_ped_v) + adjustment
+                cap = 'REF_PEDESTAL_VOLTAGE' 
+                logging.info(f'Adjust: {cap} reference change request, {old_ped_v} --> {new_value}')
+                command = part.request_voltage_change(cap, new_value)
+                self.ShowReferenceParameters()
+                logging.info(f'Sending as: {command}')
+                asyncio.get_event_loop().create_task(self.detector.add_task(bus_id, command, part, print))
+                self.pollModule(module_id)
 
 
     def buttonCancelAdjustPressed(self):
@@ -439,6 +475,13 @@ class MainWindow(QtWidgets.QMainWindow):
         self.buttonCancelAdjust.hide() 
         self.spinBoxAdjust.setValue(0.0)
 
+
+    def spinBoxCorrectionIntervalValueChanged(self):
+        self.config.query_delay = self.spinBoxCorrectionInterval.value()
+        if self.config.query_delay > 0: 
+            self.pollTimer.start(self.config.query_delay * 1000)
+        else:
+            self.pollTimer.stop()
 
     def buttonSetHvOnPressed(self):
         self.SwitchHV(HVsysSupply.POWER_ON)
@@ -745,6 +788,57 @@ class MainWindow(QtWidgets.QMainWindow):
                 #logging.info(index)
                 self.busGrid.item(index,GRID_COLUMN_LEFT_STATE).setForeground(QBrush(COLOR_OFFLINE))
         self.sender().stop()
+
+
+    def pollTimerFired(self):
+        logging.info("Poll timer fired!")
+
+        for module_id, config in self.config.modules.items():
+            if config.online:
+                self.pollModule(module_id)
+                if config.has('hv') and self.checkBoxTemperatureControl.isChecked():
+                    # do the temperature HV correction 
+                    # select the part
+                    bus_id = config.bus_id
+                    part_address = int(config.address('hv'))
+                    part = detector.buses[bus_id].getPart(part_address) 
+                    
+                    # get the reference (or user-entered) ped v
+                    pedestal_voltage = float(part.state['REF_PEDESTAL_VOLTAGE'])
+                    # get the corrected ped v
+                    correction = part.voltage_correction()
+                    set_pedestal_voltage = pedestal_voltage + correction
+                    # fire
+                    cap = 'SET_PEDESTAL_VOLTAGE'
+                    value = part.valueFromString(cap, str(set_pedestal_voltage))
+                    command = Message(Message.WRITE_SHORT, part_address, part, cap, value)
+                    logging.info('Going to set corrected ped v of module %s to %s (%s)'%(module_id, set_pedestal_voltage, value))
+                    asyncio.get_event_loop().create_task(detector.add_task(bus_id, command, part, print))
+
+                    now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                    self.labelLastCorrection.setText(f'Last at: {now}')
+
+        self.UpdateModuleGrid()
+
+
+    def guiTimerFired(self):
+        time_remaining = datetime.timedelta(seconds=int(self.pollTimer.remainingTime()/1000))
+        self.labelNextCorrection.setText(f'Next in: {time_remaining}')
+
+
+    def OnCheckBoxPollChanged(self, state):
+        logging.info("OnCheckBoxPollChange")
+        logging.info(str(state))
+        if state == Qt.Checked and self.config.query_delay > 0:
+            self.pollTimer.start(self.config.query_delay * 1000)
+            logging.info("Poll timer started!")
+        else:
+            self.pollTimer.stop()
+            logging.info("Poll timer stopped!")
+
+        controls = [self.checkBoxTemperatureControl, self.spinBoxCorrectionInterval, self.labelLastCorrection, self.labelNextCorrection]
+        for c in controls:
+            c.setEnabled(state == Qt.Checked)
 
 
     @asyncClose
