@@ -793,15 +793,16 @@ class MainWindow(QtWidgets.QMainWindow):
     def pollTimerFired(self):
         logging.info("Poll timer fired!")
 
+        self.pollAllTemperature(False)
+        # TODO self.pollAllStatus(self.checkStatus)
         for module_id, config in self.config.modules.items():
             if config.online:
-                self.pollModule(module_id)
                 if config.has('hv') and self.checkBoxTemperatureControl.isChecked():
                     # do the temperature HV correction 
                     # select the part
                     bus_id = config.bus_id
                     part_address = int(config.address('hv'))
-                    part = detector.buses[bus_id].getPart(part_address) 
+                    part = self.detector.buses[bus_id].getPart(part_address) 
                     
                     # get the reference (or user-entered) ped v
                     pedestal_voltage = float(part.state['REF_PEDESTAL_VOLTAGE'])
@@ -815,9 +816,11 @@ class MainWindow(QtWidgets.QMainWindow):
                     logging.info('Going to set corrected ped v of module %s to %s (%s)'%(module_id, set_pedestal_voltage, value))
                     asyncio.get_event_loop().create_task(detector.add_task(bus_id, command, part, print))
 
-                    now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-                    self.labelLastCorrection.setText(f'Last at: {now}')
 
+        logging.info("Poll complete.")
+
+        now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        self.labelLastCorrection.setText(f'Last at: {now}')
         self.UpdateModuleGrid()
 
 
