@@ -814,7 +814,7 @@ class MainWindow(QtWidgets.QMainWindow):
                     value = part.valueFromString(cap, str(set_pedestal_voltage))
                     command = Message(Message.WRITE_SHORT, part_address, part, cap, value)
                     logging.info('Going to set corrected ped v of module %s to %s (%s)'%(module_id, set_pedestal_voltage, value))
-                    asyncio.get_event_loop().create_task(detector.add_task(bus_id, command, part, print))
+                    asyncio.get_event_loop().create_task(self.detector.add_task(bus_id, command, part, print))
 
 
         logging.info("Poll complete.")
