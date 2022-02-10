@@ -192,4 +192,5 @@ class HVsysBus:
         self.latency_queue.insert(0, latency)
         
     def latency(self):
-        return sum(self.latency_queue) / len(self.latency_queue) if len(self.latency_queue) > 0 else 0 
+        latency = sum(self.latency_queue) / len(self.latency_queue) if len(self.latency_queue) > 0 else 0 
+        return int(latency*1000) # ms
