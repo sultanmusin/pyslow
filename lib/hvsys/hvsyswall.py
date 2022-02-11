@@ -10,6 +10,7 @@ __version__ = "0.5"
 __email__ = "opetukhov@inr.ru"
 __status__ = "Development"
 
+import bisect
 import logging
 import sys
 sys.path.append('.')
@@ -216,6 +217,51 @@ class HVsysWall:
             return self.config.reference_temperature - 1
         else:
             return round(63.9-0.019*counts, HVsysWall.VOLTAGE_DECIMAL_PLACES)
+
+    """ 
+    Table calculations for ERTJ1VV104J : NTC Thermistor 
+    See table https://industrial.panasonic.com/cdbs/www-data/pdf2/AUA0000/AUA0000AE276.pdf
+    ADC counts to resistance (kOhms): Rt = adcv * 100 / (4096 - adcv)
+    Difference between old method and this one:
+    ADC counts / old / this
+    1500, 35.4, 36.84
+    1550, 34.45, 35.79
+    1600, 33.5, 34.75
+    1650, 32.55, 33.72
+    1700, 31.6, 32.71
+    1750, 30.65, 31.72
+    1800, 29.7, 30.74
+    1850, 28.75, 29.77
+    1900, 27.8, 28.81
+    1950, 26.85, 27.85
+    2000, 25.9, 26.91
+    2050, 24.95, 25.96
+    2100, 24.0, 25.04
+    2150, 23.05, 24.09
+    2200, 22.1, 23.17
+    2250, 21.15, 22.25
+    2300, 20.2, 21.33
+    2350, 19.25, 20.4
+    2400, 18.3, 19.47
+    2450, 17.35, 18.54
+    """
+    def tempCountsToDegreesPanasonic(self, counts: int) -> float:
+        if self.config.temperature_from_module == 'FAKE':
+            return self.config.reference_temperature - 1
+
+        r = counts * 100 / (4096 - counts)
+        r_from_0_to_125 = [405.0, 381.5, 359.6, 339.0, 319.7, 301.5, 284.5, 268.5, 253.5, 239.4, 226.2, 213.8, 202.1, 191.1, 180.7, 171.0, 161.8, 153.2, 145.1, 137.5, 130.3, 123.5, 117.1, 111.0, 105.4, 100.0, 94.94, 90.16, 85.64, 81.38, 77.34, 73.53, 69.92, 66.51, 63.28, 60.23, 57.33, 54.59, 52.00, 49.54, 47.21, 44.99, 42.90, 40.91, 39.02, 37.23, 35.53, 33.91, 32.38, 30.92, 29.54, 28.22, 26.97, 25.77, 24.64, 23.56, 22.53, 21.55, 20.62, 19.73, 18.89, 18.08, 17.32, 16.59, 15.89, 15.23, 14.60, 14.00, 13.43, 12.88, 12.36, 11.86, 11.39, 10.94, 10.50, 10.09, 9.696, 9.319, 8.959, 8.614, 8.284, 7.968, 7.666, 7.377, 7.099, 6.834, 6.579, 6.335, 6.101, 5.877, 5.662, 5.456, 5.258, 5.068, 4.886, 4.712, 4.544, 4.383, 4.229, 4.081, 3.939, 3.802, 3.671, 3.545, 3.425, 3.308, 3.197, 3.089, 2.986, 2.887, 2.791, 2.699, 2.610, 2.525, 2.443, 2.364, 2.287, 2.214, 2.143, 2.075, 2.009, 1.945, 1.884, 1.825, 1.768, 1.712]
+        neg_map = [-x for x in r_from_0_to_125]
+        position = bisect.bisect(neg_map, -r)
+        if position == 0:
+            return (405 - r) / (405-381)    # winter is coming
+        elif position == len(r_from_0_to_125):
+            return 125                      # the roof the roof
+        else:
+            low = r_from_0_to_125[position-1]
+            high = r_from_0_to_125[position]
+            return round(position + (r - low) / (high - low), HVsysWall.VOLTAGE_DECIMAL_PLACES)
+
 
     def tempDegreesToCounts(self, degrees: float) -> int:
         # we'll probably never need setting the temperature...
