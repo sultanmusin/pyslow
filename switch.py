@@ -133,10 +133,10 @@ class MainWindow(QMainWindow):
 
         brushes = [ QBrush(QColor(255,64,64)), QBrush(QColor(64,255,64)) ]
 
-        readSwitch(self.lineAddress1.text(), 1, lambda state: self.pushButton1.setForeground(brushes[state]))
-        readSwitch(self.lineAddress2.text(), 1, lambda state: self.pushButton2.setForeground(brushes[state]))
-        readSwitch(self.lineAddress3.text(), 1, lambda state: self.pushButton3.setForeground(brushes[state]))
-        readSwitch(self.lineAddress4.text(), 1, lambda state: self.pushButton4.setForeground(brushes[state]))
+        readSwitch(self.lineAddress1.text(), 1, lambda state: self.label1.setForeground(brushes[state]))
+        readSwitch(self.lineAddress2.text(), 1, lambda state: self.label2.setForeground(brushes[state]))
+        readSwitch(self.lineAddress3.text(), 1, lambda state: self.label3.setForeground(brushes[state]))
+        readSwitch(self.lineAddress4.text(), 1, lambda state: self.label4.setForeground(brushes[state]))
     # setupUi
 
     def retranslateUi(self, MainWindow):
