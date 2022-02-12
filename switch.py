@@ -131,10 +131,12 @@ class MainWindow(QMainWindow):
 
         QMetaObject.connectSlotsByName(MainWindow)
 
-        readSwitch(self.lineAddress1.text(), 1, lambda state: print(f"1 -> {state}"))
-        readSwitch(self.lineAddress2.text(), 1, lambda state: print(f"2 -> {state}"))
-        readSwitch(self.lineAddress3.text(), 1, lambda state: print(f"3 -> {state}"))
-        readSwitch(self.lineAddress4.text(), 1, lambda state: print(f"4 -> {state}"))
+        brushes = [ QBrush(QColor(255,64,64)), QBrush(QColor(64,255,64)) ]
+
+        readSwitch(self.lineAddress1.text(), 1, lambda state: self.pushButton1.setForeground(brushes[state]))
+        readSwitch(self.lineAddress2.text(), 1, lambda state: self.pushButton2.setForeground(brushes[state]))
+        readSwitch(self.lineAddress3.text(), 1, lambda state: self.pushButton3.setForeground(brushes[state]))
+        readSwitch(self.lineAddress4.text(), 1, lambda state: self.pushButton4.setForeground(brushes[state]))
     # setupUi
 
     def retranslateUi(self, MainWindow):
@@ -152,6 +154,7 @@ class MainWindow(QMainWindow):
         self.label3.setText(QCoreApplication.translate("MainWindow", u"Wall 3", None))
         self.label4.setText(QCoreApplication.translate("MainWindow", u"Veto", None))
     # retranslateUi
+
 
 def readSwitch(address:str, chan: int, callback):
     (host, port) = address.split(':')
