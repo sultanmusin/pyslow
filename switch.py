@@ -131,10 +131,10 @@ class MainWindow(QMainWindow):
 
         QMetaObject.connectSlotsByName(MainWindow)
 
-        readSwitch(self.lineAddress1.text(), 1, lambda state: print("1 -> "+state))
-        readSwitch(self.lineAddress2.text(), 1, lambda state: print("2 -> "+state))
-        readSwitch(self.lineAddress3.text(), 1, lambda state: print("3 -> "+state))
-        readSwitch(self.lineAddress4.text(), 1, lambda state: print("4 -> "+state))
+        readSwitch(self.lineAddress1.text(), 1, lambda state: print(f"1 -> {state}"))
+        readSwitch(self.lineAddress2.text(), 1, lambda state: print(f"2 -> {state}"))
+        readSwitch(self.lineAddress3.text(), 1, lambda state: print(f"3 -> {state}"))
+        readSwitch(self.lineAddress4.text(), 1, lambda state: print(f"4 -> {state}"))
     # setupUi
 
     def retranslateUi(self, MainWindow):
@@ -156,35 +156,46 @@ class MainWindow(QMainWindow):
 def readSwitch(address:str, chan: int, callback):
     (host, port) = address.split(':')
     port = int(port)
-    clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    clientSocket.connect((host, port))
-    # Send data to server
-    cmd = "\x01\x02\x00\x01\x01"            # cmd=READ  ver=2 err=0 len=1 chan=1  TODO chan
-    clientSocket.send(cmd.encode())
+    try:
+        clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        clientSocket.settimeout(1)
+        clientSocket.connect((host, port))
+        # Send data to server
+        cmd = "\x01\x02\x00\x01\x01"            # cmd=READ  ver=2 err=0 len=1 chan=1  TODO chan
+        logging.info(f"Sending to {host}:{port} : {cmd.encode()}")
+        clientSocket.send(cmd.encode())
 
-    response = clientSocket.recv(1024)
-    clientSocket.close()
-    # Print to the console
-    logging.info(f'Response: {len(response)} bytes')
-    logging.info([int(byte) for byte in response])      # Печатает 7 байт ответа 1 2 0 3 1 1 0 
-    logging.info(['OK', 'E1', 'E2', 'E3', 'E4', 'E5', 'E6', 'E7'][response[2]])
-    callback(int(response[6]))
+        response = clientSocket.recv(1024)
+        clientSocket.close()
+        # Print to the console
+        logging.info(f'Response: {len(response)} bytes')
+        logging.info([int(byte) for byte in response])      # Печатает 7 байт ответа 1 2 0 3 1 1 0 
+        logging.info(['OK', 'E1', 'E2', 'E3', 'E4', 'E5', 'E6', 'E7'][response[2]])
+        callback(int(response[6]))
+    except TimeoutError as e:
+        logging.warning(f"Timeout on {host}:{port}, skipping")
 
 def setSwitch(address:str, chan: int, value:int):
     (host, port) = address.split(':')
     port = int(port)
     clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    clientSocket.connect((host, port))
-    # Send data to server
-    cmd = "\x02\x02\x00\x03\x01\x01\x00"  # cmd=WRITE ver=2 err=0 len=3 chan=1 dir=OUT value=LOW  TODO chan
-    clientSocket.send(cmd.encode())
+    clientSocket.settimeout(1)
+    try:
+        clientSocket.connect((host, port))
+        # Send data to server
+        cmd = "\x02\x02\x00\x03\x01\x01\x00"  # cmd=WRITE ver=2 err=0 len=3 chan=1 dir=OUT value=LOW  TODO chan
+        logging.info(f"Sending to {host}:{port} : {cmd.encode()}")
+        clientSocket.send(cmd.encode())
 
-    response = clientSocket.recv(1024)
-    clientSocket.close()
-    # Print to the console
-    logging.info(f'Response: {len(response)} bytes')
-    logging.info([int(byte) for byte in response])      # Печатает 5 байт ответа
-    logging.info(['OK', 'E1', 'E2', 'E3', 'E4', 'E5', 'E6', 'E7'][response[2]])
+        response = clientSocket.recv(1024)
+        clientSocket.close()
+        # Print to the console
+        logging.info(f'Response: {len(response)} bytes')
+        logging.info([int(byte) for byte in response])      # Печатает 5 байт ответа
+        logging.info(['OK', 'E1', 'E2', 'E3', 'E4', 'E5', 'E6', 'E7'][response[2]])
+    except TimeoutError as e:
+        logging.warning(f"Timeout on {host}:{port}, skipping")
+
 
 def main(argv):
     logging.basicConfig(
