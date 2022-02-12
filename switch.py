@@ -131,13 +131,27 @@ class MainWindow(QMainWindow):
 
         QMetaObject.connectSlotsByName(MainWindow)
 
-        brushes = [ QBrush(QColor(255,64,64)), QBrush(QColor(64,255,64)) ]
 
-        readSwitch(self.lineAddress1.text(), 1, lambda state: self.label1.setForeground(brushes[state]))
-        readSwitch(self.lineAddress2.text(), 1, lambda state: self.label2.setForeground(brushes[state]))
-        readSwitch(self.lineAddress3.text(), 1, lambda state: self.label3.setForeground(brushes[state]))
-        readSwitch(self.lineAddress4.text(), 1, lambda state: self.label4.setForeground(brushes[state]))
+
+        readSwitch(self.lineAddress1.text(), 1, lambda state: self.setButtonColor(self.pushButton1, state))
+        readSwitch(self.lineAddress2.text(), 1, lambda state: self.setButtonColor(self.pushButton2, state))
+        readSwitch(self.lineAddress3.text(), 1, lambda state: self.setButtonColor(self.pushButton3, state))
+        readSwitch(self.lineAddress4.text(), 1, lambda state: self.setButtonColor(self.pushButton4, state))
     # setupUi
+
+    def setButtonColor(self, button, state):
+        red = self.button.palette()
+        red.setColor(QPalette.Button, QColor(Qt.red))
+
+        green = button.palette()
+        green.setColor(QPalette.Button, QColor(Qt.green))
+
+        palettes = [ red, green ]
+
+        button.setAutoFillBackground(true)
+        button.setPalette(palettes[state])
+        button.update()
+
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("Switch", u"Switch", None))
