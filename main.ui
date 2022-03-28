@@ -380,7 +380,7 @@
          <number>0</number>
         </property>
         <item>
-         <widget class="QGroupBox" name="horizontalGroupBox">
+         <widget class="QGroupBox" name="groupBoxPoll">
           <property name="title">
            <string>Temperature Correction</string>
           </property>
