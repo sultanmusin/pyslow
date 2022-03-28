@@ -1,3 +1,5 @@
+#! /usr/bin/python3
+
 # -*- coding: utf-8 -*-
 
 ################################################################################
@@ -131,24 +133,56 @@ class MainWindow(QMainWindow):
 
         QMetaObject.connectSlotsByName(MainWindow)
 
+        self.states = [0,0,0,0]
 
+        readSwitch(self.lineAddress1.text(), 1, lambda state: self.setButtonColor(0, self.pushButton1, state))
+        readSwitch(self.lineAddress2.text(), 1, lambda state: self.setButtonColor(1, self.pushButton2, state))
+        readSwitch(self.lineAddress3.text(), 1, lambda state: self.setButtonColor(2, self.pushButton3, state))
+        readSwitch(self.lineAddress4.text(), 1, lambda state: self.setButtonColor(3, self.pushButton4, state))
 
-        readSwitch(self.lineAddress1.text(), 1, lambda state: self.setButtonColor(self.pushButton1, state))
-        readSwitch(self.lineAddress2.text(), 1, lambda state: self.setButtonColor(self.pushButton2, state))
-        readSwitch(self.lineAddress3.text(), 1, lambda state: self.setButtonColor(self.pushButton3, state))
-        readSwitch(self.lineAddress4.text(), 1, lambda state: self.setButtonColor(self.pushButton4, state))
+        self.pushButton1.clicked.connect(self.pushButton1Clicked)
+        self.pushButton2.clicked.connect(self.pushButton2Clicked)
+        self.pushButton3.clicked.connect(self.pushButton3Clicked)
+        self.pushButton4.clicked.connect(self.pushButton4Clicked)
     # setupUi
 
-    def setButtonColor(self, button, state):
-        red = self.button.palette()
+    def pushButton1Clicked(self):
+        new_state = 1 - self.states[0]
+        logging.info(f'Set board 1 to {new_state}')
+        setSwitch(self.lineAddress1.text(), 1, new_state)
+        readSwitch(self.lineAddress1.text(), 1, lambda state: self.setButtonColor(0, self.pushButton1, state))
+
+    def pushButton2Clicked(self):
+        new_state = 1 - self.states[1]
+        logging.info(f'Set board 2 to {new_state}')
+        setSwitch(self.lineAddress2.text(), 1, new_state)
+        readSwitch(self.lineAddress2.text(), 1, lambda state: self.setButtonColor(1, self.pushButton2, state))
+
+    def pushButton3Clicked(self):
+        new_state = 1 - self.states[2]
+        logging.info(f'Set board 3 to {new_state}')
+        setSwitch(self.lineAddress3.text(), 1, new_state)
+        readSwitch(self.lineAddress3.text(), 1, lambda state: self.setButtonColor(2, self.pushButton3, state))
+
+    def pushButton4Clicked(self):
+        new_state = 1 - self.states[3]
+        logging.info(f'Set board 4 to {new_state}')
+        setSwitch(self.lineAddress4.text(), 1, new_state)
+        readSwitch(self.lineAddress4.text(), 1, lambda state: self.setButtonColor(3, self.pushButton4, state))
+
+
+    def setButtonColor(self, number, button, state):
+        self.states[number] = state
+
+        red = button.palette()
         red.setColor(QPalette.Button, QColor(Qt.red))
 
         green = button.palette()
         green.setColor(QPalette.Button, QColor(Qt.green))
 
-        palettes = [ red, green ]
+        palettes = [ green, red ]
 
-        button.setAutoFillBackground(true)
+        button.setAutoFillBackground(True)
         button.setPalette(palettes[state])
         button.update()
 
@@ -200,7 +234,7 @@ def setSwitch(address:str, chan: int, value:int):
     try:
         clientSocket.connect((host, port))
         # Send data to server
-        cmd = "\x02\x02\x00\x03\x01\x01\x00"  # cmd=WRITE ver=2 err=0 len=3 chan=1 dir=OUT value=LOW  TODO chan
+        cmd = "\x02\x02\x00\x03\x01\x01\x00" if value==0 else "\x02\x02\x00\x03\x01\x01\x01" # cmd=WRITE ver=2 err=0 len=3 chan=1 dir=OUT value=LOW  TODO chan
         logging.info(f"Sending to {host}:{port} : {cmd.encode()}")
         clientSocket.send(cmd.encode())
 

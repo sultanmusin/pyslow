@@ -568,6 +568,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 if 'STATUS' in part.state and part.state['STATUS'] is not None:
                     status = HVStatus(part.state['STATUS'])
                     self.moduleList.item(index, GRID_COLUMN_LEFT_STATE).setText(str(status))
+                    self.moduleList.item(index, GRID_COLUMN_LEFT_STATE).setToolTip(str(status))
                     if status.is_on():
                         self.moduleList.item(index, GRID_COLUMN_HV_ON).setForeground(QBrush(COLOR_OK))   
                     else:
