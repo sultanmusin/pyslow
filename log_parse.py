@@ -51,7 +51,7 @@ def get_options(argv):
             config = arg
         elif opt in ("-d", "--datetime"):
             when = datetime.strptime(arg, '%Y-%m-%d-%H-%M-%S')
-        elif opt in ("-m", "--modlue"):
+        elif opt in ("-m", "--module"):
             module = arg
 
     logfiles = args if len(args) > 0 else glob.glob("logs/*.txt")
