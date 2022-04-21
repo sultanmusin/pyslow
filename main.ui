@@ -109,7 +109,7 @@
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>200</height>
+             <height>150</height>
             </size>
            </property>
            <property name="title">
@@ -156,7 +156,7 @@
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
                 <horstretch>0</horstretch>
-                <verstretch>4</verstretch>
+                <verstretch>2</verstretch>
                </sizepolicy>
               </property>
               <property name="minimumSize">
@@ -284,13 +284,13 @@
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
              <horstretch>0</horstretch>
-             <verstretch>1</verstretch>
+             <verstretch>2</verstretch>
             </sizepolicy>
            </property>
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>100</height>
+             <height>150</height>
             </size>
            </property>
            <property name="title">
@@ -385,6 +385,12 @@
            <string>Temperature Correction</string>
           </property>
           <layout class="QGridLayout" name="gridLayout">
+           <property name="topMargin">
+            <number>3</number>
+           </property>
+           <property name="bottomMargin">
+            <number>3</number>
+           </property>
            <item row="3" column="0">
             <widget class="QLabel" name="labelLastCorrection">
              <property name="text">
@@ -484,6 +490,12 @@
            <string>Module </string>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_17">
+           <property name="topMargin">
+            <number>3</number>
+           </property>
+           <property name="bottomMargin">
+            <number>3</number>
+           </property>
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_4">
              <item>
@@ -598,19 +610,25 @@
           <property name="sizePolicy">
            <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
             <horstretch>1</horstretch>
-            <verstretch>250</verstretch>
+            <verstretch>160</verstretch>
            </sizepolicy>
           </property>
           <property name="minimumSize">
            <size>
             <width>450</width>
-            <height>250</height>
+            <height>300</height>
            </size>
           </property>
           <property name="title">
            <string>High Voltage</string>
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout">
+           <property name="topMargin">
+            <number>3</number>
+           </property>
+           <property name="bottomMargin">
+            <number>3</number>
+           </property>
            <item>
             <widget class="QTableWidget" name="tableHV">
              <property name="sizePolicy">
@@ -692,6 +710,12 @@
            <string>LED</string>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_3">
+           <property name="topMargin">
+            <number>3</number>
+           </property>
+           <property name="bottomMargin">
+            <number>3</number>
+           </property>
            <item>
             <widget class="QTableWidget" name="tableLED">
              <property name="sizePolicy">
