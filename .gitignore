@@ -61,3 +61,4 @@ config/PsdSlowControlConfig.xml
 *.dat1
 *.dat2
 
+.qt_for_python/uic/main.py
