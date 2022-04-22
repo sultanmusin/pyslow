@@ -306,8 +306,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.tableLED.setHorizontalHeaderLabels(['Requested', 'Set', 'Measured'])
         #self.tableLED.setRowCount(len(self.config.modules))
         self.tableLED.setVerticalHeaderLabels([
-            "Amplitude", 
             "Frequency", 
+            "Amplitude", 
             "ADC Setpoint", 
             "Average points", 
             "Autoregulation on/off", 
@@ -863,6 +863,7 @@ def print_usage():
 
 
 async def main(argv):
+    # c7A9KzKcjZ4dkVbq8n9e
     logging.basicConfig(
         level=logging.INFO, 
         format='%(asctime)s | %(levelname)s | %(message)s',
