@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-# from __future__ import annotations   # For neat recursive type hints
-
 __author__ = "Oleg Petukhov"
 __copyright__ = "2020, INR RAS"
 __license__ = "GPL"
@@ -10,380 +8,181 @@ __version__ = "0.5"
 __email__ = "opetukhov@inr.ru"
 __status__ = "Development"
 
+
+
 import logging
 import sys
+from lxml import etree
+from bs4 import BeautifulSoup
+
 sys.path.append('.')
 sys.path.append('lib/hvsys')
-from message import Message
 
-class HVsysSupply800c:
+from hvsys import HVsys
+from hvsysbus import HVsysBus
+def validate(xml_path: str, xsd_path: str=None) -> bool:
 
-    CELL_ID = 0x800c
+    xml_doc = etree.parse(xml_path)
 
-    DESCRIPTION = "HV Supply (na61ps10c)"
+    if xsd_path is not None: 
+        xmlschema_doc = etree.parse(xsd_path)
+        xmlschema = etree.XMLSchema(xmlschema_doc)
+    #result = xmlschema.validate(xml_doc)
 
-    MAX_CHANNEL_COUNT = 10
+    #TODO xmlschema.assertValid(xml_doc)
 
-    PEDESTAL_VOLTAGE_BIAS = 0         # volts. Set real ped V this much HIGHER so the per-channel voltage settings can tune both ways up and down. Set to zero for 800c boards.
-    PEDESTAL_RESOLUTION = 4096        # counts
-    VOLTAGE_RESOLUTION = 4096         # counts
-    VOLTAGE_DECIMAL_PLACES = 2        # to 0.01 V
-
-    POWER_OFF = 0
-    POWER_ON = 1
-
-    capabilities = {
-        "CELL_ID": 0x1c,         
-        "STATUS": 0x00,               # status -  error i.e. in process of settings - stat=avADC-ADCsetpt;
-        "1/SET_VOLTAGE": 0x02,
-        "2/SET_VOLTAGE": 0x04,
-        "3/SET_VOLTAGE": 0x06,
-        "4/SET_VOLTAGE": 0x08,
-        "5/SET_VOLTAGE": 0x0a,
-        "6/SET_VOLTAGE": 0x0c,
-        "7/SET_VOLTAGE": 0x0e,
-        "8/SET_VOLTAGE": 0x10,
-        "9/SET_VOLTAGE": 0x12,
-        "10/SET_VOLTAGE": 0x14,
-        "SET_PEDESTAL_VOLTAGE": 0x16,
-        "RAMP_TIME": 0x18,
-        "TEMPERATURE": 0x1a,
-        "RAMP_STATUS": 0x20,
-        "1/MEAS_VOLTAGE": 0x22,
-        "2/MEAS_VOLTAGE": 0x24,
-        "3/MEAS_VOLTAGE": 0x26,
-        "4/MEAS_VOLTAGE": 0x28,
-        "5/MEAS_VOLTAGE": 0x2a,
-        "6/MEAS_VOLTAGE": 0x2c,
-        "7/MEAS_VOLTAGE": 0x2e,
-        "8/MEAS_VOLTAGE": 0x30,
-        "9/MEAS_VOLTAGE": 0x32,
-        "10/MEAS_VOLTAGE": 0x34,        
-        "MEAS_PEDESTAL_VOLTAGE": 0x36,
-        "VOLTAGE_CALIBRATION": 0x38,           # Calibration value of channels Voltage in 10mV units, i.e. to get Volts one need Vmax/100.
-        "PEDESTAL_VOLTAGE_CALIBRATION": 0x3a,  # Calibration value of pedestal Voltage in 10mV units, i.e. to get Volts one need eePedVmax/100.
-#        "PEDESTAL_VOLTAGE_CALIBRATION_MIN":  not available, single ped calibration for this electronics version, see above
-#        "PEDESTAL_VOLTAGE_CALIBRATION_MAX":  not available, single ped calibration for this electronics version, see above
-        "VERSION_DATE_LOW": 0x3c,              # Response = 8212 (0x2014)
-        "VERSION_DATE_HIGH": 0x3e,             # Response = 5121 (0x1401)
-        "CELL_ADDRESS": 0x41
-    }
-
-    capabilities_by_subaddress = {val: key for key, val in capabilities.items()}
-
-    # poll these first so the voltages can be translated to string using the calibrations
-    priority_capabilities = [
-        "TEMPERATURE",
-        "PEDESTAL_VOLTAGE_CALIBRATION", 
-        "SET_PEDESTAL_VOLTAGE",
-        "MEAS_PEDESTAL_VOLTAGE",
-        "VOLTAGE_CALIBRATION"
-    ]
+    return True
 
 
-    volatile = [
-        "STATUS",
-        "TEMPERATURE",
-        "RAMP_STATUS",
-        "MEAS_PEDESTAL_VOLTAGE",
-        "1/MEAS_VOLTAGE",
-        "2/MEAS_VOLTAGE",
-        "3/MEAS_VOLTAGE",
-        "4/MEAS_VOLTAGE",
-        "5/MEAS_VOLTAGE",
-        "6/MEAS_VOLTAGE",
-        "7/MEAS_VOLTAGE",
-        "8/MEAS_VOLTAGE",
-        "9/MEAS_VOLTAGE",
-        "10/MEAS_VOLTAGE"
-    ]
+def load(xml_path: str, schema: str=None):
+    logging.info("Loading config: %s"%(xml_path))
+    validate(xml_path, schema)
+    with open(xml_path, 'r') as f:
+        soup = BeautifulSoup(f, 'xml')
+        return Config(soup)
 
 
-#    def __init__(self, config:config.Config):
-    def __init__(self, config):
-        self.config = config
-        self.state = {}
-        for cap in HVsysSupply800c.capabilities:
-            self.state[cap] = None
+ 
+class Config: 
+    def __init__(self, soup):
+        self.soup = soup
+        self.process_config()
 
-        self.state['REF_PEDESTAL_VOLTAGE'] = self.config.hv_pedestal
-        for ch in range(1,self.config.n_channels+1):
-            self.state[f"{ch}/REF_VOLTAGE"] = self.config.hv[str(ch)]
-
-    # set another module (can be any object with state['TEMPERATURE'] property) as the source for this module temp correction
-    def set_temperature_sensor(self, temperature_sensor):
-        self.temperature_sensor = config.temperature_sensor
+    # remove empty lines from grid [1,1,3,3,5,5,1] => [0,0,1,1,2,2,0]
+    # returns map {1:0, 3:1, 5: 2}
+    def get_tetris(self, xx):
+        ordered_and_unique = sorted(set(xx))
+        new_x_by_old_x = {value:key for (key,value) in enumerate(ordered_and_unique)}
+        return new_x_by_old_x
 
 
-    def reference_voltage_caps(self):
-        return [f"{ch}/REF_VOLTAGE" for ch in range(1, self.config.n_channels+1)] + ['REF_PEDESTAL_VOLTAGE']
+    def process_config(self):
+        self.buses = {} # dict[str,BusConfig]
+
+        self.title = str(self.soup.select("global title")[0].text) if len(self.soup.select("global title")) > 0 else "DCS"
+        self.logo = str(self.soup.select("global logo")[0].text) if len(self.soup.select("global logo")) > 0 else None
+        self.reference_temperature = float(self.soup.select("global flags refTemp")[0].text)
+        self.temperature_slope = float(self.soup.select("global flags tempSlope")[0].text)
+        self.verbose = bool(int(self.soup.select("global flags verbose")[0].text))
+        self.query_delay = int(self.soup.select("global flags queryDelay")[0].text)
+
+        for sys_mod in self.soup.select("global connection hvsys"):
+            id = sys_mod.attrs['id'] if 'id' in sys_mod.attrs else HVsysBus.DefaultBusId
+            self.buses[id] = BusConfig(self, sys_mod)
+
+        self.modules = {} # dict[str,ModuleConfig]
+
+        xx = list(map(lambda tag: int(tag.text), self.soup.select("config module geometry x")))
+        if len(xx) > 0:
+            xx_tetris = self.get_tetris(xx)
+            xx = [xx_tetris[x] for x in xx]
+            self.geom_min_x, self.geom_max_x = min(xx), max(xx)
+            self.geom_width = self.geom_max_x - self.geom_min_x + 1
+
+            yy = list(map(lambda tag: int(tag.text), self.soup.select("config module geometry y")))
+            yy_tetris = self.get_tetris(yy)
+            yy = [yy_tetris[y] for y in yy]
+            self.geom_min_y, self.geom_max_y = min(yy), max(yy)
+            self.geom_height = self.geom_max_y - self.geom_min_y + 1
+
+            self.modulesOrderedByGeometry = [''] * self.geom_height * self.geom_width
+
+        for mod in self.soup.select("config module"):
+            id = mod.attrs['id']
+            x = xx_tetris[int(mod.find('x').text)]
+            y = yy_tetris[int(mod.find('y').text)]
+            self.modulesOrderedByGeometry[x + y * self.geom_width] = id
+            self.modules[id] = ModuleConfig(mod, self, x, y)
+
+        #print(self.modulesOrderedByGeometry)
+
+        #self.modulesOrderedByGeometry = [
+        #    "",   "",   " 1", " 2", " 3", " 4", " 5", "",   "",
+        #    "35", "36", " 6", " 7", " 8", " 9", "10", "45", "46",
+        #    "37", "38", "11", "12", "13", "14", "15", "47", "48",
+        #    "39", "40", "16", "17", "",   "18", "19", "49", "50",
+        #    "41", "42", "20", "21", "22", "23", "24", "51", "52",
+        #    "43", "44", "25", "26", "27", "28", "29", "53", "54",
+        #    "",   "",   "30", "31", "32", "33", "34", "",   ""
+        #    ]
+
+        self.modulesOrderedById = list(self.modules.keys())
+        self.modulesOrderedById.sort(key=int)
+        #print(self.modulesOrderedById)
+
+        for mod in self.soup.select("global flags onlineModules"):
+            for m in mod.text.strip().split(','):
+                self.modules[m].online = True
 
 
-    def updateState(self, cap, value):
-        self.state[cap] = value # TODO checks 
-
-    def pedestalVoltsToCounts(self, volts: str) -> int:                       # also can accept float value
-        volts_to_set = float(volts) + HVsysSupply800c.PEDESTAL_VOLTAGE_BIAS       # Set real ped V this much HIGHER so the per-channel voltage settings can tune both ways up and down
-                                                                              # May be DANGEROUS to set ped V before per-channel V with HV ON
-        calib_ped = self.state["PEDESTAL_VOLTAGE_CALIBRATION"] / 100.0     # 6248 -> 62.48 V
-
-        # we can set values more than higher calibration so I comment out this check.
-        # this_is_ok.jpg
-
-        if volts_to_set > calib_ped:
-            print("HVsysSupply800c: trying to set invalid voltage, %2.2f > %2.2f (upper bound), setting upper bound"%(volts_to_set, calib_ped))
-            volts_to_set = calib_ped
-
-        return int((HVsysSupply800c.PEDESTAL_RESOLUTION - 1) * volts_to_set / calib_ped)
 
 
-    def pedestalCountsToVolts(self, counts: int) -> float:
-        if counts < 0: # or counts >= HVsysSupply800c.PEDESTAL_RESOLUTION:
-            raise ValueError("HVsysSupply800c: invalid pedestal counts %d >= PEDESTAL_RESOLUTION"%(counts))
 
-        calib_ped = self.state["PEDESTAL_VOLTAGE_CALIBRATION"] / 100.0     # 5270 -> 52.70 V
+class ModuleConfig:
+    possible_parts = list(HVsys.catalogus.keys())
 
-        volts = counts * calib_ped / (HVsysSupply800c.PEDESTAL_RESOLUTION - 1) - HVsysSupply800c.PEDESTAL_VOLTAGE_BIAS
-        return round(volts, HVsysSupply800c.VOLTAGE_DECIMAL_PLACES)
+    def __init__(self, soup, detector, x, y):
+        self.id = soup.attrs['id']
+        self.detector = detector
+        self.reference_temperature = detector.reference_temperature
+        self.temperature_slope = detector.temperature_slope
+        self.x = x
+        self.y = y
+        self.version = soup['version'] if 'version' in soup.attrs else 'default'
 
-    def voltsToCounts(self, volts: str) -> int:
-        if "VOLTAGE_CALIBRATION" not in self.state or self.state["VOLTAGE_CALIBRATION"] is None: 
-            raise ValueError("HVsysSupply800c: cannot translate volts to counts without knowing VOLTAGE_CALIBRATION")
-        #if "SET_PEDESTAL_VOLTAGE" not in self.state or self.state["SET_PEDESTAL_VOLTAGE"] is None: 
-        #    raise ValueError("HVsysSupply800c: cannot translate volts to counts without knowing SET_PEDESTAL_VOLTAGE")
-        #pedestal_voltage = self.pedestalCountsToVolts(self.state["SET_PEDESTAL_VOLTAGE"])
-        pedestal_voltage = self.state['REF_PEDESTAL_VOLTAGE']
-        # tmp = float( self.valueToString('TEMPERATURE', self.state['TEMPERATURE']) )
-        # tmp_corr = -(tmp - self.config.reference_temperature) * self.config.temperature_slope / 1000 # minus for normal temperature correction, e.g. config value 60 means "-60mV/C"
-        volts_to_set = (float(volts) - pedestal_voltage - HVsysSupply800c.PEDESTAL_VOLTAGE_BIAS) # - tmp_corr  # e.g. -0.5V means we need to go 0.5V lower than pedestal (with positive counts)       
+        self.parts = []
+        self.addr = {}
 
-        # logging.debug("voltsToCounts: temperature correction for T=%s is %d V" % (tmp, tmp_corr))
-        calib_voltage_slope = self.state["VOLTAGE_CALIBRATION"] / 100.0              #  325 -> -3.25 V (full scale) 
+        for part in ModuleConfig.possible_parts:
+            partConfigNode = soup.find('connection').find(part)
+            if partConfigNode is not None:
+                self.parts.append(part)
+                self.addr[part] = int(partConfigNode.find('id').text)
 
-        if volts_to_set < 0:
-            print("HVsysSupply800c: trying to set invalid voltage, %2.2f < %2.2f (lower bound), setting lower bound"%(volts_to_set, 0))
-            volts_to_set = 0
+        connectionNode = soup.find('connection').find('hvsys')
+        self.bus_id = connectionNode.attrs['id'] if 'id' in connectionNode.attrs else HVsysBus.DefaultBusId
+        self.bus = detector.buses[self.bus_id]
 
-        if volts_to_set > calib_voltage_slope:
-            print("HVsysSupply800c: trying to set invalid voltage, %2.2f > %2.2f (upper bound), setting upper bound"%(volts_to_set, calib_voltage_slope))
-            volts_to_set = calib_voltage_slope
+        hvConfigNode = soup.find('connection').find('hv')
+        if self.has('hv'):
+            self.hv = {}
+            for chan in soup.select("settings hv channel"):
+                self.hv[chan.attrs['id']] = float(chan.text)
+            self.n_channels = len(soup.select("settings hv channel"))
+            self.hv_pedestal = float(soup.find('settings').find('hv').find('pedestal').text)
+            self.temperature_from_module = soup['temperature_from_module'] if 'temperature_from_module' in soup.attrs else self.id
+            logging.info(f'Config: temperature from module {self.id} set to {self.temperature_from_module}.');
 
-        return int((HVsysSupply800c.VOLTAGE_RESOLUTION - 1) * volts_to_set / calib_voltage_slope)
+        ledConfigNode = soup.find('connection').find('led')
+        if self.has('led'):
+            self.ledAutoTune = int(soup.find('settings').find('led').find('autoTune').text)
+            self.ledBrightness = int(soup.find('settings').find('led').find('brightness').text)
+            self.ledFrequency = int(soup.find('settings').find('led').find('frequency').text)
+            self.ledPinADCSet = int(soup.find('settings').find('led').find('pinADCSet').text)
 
-    def measVoltsToCounts(self, volts: str) -> int:
-        if "VOLTAGE_CALIBRATION" not in self.state or self.state["VOLTAGE_CALIBRATION"] is None: 
-            raise ValueError("HVsysSupply800c: cannot translate volts to counts without knowing VOLTAGE_CALIBRATION")
-        if "MEAS_PEDESTAL_VOLTAGE" not in self.state or self.state["MEAS_PEDESTAL_VOLTAGE"] is None: 
-            raise ValueError("HVsysSupply800c: cannot translate volts to counts without knowing MEAS_PEDESTAL_VOLTAGE")
-        pedestal_voltage = self.pedestalCountsToVolts(self.state["MEAS_PEDESTAL_VOLTAGE"])
-        #pedestal_voltage = self.state['REF_PEDESTAL_VOLTAGE']
-        volts_to_set = (float(volts) - pedestal_voltage - HVsysSupply800c.PEDESTAL_VOLTAGE_BIAS)  # e.g. -0.5V means we need to go 0.5V lower than pedestal (with positive counts)       
-        calib_voltage_slope = self.state["VOLTAGE_CALIBRATION"] / 100.0              #  325 -> -3.25 V (full scale) 
+        self.online = False
+    
 
-        if volts_to_set < 0:
-            print("HVsysSupply800c: trying to set invalid voltage, %2.2f < %2.2f (lower bound), setting lower bound"%(volts_to_set, 0))
-            volts_to_set = 0
+    def has(self, part : str):
+        return part in self.parts
 
-        if volts_to_set > calib_voltage_slope:
-            print("HVsysSupply800c: trying to set invalid voltage, %2.2f > %2.2f (upper bound), setting upper bound"%(volts_to_set, calib_voltage_slope))
-            volts_to_set = calib_voltage_slope
-
-        return int((HVsysSupply800c.VOLTAGE_RESOLUTION - 1) * volts_to_set / calib_voltage_slope)
-
-    def countsToVolts(self, counts: int) -> str:
-        if counts < 0 or counts >= HVsysSupply800c.VOLTAGE_RESOLUTION:
-            raise ValueError("HVsysSupply800c: invalid voltage counts %d >= VOLTAGE_RESOLUTION"%(counts))
-        if "VOLTAGE_CALIBRATION" not in self.state or self.state["VOLTAGE_CALIBRATION"] is None: 
-            raise ValueError("HVsysSupply800c: cannot translate counts to volts without knowing VOLTAGE_CALIBRATION")
-        #if "SET_PEDESTAL_VOLTAGE" not in self.state or self.state["SET_PEDESTAL_VOLTAGE"] is None: 
-        #    raise ValueError("HVsysSupply800c: cannot translate counts to volts without knowing SET_PEDESTAL_VOLTAGE")
-
-        calib_voltage_slope = self.state["VOLTAGE_CALIBRATION"] / 100.0              #  325 -> -3.25 V (full scale) 
-        #pedestal_voltage = self.pedestalCountsToVolts(self.state["SET_PEDESTAL_VOLTAGE"])
-        pedestal_voltage = self.state['REF_PEDESTAL_VOLTAGE']
-
-        # tmp = float( self.valueToString('TEMPERATURE', self.state['TEMPERATURE']) )
-        # tmp_corr = -(tmp - self.config.reference_temperature) * self.config.temperature_slope / 1000 # minus for normal termerature correction, e.g. config value 60 means "-60mV/C"
-
-        volts = pedestal_voltage + counts * calib_voltage_slope / (HVsysSupply800c.VOLTAGE_RESOLUTION - 1) + HVsysSupply800c.PEDESTAL_VOLTAGE_BIAS # - tmp_corr
-        return round(volts, HVsysSupply800c.VOLTAGE_DECIMAL_PLACES)
-
-    def measCountsToVolts(self, counts: int) -> str:
-        if counts < 0 or counts >= HVsysSupply800c.VOLTAGE_RESOLUTION:
-            raise ValueError("HVsysSupply800c: invalid voltage counts %d >= VOLTAGE_RESOLUTION"%(counts))
-        if "VOLTAGE_CALIBRATION" not in self.state or self.state["VOLTAGE_CALIBRATION"] is None: 
-            raise ValueError("HVsysSupply800c: cannot translate counts to volts without knowing VOLTAGE_CALIBRATION")
-        if "SET_PEDESTAL_VOLTAGE" not in self.state or self.state["MEAS_PEDESTAL_VOLTAGE"] is None: 
-            raise ValueError("HVsysSupply800c: cannot translate counts to volts without knowing MEAS_PEDESTAL_VOLTAGE")
-
-        calib_voltage_slope = self.state["VOLTAGE_CALIBRATION"] / 100.0              #  325 -> -3.25 V (full scale) 
-        pedestal_voltage = self.pedestalCountsToVolts(self.state["MEAS_PEDESTAL_VOLTAGE"])
-        #pedestal_voltage = self.state['REF_PEDESTAL_VOLTAGE']
-
-        volts = pedestal_voltage + counts * calib_voltage_slope / (HVsysSupply800c.VOLTAGE_RESOLUTION - 1) + HVsysSupply800c.PEDESTAL_VOLTAGE_BIAS
-        return round(volts, HVsysSupply800c.VOLTAGE_DECIMAL_PLACES)
+    def address(self, part: str):
+        return self.addr[part]
 
 
-    def tempCountsToDegrees(self, counts: int) -> float:
-        if self.config.temperature_from_module == 'FAKE':
-            return self.config.reference_temperature - 1
-        else:
-            return round(63.9-0.019*counts, HVsysSupply800c.VOLTAGE_DECIMAL_PLACES)
+class BusConfig:
+    def __init__(self, det_cfg:Config, soup):
+        self.det_cfg = det_cfg
+        self.id = soup.attrs['id'] if 'id' in soup.attrs else HVsysBus.DefaultBusId
+        self.host = soup.find("host").text
+        self.port = int(soup.find("port").text) 
+        self.timeout = float(soup.attrs['timeout']) if 'timeout' in soup.attrs else HVsysBus.DefaultTimeout
+        self.retry = float(soup.attrs['retry']) if 'retry' in soup.attrs else HVsysBus.DefaultRetry
 
-
-    def tempDegreesToCounts(self, degrees: float) -> int:
-        # we'll probably never need setting the temperature...
-        return int((63.9-degrees)/0.019)
-
-
-    def voltage_correction(self): 
-        if "TEMPERATURE" not in self.state or self.state["TEMPERATURE"] is None: 
-            raise ValueError("HVsysSupply800c: cannot calculate temperature correction without knowing TEMPERATURE")
-        tmp = self.tempCountsToDegrees(self.state['TEMPERATURE'])
-        tmp_corr = (tmp - self.config.reference_temperature) * self.config.temperature_slope / 1000 # minus for normal termerature correction, e.g. config value 60 means "-60mV/C"
-        
-        return round(tmp_corr, HVsysSupply800c.VOLTAGE_DECIMAL_PLACES)
-
-    convertorsFromString = {
-        "TEMPERATURE": tempDegreesToCounts,
-        "1/REF_VOLTAGE": voltsToCounts,
-        "2/REF_VOLTAGE": voltsToCounts,
-        "3/REF_VOLTAGE": voltsToCounts,
-        "4/REF_VOLTAGE": voltsToCounts,
-        "5/REF_VOLTAGE": voltsToCounts,
-        "6/REF_VOLTAGE": voltsToCounts,
-        "7/REF_VOLTAGE": voltsToCounts,
-        "8/REF_VOLTAGE": voltsToCounts,
-        "9/REF_VOLTAGE": voltsToCounts,
-        "10/REF_VOLTAGE": voltsToCounts,
-        "REF_PEDESTAL_VOLTAGE": pedestalVoltsToCounts,
-        "1/SET_VOLTAGE": voltsToCounts,
-        "2/SET_VOLTAGE": voltsToCounts,
-        "3/SET_VOLTAGE": voltsToCounts,
-        "4/SET_VOLTAGE": voltsToCounts,
-        "5/SET_VOLTAGE": voltsToCounts,
-        "6/SET_VOLTAGE": voltsToCounts,
-        "7/SET_VOLTAGE": voltsToCounts,
-        "8/SET_VOLTAGE": voltsToCounts,
-        "9/SET_VOLTAGE": voltsToCounts,
-        "10/SET_VOLTAGE": voltsToCounts,
-        "SET_PEDESTAL_VOLTAGE": pedestalVoltsToCounts,
-        "1/MEAS_VOLTAGE": measVoltsToCounts,
-        "2/MEAS_VOLTAGE": measVoltsToCounts,
-        "3/MEAS_VOLTAGE": measVoltsToCounts,
-        "4/MEAS_VOLTAGE": measVoltsToCounts,
-        "5/MEAS_VOLTAGE": measVoltsToCounts,
-        "6/MEAS_VOLTAGE": measVoltsToCounts,
-        "7/MEAS_VOLTAGE": measVoltsToCounts,
-        "8/MEAS_VOLTAGE": measVoltsToCounts,
-        "9/MEAS_VOLTAGE": measVoltsToCounts,
-        "10/MEAS_VOLTAGE": measVoltsToCounts, 
-        "MEAS_PEDESTAL_VOLTAGE": pedestalVoltsToCounts,
-    }
-
-    convertorsToString = {
-        "TEMPERATURE": tempCountsToDegrees,
-        "1/REF_VOLTAGE": countsToVolts,
-        "2/REF_VOLTAGE": countsToVolts,
-        "3/REF_VOLTAGE": countsToVolts,
-        "4/REF_VOLTAGE": countsToVolts,
-        "5/REF_VOLTAGE": countsToVolts,
-        "6/REF_VOLTAGE": countsToVolts,
-        "7/REF_VOLTAGE": countsToVolts,
-        "8/REF_VOLTAGE": countsToVolts,
-        "9/REF_VOLTAGE": countsToVolts,
-        "10/REF_VOLTAGE": countsToVolts,
-        "REF_PEDESTAL_VOLTAGE": pedestalCountsToVolts,
-        "1/SET_VOLTAGE": countsToVolts,
-        "2/SET_VOLTAGE": countsToVolts,
-        "3/SET_VOLTAGE": countsToVolts,
-        "4/SET_VOLTAGE": countsToVolts,
-        "5/SET_VOLTAGE": countsToVolts,
-        "6/SET_VOLTAGE": countsToVolts,
-        "7/SET_VOLTAGE": countsToVolts,
-        "8/SET_VOLTAGE": countsToVolts,
-        "9/SET_VOLTAGE": countsToVolts,
-        "10/SET_VOLTAGE": countsToVolts,
-        "SET_PEDESTAL_VOLTAGE": pedestalCountsToVolts,
-        "1/MEAS_VOLTAGE": measCountsToVolts,
-        "2/MEAS_VOLTAGE": measCountsToVolts,
-        "3/MEAS_VOLTAGE": measCountsToVolts,
-        "4/MEAS_VOLTAGE": measCountsToVolts,
-        "5/MEAS_VOLTAGE": measCountsToVolts,
-        "6/MEAS_VOLTAGE": measCountsToVolts,
-        "7/MEAS_VOLTAGE": measCountsToVolts,
-        "8/MEAS_VOLTAGE": measCountsToVolts,
-        "9/MEAS_VOLTAGE": measCountsToVolts,
-        "10/MEAS_VOLTAGE": measCountsToVolts, 
-        "MEAS_PEDESTAL_VOLTAGE": pedestalCountsToVolts,
-    }
-
-    def valueToString(self, cap:str, value:int) -> str:
-        if cap in HVsysSupply800c.convertorsToString:
-            method = self.convertorsToString[cap]
-            result = method(self, value)
-            return str(result)
-        else:
-            return str(value)
-
-    def valueFromString(self, cap:str, string:str) -> int:
-        if cap in HVsysSupply800c.convertorsToString:
-            result = self.convertorsFromString[cap](self, string)
-            return result
-        else:
-            return int(string)
-
-
-    def has_reference_voltage(self):
-        return True
-
-    def request_voltage_change(self, cap, new_voltage) -> Message:
-        # cap should be one of N/REF_VOLTAGE or REF_PEDESTAL_VOLTAGE
-        if cap not in self.reference_voltage_caps(): 
-            return None
-
-        old_voltage = self.countsToVolts(self.state[cap])
-        self.state[cap] = self.voltsToCounts(new_voltage)
-        corrected_voltage = new_voltage + self.voltage_correction()
-        
-        if cap == 'REF_PEDESTAL_VOLTAGE':     # also update all the channel voltages
-            for ch in range(1, self.config.n_channels+1):
-                self.state[f'{ch}/REF_VOLTAGE'] += (new_voltage - old_voltage)
-        
-        set_cap = cap.replace('REF', 'SET')     # 4/REF_VOLTAGE -> 4/SET_VOLTAGE to construct the command
-        set_value = self.valueFromString(set_cap, corrected_voltage)
-        command = Message(Message.WRITE_SHORT, self.config.addr['hv'], self, set_cap, set_value)
-        return command
-
-    def request_voltage_correction(self) -> Message:
-        set_value = self.valueFromString('SET_PEDESTAL_VOLTAGE', self.state['REQ_PEDESTAL_VOLTAGE'])
-        command = Message(Message.WRITE_SHORT, self.config.addr['hv'], self, 'SET_PEDESTAL_VOLTAGE', set_value)
-        return command
-
-
-""" Doc
-	
-	// Sub-addresses (register offsets) in na61ps10c memory
-	public static byte ADDR_STATUS = 0x00;               // status -  error i.e. in process of settings - stat=avADC-ADCsetpt;
-	public static byte AddrSetVoltage(int chan) throws Exception {
-		if((chan < 0) || (chan > 9)) throw new Exception("Cannot find address to set voltage for channel " + chan);
-		return (byte) (0x02 + chan*2);
-	}
-	public static byte ADDR_SET_PEDESTAL_VOLTAGE = 0x16;
-	public static byte ADDR_RAMP_TIME = 0x18;
-	public static byte ADDR_TEMPERATURE = 0x1a;
-	public static byte ADDR_CELL_ID = 0x1c;              
-	public static byte ADDR_DUMMY = 0x1e;
-	public static byte ADDR_RAMP_STATUS = 0x20; // for reading Ramp Up/Down STATus register - bits 0-9 RUD active on corresponding channel. 												Bit 10 RUD active on PedV.
-	public static byte AddrMeasVoltage(int chan) throws Exception { 
-		if((chan < 0) || (chan > 9)) throw new Exception("Cannot find address to set voltage for channel " + chan);
-		return (byte) (0x22 + chan*2); 
-	}
-	public static byte ADDR_MEAS_PEDESTAL_VOLTAGE = 0x36;
-	public static byte ADDR_VOLTAGE_CALIBRATION = 0x38; //(rw) Calibration value of channels Voltage in 10mV units, i.e. to get Volts one need Vmax/100.
-	public static byte ADDR_PEDESTAL_VOLTAGE_CALIBRATION = 0x3a; //(rw) Calibration value of pedestal Voltage in 10mV units, i.e. to get Volts one need eePedVmax/100.
-	public static byte ADDR_VERSION_DATE_LOW = 0x3c;
-	public static byte ADDR_VERSION_DATE_HIGH = 0x3e;
-	public static byte ADDR_NEW_CELL_ADDRESS = 0x41;
-	public static int swapChannels(int id) { return 9 - ((id+9) % 10); }
+""" 
+Example:
+from bs4 import BeautifulSoup
+f = open('config/FHCal.xml', 'r')
+soup = BeautifulSoup(f, 'xml')
+[(int(m.attrs['id']), int(m.select('connection hvsys hv id')[0].text)) for m in soup.select('config module')]
 """
