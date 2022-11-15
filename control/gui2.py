@@ -65,11 +65,12 @@ GRID_ROW_AVERAGE_ADC = 5
 GRID_ROWS_LED = 6
 
 # All grids column legend
-GRID_COLUMN_REFERENCE = 0
-GRID_COLUMN_CORRECTED = 1
-GRID_COLUMN_MEAS = 2
-GRID_COLUMN_STATE = 3
-GRID_COLUMNS = 4
+GRID_COLUMN_FILE = 0
+GRID_COLUMN_REFERENCE = 1
+GRID_COLUMN_CORRECTED = 2
+GRID_COLUMN_MEAS = 3
+GRID_COLUMN_STATE = 4
+GRID_COLUMNS = 5
 GRID_COLUMNS_LED = 3
 
 hv_grid_coords = {
@@ -283,7 +284,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.buttonSetHvOff.clicked.connect(self.buttonSetHvOffPressed) 
 
         self.tableHV = self.findChild(QtWidgets.QTableWidget, 'tableHV') 
-        self.tableHV.setHorizontalHeaderLabels(['Requested', 'Corrected', 'Measured', 'State'])
+        self.tableHV.setHorizontalHeaderLabels(['Reference', 'Requested', 'Corrected', 'Measured', 'State'])
         #self.tableHV.setRowCount(len(self.config.modules))
         self.tableHV.setVerticalHeaderLabels(self.config.modules)
 
@@ -295,10 +296,10 @@ class MainWindow(QtWidgets.QMainWindow):
             for col in range(GRID_COLUMNS):
                 item = QtWidgets.QTableWidgetItem("")
                 self.tableHV.setItem(row, col, item)
-                if col>0 or row in [GRID_ROW_TEMPERATURE, GRID_ROW_SLOPE]: 
+                if col != 1 or row in [GRID_ROW_TEMPERATURE, GRID_ROW_SLOPE]: 
                     item.setFlags(item.flags() & ~Qt.ItemIsEditable)
 
-            self.tableHV.setItem(row, GRID_COLUMN_STATE, QtWidgets.QTableWidgetItem("OK"))
+            self.tableHV.item(row, GRID_COLUMN_STATE).setText("OK")
         
         self.tableHV.itemChanged.connect(self.tableHVitemChanged)
 
@@ -326,7 +327,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.tableLED.itemChanged.connect(self.tableLEDitemChanged)
 
         self.splitter = self.findChild(QtWidgets.QSplitter, 'splitter')
-        self.splitter.setSizes([400,400]) 
+        self.splitter.setSizes([400,600]) 
 
         self.statusBar = self.findChild(QtWidgets.QStatusBar, 'statusBar') 
         
@@ -744,14 +745,18 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.tableLED.itemChanged.disconnect()
 
                 for ch in active_module_config.hv.keys():
+                    file_hv = self.config.modules[module_id].hv[ch]
                     hv = part.state[f'{ch}/REF_VOLTAGE'] 
-                    self.tableHV.setItem(int(ch)-1, GRID_COLUMN_REFERENCE, QtWidgets.QTableWidgetItem(str(hv)))    
+                    self.tableHV.item(int(ch)-1, GRID_COLUMN_FILE).setText(str(file_hv))    
+                    self.tableHV.item(int(ch)-1, GRID_COLUMN_REFERENCE).setText(str(hv))    
 
+                file_ped_v = self.config.modules[module_id].hv_pedestal
                 ped_v = part.state['REF_PEDESTAL_VOLTAGE']
-                self.tableHV.setItem(GRID_ROW_PEDESTAL, GRID_COLUMN_REFERENCE, QtWidgets.QTableWidgetItem(str(ped_v)))
-                self.tableHV.setItem(GRID_ROW_TEMPERATURE, GRID_COLUMN_REFERENCE, QtWidgets.QTableWidgetItem("%.2f °C"%(self.config.reference_temperature)))
-                self.tableHV.setItem(GRID_ROW_SLOPE, GRID_COLUMN_REFERENCE, QtWidgets.QTableWidgetItem("%+.0f mV/°C"%(-self.config.temperature_slope)))
-                self.tableHV.setItem(GRID_ROW_TEMPERATURE, GRID_COLUMN_STATE, QtWidgets.QTableWidgetItem("Sensor: %s"%(str(active_module_config.temperature_from_module))))
+                self.tableHV.item(GRID_ROW_PEDESTAL, GRID_COLUMN_FILE).setText(str(file_ped_v))
+                self.tableHV.item(GRID_ROW_PEDESTAL, GRID_COLUMN_REFERENCE).setText(str(ped_v))
+                self.tableHV.item(GRID_ROW_TEMPERATURE, GRID_COLUMN_REFERENCE).setText("%.2f °C"%(self.config.reference_temperature))
+                self.tableHV.item(GRID_ROW_SLOPE, GRID_COLUMN_REFERENCE).setText("%+.0f mV/°C"%(-self.config.temperature_slope))
+                self.tableHV.item(GRID_ROW_TEMPERATURE, GRID_COLUMN_STATE).setText("Sensor: %s"%(str(active_module_config.temperature_from_module)))
 
                 self.tableHV.itemChanged.connect(self.tableHVitemChanged)
                 self.tableLED.itemChanged.connect(self.tableLEDitemChanged)
