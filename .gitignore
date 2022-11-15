@@ -20,6 +20,9 @@ dist/
 *.log
 logs/*.txt
 logs/*.log
+logs/*.xls*
+logs/*.png
+logs/*.py
 
 # Maven
 target/
