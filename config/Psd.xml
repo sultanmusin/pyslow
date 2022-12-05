@@ -1,38 +1,41 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="utf-8"?>
 <config xmlns="http://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" created="17.02.2014" id="default" xsi:noNamespaceSchemaLocation="PsdSlowControlConfig.xsd" xsi:schemaLocation="PsdSlowControlConfig.xsd">
-
-<!--
-
-July 2016 calibrations, except:
-
-mod#3 chan#7 (sect#2) - HV is increased to 68.9V (was 67.0V - too low)
-
-mod#27, 28, 31, 34, 39, 41 - HV is decreades to 0.2V
-
-mod#41 ch#2 has error mask and pedestal HV only
-
-mod#34 ch#9
-
-31.05.2017: mod#6 <-> mod#1 exchanged
-
-09.06.2017: mod#1 back, mod#6 <-> mod#2
-
-25.04.2018: mod#34 ch#1 -> 64.1V (almost off), set errorMask 65528
-
-04.07.2018: mod#34 ch#1 -> 63.21V (almost off), set errorMask 8180
-
-09.07.2018: mod#40 ch#10 -> 65.8V (was 66.0), set errorMask 4092
-
-12.07.2018: mod#41 ch#5 66.8 -> 66.5, set errorMask 
-
-01.11.2018: mod#38 ch#5 -> 64.5, set errorMask 8060
--->
-
 	<global>
-		<title>NA61 PSD</title>
-		<logo>iVBORw0KGgoAAAANSUhEUgAAAFgAAABkCAMAAAA18wfQAAAC9FBMVEXwkB0AVKYJVa33khwAVKgAVqkAU6UAWbEAU6YAUqMAUqT5kxwAVKYAWKsAVacAU6YAVKcAVKcAV6wAVagAVqr6lRwDVKQAU6QAVakAVKfyjhoBUKH6kxwAVKYAVKbzkhsAVakAU6QAUqYAVKcAVKYAVKgAVKf5kxwAV6wAVaj6lBwAU6QAU6T5kxz6lBwAVakAVan3khv4khoAVaYAU6TtixwAV60AVakBVKf5khsAU6X7lRwAVaoAVagAVKf6lBwAVaj2khwAU6X2kRwAU6X0kBsAVqv6lBwAVan4khv4khkAV6wAV60AVKcAVKfzkR0AVKb3kRoAVar4kxwAVagAVaj4kRsAU6T3kRr5kxv7lBz5lBwAVagGVaX5lBsAVKcAVKb3khsAU6UBVacAVKf6lRsAVKcAVaj4khsAVKX2kRsAVqv6lBsAVan5kxv3kRryjhf6lRz8mBz6lBwAVaj7lhwAVakDVaj4kRvzkR0AVqr8lhwAVaj7lRz5khv6lBz6lBwAVan4lBv5kxsAV6z8mBwAVKj9mR34kxsAVaj4kxv4kxv4khsAU6b4kBomXZMAVaj5lRz3kxz3kRr7lxz8lhwAWK78mR0BVaj5kxz8mBwAV60AV638mR35kxv8lxz6lRv2khz4kxv4khv9mRwAV6z4khsAVKYAWbH7mBz8lxv2khz9mx0AVKf9nR0AWa8AWbJmbHJia3R2b2j6lB2YeVije03TiS/EhTg9YoobWpu8gz0uWpRka2ybeU4XV5l4cmOFdVs0YI06YInWjTHYjDCVdV+ieFKsfU4AVKb3khwAVKcAVaj4kxwAU6n6kxr4kxsAVakHVaP5khv6lBz8kxkLVaObe0/zkR0QV58fWpcXWZuQeFbljiXskCExX4xCZINca3PfjCg7YoevgEPKhzTaiyvvkR9lbW7TiS8GU6dTaHnDhThsb2qlfUn8lhxIZX9xcGeNd1effU27gzyCdF2WeVK1gkDBhDp3cmN8cmGJdlqSofyDAAAAAXRSTlMAQObYZgAAAAFiS0dEAIgFHUgAAAAJcEhZcwAACxMAAAsTAQCanBgAAAAHdElNRQfmBBYHLDnvQAmfAAAFcklEQVRo3q2aPUxbVxTHz5NlFiREaiNhKUgsFgEJ2MhACUwwEBgISyBbwkQYAoIBSCEIAkwJEiFSVUIYKlVK1KpDpXasOt1z33sYxxgIJUlJm6YfykeTVGm79Nx7n59tMMROzhnQ3+bxe9f/d86551oAvCuKHYqEUoNKlQFXOEhRpVSdUneYsMuzioZnAGaNYl2vxgWQE/z15ubmr4iLAN+TIm6ABTtuCSGsGOJgVCm5huiwgKNEEw8JPBVRyqUVj7GAQwr3nzI2rNQOOdHHArYV7oEyVir1N2KC59FJ31jtxBPERh5wytgZreJ0i1t84G1yYu6cfopsWdytcD8qJ5aUJ2+5kg3KPWPLYNTz5CwPeNwzdghUGu+Q4kk2ncZPHfX5VRq/YnNC4eRrjaO8c3cRa5nAVB9yS1cxdYokOXEX2LJtZ0NXMYFfxPh6seVXMalfuFomwIAl3D1jLK19iw/8lRC/k7ErGuzGdLvnqo9HjjGWniLtTDVM4FYh/jTt4To9O8Z9dFobq3DHhHyGWAxsaayMVQPKR8KlHbWZCyy1sWqTG9Ut4zIfOGWsFG8YLQbdd7SxttzzpiyewnMf1FXpviPdWCJRw7fi6MbwojZWXFurc4AP/EMxaNwV8Q1OBhjBgKCN7bRWHZhh4w6EIbGgja2XfQ5cZAOfXjre2HZbqRL75lk+I+AqDPXNmhIsvcTIhVNQA8umUugZTvKBbaiFLz31KbTxgachtXeWwG2YeF/MFxT7+ryvmj5gMlEnAfoRbs/x23OpvLYogiRKLR0R83ZEaf/3qbDVdSIdIz6uxVcXMqZlEcz4A38vN1JkBoG7tFB38a/V5earjsPAkSPB3UZ0trR09NujaXBRzvk+Cyy6D4JDDV7AKb3efA8O2WD7IPh09uWycLA+oNUfAa4wN79aKPhkvQe0s8Dt2QcN5UZ43H/rmG3JdZO9/dKSrbnAF/Tr0v1gkc6YJv+F9BLruvDt6TdPJAe4AurNReFcYPPQuvzXofRJ11xsZ1yWDT5vSOUgDgdTDaTYshBwUF/VmgWOnDDh2zofStMG0veo1rIrN1ijGhoOyYp96WE+gG1Z66ZFBKmD5Hx4Qe+8ZvLuKDBk1H8e6RZMO3UI2JKVqhvUi/cAwwFwtNyLVG5lpUX+YHs/OJ3I45mvJBQI7jgcLDOS7zMoFKwPw7nBqvZKgpXRipHc3wBkNFIVvsp6tyitUpF7celWMgqsEUl/kcULrvTVeUbqLIyoBq6Hn6UBNuwwPIdRvX/egSEI8a13hiar8LxZeSPYfOAxWqcp7MtQ3CnYuAsr0NZucBMXq6r5wD1zt6ZCHu7SjXU+jxtXa0HqlnEXnvdYJ9jAAcDvhE5j5zh+S1smV5T14rYZMnAF/7G62cBOc0yKkyQ+QefefesKF/cM4poQqtxqSLkW34IRfzO9tBjxVX4zXV5BuH8NGDHwWLCl8SSic02vszeAa3FvoGAIMjbminVSNxD3XMGWxmWIz6QeUMjsp2bc4SkPxEdCVFOfILUjdN5xRC+lWFIPz2NktitEExO4GXGXcJ9rJ9YkX1LQ539phlZSe4INrIy9b8YhRNzkAy8TThoc4r3HeZ7S8oiEMZb2uSHEjTgfmBa8Swue1pX9Ot/jX35gZWxUJ8UfpNbZwMpY8TEMkyc7qSPth0cd4hZlseiAKsQn7jvG8MKe3VuVFPNkceBNxgzMYPFPemReDWDsoTl9csScZ6yAQWrycaFN4YhF3YEVmJrnz3rcL2La7gJ/mdNDwCQbU0X7xgpKNpot2MA3aVfaTibjwcpaUvFkMhms5NqfVSzo7FDRzFfP3j8jeKqH6YSgYVOpW/B9I1/r4yZ4wP8D55ToN5t/XgcAAAAASUVORK5CYII=</logo>
 		<flags>
+			<onlineModules>13</onlineModules>
+			<onlineModules>14</onlineModules>
+			<onlineModules>15</onlineModules>
+			<onlineModules>16</onlineModules>
+			<onlineModules>17</onlineModules>
+			<onlineModules>18</onlineModules>
+			<onlineModules>19</onlineModules>
+			<onlineModules>20</onlineModules>
+			<onlineModules>21</onlineModules>
+			<onlineModules>22</onlineModules>
+			<onlineModules>23</onlineModules>
+			<onlineModules>24</onlineModules>
+			<onlineModules>25</onlineModules>
+			<onlineModules>26</onlineModules>
+			<onlineModules>27</onlineModules>
+			<onlineModules>28</onlineModules>
+			<onlineModules>29</onlineModules>
+			<onlineModules>30</onlineModules>
+			<onlineModules>31</onlineModules>
+			<onlineModules>32</onlineModules>
+			<onlineModules>33</onlineModules>
+			<onlineModules>34</onlineModules>
+			<onlineModules>35</onlineModules>
+			<onlineModules>36</onlineModules>
+			<onlineModules>37</onlineModules>
+			<onlineModules>38</onlineModules>
+			<onlineModules>39</onlineModules>
+			<onlineModules>40</onlineModules>
+			<onlineModules>41</onlineModules>
+			<onlineModules>42</onlineModules>
+			<onlineModules>43</onlineModules>
+			<onlineModules>44</onlineModules>
 
+<<<<<<< HEAD
 <!--
 <onlineModules>30</onlineModules>
 <onlineModules>18</onlineModules>
@@ -96,1245 +99,1249 @@ mod#34 ch#9
 		        <stopBits>1</stopBits>
 		        <parity>0</parity>		        
 		</hvsys>
+=======
+                        <queryDelay>1800</queryDelay>
+                        <refTemp unit="degree">25</refTemp>
+                        <tempSlope>60</tempSlope>
+                        <queryDelay unit="sec">1800</queryDelay>
+			<verbose> 1 </verbose>
+			<useVoiceNotifications> 0 </useVoiceNotifications>
+			<voiceServer> na61daqt </voiceServer>
+                        <opc>opc.tcp://0.0.0.0:4840</opc>
+		</flags>
+		<connection>
+			<hvsys>
+				<rate unit="baud">57600</rate>
+                                <!--<host>10.0.9.3</host>-->
+                                <host>192.168.69.76</host>
+                                <port>4001</port>
+				<dataBits>8</dataBits>
+				<stopBits>1</stopBits>
+				<parity>0</parity>
+			</hvsys>
+>>>>>>> 50d9ed60b83a6ac11162ca988602df8d12df4965
 		</connection>
 		<settings>
-		    <hv>
-		        <base unit="Volts">64.0</base>
-		    </hv>
+			<hv>
+				<base unit="Volts">64.0</base>
+			</hv>
 		</settings>
-    </global>
-
-<module version="NA61_2_V2" id="13">
-    	<geometry>
-    	    <size>2</size>
-    	    <x>7</x>
-    	   	<y>4</y>
-    	</geometry>
- 
-    	<connection>
+	</global>
+	<module version="NA61_2_V2" id="13">
+		<geometry>
+			<size>2</size>
+			<x>7</x>
+			<y>4</y>
+		</geometry>
+		<connection>
 			<hvsys>
 				<led>
-				    <id>21</id>
-				</led>    
-				<hv>
-				    <id>22</id>
-				</hv>
-			</hvsys>
-    	        	</connection>    
-    	<settings>
-    	    <led>
-			    <autoTune>0</autoTune>
-			    <brightness>1000</brightness>
-			    <frequency unit="Hz">0</frequency>
-			    <pinADCSet>11</pinADCSet>
-    	    </led>
-			<hv>
-                            	<channel id="1" unit="Volts">69.1</channel>
-                                <channel id="2" unit="Volts">68.8</channel>
-                                <channel id="3" unit="Volts">68.9</channel>
-                                <channel id="4" unit="Volts">68.6</channel>
-                                <channel id="5" unit="Volts">68.6</channel>
-                                <channel id="6" unit="Volts">68.9</channel>
-                                <channel id="7" unit="Volts">68.8</channel>
-                                <channel id="8" unit="Volts">68.9</channel>
-                                <channel id="9" unit="Volts">68.8</channel>
-                                <channel id="10" unit="Volts">68.8</channel>
-                                <pedestal unit="Volts">65.49</pedestal>
-			</hv>
-    	</settings>
-
-    </module>
-<module version="NA61_2_V2" id="14">
-    	<geometry>
-    	    <size>2</size>
-    	    <x>5</x>
-    	   	<y>4</y>
-    	</geometry>
- 
-    	<connection>
-			<hvsys>
-				<led>
-				    <id>23</id>
-				</led>    
-				<hv>
-				    <id>24</id>
-				</hv>
-			</hvsys>
-    	        	</connection>    
-    	<settings>
-    	    <led>
-			    <autoTune>0</autoTune>
-			    <brightness>1000</brightness>
-			    <frequency unit="Hz">0</frequency>
-			    <pinADCSet>20</pinADCSet>
-    	    </led>
-			<hv>
-                               	<channel id="1" unit="Volts">69.5</channel>
-                                <channel id="2" unit="Volts">68.4</channel>
-                                <channel id="3" unit="Volts">69.4</channel>
-                                <channel id="4" unit="Volts">68.2</channel>
-                                <channel id="5" unit="Volts">69.6</channel>
-                                <channel id="6" unit="Volts">68.5</channel>
-                                <channel id="7" unit="Volts">69.6</channel>
-                                <channel id="8" unit="Volts">68.5</channel>
-                                <channel id="9" unit="Volts">69.8</channel>
-                                <channel id="10" unit="Volts">68.5</channel>
-                                <pedestal unit="Volts">68.0</pedestal><!--65.49-->
-			</hv>
-    	</settings>
-
-    </module>
-<module version="NA61_2_V2" id="15">
-    	<geometry>
-    	    <size>2</size>
-    	    <x>7</x>
-    	   	<y>6</y>
-    	</geometry>
-    	 
-    	<connection>
-			<hvsys>
-				<led>
-				    <id>25</id>
-				</led>    
-				<hv>
-				    <id>26</id>
-				</hv>
-			</hvsys>
-    	        	</connection>    
-    	<settings>
-    	    <led>
-			    <autoTune>0</autoTune>
-			    <brightness>1000</brightness>
-			    <frequency unit="Hz">0</frequency>
-			    <pinADCSet>8</pinADCSet>
-    	    </led>
-			<hv>
-                            	<channel id="1" unit="Volts">67.7</channel>
-                                <channel id="2" unit="Volts">67.2</channel>
-                                <channel id="3" unit="Volts">67.6</channel>
-                                <channel id="4" unit="Volts">67.3</channel>
-                                <channel id="5" unit="Volts">67.7</channel>
-                                <channel id="6" unit="Volts">67.2</channel>
-                                <channel id="7" unit="Volts">67.2</channel>
-                                <channel id="8" unit="Volts">67.6</channel>
-                                <channel id="9" unit="Volts">67.9</channel>
-                                <channel id="10" unit="Volts">67.7</channel>
-                                <pedestal unit="Volts">65.49</pedestal>
-			</hv>
-    	</settings>
-    	
-    </module>
-<module version="NA61_2_V2" id="16">
-    	<geometry>
-    	    <size>2</size>
-    	    <x>5</x>
-    	   	<y>6</y>
-    	</geometry>
-    	 
-    	<connection>
-			<hvsys>
-				<led>
-				    <id>27</id>
-				</led>    
-				<hv>
-				    <id>28</id>
-				</hv>
-			</hvsys>
-    	        	</connection>    
-    	<settings>
-    	    <led>
-			    <autoTune>0</autoTune>
-			    <brightness>1000</brightness>
-			    <frequency unit="Hz">0</frequency>
-			    <pinADCSet>15</pinADCSet>
-    	    </led>
-			<hv>
-				<channel id="1" unit="Volts">69.2</channel>
-				<channel id="2" unit="Volts">69.6</channel>
-				<channel id="3" unit="Volts">69.1</channel>
-				<channel id="4" unit="Volts">69.7</channel>
-				<channel id="5" unit="Volts">69.8</channel>
-				<channel id="6" unit="Volts">69.6</channel>
-				<channel id="7" unit="Volts">69.3</channel>
-				<channel id="8" unit="Volts">70.0</channel>
-				<channel id="9" unit="Volts">69.4</channel>
-				<channel id="10" unit="Volts">70.0</channel> 
-                                <pedestal unit="Volts">67.49</pedestal>
-			</hv>
-    	</settings> 
-
-    </module>
-<module version="NA61_2_V2" id="17">
-    	<geometry>
-    	    <size>2</size>
-    	    <x>9</x>
-    	   	<y>2</y>
-    	</geometry>
-    	<connection>
-			<hvsys>
-				<led>
-				    <id>29</id>
-				</led>    
-				<hv>
-				    <id>30</id>
-				</hv>
-			</hvsys>
-    	        	</connection>    
-    	<settings>
-    	    <led>
-			    <autoTune>0</autoTune>
-			    <brightness>1000</brightness>
-			    <frequency unit="Hz">0</frequency>
-			    <pinADCSet>50</pinADCSet>
-    	    </led>
-			<hv>
-                            	<channel id="1" unit="Volts">69.70</channel>
-                                <channel id="2" unit="Volts">69.70</channel>
-                                <channel id="3" unit="Volts">69.70</channel>
-                                <channel id="4" unit="Volts">69.70</channel>
-                                <channel id="5" unit="Volts">69.70</channel>
-                                <channel id="6" unit="Volts">69.70</channel>
-                                <channel id="7" unit="Volts">69.70</channel>
-                                <channel id="8" unit="Volts">69.70</channel>
-                                <channel id="9" unit="Volts">69.70</channel>
-                                <channel id="10" unit="Volts">69.70</channel>
-                                <pedestal unit="Volts">67.0</pedestal>
-			</hv>
-    	</settings> 
-    </module>
-<module version="NA61_2_V2" id="18">
-    	<geometry>
-    	    <size>2</size>
-    	    <x>7</x>
-    	   	<y>2</y>
-    	</geometry>
-        	<connection>
-			<hvsys>
-				<led>
-				    <id>31</id>
-				</led>    
-				<hv>
-				    <id>32</id>
-				</hv>
-			</hvsys>
-    	        	</connection>    
-    	<settings>
-    	    <led>
-			    <autoTune>0</autoTune>
-			    <brightness>1000</brightness>
-			    <frequency unit="Hz">0</frequency>
-			    <pinADCSet>50</pinADCSet>
-    	    </led>
-			<hv>
-				<channel id="1" unit="Volts">69.5</channel>
-				<channel id="2" unit="Volts">69.5</channel>
-				<channel id="3" unit="Volts">69.5</channel>
-				<channel id="4" unit="Volts">69.5</channel>
-				<channel id="5" unit="Volts">69.5</channel>
-				<channel id="6" unit="Volts">69.5</channel>
-				<channel id="7" unit="Volts">69.5</channel>
-				<channel id="8" unit="Volts">69.5</channel>
-				<channel id="9" unit="Volts">69.5</channel>
-				<channel id="10" unit="Volts">69.5</channel> 
-                                <pedestal unit="Volts">67.0</pedestal>
-			</hv>
-    	</settings> 
-    </module>
-<module version="NA61_2_V2" id="19">
-    	<geometry>
-    	    <size>2</size>
-    	    <x>5</x>
-    	   	<y>2</y>
-    	</geometry>
-        	<connection>
-			<hvsys>
-				<led>
-				    <id>37</id>
-				</led>    
-				<hv>
-				    <id>38</id>
-				</hv>
-			</hvsys>
-    	        	</connection>    
-    	<settings>
-    	    <led>
-			    <autoTune>0</autoTune>
-			    <brightness>1000</brightness>
-			    <frequency unit="Hz">0</frequency>
-			    <pinADCSet>40</pinADCSet>
-    	    </led>
-			<hv>
-				<channel id="1" unit="Volts">69.68</channel>
-				<channel id="2" unit="Volts">69.68</channel>
-				<channel id="3" unit="Volts">69.68</channel>
-				<channel id="4" unit="Volts">69.68</channel>
-				<channel id="5" unit="Volts">69.68</channel>
-				<channel id="6" unit="Volts">69.68</channel>
-				<channel id="7" unit="Volts">69.68</channel>
-				<channel id="8" unit="Volts">69.68</channel>
-				<channel id="9" unit="Volts">69.68</channel>
-				<channel id="10" unit="Volts">69.68</channel> 
-                                <pedestal unit="Volts">69.0</pedestal><!--67.0-->
-			</hv>
-    	</settings> 
-    </module>
-<module version="NA61_2_V2" id="20">
-    	<geometry>
-    	    <size>2</size>
-    	    <x>3</x>
-    	   	<y>2</y>
-    	</geometry>
-        	<connection>
-			<hvsys>
-				<led>
-				    <id>39</id>
-				</led>    
-				<hv>
-				    <id>40</id>
-				</hv>
-			</hvsys>
-    	        	</connection>    
-    	<settings>
-    	    <led>
-			    <autoTune>0</autoTune>
-			    <brightness>1000</brightness>
-			    <frequency unit="Hz">0</frequency>
-			    <pinADCSet>35</pinADCSet>
-    	    </led>
-			<hv>
-				<channel id="1" unit="Volts">69.76</channel>
-				<channel id="2" unit="Volts">69.76</channel>
-				<channel id="3" unit="Volts">69.76</channel>
-				<channel id="4" unit="Volts">69.76</channel>
-				<channel id="5" unit="Volts">69.76</channel>
-				<channel id="6" unit="Volts">69.76</channel>
-				<channel id="7" unit="Volts">69.76</channel>
-				<channel id="8" unit="Volts">69.76</channel>
-				<channel id="9" unit="Volts">69.76</channel>
-				<channel id="10" unit="Volts">69.76</channel> 
-                                <pedestal unit="Volts">69.0</pedestal><!--67.0-->
-			</hv>
-    	</settings> 
-    </module>
-<module version="NA61_2_V2" id="21">
-    	<geometry>
-    	    <size>2</size>
-    	    <x>3</x>
-    	   	<y>4</y>
-    	</geometry>
-        	<connection>
-			<hvsys>
-				<led>
-				    <id>57</id>
-				</led>    
-				<hv>
-				    <id>58</id>
-				</hv>
-			</hvsys>
-    	        	</connection>    
-    	<settings>
-    	    <led>
-			    <autoTune>0</autoTune>
-			    <brightness>1000</brightness>
-			    <frequency unit="Hz">0</frequency>
-			    <pinADCSet>40</pinADCSet>
-    	    </led>
-			<hv>
-				<channel id="1" unit="Volts">69.5</channel>
-				<channel id="2" unit="Volts">69.5</channel>
-				<channel id="3" unit="Volts">69.5</channel>
-				<channel id="4" unit="Volts">69.5</channel>
-				<channel id="5" unit="Volts">69.5</channel>
-				<channel id="6" unit="Volts">69.5</channel>
-				<channel id="7" unit="Volts">69.5</channel>
-				<channel id="8" unit="Volts">69.5</channel>
-				<channel id="9" unit="Volts">69.5</channel>
-				<channel id="10" unit="Volts">69.5</channel> 
-                                <pedestal unit="Volts">69.5</pedestal>
-			</hv>
-    	</settings> 
-    </module>
-<module version="NA61_2_V2" id="22">
-    	<geometry>
-    	    <size>2</size>
-    	    <x>3</x>
-    	   	<y>6</y>
-    	</geometry>
-        	<connection>
-			<hvsys>
-				<led>
-				    <id>69</id>
-				</led>    
-				<hv>
-				    <id>70</id>
-				</hv>
-			</hvsys>
-    	        	</connection>    
-    	<settings>
-    	    <led>
-			    <autoTune>0</autoTune>
-			    <brightness>1000</brightness>
-			    <frequency unit="Hz">0</frequency>
-			    <pinADCSet>30</pinADCSet>
-    	    </led>
-			<hv>
-                                <channel id="1" unit="Volts">69.5</channel>
-                                <channel id="2" unit="Volts">69.5</channel>
-                                <channel id="3" unit="Volts">69.5</channel>
-                                <channel id="4" unit="Volts">69.5</channel>
-                                <channel id="5" unit="Volts">69.5</channel>
-                                <channel id="6" unit="Volts">69.5</channel>
-                                <channel id="7" unit="Volts">69.5</channel>
-                                <channel id="8" unit="Volts">69.5</channel>
-                                <channel id="9" unit="Volts">69.5</channel>
-                                <channel id="10" unit="Volts">69.5</channel>
-                                <pedestal unit="Volts">69.5</pedestal>
-			</hv>
-    	</settings> 
-    </module>
-<module version="NA61_2_V2" id="23">
-    	<geometry>
-    	    <size>2</size>
-    	    <x>3</x>
-    	   	<y>8</y>
-    	</geometry>
-        	<connection>
-			<hvsys>
-				<led>
-				    <id>45</id>
-				</led>    
-				<hv>
-				    <id>46</id>
-				</hv>
-			</hvsys>
-    	        	</connection>    
-    	<settings>
-    	    <led>
-			    <autoTune>0</autoTune>
-			    <brightness>1000</brightness>
-			    <frequency unit="Hz">0</frequency>
-			    <pinADCSet>40</pinADCSet>
-    	    </led>
-			<hv>
-
-                                <channel id="1" unit="Volts">69.5</channel>
-                                <channel id="2" unit="Volts">69.5</channel>
-                                <channel id="3" unit="Volts">69.5</channel>
-                                <channel id="4" unit="Volts">69.5</channel>
-                                <channel id="5" unit="Volts">69.5</channel>
-                                <channel id="6" unit="Volts">69.5</channel>
-                                <channel id="7" unit="Volts">69.5</channel>
-                                <channel id="8" unit="Volts">69.5</channel>
-                                <channel id="9" unit="Volts">69.5</channel>
-                                <channel id="10" unit="Volts">69.5</channel>
-                                <pedestal unit="Volts">69.5</pedestal>
-			</hv>
-    	</settings> 
-    </module>
-<module version="NA61_2_V2" id="24">
-    	<geometry>
-    	    <size>2</size>
-    	    <x>5</x>
-    	   	<y>8</y>
-    	</geometry>
-        	<connection>
-			<hvsys>
-				<led>
-				    <id>47</id>
-				</led>    
-				<hv>
-				    <id>48</id>
-				</hv>
-			</hvsys>
-    	        	</connection>    
-    	<settings>
-    	    <led>
-			    <autoTune>0</autoTune>
-			    <brightness>1000</brightness>
-			    <frequency unit="Hz">0</frequency>
-			    <pinADCSet>60</pinADCSet>
-    	    </led>
-			<hv>
-				<channel id="1" unit="Volts">69.5</channel>
-				<channel id="2" unit="Volts">69.5</channel>
-				<channel id="3" unit="Volts">69.5</channel>
-				<channel id="4" unit="Volts">69.5</channel>
-				<channel id="5" unit="Volts">69.5</channel>
-				<channel id="6" unit="Volts">69.5</channel>
-				<channel id="7" unit="Volts">69.5</channel>
-				<channel id="8" unit="Volts">69.5</channel>
-				<channel id="9" unit="Volts">69.5</channel>
-				<channel id="10" unit="Volts">69.5</channel> 
-                                <pedestal unit="Volts">68.0</pedestal>
-			</hv>
-    	</settings> 
-    </module>
-<module version="NA61_2_V2" id="25">
-    	<geometry>
-    	    <size>2</size>
-    	    <x>7</x>
-    	   	<y>8</y>
-    	</geometry>
-        <connection>
-			<hvsys>
-				<led>
-				    <id>49</id>
-				</led>    
-				<hv>
-				    <id>50</id>
-				</hv>
-			</hvsys>
-    	        	</connection>    
-    	<settings>
-    	    <led>
-			    <autoTune>0</autoTune>
-			    <brightness>1000</brightness>
-			    <frequency unit="Hz">0</frequency>
-			    <pinADCSet>40</pinADCSet>
-    	    </led>
-			<hv>
-				<channel id="1" unit="Volts">69.66</channel>
-				<channel id="2" unit="Volts">69.66</channel>
-				<channel id="3" unit="Volts">69.66</channel>
-				<channel id="4" unit="Volts">69.66</channel>
-				<channel id="5" unit="Volts">69.66</channel>
-				<channel id="6" unit="Volts">69.66</channel>
-				<channel id="7" unit="Volts">69.66</channel>
-				<channel id="8" unit="Volts">69.66</channel>
-				<channel id="9" unit="Volts">69.66</channel>
-				<channel id="10" unit="Volts">69.66</channel> 
-                                <pedestal unit="Volts">67.0</pedestal>
-			</hv>
-    	</settings> 
-    </module>
-<module version="NA61_2_V2" id="26">
-    	<geometry>
-    	    <size>2</size>
-    	    <x>9</x>
-    	   	<y>8</y>
-    	</geometry>
-        	<connection>
-			<hvsys>
-				<led>
-				    <id>51</id>
-				</led>    
-				<hv>
-				    <id>52</id>
-				</hv>
-			</hvsys>
-    	        	</connection>    
-    	<settings>
-    	    <led>
-			    <autoTune>0</autoTune>
-			    <brightness>1000</brightness>
-			    <frequency unit="Hz">0</frequency>
-			    <pinADCSet>60</pinADCSet>
-    	    </led>
-			<hv>
-				<channel id="1" unit="Volts">69.55</channel>
-				<channel id="2" unit="Volts">69.55</channel>
-				<channel id="3" unit="Volts">69.55</channel>
-				<channel id="4" unit="Volts">69.55</channel>
-				<channel id="5" unit="Volts">69.55</channel>
-				<channel id="6" unit="Volts">69.55</channel>
-				<channel id="7" unit="Volts">69.55</channel>
-				<channel id="8" unit="Volts">69.55</channel>
-				<channel id="9" unit="Volts">69.55</channel>
-				<channel id="10" unit="Volts">69.55</channel> 
-                                <pedestal unit="Volts">67.0</pedestal>
-			</hv>
-    	</settings> 
-    </module>
-<module version="NA61_2_V2" id="27">
-    	<geometry>
-    	    <size>2</size>
-    	    <x>9</x>
-    	   	<y>6</y>
-    	</geometry>
-        	<connection>
-			<hvsys>
-				<led>
-				    <id>53</id>
-				</led>    
-				<hv>
-				    <id>54</id>
-				</hv>
-			</hvsys>
-    	        	</connection>    
-    	<settings>
-    	    <led>
-			    <autoTune>0</autoTune>
-			    <brightness>1000</brightness>
-			    <frequency unit="Hz">0</frequency>
-			    <pinADCSet>80</pinADCSet>
-    	    </led>
-			<hv>
-				<channel id="1" unit="Volts">69.62</channel>
-				<channel id="2" unit="Volts">69.62</channel>
-				<channel id="3" unit="Volts">69.62</channel>
-				<channel id="4" unit="Volts">69.62</channel>
-				<channel id="5" unit="Volts">69.62</channel>
-				<channel id="6" unit="Volts">69.62</channel>
-				<channel id="7" unit="Volts">69.62</channel>
-				<channel id="8" unit="Volts">69.62</channel>
-				<channel id="9" unit="Volts">69.62</channel>
-				<channel id="10" unit="Volts">69.62</channel> 
-                                <pedestal unit="Volts">67.0</pedestal>
-			</hv>
-    	</settings> 
-    </module>
-<module version="NA61_2_V2" id="28">
-    	<geometry>
-    	    <size>2</size>
-    	    <x>9</x>
-    	   	<y>4</y>
-    	</geometry>
-       	<connection>
-			<hvsys>
-				<led>
-				    <id>55</id>
-				</led>    
-				<hv>
-				    <id>56</id>
-				</hv>
-			</hvsys>
-    	        	</connection>    
-    	<settings>
-    	    <led>
-			    <autoTune>0</autoTune>
-			    <brightness>1000</brightness>
-			    <frequency unit="Hz">0</frequency>
-			    <pinADCSet>30</pinADCSet>
-    	    </led>
-			<hv>
-				<channel id="1" unit="Volts">69.65</channel>
-				<channel id="2" unit="Volts">69.65</channel>
-				<channel id="3" unit="Volts">69.65</channel>
-				<channel id="4" unit="Volts">69.65</channel>
-				<channel id="5" unit="Volts">69.65</channel>
-				<channel id="6" unit="Volts">69.65</channel>
-				<channel id="7" unit="Volts">69.65</channel>
-				<channel id="8" unit="Volts">69.65</channel>
-				<channel id="9" unit="Volts">69.65</channel>
-				<channel id="10" unit="Volts">69.65</channel> 
-                                <pedestal unit="Volts">67.0</pedestal>
-			</hv>
-    	</settings> 
-    </module>
-<module version="NA61_2_V2" id="29">
-    	<geometry>
-    	    <size>2</size>
-    	    <x>9</x>
-    	   	<y>0</y>
-    	</geometry>
-
-    	<connection>
-			<hvsys>
-				<led>
-				    <id>1</id>
-				</led>    
-				<hv>
-				    <id>2</id>
-				</hv>
-			</hvsys>
-    	        	</connection>    
-    	<settings>
-    	    <led>
-			    <autoTune>0</autoTune>
-			    <brightness>1000</brightness>
-			    <frequency unit="Hz">0</frequency>
-			    <pinADCSet>30</pinADCSet>
-    	    </led>
-			<hv>
-                                <channel id="1" unit="Volts">69.5</channel>
-                                <channel id="2" unit="Volts">68.1</channel>
-                                <channel id="3" unit="Volts">70.0</channel>
-                                <channel id="4" unit="Volts">68.4</channel>
-                                <channel id="5" unit="Volts">70.2</channel>
-                                <channel id="6" unit="Volts">68.5</channel>
-                                <channel id="7" unit="Volts">70.2</channel>
-                                <channel id="8" unit="Volts">68.4</channel>
-                                <channel id="9" unit="Volts">70.2</channel>
-                                <channel id="10" unit="Volts">68.5</channel>
-                                <pedestal unit="Volts">67.5</pedestal>
-			</hv>
-    	</settings>
-
-    </module>
-<module version="NA61_2_V2" id="30">
-    	<geometry>
-    	    <size>2</size>
-    	    <x>7</x>
-    	   	<y>0</y>
-    	</geometry>
-       	<connection>
-			<hvsys>
-				<led>
-				    <id>3</id>
-				</led>    
-				<hv>
-				    <id>4</id>
-				</hv>
-			</hvsys>
-    	        	</connection>    
-    	<settings>
-    	    <led>
-			    <autoTune>0</autoTune>
-			    <brightness>1000</brightness>
-			    <frequency unit="Hz">0</frequency>
-			    <pinADCSet>20</pinADCSet>
-    	    </led>
-			<hv>
-                            	<channel id="1" unit="Volts">67.4</channel>
-                                <channel id="2" unit="Volts">67.3</channel>
-                                <channel id="3" unit="Volts">67.4</channel>
-                                <channel id="4" unit="Volts">67.4</channel>
-                                <channel id="5" unit="Volts">67.4</channel>
-                                <channel id="6" unit="Volts">67.4</channel>
-                                <channel id="7" unit="Volts">67.4</channel>
-                                <channel id="8" unit="Volts">67.4</channel>
-                                <channel id="9" unit="Volts">67.3</channel>
-                                <channel id="10" unit="Volts">67.4</channel>
-                                <pedestal unit="Volts">67.0</pedestal>
-			</hv>
-    	</settings> 
-    </module>
-<module version="NA61_2_V2" id="31">
-    	<geometry>
-    	    <size>2</size>
-    	    <x>5</x>
-    	   	<y>0</y>
-    	</geometry>
-       	<connection>
-			<hvsys>
-				<led>
-				    <id>5</id>
-				</led>    
-				<hv>
-				    <id>6</id>
-				</hv>
-			</hvsys>
-    	        	</connection>    
-    	<settings>
-    	    <led>
-			    <autoTune>0</autoTune>
-			    <brightness>1000</brightness>
-			    <frequency unit="Hz">0</frequency>
-			    <pinADCSet>40</pinADCSet>
-    	    </led>
-			<hv>
-                            	<channel id="1" unit="Volts">68.6</channel>
-                                <channel id="2" unit="Volts">68.2</channel>
-                                <channel id="3" unit="Volts">68.8</channel>
-                                <channel id="4" unit="Volts">68.3</channel>
-                                <channel id="5" unit="Volts">68.5</channel>
-                                <channel id="6" unit="Volts">68.6</channel>
-                                <channel id="7" unit="Volts">68.9</channel>
-                                <channel id="8" unit="Volts">68.1</channel>
-                                <channel id="9" unit="Volts">68.4</channel>
-                                <channel id="10" unit="Volts">68.5</channel>
-                                <pedestal unit="Volts">68.0</pedestal><!--66.5-->
-			</hv>
-    	</settings> 
-    </module>
-<module version="NA61_2_V2" id="32">
-    	<geometry>
-    	    <size>2</size>
-    	    <x>3</x>
-    	   	<y>0</y>
-    	</geometry>
-       	<connection>
-			<hvsys>
-				<led>
-				    <id>7</id>
-				</led>    
-				<hv>
-				    <id>8</id>
-				</hv>
-			</hvsys>
-    	        	</connection>    
-    	<settings>
-    	    <led>
-			    <autoTune>0</autoTune>
-			    <brightness>1000</brightness>
-			    <frequency unit="Hz">0</frequency>
-			    <pinADCSet>25</pinADCSet>
-    	    </led>
-			<hv>
-                            	<channel id="1" unit="Volts">67.6</channel>
-                                <channel id="2" unit="Volts">67.2</channel>
-                                <channel id="3" unit="Volts">67.3</channel>
-                                <channel id="4" unit="Volts">67.4</channel>
-                                <channel id="5" unit="Volts">67.6</channel>
-                                <channel id="6" unit="Volts">67.69</channel>
-                                <channel id="7" unit="Volts">67.69</channel>
-                                <channel id="8" unit="Volts">67.6</channel>
-                                <channel id="9" unit="Volts">67.69</channel>
-                                <channel id="10" unit="Volts">67.8</channel>
-                                <pedestal unit="Volts">67.0</pedestal><!--65.49-->
-			</hv>
-    	</settings> 
-    </module>
-<module version="NA61_2_V2" id="33">
-    	<geometry>
-    	    <size>2</size>
-    	    <x>1</x>
-    	   	<y>2</y>
-    	</geometry>
-       	<connection>
-			<hvsys>
-				<led>
-				    <id>9</id>
-				</led>    
-				<hv>
-				    <id>10</id>
-				</hv>
-			</hvsys>
-    	        	</connection>    
-    	<settings>
-    	    <led>
-			    <autoTune>0</autoTune>
-			    <brightness>1000</brightness>
-			    <frequency unit="Hz">0</frequency>
-			    <pinADCSet>30</pinADCSet>
-    	    </led>
-			<hv>
-                            	<channel id="1" unit="Volts">67.8</channel>
-                                <channel id="2" unit="Volts">67.4</channel>
-                                <channel id="3" unit="Volts">67.8</channel>
-                                <channel id="4" unit="Volts">67.2</channel>
-                                <channel id="5" unit="Volts">67.69</channel>
-                                <channel id="6" unit="Volts">67.69</channel>
-                                <channel id="7" unit="Volts">67.6</channel>
-                                <channel id="8" unit="Volts">67.5</channel>
-                                <channel id="9" unit="Volts">67.8</channel>
-                                <channel id="10" unit="Volts">67.4</channel>
-                                <pedestal unit="Volts">67.0</pedestal><!--65.49-->
-			</hv>
-    	</settings> 
-    </module>
-<module version="NA61_2_V2" id="34">
-    	<geometry>
-    	    <size>2</size>
-    	    <x>1</x>
-    	   	<y>4</y>
-    	</geometry>
-       	<connection>
-			<hvsys>
-				<led>
-				    <id>13</id>
-				</led>    
-				<hv>
-				    <id>14</id>
-				</hv>
-			</hvsys>
-    	        	</connection>    
-    	<settings>
-    	    <led>
-			    <autoTune>0</autoTune>
-			    <brightness>1000</brightness>
-			    <frequency unit="Hz">0</frequency>
-			    <pinADCSet>20</pinADCSet>
-    	    </led>
-			<hv>
-                            	<channel id="1" unit="Volts">68.6</channel>
-                                <channel id="2" unit="Volts">68.6</channel>
-                                <channel id="3" unit="Volts">68.2</channel>
-                                <channel id="4" unit="Volts">68.6</channel>
-                                <channel id="5" unit="Volts">67.9</channel>
-                                <channel id="6" unit="Volts">68.6</channel>
-                                <channel id="7" unit="Volts">68.2</channel>
-                                <channel id="8" unit="Volts">68.5</channel>
-                                <channel id="9" unit="Volts">68.4</channel>
-                                <channel id="10" unit="Volts">68.6</channel>
-                                <pedestal unit="Volts">68.0</pedestal><!--65.49-->
-			</hv>
-    	</settings> 
-    </module>
-<module version="NA61_2_V2" id="35">
-    	<geometry>
-    	    <size>2</size>
-    	    <x>1</x>
-    	   	<y>6</y>
-    	</geometry>
-       	<connection>
-			<hvsys>
-				<led>
-				    <id>15</id>
-				</led>    
-				<hv>
-				    <id>16</id>
-				</hv>
-			</hvsys>
-    	        	</connection>    
-    	<settings>
-    	    <led>
-			    <autoTune>0</autoTune>
-			    <brightness>1000</brightness>
-			    <frequency unit="Hz">0</frequency>
-			    <pinADCSet>6</pinADCSet>
-    	    </led>
-			<hv>
-                            	<channel id="1" unit="Volts">68.4</channel>
-                                <channel id="2" unit="Volts">68.2</channel>
-                                <channel id="3" unit="Volts">68.4</channel>
-                                <channel id="4" unit="Volts">67.7</channel>
-                                <channel id="5" unit="Volts">68.4</channel>
-                                <channel id="6" unit="Volts">68.0</channel>
-                                <channel id="7" unit="Volts">68.5</channel>
-                                <channel id="8" unit="Volts">67.7</channel>
-                                <channel id="9" unit="Volts">68.2</channel>
-                                <channel id="10" unit="Volts">68.1</channel>
-                                <pedestal unit="Volts">65.49</pedestal>
-
-			</hv>
-    	</settings> 
-    </module>
-<module version="NA61_2_V2" id="36">
-    	<geometry>
-    	    <size>2</size>
-    	    <x>1</x>
-    	   	<y>8</y>
-    	</geometry>
-       	<connection>
-			<hvsys>
-				<led>
-				    <id>71</id>
-				</led>    
-				<hv>
-				    <id>72</id>
-				</hv>
-			</hvsys>
-    	        	</connection>    
-    	<settings>
-    	    <led>
-			    <autoTune>0</autoTune>
-			    <brightness>800</brightness>
-			    <frequency unit="Hz">0</frequency>
-			    <pinADCSet>25</pinADCSet>
-    	    </led>
-			<hv>
-
-                                <channel id="1" unit="Volts">69.75</channel>
-                                <channel id="2" unit="Volts">69.75</channel>
-                                <channel id="3" unit="Volts">69.75</channel>
-                                <channel id="4" unit="Volts">69.75</channel>
-                                <channel id="5" unit="Volts">69.75</channel>
-                                <channel id="6" unit="Volts">69.75</channel>
-                                <channel id="7" unit="Volts">69.75</channel>
-                                <channel id="8" unit="Volts">69.75</channel>
-                                <channel id="9" unit="Volts">69.75</channel>
-                                <channel id="10" unit="Volts">69.75</channel>
-                                <pedestal unit="Volts">67.0</pedestal>
-			</hv>
-    	</settings>
-    </module>
-<module version="NA61_2_V2" id="37">
-    	<geometry>
-    	    <size>2</size>
-    	    <x>3</x>
-    	   	<y>10</y>
-    	</geometry>
-
-    	<connection>
-			<hvsys>
-				<led>
-				    <id>73</id>
-				</led>    
-				<hv>
-				    <id>74</id>
-				</hv>
-			</hvsys>
-    	        	</connection>    
-    	<settings>
-    	    <led>
-			    <autoTune>0</autoTune>
-			    <brightness>1000</brightness>
-			    <frequency unit="Hz">0</frequency>
-			    <pinADCSet>20</pinADCSet>
-    	    </led>
-			<hv>
-                                <channel id="1" unit="Volts">69.73</channel>
-                                <channel id="2" unit="Volts">69.73</channel>
-                                <channel id="3" unit="Volts">69.73</channel>
-                                <channel id="4" unit="Volts">69.73</channel>
-                                <channel id="5" unit="Volts">69.73</channel>
-                                <channel id="6" unit="Volts">69.73</channel>
-                                <channel id="7" unit="Volts">69.73</channel>
-                                <channel id="8" unit="Volts">69.73</channel>
-                                <channel id="9" unit="Volts">69.73</channel>
-                                <channel id="10" unit="Volts">69.73</channel>
-                                <pedestal unit="Volts">69.73</pedestal>
-			</hv>
-    	</settings>
-
-    </module>
-<module version="NA61_2_V2" id="38">
-    	<geometry>
-    	    <size>2</size>
-    	    <x>5</x>
-    	   	<y>10</y>
-    	</geometry>
-       	<connection>
-			<hvsys>
-				<led>
-				    <id>75</id>
-				</led>    
-				<hv>
-				    <id>76</id>
-				</hv>
-			</hvsys>
-    	        	</connection>    
-    	<settings>
-    	    <led>
-			    <autoTune>0</autoTune>
-			    <brightness>1000</brightness>
-			    <frequency unit="Hz">0</frequency>
-			    <pinADCSet>18</pinADCSet>
-    	    </led>
-			<hv>
-				<channel id="1" unit="Volts">69.78</channel>
-				<channel id="2" unit="Volts">69.78</channel>
-				<channel id="3" unit="Volts">69.78</channel>
-				<channel id="4" unit="Volts">69.78</channel>
-				<channel id="5" unit="Volts">69.78</channel>
-				<channel id="6" unit="Volts">69.78</channel>
-				<channel id="7" unit="Volts">69.78</channel>
-				<channel id="8" unit="Volts">69.78</channel>
-				<channel id="9" unit="Volts">69.78</channel>
-				<channel id="10" unit="Volts">69.78</channel> 
-                                <pedestal unit="Volts">69.78</pedestal>
-			</hv>
-    	</settings> 
-    </module>
-<module version="NA61_2_V2" id="39">
-    	<geometry>
-    	    <size>2</size>
-    	    <x>7</x>
-    	   	<y>10</y>
-    	</geometry>
-       	<connection>
-			<hvsys>
-				<led>
-				    <id>87</id>
-				</led>    
-				<hv>
-				    <id>88</id>
-				</hv>
-			</hvsys>
-    	        	</connection>    
-    	<settings>
-    	    <led>
-			    <autoTune>0</autoTune>
-			    <brightness>1000</brightness>
-			    <frequency unit="Hz">0</frequency>
-			    <pinADCSet>7</pinADCSet>
-    	    </led>
-			<hv>
-				<channel id="1" unit="Volts">69.7</channel>
-				<channel id="2" unit="Volts">69.7</channel>
-				<channel id="3" unit="Volts">69.7</channel>
-				<channel id="4" unit="Volts">69.7</channel>
-				<channel id="5" unit="Volts">69.7</channel>
-				<channel id="6" unit="Volts">69.7</channel>
-				<channel id="7" unit="Volts">69.7</channel>
-				<channel id="8" unit="Volts">69.7</channel>
-				<channel id="9" unit="Volts">69.7</channel>
-				<channel id="10" unit="Volts">69.7</channel> 
-                                <pedestal unit="Volts">67.0</pedestal>
-			</hv>
-    	</settings> 
-    </module>
-<module version="NA61_2_V2" id="40">
-    	<geometry>
-    	    <size>2</size>
-    	    <x>9</x>
-    	   	<y>10</y>
-    	</geometry>
-
-    	<connection>
-			<hvsys>
-				<led>
-				    <id>79</id>
-				</led>    
-				<hv>
-				    <id>80</id>
-				</hv>
-			</hvsys>
-    	        	</connection>    
-    	<settings>
-    	    <led>
-			    <autoTune>0</autoTune>
-			    <brightness>1000</brightness>
-			    <frequency unit="Hz">0</frequency>
-			    <pinADCSet>40</pinADCSet>
-    	    </led>
-			<hv>
-				<channel id="1" unit="Volts">69.83</channel>
-				<channel id="2" unit="Volts">69.83</channel>
-				<channel id="3" unit="Volts">69.83</channel>
-				<channel id="4" unit="Volts">69.83</channel>
-				<channel id="5" unit="Volts">69.83</channel>
-				<channel id="6" unit="Volts">69.83</channel>
-				<channel id="7" unit="Volts">69.83</channel>
-				<channel id="8" unit="Volts">69.83</channel>
-				<channel id="9" unit="Volts">69.83</channel>
-				<channel id="10" unit="Volts">69.83</channel> 
-                                <pedestal unit="Volts">67.0</pedestal>
-			</hv>
-    	</settings> 
-
-    </module>
-<module version="NA61_2_V2" id="41">
-    	<geometry>
-    	    <size>2</size>
-    	    <x>11</x>
-    	   	<y>8</y>
-    	</geometry>
-       	<connection>
-			<hvsys>
-				<led>
-				    <id>43</id>
-				</led>    
-				<hv>
-				    <id>44</id>
-				</hv>
-			</hvsys>
-    	        	</connection>    
-    	<settings>
-    	    <led>
-			    <autoTune>0</autoTune>
-			    <brightness>1000</brightness>
-			    <frequency unit="Hz">0</frequency>
-			    <pinADCSet>20</pinADCSet>
-    	    </led>
-                        <hv>
-                                <channel id="1" unit="Volts">69.7</channel>
-                                <channel id="2" unit="Volts">69.7</channel>
-                                <channel id="3" unit="Volts">69.7</channel>
-                                <channel id="4" unit="Volts">69.7</channel>
-                                <channel id="5" unit="Volts">69.7</channel>
-                                <channel id="6" unit="Volts">69.7</channel>
-                                <channel id="7" unit="Volts">69.7</channel>
-                                <channel id="8" unit="Volts">69.7</channel>
-                                <channel id="9" unit="Volts">69.7</channel>
-                                <channel id="10" unit="Volts">69.7</channel>
-                                <pedestal unit="Volts">67.0</pedestal>
-                        </hv>
-    	</settings> 
-    </module>
-<module version="NA61_2_V2" id="42">
-    	<geometry>
-    	    <size>2</size>
-    	    <x>11</x>
-    	   	<y>6</y>
-    	</geometry>
-       	<connection>
-			<hvsys>
-				<led>
-				    <id>67</id>
+					<id>21</id>
 				</led>
 				<hv>
-				    <id>68</id>
+					<id>22</id>
 				</hv>
 			</hvsys>
-    	        	</connection>    
-    	<settings>
-    	    <led>
-			    <autoTune>0</autoTune>
-			    <brightness>1000</brightness>
-			    <frequency unit="Hz">0</frequency>
-			    <pinADCSet>30</pinADCSet>
-    	    </led>
+		</connection>
+		<settings>
+			<led>
+				<autoTune>0</autoTune>
+				<brightness>1000</brightness>
+				<frequency unit="Hz">0</frequency>
+				<pinADCSet>11</pinADCSet>
+			</led>
 			<hv>
-				<channel id="1" unit="Volts">69.7</channel>
-				<channel id="2" unit="Volts">69.7</channel>
-				<channel id="3" unit="Volts">69.7</channel>
-				<channel id="4" unit="Volts">69.7</channel>
-				<channel id="5" unit="Volts">69.7</channel>
-				<channel id="6" unit="Volts">69.7</channel>
-				<channel id="7" unit="Volts">69.7</channel>
-				<channel id="8" unit="Volts">69.7</channel>
-				<channel id="9" unit="Volts">69.7</channel>
-				<channel id="10" unit="Volts">69.7</channel> 
-                                <pedestal unit="Volts">67.0</pedestal>
+				<channel id="1" unit="Volts">68.39</channel>
+				<channel id="2" unit="Volts">68.52</channel>
+				<channel id="3" unit="Volts">68.44</channel>
+				<channel id="4" unit="Volts">68.55</channel>
+				<channel id="5" unit="Volts">67.85</channel>
+				<channel id="6" unit="Volts">68.52</channel>
+				<channel id="7" unit="Volts">68.46</channel>
+				<channel id="8" unit="Volts">68.73</channel>
+				<channel id="9" unit="Volts">68.34</channel>
+				<channel id="10" unit="Volts">68.67</channel>
+				<pedestal unit="Volts">67.35</pedestal>
 			</hv>
-    	</settings> 
-    </module>
-<module version="NA61_2_V2" id="43">
-    	<geometry>
-    	    <size>2</size>
-    	    <x>11</x>
-    	   	<y>4</y>
-    	</geometry>
-       	<connection>
+		</settings>
+	</module>
+	<module version="NA61_2_V2" id="14">
+		<geometry>
+			<size>2</size>
+			<x>5</x>
+			<y>4</y>
+		</geometry>
+		<connection>
 			<hvsys>
 				<led>
-				    <id>17</id>
-				</led>    
+					<id>23</id>
+				</led>
 				<hv>
-				    <id>18</id>
+					<id>24</id>
 				</hv>
 			</hvsys>
-    	        	</connection>    
-    	<settings>
-    	    <led>
-			    <autoTune>0</autoTune>
-			    <brightness>1000</brightness>
-			    <frequency unit="Hz">0</frequency>
-			    <pinADCSet>40</pinADCSet>
-    	    </led>
+		</connection>
+		<settings>
+			<led>
+				<autoTune>0</autoTune>
+				<brightness>1000</brightness>
+				<frequency unit="Hz">0</frequency>
+				<pinADCSet>20</pinADCSet>
+			</led>
 			<hv>
-                                <channel id="1" unit="Volts">69.70</channel>
-                                <channel id="2" unit="Volts">69.70</channel>
-                                <channel id="3" unit="Volts">69.70</channel>
-                                <channel id="4" unit="Volts">69.70</channel>
-                                <channel id="5" unit="Volts">69.70</channel>
-                                <channel id="6" unit="Volts">69.70</channel>
-                                <channel id="7" unit="Volts">69.70</channel>
-                                <channel id="8" unit="Volts">69.70</channel>
-                                <channel id="9" unit="Volts">69.70</channel>
-                                <channel id="10" unit="Volts">69.70</channel>
-                                <pedestal unit="Volts">64.70</pedestal>
+				<channel id="1" unit="Volts">67.88</channel>
+				<channel id="2" unit="Volts">68.04</channel>
+				<channel id="3" unit="Volts">68.55</channel>
+				<channel id="4" unit="Volts">67.74</channel>
+				<channel id="5" unit="Volts">68.63</channel>
+				<channel id="6" unit="Volts">68.12</channel>
+				<channel id="7" unit="Volts">68.75</channel>
+				<channel id="8" unit="Volts">68.12</channel>
+				<channel id="9" unit="Volts">68.59</channel>
+				<channel id="10" unit="Volts">68.2</channel>
+				<pedestal unit="Volts">67.02</pedestal>
 			</hv>
-    	</settings> 
-    </module>
-<module version="NA61_2_V2" id="44">
-    	<geometry>
-    	    <size>2</size>
-    	    <x>11</x>
-    	  	<y>2</y>
-    	</geometry>
-       	<connection>
+		</settings>
+	</module>
+	<module version="NA61_2_V2" id="15">
+		<geometry>
+			<size>2</size>
+			<x>7</x>
+			<y>6</y>
+		</geometry>
+		<connection>
 			<hvsys>
 				<led>
-				    <id>19</id>
-				</led>    
+					<id>25</id>
+				</led>
 				<hv>
-				    <id>20</id>
+					<id>26</id>
 				</hv>
 			</hvsys>
-    	</connection>    
-    	<settings>
-    	    <led>
-			    <autoTune>0</autoTune>
-			    <brightness>1500</brightness>
-			    <frequency unit="Hz">0</frequency>
-			    <pinADCSet>40</pinADCSet>
-    	    </led>
+		</connection>
+		<settings>
+			<led>
+				<autoTune>0</autoTune>
+				<brightness>1000</brightness>
+				<frequency unit="Hz">0</frequency>
+				<pinADCSet>8</pinADCSet>
+			</led>
 			<hv>
-                                <channel id="1" unit="Volts">69.70</channel>
-                                <channel id="2" unit="Volts">69.70</channel>
-                                <channel id="3" unit="Volts">69.70</channel>
-                                <channel id="4" unit="Volts">69.70</channel>
-                                <channel id="5" unit="Volts">69.70</channel>
-                                <channel id="6" unit="Volts">69.70</channel>
-                                <channel id="7" unit="Volts">69.70</channel>
-                                <channel id="8" unit="Volts">69.70</channel>
-                                <channel id="9" unit="Volts">69.70</channel>
-                                <channel id="10" unit="Volts">69.70</channel>
-                                <pedestal unit="Volts">64.70</pedestal>
+				<channel id="1" unit="Volts">67.31</channel>
+				<channel id="2" unit="Volts">67.19</channel>
+				<channel id="3" unit="Volts">67.01</channel>
+				<channel id="4" unit="Volts">67.13</channel>
+				<channel id="5" unit="Volts">67.11</channel>
+				<channel id="6" unit="Volts">67.25</channel>
+				<channel id="7" unit="Volts">66.39</channel>
+				<channel id="8" unit="Volts">67.10</channel>
+				<channel id="9" unit="Volts">67.45</channel>
+				<channel id="10" unit="Volts">67.40</channel>
+				<pedestal unit="Volts">65.89</pedestal>
 			</hv>
-    	</settings> 
-    </module>
+		</settings>
+	</module>
+	<module version="NA61_2_V2" id="16">
+		<geometry>
+			<size>2</size>
+			<x>5</x>
+			<y>6</y>
+		</geometry>
+		<connection>
+			<hvsys>
+				<led>
+					<id>27</id>
+				</led>
+				<hv>
+					<id>28</id>
+				</hv>
+			</hvsys>
+		</connection>
+		<settings>
+			<led>
+				<autoTune>0</autoTune>
+				<brightness>1000</brightness>
+				<frequency unit="Hz">0</frequency>
+				<pinADCSet>15</pinADCSet>
+			</led>
+			<hv>
+				<channel id="1" unit="Volts">68.55</channel>
+				<channel id="2" unit="Volts">68.56</channel>
+				<channel id="3" unit="Volts">68.72</channel>
+				<channel id="4" unit="Volts">68.82</channel>
+				<channel id="5" unit="Volts">68.72</channel>
+				<channel id="6" unit="Volts">68.79</channel>
+				<channel id="7" unit="Volts">68.58</channel>
+				<channel id="8" unit="Volts">68.80</channel>
+				<channel id="9" unit="Volts">68.66</channel>
+				<channel id="10" unit="Volts">68.56</channel>
+				<pedestal unit="Volts">68.05</pedestal>
+			</hv>
+		</settings>
+	</module>
+	<module version="NA61_2_V2" id="17">
+		<geometry>
+			<size>2</size>
+			<x>9</x>
+			<y>2</y>
+		</geometry>
+		<connection>
+			<hvsys>
+				<led>
+					<id>29</id>
+				</led>
+				<hv>
+					<id>30</id>
+				</hv>
+			</hvsys>
+		</connection>
+		<settings>
+			<led>
+				<autoTune>0</autoTune>
+				<brightness>1000</brightness>
+				<frequency unit="Hz">0</frequency>
+				<pinADCSet>50</pinADCSet>
+			</led>
+			<hv>
+				<channel id="1" unit="Volts">67.89</channel>
+				<channel id="2" unit="Volts">67.24</channel>
+				<channel id="3" unit="Volts">68.36</channel>
+				<channel id="4" unit="Volts">67.19</channel>
+				<channel id="5" unit="Volts">67.8</channel>
+				<channel id="6" unit="Volts">67.06</channel>
+				<channel id="7" unit="Volts">68.89</channel>
+				<channel id="8" unit="Volts">67.08</channel>
+				<channel id="9" unit="Volts">68.72</channel>
+				<channel id="10" unit="Volts">68.57</channel>
+				<pedestal unit="Volts">66.56</pedestal>
+			</hv>
+		</settings>
+	</module>
+	<module version="NA61_2_V2" id="18">
+		<geometry>
+			<size>2</size>
+			<x>7</x>
+			<y>2</y>
+		</geometry>
+		<connection>
+			<hvsys>
+				<led>
+					<id>31</id>
+				</led>
+				<hv>
+					<id>32</id>
+				</hv>
+			</hvsys>
+		</connection>
+		<settings>
+			<led>
+				<autoTune>0</autoTune>
+				<brightness>1000</brightness>
+				<frequency unit="Hz">0</frequency>
+				<pinADCSet>50</pinADCSet>
+			</led>
+			<hv>
+				<channel id="1" unit="Volts">67.48</channel>
+				<channel id="2" unit="Volts">67.55</channel>
+				<channel id="3" unit="Volts">68.29</channel>
+				<channel id="4" unit="Volts">68.29</channel>
+				<channel id="5" unit="Volts">68.17</channel>
+				<channel id="6" unit="Volts">68.35</channel>
+				<channel id="7" unit="Volts">68.08</channel>
+				<channel id="8" unit="Volts">68.57</channel>
+				<channel id="9" unit="Volts">68.48</channel>
+				<channel id="10" unit="Volts">68.3</channel>
+				<pedestal unit="Volts">66.98</pedestal>
+			</hv>
+		</settings>
+	</module>
+	<module version="NA61_2_V2" id="19">
+		<geometry>
+			<size>2</size>
+			<x>5</x>
+			<y>2</y>
+		</geometry>
+		<connection>
+			<hvsys>
+				<led>
+					<id>37</id>
+				</led>
+				<hv>
+					<id>38</id>
+				</hv>
+			</hvsys>
+		</connection>
+		<settings>
+			<led>
+				<autoTune>0</autoTune>
+				<brightness>1000</brightness>
+				<frequency unit="Hz">0</frequency>
+				<pinADCSet>40</pinADCSet>
+			</led>
+			<hv>
+				<channel id="1" unit="Volts">67.63</channel>
+				<channel id="2" unit="Volts">68.00</channel>
+				<channel id="3" unit="Volts">67.69</channel>
+				<channel id="4" unit="Volts">68.00</channel>
+				<channel id="5" unit="Volts">67.69</channel>
+				<channel id="6" unit="Volts">68.31</channel>
+				<channel id="7" unit="Volts">68.00</channel>
+				<channel id="8" unit="Volts">68.57</channel>
+				<channel id="9" unit="Volts">68.00</channel>
+				<channel id="10" unit="Volts">68.25</channel>
+				<pedestal unit="Volts">67.53</pedestal>
+			</hv>
+		</settings>
+	</module>
+	<module version="NA61_2_V2" id="20">
+		<geometry>
+			<size>2</size>
+			<x>3</x>
+			<y>2</y>
+		</geometry>
+		<connection>
+			<hvsys>
+				<led>
+					<id>39</id>
+				</led>
+				<hv>
+					<id>40</id>
+				</hv>
+			</hvsys>
+		</connection>
+		<settings>
+			<led>
+				<autoTune>0</autoTune>
+				<brightness>1000</brightness>
+				<frequency unit="Hz">0</frequency>
+				<pinADCSet>35</pinADCSet>
+			</led>
+			<hv>
+				<channel id="1" unit="Volts">67.91</channel>
+				<channel id="2" unit="Volts">68.04</channel>
+				<channel id="3" unit="Volts">67.94</channel>
+				<channel id="4" unit="Volts">67.85</channel>
+				<channel id="5" unit="Volts">67.74</channel>
+				<channel id="6" unit="Volts">67.41</channel>
+				<channel id="7" unit="Volts">68.07</channel>
+				<channel id="8" unit="Volts">67.9</channel>
+				<channel id="9" unit="Volts">68.25</channel>
+				<channel id="10" unit="Volts">69.18</channel>
+				<pedestal unit="Volts">66.91</pedestal>
+			</hv>
+		</settings>
+	</module>
+	<module version="NA61_2_V2" id="21">
+		<geometry>
+			<size>2</size>
+			<x>3</x>
+			<y>4</y>
+		</geometry>
+		<connection>
+			<hvsys>
+				<led>
+					<id>57</id>
+				</led>
+				<hv>
+					<id>58</id>
+				</hv>
+			</hvsys>
+		</connection>
+		<settings>
+			<led>
+				<autoTune>0</autoTune>
+				<brightness>1000</brightness>
+				<frequency unit="Hz">0</frequency>
+				<pinADCSet>40</pinADCSet>
+			</led>
+			<hv>
+				<channel id="1" unit="Volts">68.98</channel>
+				<channel id="2" unit="Volts">69.0</channel>
+				<channel id="3" unit="Volts">68.67</channel>
+				<channel id="4" unit="Volts">68.98</channel>
+				<channel id="5" unit="Volts">69.01</channel>
+				<channel id="6" unit="Volts">68.97</channel>
+				<channel id="7" unit="Volts">69.06</channel>
+				<channel id="8" unit="Volts">68.91</channel>
+				<channel id="9" unit="Volts">68.99</channel>
+				<channel id="10" unit="Volts">68.86</channel>
+				<pedestal unit="Volts">67.87</pedestal>
+			</hv>
+		</settings>
+	</module>
+	<module version="NA61_2_V2" id="22">
+		<geometry>
+			<size>2</size>
+			<x>3</x>
+			<y>6</y>
+		</geometry>
+		<connection>
+			<hvsys>
+				<led>
+					<id>69</id>
+				</led>
+				<hv>
+					<id>70</id>
+				</hv>
+			</hvsys>
+		</connection>
+		<settings>
+			<led>
+				<autoTune>0</autoTune>
+				<brightness>1000</brightness>
+				<frequency unit="Hz">0</frequency>
+				<pinADCSet>30</pinADCSet>
+			</led>
+			<hv>
+				<channel id="1" unit="Volts">67.46</channel>
+				<channel id="2" unit="Volts">67.7</channel>
+				<channel id="3" unit="Volts">67.84</channel>
+				<channel id="4" unit="Volts">68.44</channel>
+				<channel id="5" unit="Volts">68.09</channel>
+				<channel id="6" unit="Volts">68.31</channel>
+				<channel id="7" unit="Volts">68.25</channel>
+				<channel id="8" unit="Volts">68.67</channel>
+				<channel id="9" unit="Volts">68.01</channel>
+				<channel id="10" unit="Volts">68.52</channel>
+				<pedestal unit="Volts">66.77</pedestal>
+			</hv>
+		</settings>
+	</module>
+	<module version="NA61_2_V2" id="23">
+		<geometry>
+			<size>2</size>
+			<x>3</x>
+			<y>8</y>
+		</geometry>
+		<connection>
+			<hvsys>
+				<led>
+					<id>45</id>
+				</led>
+				<hv>
+					<id>46</id>
+				</hv>
+			</hvsys>
+		</connection>
+		<settings>
+			<led>
+				<autoTune>0</autoTune>
+				<brightness>1000</brightness>
+				<frequency unit="Hz">0</frequency>
+				<pinADCSet>40</pinADCSet>
+			</led>
+			<hv>
+				<channel id="1" unit="Volts">67.65</channel>
+				<channel id="2" unit="Volts">67.45</channel>
+				<channel id="3" unit="Volts">67.85</channel>
+				<channel id="4" unit="Volts">67.55</channel>
+				<channel id="5" unit="Volts">67.45</channel>
+				<channel id="6" unit="Volts">67.7</channel>
+				<channel id="7" unit="Volts">67.8</channel>
+				<channel id="8" unit="Volts">67.45</channel>
+				<channel id="9" unit="Volts">67.85</channel>
+				<channel id="10" unit="Volts">67.53</channel>
+				<pedestal unit="Volts">66.7</pedestal>
+			</hv>
+		</settings>
+	</module>
+	<module version="NA61_2_V2" id="24">
+		<geometry>
+			<size>2</size>
+			<x>5</x>
+			<y>8</y>
+		</geometry>
+		<connection>
+			<hvsys>
+				<led>
+					<id>47</id>
+				</led>
+				<hv>
+					<id>48</id>
+				</hv>
+			</hvsys>
+		</connection>
+		<settings>
+			<led>
+				<autoTune>0</autoTune>
+				<brightness>1000</brightness>
+				<frequency unit="Hz">0</frequency>
+				<pinADCSet>60</pinADCSet>
+			</led>
+			<hv>
+				<channel id="1" unit="Volts">67.47</channel>
+				<channel id="2" unit="Volts">67.23</channel>
+				<channel id="3" unit="Volts">67.78</channel>
+				<channel id="4" unit="Volts">67.23</channel>
+				<channel id="5" unit="Volts">67.73</channel>
+				<channel id="6" unit="Volts">67.23</channel>
+				<channel id="7" unit="Volts">67.68</channel>
+				<channel id="8" unit="Volts">67.47</channel>
+				<channel id="9" unit="Volts">67.73</channel>
+				<channel id="10" unit="Volts">67.47</channel>
+				<pedestal unit="Volts">65.97</pedestal>
+			</hv>
+		</settings>
+	</module>
+	<module version="NA61_2_V2" id="25">
+		<geometry>
+			<size>2</size>
+			<x>7</x>
+			<y>8</y>
+		</geometry>
+		<connection>
+			<hvsys>
+				<led>
+					<id>49</id>
+				</led>
+				<hv>
+					<id>50</id>
+				</hv>
+			</hvsys>
+		</connection>
+		<settings>
+			<led>
+				<autoTune>0</autoTune>
+				<brightness>1000</brightness>
+				<frequency unit="Hz">0</frequency>
+				<pinADCSet>40</pinADCSet>
+			</led>
+			<hv>
+				<channel id="1" unit="Volts">67.67</channel>
+				<channel id="2" unit="Volts">67.37</channel>
+				<channel id="3" unit="Volts">68.07</channel>
+				<channel id="4" unit="Volts">67.67</channel>
+				<channel id="5" unit="Volts">67.77</channel>
+				<channel id="6" unit="Volts">67.67</channel>
+				<channel id="7" unit="Volts">68.07</channel>
+				<channel id="8" unit="Volts">67.67</channel>
+				<channel id="9" unit="Volts">68.07</channel>
+				<channel id="10" unit="Volts">67.67</channel>
+				<pedestal unit="Volts">65.01</pedestal>
+			</hv>
+		</settings>
+	</module>
+	<module version="NA61_2_V2" id="26">
+		<geometry>
+			<size>2</size>
+			<x>9</x>
+			<y>8</y>
+		</geometry>
+		<connection>
+			<hvsys>
+				<led>
+					<id>51</id>
+				</led>
+				<hv>
+					<id>52</id>
+				</hv>
+			</hvsys>
+		</connection>
+		<settings>
+			<led>
+				<autoTune>0</autoTune>
+				<brightness>1000</brightness>
+				<frequency unit="Hz">0</frequency>
+				<pinADCSet>60</pinADCSet>
+			</led>
+			<hv>
+				<channel id="1" unit="Volts">66.94</channel>
+				<channel id="2" unit="Volts">67.78</channel>
+				<channel id="3" unit="Volts">67.67</channel>
+				<channel id="4" unit="Volts">67.78</channel>
+				<channel id="5" unit="Volts">67.78</channel>
+				<channel id="6" unit="Volts">68.08</channel>
+				<channel id="7" unit="Volts">68.08</channel>
+				<channel id="8" unit="Volts">67.88</channel>
+				<channel id="9" unit="Volts">67.78</channel>
+				<channel id="10" unit="Volts">67.88</channel>
+				<pedestal unit="Volts">65.23</pedestal>
+			</hv>
+		</settings>
+	</module>
+	<module version="NA61_2_V2" id="27">
+		<geometry>
+			<size>2</size>
+			<x>9</x>
+			<y>6</y>
+		</geometry>
+		<connection>
+			<hvsys>
+				<led>
+					<id>53</id>
+				</led>
+				<hv>
+					<id>54</id>
+				</hv>
+			</hvsys>
+		</connection>
+		<settings>
+			<led>
+				<autoTune>0</autoTune>
+				<brightness>1000</brightness>
+				<frequency unit="Hz">0</frequency>
+				<pinADCSet>80</pinADCSet>
+			</led>
+			<hv>
+				<channel id="1" unit="Volts">68.0</channel>
+				<channel id="2" unit="Volts">68.2</channel>
+				<channel id="3" unit="Volts">68.5</channel>
+				<channel id="4" unit="Volts">68.2</channel>
+				<channel id="5" unit="Volts">68.2</channel>
+				<channel id="6" unit="Volts">68.2</channel>
+				<channel id="7" unit="Volts">68.5</channel>
+				<channel id="8" unit="Volts">68.2</channel>
+				<channel id="9" unit="Volts">68.2</channel>
+				<channel id="10" unit="Volts">68.2</channel>
+				<pedestal unit="Volts">65.58</pedestal>
+			</hv>
+		</settings>
+	</module>
+	<module version="NA61_2_V2" id="28">
+		<geometry>
+			<size>2</size>
+			<x>9</x>
+			<y>4</y>
+		</geometry>
+		<connection>
+			<hvsys>
+				<led>
+					<id>55</id>
+				</led>
+				<hv>
+					<id>56</id>
+				</hv>
+			</hvsys>
+		</connection>
+		<settings>
+			<led>
+				<autoTune>0</autoTune>
+				<brightness>1000</brightness>
+				<frequency unit="Hz">0</frequency>
+				<pinADCSet>30</pinADCSet>
+			</led>
+			<hv>
+				<channel id="1" unit="Volts">67.46</channel>
+				<channel id="2" unit="Volts">67.51</channel>
+				<channel id="3" unit="Volts">67.64</channel>
+				<channel id="4" unit="Volts">67.51</channel>
+				<channel id="5" unit="Volts">67.16</channel>
+				<channel id="6" unit="Volts">67.41</channel>
+				<channel id="7" unit="Volts">67.16</channel>
+				<channel id="8" unit="Volts">67.41</channel>
+				<channel id="9" unit="Volts">67.66</channel>
+				<channel id="10" unit="Volts">67.81</channel>
+				<pedestal unit="Volts">64.66</pedestal>
+			</hv>
+		</settings>
+	</module>
+	<module version="NA61_2_V2" id="29">
+		<geometry>
+			<size>2</size>
+			<x>9</x>
+			<y>0</y>
+		</geometry>
+		<connection>
+			<hvsys>
+				<led>
+					<id>1</id>
+				</led>
+				<hv>
+					<id>2</id>
+				</hv>
+			</hvsys>
+		</connection>
+		<settings>
+			<led>
+				<autoTune>0</autoTune>
+				<brightness>1000</brightness>
+				<frequency unit="Hz">0</frequency>
+				<pinADCSet>30</pinADCSet>
+			</led>
+			<hv>
+				<channel id="1" unit="Volts">67.43</channel>
+				<channel id="2" unit="Volts">67.67</channel>
+				<channel id="3" unit="Volts">67.96</channel>
+				<channel id="4" unit="Volts">68.27</channel>
+				<channel id="5" unit="Volts">68.09</channel>
+				<channel id="6" unit="Volts">68.38</channel>
+				<channel id="7" unit="Volts">68.04</channel>
+				<channel id="8" unit="Volts">68.5</channel>
+				<channel id="9" unit="Volts">68.29</channel>
+				<channel id="10" unit="Volts">68.51</channel>
+				<pedestal unit="Volts">66.93</pedestal>
+			</hv>
+		</settings>
+	</module>
+	<module version="NA61_2_V2" id="30">
+		<geometry>
+			<size>2</size>
+			<x>7</x>
+			<y>0</y>
+		</geometry>
+		<connection>
+			<hvsys>
+				<led>
+					<id>3</id>
+				</led>
+				<hv>
+					<id>4</id>
+				</hv>
+			</hvsys>
+		</connection>
+		<settings>
+			<led>
+				<autoTune>0</autoTune>
+				<brightness>1000</brightness>
+				<frequency unit="Hz">0</frequency>
+				<pinADCSet>20</pinADCSet>
+			</led>
+			<hv>
+				<channel id="1" unit="Volts">67.16</channel>
+				<channel id="2" unit="Volts">66.96</channel>
+				<channel id="3" unit="Volts">67.09</channel>
+				<channel id="4" unit="Volts">67.32</channel>
+				<channel id="5" unit="Volts">67.11</channel>
+				<channel id="6" unit="Volts">67.41</channel>
+				<channel id="7" unit="Volts">66.88</channel>
+				<channel id="8" unit="Volts">66.96</channel>
+				<channel id="9" unit="Volts">67.2</channel>
+				<channel id="10" unit="Volts">67.56</channel>
+				<pedestal unit="Volts">66.38</pedestal>
+			</hv>
+		</settings>
+	</module>
+	<module version="NA61_2_V2" id="31">
+		<geometry>
+			<size>2</size>
+			<x>5</x>
+			<y>0</y>
+		</geometry>
+		<connection>
+			<hvsys>
+				<led>
+					<id>5</id>
+				</led>
+				<hv>
+					<id>6</id>
+				</hv>
+			</hvsys>
+		</connection>
+		<settings>
+			<led>
+				<autoTune>0</autoTune>
+				<brightness>1000</brightness>
+				<frequency unit="Hz">0</frequency>
+				<pinADCSet>40</pinADCSet>
+			</led>
+			<hv>
+				<channel id="1" unit="Volts">68.06</channel>
+				<channel id="2" unit="Volts">68.19</channel>
+				<channel id="3" unit="Volts">68.51</channel>
+				<channel id="4" unit="Volts">67.83</channel>
+				<channel id="5" unit="Volts">68.13</channel>
+				<channel id="6" unit="Volts">68.54</channel>
+				<channel id="7" unit="Volts">68.68</channel>
+				<channel id="8" unit="Volts">67.78</channel>
+				<channel id="9" unit="Volts">68.23</channel>
+				<channel id="10" unit="Volts">68.38</channel>
+				<pedestal unit="Volts">67.28</pedestal>
+			</hv>
+		</settings>
+	</module>
+	<module version="NA61_2_V2" id="32">
+		<geometry>
+			<size>2</size>
+			<x>3</x>
+			<y>0</y>
+		</geometry>
+		<connection>
+			<hvsys>
+				<led>
+					<id>7</id>
+				</led>
+				<hv>
+					<id>8</id>
+				</hv>
+			</hvsys>
+		</connection>
+		<settings>
+			<led>
+				<autoTune>1</autoTune>
+				<brightness>950</brightness>
+				<frequency unit="Hz">0</frequency>
+				<pinADCSet>20</pinADCSet>
+			</led>
+			<hv>
+				<channel id="1" unit="Volts">67.34</channel>
+				<channel id="2" unit="Volts">66.95</channel>
+				<channel id="3" unit="Volts">67.25</channel>
+				<channel id="4" unit="Volts">67.13</channel>
+				<channel id="5" unit="Volts">67.29</channel>
+				<channel id="6" unit="Volts">67.54</channel>
+				<channel id="7" unit="Volts">67.52</channel>
+				<channel id="8" unit="Volts">67.57</channel>
+				<channel id="9" unit="Volts">67.68</channel>
+				<channel id="10" unit="Volts">67.56</channel>
+				<pedestal unit="Volts">66.45</pedestal>
+			</hv>
+		</settings>
+	</module>
+	<module version="NA61_2_V2" id="33">
+		<geometry>
+			<size>2</size>
+			<x>1</x>
+			<y>2</y>
+		</geometry>
+		<connection>
+			<hvsys>
+				<led>
+					<id>9</id>
+				</led>
+				<hv>
+					<id>10</id>
+				</hv>
+			</hvsys>
+		</connection>
+		<settings>
+			<led>
+				<autoTune>0</autoTune>
+				<brightness>1000</brightness>
+				<frequency unit="Hz">0</frequency>
+				<pinADCSet>30</pinADCSet>
+			</led>
+			<hv>
+				<channel id="1" unit="Volts">67.23</channel>
+				<channel id="2" unit="Volts">67.22</channel>
+				<channel id="3" unit="Volts">67.51</channel>
+				<channel id="4" unit="Volts">67.13</channel>
+				<channel id="5" unit="Volts">67.32</channel>
+				<channel id="6" unit="Volts">67.86</channel>
+				<channel id="7" unit="Volts">67.19</channel>
+				<channel id="8" unit="Volts">67.55</channel>
+				<channel id="9" unit="Volts">67.38</channel>
+				<channel id="10" unit="Volts">67.49</channel>
+				<pedestal unit="Volts">66.04</pedestal>
+			</hv>
+		</settings>
+	</module>
+	<module version="NA61_2_V2" id="34">
+		<geometry>
+			<size>2</size>
+			<x>1</x>
+			<y>4</y>
+		</geometry>
+		<connection>
+			<hvsys>
+				<led>
+					<id>13</id>
+				</led>
+				<hv>
+					<id>14</id>
+				</hv>
+			</hvsys>
+		</connection>
+		<settings>
+			<led>
+				<autoTune>0</autoTune>
+				<brightness>0</brightness>
+				<frequency unit="Hz">0</frequency>
+				<pinADCSet>20</pinADCSet>
+			</led>
+			<hv>
+				<channel id="1" unit="Volts">67.92</channel>
+				<channel id="2" unit="Volts">68.41</channel>
+				<channel id="3" unit="Volts">67.82</channel>
+				<channel id="4" unit="Volts">69.2</channel>
+				<channel id="5" unit="Volts">67.41</channel>
+				<channel id="6" unit="Volts">69.11</channel>
+				<channel id="7" unit="Volts">68.39</channel>
+				<channel id="8" unit="Volts">69.17</channel>
+				<channel id="9" unit="Volts">68.34</channel>
+				<channel id="10" unit="Volts">69.4</channel>
+				<pedestal unit="Volts">66.04</pedestal>
+			</hv>
+		</settings>
+	</module>
+	<module version="NA61_2_V2" id="35">
+		<geometry>
+			<size>2</size>
+			<x>1</x>
+			<y>6</y>
+		</geometry>
+		<connection>
+			<hvsys>
+				<led>
+					<id>15</id>
+				</led>
+				<hv>
+					<id>16</id>
+				</hv>
+			</hvsys>
+		</connection>
+		<settings>
+			<led>
+				<autoTune>0</autoTune>
+				<brightness>1000</brightness>
+				<frequency unit="Hz">0</frequency>
+				<pinADCSet>6</pinADCSet>
+			</led>
+			<hv>
+				<channel id="1" unit="Volts">67.93</channel>
+				<channel id="2" unit="Volts">68.03</channel>
+				<channel id="3" unit="Volts">67.59</channel>
+				<channel id="4" unit="Volts">67.37</channel>
+				<channel id="5" unit="Volts">67.8</channel>
+				<channel id="6" unit="Volts">67.59</channel>
+				<channel id="7" unit="Volts">68.16</channel>
+				<channel id="8" unit="Volts">67.8</channel>
+				<channel id="9" unit="Volts">67.59</channel>
+				<channel id="10" unit="Volts">68.02</channel>
+				<pedestal unit="Volts">65.3</pedestal>
+			</hv>
+		</settings>
+	</module>
+	<module version="NA61_2_V2" id="36">
+		<geometry>
+			<size>2</size>
+			<x>1</x>
+			<y>8</y>
+		</geometry>
+		<connection>
+			<hvsys>
+				<led>
+					<id>71</id>
+				</led>
+				<hv>
+					<id>72</id>
+				</hv>
+			</hvsys>
+		</connection>
+		<settings>
+			<led>
+				<autoTune>0</autoTune>
+				<brightness>800</brightness>
+				<frequency unit="Hz">0</frequency>
+				<pinADCSet>25</pinADCSet>
+			</led>
+			<hv>
+				<channel id="1" unit="Volts">67.98</channel>
+				<channel id="2" unit="Volts">68.23</channel>
+				<channel id="3" unit="Volts">67.73</channel>
+				<channel id="4" unit="Volts">67.87</channel>
+				<channel id="5" unit="Volts">67.48</channel>
+				<channel id="6" unit="Volts">67.98</channel>
+				<channel id="7" unit="Volts">67.87</channel>
+				<channel id="8" unit="Volts">68.08</channel>
+				<channel id="9" unit="Volts">68.08</channel>
+				<channel id="10" unit="Volts">68.08</channel>
+				<pedestal unit="Volts">65.12</pedestal>
+			</hv>
+		</settings>
+	</module>
+	<module version="NA61_2_V2" id="37">
+		<geometry>
+			<size>2</size>
+			<x>3</x>
+			<y>10</y>
+		</geometry>
+		<connection>
+			<hvsys>
+				<led>
+					<id>73</id>
+				</led>
+				<hv>
+					<id>74</id>
+				</hv>
+			</hvsys>
+		</connection>
+		<settings>
+			<led>
+				<autoTune>0</autoTune>
+				<brightness>1000</brightness>
+				<frequency unit="Hz">0</frequency>
+				<pinADCSet>20</pinADCSet>
+			</led>
+			<hv>
+				<channel id="1" unit="Volts">68.65</channel>
+				<channel id="2" unit="Volts">69.01</channel>
+				<channel id="3" unit="Volts">68.68</channel>
+				<channel id="4" unit="Volts">68.9</channel>
+				<channel id="5" unit="Volts">68.82</channel>
+				<channel id="6" unit="Volts">69.01</channel>
+				<channel id="7" unit="Volts">68.45</channel>
+				<channel id="8" unit="Volts">69.15</channel>
+				<channel id="9" unit="Volts">68.72</channel>
+				<channel id="10" unit="Volts">68.78</channel>
+				<pedestal unit="Volts">68.28</pedestal>
+			</hv>
+		</settings>
+	</module>
+	<module version="NA61_2_V2" id="38">
+		<geometry>
+			<size>2</size>
+			<x>5</x>
+			<y>10</y>
+		</geometry>
+		<connection>
+			<hvsys>
+				<led>
+					<id>75</id>
+				</led>
+				<hv>
+					<id>76</id>
+				</hv>
+			</hvsys>
+		</connection>
+		<settings>
+			<led>
+				<autoTune>0</autoTune>
+				<brightness>1000</brightness>
+				<frequency unit="Hz">0</frequency>
+				<pinADCSet>18</pinADCSet>
+			</led>
+			<hv>
+				<channel id="1" unit="Volts">67.32</channel>
+				<channel id="2" unit="Volts">67.02</channel>
+				<channel id="3" unit="Volts">67.42</channel>
+				<channel id="4" unit="Volts">67.69</channel>
+				<channel id="5" unit="Volts">67.58</channel>
+				<channel id="6" unit="Volts">67.68</channel>
+				<channel id="7" unit="Volts">67.92</channel>
+				<channel id="8" unit="Volts">67.05</channel>
+				<channel id="9" unit="Volts">67.93</channel>
+				<channel id="10" unit="Volts">67.57</channel>
+				<pedestal unit="Volts">65.6</pedestal>
+			</hv>
+		</settings>
+	</module>
+	<module version="NA61_2_V2" id="39">
+		<geometry>
+			<size>2</size>
+			<x>7</x>
+			<y>10</y>
+		</geometry>
+		<connection>
+			<hvsys>
+				<led>
+					<id>87</id>
+				</led>
+				<hv>
+					<id>88</id>
+				</hv>
+			</hvsys>
+		</connection>
+		<settings>
+			<led>
+				<autoTune>0</autoTune>
+				<brightness>1000</brightness>
+				<frequency unit="Hz">0</frequency>
+				<pinADCSet>7</pinADCSet>
+			</led>
+			<hv>
+				<channel id="1" unit="Volts">67.61</channel>
+				<channel id="2" unit="Volts">67.4</channel>
+				<channel id="3" unit="Volts">67.99</channel>
+				<channel id="4" unit="Volts">67.34</channel>
+				<channel id="5" unit="Volts">67.89</channel>
+				<channel id="6" unit="Volts">69.17</channel>
+				<channel id="7" unit="Volts">67.99</channel>
+				<channel id="8" unit="Volts">67.38</channel>
+				<channel id="9" unit="Volts">68.17</channel>
+				<channel id="10" unit="Volts">67.12</channel>
+				<pedestal unit="Volts">65.15</pedestal>
+			</hv>
+		</settings>
+	</module>
+	<module version="NA61_2_V2" id="40">
+		<geometry>
+			<size>2</size>
+			<x>9</x>
+			<y>10</y>
+		</geometry>
+		<connection>
+			<hvsys>
+				<led>
+					<id>79</id>
+				</led>
+				<hv>
+					<id>80</id>
+				</hv>
+			</hvsys>
+		</connection>
+		<settings>
+			<led>
+				<autoTune>0</autoTune>
+				<brightness>1000</brightness>
+				<frequency unit="Hz">0</frequency>
+				<pinADCSet>40</pinADCSet>
+			</led>
+			<hv>
+				<channel id="1" unit="Volts">67.75</channel>
+				<channel id="2" unit="Volts">68.36</channel>
+				<channel id="3" unit="Volts">67.43</channel>
+				<channel id="4" unit="Volts">68.41</channel>
+				<channel id="5" unit="Volts">68.41</channel>
+				<channel id="6" unit="Volts">68.04</channel>
+				<channel id="7" unit="Volts">67.75</channel>
+				<channel id="8" unit="Volts">68.18</channel>
+				<channel id="9" unit="Volts">67.89</channel>
+				<channel id="10" unit="Volts">68.43</channel>
+				<pedestal unit="Volts">64.92</pedestal>
+			</hv>
+		</settings>
+	</module>
+	<module version="NA61_2_V2" id="41">
+		<geometry>
+			<size>2</size>
+			<x>11</x>
+			<y>8</y>
+		</geometry>
+		<connection>
+			<hvsys>
+				<led>
+					<id>43</id>
+				</led>
+				<hv>
+					<id>44</id>
+				</hv>
+			</hvsys>
+		</connection>
+		<settings>
+			<led>
+				<autoTune>0</autoTune>
+				<brightness>1000</brightness>
+				<frequency unit="Hz">0</frequency>
+				<pinADCSet>20</pinADCSet>
+			</led>
+			<hv>
+				<channel id="1" unit="Volts">67.85</channel>
+				<channel id="2" unit="Volts">67.95</channel>
+				<channel id="3" unit="Volts">67.85</channel>
+				<channel id="4" unit="Volts">67.85</channel>
+				<channel id="5" unit="Volts">67.85</channel>
+				<channel id="6" unit="Volts">67.85</channel>
+				<channel id="7" unit="Volts">67.95</channel>
+				<channel id="8" unit="Volts">68.05</channel>
+				<channel id="9" unit="Volts">67.95</channel>
+				<channel id="10" unit="Volts">67.95</channel>
+				<pedestal unit="Volts">65.15</pedestal>
+			</hv>
+		</settings>
+	</module>
+	<module version="NA61_2_V2" id="42">
+		<geometry>
+			<size>2</size>
+			<x>11</x>
+			<y>6</y>
+		</geometry>
+		<connection>
+			<hvsys>
+				<led>
+					<id>67</id>
+				</led>
+				<hv>
+					<id>68</id>
+				</hv>
+			</hvsys>
+		</connection>
+		<settings>
+			<led>
+				<autoTune>0</autoTune>
+				<brightness>1000</brightness>
+				<frequency unit="Hz">0</frequency>
+				<pinADCSet>30</pinADCSet>
+			</led>
+			<hv>
+				<channel id="1" unit="Volts">67.28</channel>
+				<channel id="2" unit="Volts">67.28</channel>
+				<channel id="3" unit="Volts">67.18</channel>
+				<channel id="4" unit="Volts">67.28</channel>
+				<channel id="5" unit="Volts">66.69</channel>
+				<channel id="6" unit="Volts">67.28</channel>
+				<channel id="7" unit="Volts">67.18</channel>
+				<channel id="8" unit="Volts">67.69</channel>
+				<channel id="9" unit="Volts">67.18</channel>
+				<channel id="10" unit="Volts">67.68</channel>
+				<pedestal unit="Volts">64.48</pedestal>
+			</hv>
+		</settings>
+	</module>
+	<module version="NA61_2_V2" id="43">
+		<geometry>
+			<size>2</size>
+			<x>11</x>
+			<y>4</y>
+		</geometry>
+		<connection>
+			<hvsys>
+				<led>
+					<id>17</id>
+				</led>
+				<hv>
+					<id>18</id>
+				</hv>
+			</hvsys>
+		</connection>
+		<settings>
+			<led>
+				<autoTune>0</autoTune>
+				<brightness>1000</brightness>
+				<frequency unit="Hz">0</frequency>
+				<pinADCSet>40</pinADCSet>
+			</led>
+			<hv>
+				<channel id="1" unit="Volts">66.75</channel>
+				<channel id="2" unit="Volts">67.1</channel>
+				<channel id="3" unit="Volts">66.42</channel>
+				<channel id="4" unit="Volts">66.79</channel>
+				<channel id="5" unit="Volts">66.2</channel>
+				<channel id="6" unit="Volts">66.85</channel>
+				<channel id="7" unit="Volts">66.88</channel>
+				<channel id="8" unit="Volts">67.1</channel>
+				<channel id="9" unit="Volts">66.49</channel>
+				<channel id="10" unit="Volts">66.51</channel>
+				<pedestal unit="Volts">65.7</pedestal>
+			</hv>
+		</settings>
+	</module>
+	<module version="NA61_2_V2" id="44">
+		<geometry>
+			<size>2</size>
+			<x>11</x>
+			<y>2</y>
+		</geometry>
+		<connection>
+			<hvsys>
+				<led>
+					<id>19</id>
+				</led>
+				<hv>
+					<id>20</id>
+				</hv>
+			</hvsys>
+		</connection>
+		<settings>
+			<led>
+				<autoTune>0</autoTune>
+				<brightness>1500</brightness>
+				<frequency unit="Hz">0</frequency>
+				<pinADCSet>40</pinADCSet>
+			</led>
+			<hv>
+                                <channel id="1" unit="Volts">67.0</channel>
+                                <channel id="2" unit="Volts">67.0</channel>
+                                <channel id="3" unit="Volts">67.0</channel>
+                                <channel id="4" unit="Volts">67.0</channel>
+                                <channel id="5" unit="Volts">67.0</channel>
+                                <channel id="6" unit="Volts">67.0</channel>
+                                <channel id="7" unit="Volts">67.0</channel>
+                                <channel id="8" unit="Volts">67.0</channel>
+                                <channel id="9" unit="Volts">67.0</channel>
+                                <channel id="10" unit="Volts">67.0</channel>
+                                <pedestal unit="Volts">64.0</pedestal>
+			</hv>
+		</settings>
+	</module>
 </config>
+
