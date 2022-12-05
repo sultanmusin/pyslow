@@ -44,8 +44,8 @@ mod#34 ch#9
 <onlineModules>43</onlineModules>
 -->
 
+<!-- -->
 <onlineModules>13</onlineModules>
-<!--
 <onlineModules>14</onlineModules>
 <onlineModules>15</onlineModules>
 <onlineModules>16</onlineModules>
@@ -77,9 +77,9 @@ mod#34 ch#9
 <onlineModules>42</onlineModules>
 <onlineModules>43</onlineModules>
 <onlineModules>44</onlineModules>
--->
+<!-- -->
 
-            <queryDelay>60</queryDelay>
+            <queryDelay>600</queryDelay>
             <refTemp unit="degree">25</refTemp>
             <tempSlope >60</tempSlope>
             <queryDelay unit="sec">1800</queryDelay>
