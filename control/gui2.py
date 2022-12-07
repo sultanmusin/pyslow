@@ -929,9 +929,12 @@ async def main(argv):
     await future
     return True
 
-if __name__ == '__main__':
+def start(argv):
     try:
-        qasync.run(main(sys.argv[1:]))
+        qasync.run(main(argv))
     except asyncio.exceptions.CancelledError:
         logging.info("Application exit.")  
         sys.exit(0)
+
+if __name__ == '__main__':
+    start(sys.argv[1:])

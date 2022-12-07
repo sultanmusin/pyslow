@@ -43,6 +43,12 @@ python3 control/poller.py
 
 All the scripts above use the config/PsdSlowControlConfig.xml 
 
+To run from Linux menu:
+    1. Change the slow_control.desktop file
+        Replace the `~/programms/pyslow/start.py` with your `path/to/slow/control/start.py`
+    2. `ln -s path/to/slow/control/slow_control.desktop ~/.local/share/applications`
+    3. Run from menu - choose config file.
+
 ### Contacts ###
 
 * Repo owner or admin
