@@ -10,6 +10,8 @@ doc/na61-psd-slow-control/references/
 node_modules/
 dist/
 
+venv/
+
 # Compiled Java class files
 *.class
 

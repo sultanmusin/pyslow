@@ -1,9 +1,10 @@
 [Desktop Entry]
 Name=Slow control
 Comment=HV control
-Exec=bash -c "cd ~/programms/pyslow; python3 /home/admin/programms/pyslow/start.py"
+Exec=/opt/slow_control/pyslow/start.sh
+Icon=/opt/slow_control/pyslow/icon.png
 Terminal=true
 Type=Application
 StartupNotify=false
-Categories=TextEditor;Development;IDE;
+Categories=Development;
 Keywords=slow_control;
