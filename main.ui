@@ -324,7 +324,7 @@
             </size>
            </property>
            <property name="title">
-            <string>System buses</string>
+            <string>Log</string>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_16">
             <property name="spacing">
@@ -342,6 +342,35 @@
             <property name="bottomMargin">
              <number>3</number>
             </property>
+            <item>
+             <widget class="QTextEdit" name="logArea"/>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButtonReset">
+              <property name="text">
+               <string>Reset</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QGroupBox" name="groupBox_3">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+             <horstretch>0</horstretch>
+             <verstretch>2</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>120</height>
+            </size>
+           </property>
+           <property name="title">
+            <string>System Buses</string>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_4">
             <item>
              <widget class="QTableWidget" name="busGrid">
               <property name="sizePolicy">
@@ -810,7 +839,7 @@
               <number>19</number>
              </property>
              <property name="columnCount">
-              <number>5</number>
+              <number>4</number>
              </property>
              <attribute name="verticalHeaderMinimumSectionSize">
               <number>20</number>
@@ -930,7 +959,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>851</width>
+     <width>1024</width>
      <height>20</height>
     </rect>
    </property>
