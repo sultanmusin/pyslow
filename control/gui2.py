@@ -42,6 +42,7 @@ COLOR_ERROR = QColor(224,48,48)
 COLOR_NOT_REFERENCE = QColor(224,48,224)
 COLOR_OK = QColor(128,224,48)
 COLOR_ONLINE = QColor(128,224,48)
+COLOR_WHITE = QColor(255,255,255)
 
 GRID_COLUMN_ONLINE = 0
 GRID_COLUMN_HV_ON = 1
@@ -142,6 +143,17 @@ led_grid_coords = {
 capability_by_led_grid_coords = {val : key for key, val in led_grid_coords.items()}
 
 
+class CallbackHandler(logging.StreamHandler):
+    def __init__(self, cb):
+        logging.StreamHandler.__init__(self)
+        self.cb = cb
+
+    def emit(self, record):
+        if record.levelno >= 30:
+            msg = record.levelname + ': ' + self.format(record)
+            self.cb(msg)
+
+
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self, config):
         super(MainWindow, self).__init__() # Call the inherited classes __init__ method
@@ -162,6 +174,15 @@ class MainWindow(QtWidgets.QMainWindow):
         #self.pollAllTemperature(False) # no callbacks
         #self.SetReferenceParameters()
         #self.UpdateModuleGrid()
+
+    def OnLogMessage(self, msg):
+        self.logArea.setTextColor(COLOR_WHITE)
+        self.logArea.setTextBackgroundColor(COLOR_ERROR)
+        self.logArea.setText(msg)
+
+
+    def OnResetLogMessage(self, msg):
+        self.logArea.setText("")
 
 
     def SelectFirstOnlineModule(self):
@@ -341,6 +362,12 @@ class MainWindow(QtWidgets.QMainWindow):
         self.guiTimer.timeout.connect(self.guiTimerFired)
         self.guiTimer.start(1000)
 
+        self.logArea = self.findChild(QtWidgets.QTextEdit, 'logArea')
+        self.logArea.setText('')
+        self.logArea.setReadOnly(True)
+
+        self.pushButtonReset = self.findChild(QtWidgets.QPushButton, 'pushButtonReset')
+        self.pushButtonReset.clicked.connect(self.OnResetLogMessage)
 
 
     def on_refresh(self):
@@ -912,7 +939,9 @@ async def main(argv):
 
     loop = asyncio.get_event_loop()
     #loop.set_exception_handler(handler)
-    
+
+    logging.getLogger().addHandler(CallbackHandler(mainWindow.OnLogMessage))
+
     try:
         logging.info("Staring bus listeners...")
         for id, bus in mainWindow.detector.buses.items():
