@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<config xmlns="http://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" created="17.02.2014" id="default" xsi:noNamespaceSchemaLocation="PsdSlowControlConfig.xsd" xsi:schemaLocation="PsdSlowControlConfig.xsd">
+<global>
+	<title>FHCal DCS (socket manager connection)</title>
+	<flags>
+            <onlineModules> 201 </onlineModules>
+            <queryDelay unit="sec">600</queryDelay>
+            <verbose> 1 </verbose>
+            <monitorHV> 0 </monitorHV>
+            <refTemp> 25 </refTemp>
+            <tempSlope> 60 </tempSlope>
+
+        </flags>
+        <connection>
+        <hvsys id="fhcal" timeout="4">
+                <rate unit="baud">57600</rate>
+                <host>127.0.0.1</host>
+                <port>4134</port>
+                <dataBits>8</dataBits>
+                <stopBits>1</stopBits>
+                <parity>0</parity>
+        </hvsys>
+        </connection>
+        <settings>
+            <hv>
+                <base unit="Volts">64.0</base>
+            </hv>
+        </settings>
+    </global>
+
+    <module id="201">
+        <geometry>
+            <size>1</size>
+            <x>0</x>
+            <y>0</y>
+        </geometry>
+        <connection>
+            <hvsys id="fhcal">
+                <led>
+                    <id>201</id>
+                </led>
+            </hvsys>
+        </connection>
+        <settings>
+            <led>
+                <autoTune>0</autoTune>
+                <brightness>1000</brightness>
+                <frequency unit="Hz">100</frequency>
+                <pinADCSet>3</pinADCSet>
+            </led>
+        </settings>
+    </module>
+</config>

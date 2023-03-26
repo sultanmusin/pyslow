@@ -4,7 +4,7 @@
 	<title>Quartz Hodoscope DCS (socket manager connection)</title>
     <logo>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</logo>
 	<flags>
-            <onlineModules> 145,146,147,148 </onlineModules>
+            <onlineModules> 141,142,143,144 </onlineModules>
 
             <queryDelay unit="sec">600</queryDelay>
             <verbose> 1 </verbose>
@@ -16,11 +16,11 @@
         <connection>
         <hvsys id="Hodo">
                 <rate unit="baud">57600</rate>
-		<host>127.0.0.1</host>
+                <host>127.0.0.1</host>
                 <port>4048</port>
                 <dataBits>8</dataBits>
                 <stopBits>1</stopBits>
-                <parity>0</parity>                
+                <parity>0</parity>
         </hvsys>
         </connection>
         <settings>
@@ -30,20 +30,20 @@
         </settings>
     </global>
 
-    <module id="145" temperature_from_module="145">
+    <module id="141" temperature_from_module="142">
         <geometry>
             <size>1</size>
             <x>1</x>
             <y>7</y>
         </geometry>
-                 
+
         <connection>
             <hvsys id="Hodo">
                 <hv>
-                    <id>145</id>
+                    <id>141</id>
                 </hv>
             </hvsys>
-        </connection>    
+        </connection>
         <settings>
             <hv>
                 <channel id="1" unit="Volts">47.0</channel>
@@ -56,24 +56,24 @@
                 <channel id="8" unit="Volts">47.0</channel>
                 <pedestal unit="Volts">47.0</pedestal>
             </hv>
-        </settings> 
-        
+        </settings>
+
     </module>
 
-    <module id="146" temperature_from_module="146">
+    <module id="142" temperature_from_module="142">
         <geometry>
             <size>1</size>
             <x>2</x>
             <y>7</y>
         </geometry>
-                 
+
         <connection>
             <hvsys id="Hodo">
                 <hv>
-                    <id>146</id>
+                    <id>142</id>
                 </hv>
             </hvsys>
-        </connection>    
+        </connection>
         <settings>
             <hv>
                 <channel id="1" unit="Volts">47.0</channel>
@@ -86,24 +86,24 @@
                 <channel id="8" unit="Volts">47.0</channel>
                 <pedestal unit="Volts">47.0</pedestal>
             </hv>
-        </settings> 
-        
+        </settings>
+
     </module>
 
-    <module id="147" temperature_from_module="145">
+    <module id="143" temperature_from_module="143">
         <geometry>
             <size>1</size>
             <x>3</x>
             <y>7</y>
         </geometry>
-                 
+
         <connection>
             <hvsys id="Hodo">
                 <hv>
-                    <id>147</id>
+                    <id>143</id>
                 </hv>
             </hvsys>
-        </connection>    
+        </connection>
         <settings>
             <hv>
                 <channel id="1" unit="Volts">47.0</channel>
@@ -116,24 +116,24 @@
                 <channel id="8" unit="Volts">47.0</channel>
                 <pedestal unit="Volts">47.0</pedestal>
             </hv>
-        </settings> 
-        
+        </settings>
+
     </module>
 
-    <module id="148" temperature_from_module="145">
+    <module id="144" temperature_from_module="143">
         <geometry>
             <size>1</size>
             <x>4</x>
             <y>7</y>
         </geometry>
-                 
+
         <connection>
             <hvsys id="Hodo">
                 <hv>
-                    <id>148</id>
+                    <id>144</id>
                 </hv>
             </hvsys>
-        </connection>    
+        </connection>
         <settings>
             <hv>
                 <channel id="1" unit="Volts">47.0</channel>
@@ -146,10 +146,9 @@
                 <channel id="8" unit="Volts">47.0</channel>
                 <pedestal unit="Volts">47.0</pedestal>
             </hv>
-        </settings> 
-        
+        </settings>
+
     </module>
 
 
 </config>
-
