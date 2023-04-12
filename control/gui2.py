@@ -65,6 +65,12 @@ GRID_ROW_AUTOREG = 4
 GRID_ROW_AVERAGE_ADC = 5
 GRID_ROWS_LED = 6
 
+GRID_COLUMN_REQUESTED_LED = 0
+GRID_COLUMN_SET_LED = 1
+GRID_COLUMN_MEAS_LED = 2
+GRID_COLUMN_STATE_LED = 3
+GRID_COLUMNS_LED = 4
+
 # All grids column legend
 GRID_COLUMN_FILE = 0
 GRID_COLUMN_REFERENCE = 1
@@ -72,7 +78,6 @@ GRID_COLUMN_CORRECTED = 2
 GRID_COLUMN_MEAS = 3
 GRID_COLUMN_STATE = 4
 GRID_COLUMNS = 5
-GRID_COLUMNS_LED = 3
 
 hv_grid_coords = {
     "1/REF_VOLTAGE": (0,GRID_COLUMN_REFERENCE),
@@ -132,12 +137,12 @@ hv_grid_coords = {
 capability_by_hv_grid_coords = {val : key for key, val in hv_grid_coords.items()}
 
 led_grid_coords = {
-    "SET_FREQUENCY": (GRID_ROW_FREQUENCY,GRID_COLUMN_REFERENCE),
-    "SET_AMPLITUDE": (GRID_ROW_AMPLITUDE,GRID_COLUMN_REFERENCE),
-    "ADC_SET_POINT": (GRID_ROW_ADC_SET_POINT,GRID_COLUMN_REFERENCE),
-    "AVERAGE_POINTS": (GRID_ROW_AVERAGE_POINTS,GRID_COLUMN_REFERENCE),
-    "AUTOREG": (GRID_ROW_AUTOREG,GRID_COLUMN_REFERENCE),
-    "AVERAGE_ADC": (GRID_ROW_AVERAGE_ADC,GRID_COLUMN_REFERENCE),
+    "SET_FREQUENCY": (GRID_ROW_FREQUENCY,GRID_COLUMN_REQUESTED_LED),
+    "SET_AMPLITUDE": (GRID_ROW_AMPLITUDE,GRID_COLUMN_REQUESTED_LED),
+    "ADC_SET_POINT": (GRID_ROW_ADC_SET_POINT,GRID_COLUMN_REQUESTED_LED),
+    "AVERAGE_POINTS": (GRID_ROW_AVERAGE_POINTS,GRID_COLUMN_REQUESTED_LED),
+    "AUTOREG": (GRID_ROW_AUTOREG,GRID_COLUMN_REQUESTED_LED),
+    "AVERAGE_ADC": (GRID_ROW_AVERAGE_ADC,GRID_COLUMN_REQUESTED_LED),
 }
 
 capability_by_led_grid_coords = {val : key for key, val in led_grid_coords.items()}
@@ -325,7 +330,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.tableHV.itemChanged.connect(self.tableHVitemChanged)
 
         self.tableLED = self.findChild(QtWidgets.QTableWidget, 'tableLED') 
-        self.tableLED.setHorizontalHeaderLabels(['Requested', 'Set', 'Measured'])
+        self.tableLED.setHorizontalHeaderLabels(['Requested', 'Set', 'Measured', 'STATE'])
         #self.tableLED.setRowCount(len(self.config.modules))
         self.tableLED.setVerticalHeaderLabels([
             "Frequency", 
@@ -343,7 +348,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 if col>0: 
                     item.setFlags(item.flags() & ~Qt.ItemIsEditable)
 
-            self.tableLED.setItem(row, GRID_COLUMN_STATE, QtWidgets.QTableWidgetItem("OK"))
+            self.tableLED.setItem(row, GRID_COLUMN_STATE_LED, QtWidgets.QTableWidgetItem("OK"))
         
         self.tableLED.itemChanged.connect(self.tableLEDitemChanged)
 
@@ -563,7 +568,7 @@ class MainWindow(QtWidgets.QMainWindow):
             part_address = int(self.config.modules[module_id].address('led'))
             part = self.detector.buses[bus_id].getPart(part_address) 
             try:
-                if item.column() == GRID_COLUMN_REFERENCE:
+                if item.column() == GRID_COLUMN_REQUESTED_LED:
                     cap = capability_by_led_grid_coords[(item.row(), item.column())]
                     logging.info(f'LED Changed: {cap} reference change request')
                     new_value = part.valueFromString(cap, item.text()) # now just converts str to int
