@@ -404,7 +404,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.pushButtonReset = self.findChild(QtWidgets.QPushButton, 'pushButtonReset')
         self.pushButtonReset.clicked.connect(self.OnResetLogMessage)
 
-        self.actionChange_config.triggered.connect(self.onEditModeToggled)
+        # self.actionChange_config.triggered.connect(self.onEditModeToggled)
 
 
     def on_refresh(self):
