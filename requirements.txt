@@ -4,3 +4,4 @@ PyQt5
 qasync
 requests
 flask
+Flask-SocketIO

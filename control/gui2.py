@@ -746,7 +746,6 @@ class MainWindow(QtWidgets.QMainWindow):
 
         str_value = part.valueToString(capability, value)
 
-
         if type(part) in [HVsysSupply, HVsysSupply800c, HVsysWall]:
             self.tableHV.itemChanged.disconnect(self.tableHVitemChanged)  # temporarily disable the handler as we change the table values
             if type(part) is HVsysWall:
