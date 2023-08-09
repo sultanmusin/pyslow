@@ -65,6 +65,12 @@ GRID_ROW_AUTOREG = 4
 GRID_ROW_AVERAGE_ADC = 5
 GRID_ROWS_LED = 6
 
+GRID_COLUMN_REQUESTED_LED = 0
+GRID_COLUMN_SET_LED = 1
+GRID_COLUMN_MEAS_LED = 2
+GRID_COLUMN_STATE_LED = 3
+GRID_COLUMNS_LED = 4
+
 # All grids column legend
 GRID_COLUMN_FILE = 0
 GRID_COLUMN_REFERENCE = 1
@@ -72,7 +78,6 @@ GRID_COLUMN_CORRECTED = 2
 GRID_COLUMN_MEAS = 3
 GRID_COLUMN_STATE = 4
 GRID_COLUMNS = 5
-GRID_COLUMNS_LED = 3
 
 hv_grid_coords = {
     "1/REF_VOLTAGE": (0,GRID_COLUMN_REFERENCE),
@@ -142,6 +147,8 @@ led_grid_coords = {
 
 capability_by_led_grid_coords = {val : key for key, val in led_grid_coords.items()}
 
+MODULE_LIST_HEADERS = ['Online', 'HV ON', 'State', 'hv id', 'led id']
+
 
 class CallbackHandler(logging.StreamHandler):
     def __init__(self, cb):
@@ -156,11 +163,12 @@ class CallbackHandler(logging.StreamHandler):
 
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self, config):
-        super(MainWindow, self).__init__() # Call the inherited classes __init__ method
-        uic.loadUi('main.ui', self) # Load the .ui file
-        self.show() # Show the GUI
+        super(MainWindow, self).__init__()  # Call the inherited classes __init__ method
+        uic.loadUi('main.ui', self)  # Load the .ui file
+        self.show()  # Show the GUI
 
-        self.dirname=''
+        self.dirname = ''
+        self.CONFIG_EDIT_MODE = False
 
         self.config = config
         self.detector = Detector(self.config)
@@ -175,11 +183,37 @@ class MainWindow(QtWidgets.QMainWindow):
         #self.SetReferenceParameters()
         #self.UpdateModuleGrid()
 
+    def onEditModeToggled(self):
+        if self.CONFIG_EDIT_MODE:
+            self.onEditModeOff()
+        else:
+            self.onEditModeOn()
+
+    def onEditModeOn(self):
+        print('Turning on edit mode')
+        self.CONFIG_EDIT_MODE = True
+        self.moduleList.setColumnCount(5)
+        self.moduleList.setHorizontalHeaderLabels(MODULE_LIST_HEADERS)
+        self.expandModuleListTableOnEditMode()
+
+    def onEditModeOff(self):
+        self.CONFIG_EDIT_MODE = False
+        print('Turning off edit mode')
+        self.moduleList.setColumnCount(3)
+        self.moduleList.setHorizontalHeaderLabels(MODULE_LIST_HEADERS[:3])
+
+
+    def expandModuleListTableOnEditMode(self):
+        for module_id, (title, module) in enumerate(self.config.modules.items()):
+            self.moduleList.setItem(module_id, 3, QtWidgets.QTableWidgetItem(f"{module.addr['hv']}"))
+            # self.moduleList.item(module_id, 3).setFlags(~Qt.ItemIsEditable)
+            self.moduleList.setItem(module_id, 4, QtWidgets.QTableWidgetItem(f"{module.addr['led']}"))
+            # self.moduleList.item(module_id, 4).setFlags(~Qt.ItemIsEditable)
+
     def OnLogMessage(self, msg):
         self.logArea.setTextColor(COLOR_WHITE)
         self.logArea.setTextBackgroundColor(COLOR_ERROR)
         self.logArea.setText(msg)
-
 
     def OnResetLogMessage(self, msg):
         self.logArea.setText("")
@@ -217,7 +251,8 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.moduleList = self.findChild(QtWidgets.QTableWidget, 'moduleList') 
         self.moduleList.setColumnCount(3)
-        self.moduleList.setHorizontalHeaderLabels(['Online', 'HV ON', 'State'])
+        self.moduleList.setHorizontalHeaderLabels(MODULE_LIST_HEADERS[:3])
+
         self.moduleList.setRowCount(len(self.config.modules))
         self.moduleList.setVerticalHeaderLabels([f'Module {id}' for id in self.config.modules])
 
@@ -368,6 +403,8 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.pushButtonReset = self.findChild(QtWidgets.QPushButton, 'pushButtonReset')
         self.pushButtonReset.clicked.connect(self.OnResetLogMessage)
+
+        self.actionChange_config.triggered.connect(self.onEditModeToggled)
 
 
     def on_refresh(self):
@@ -563,7 +600,7 @@ class MainWindow(QtWidgets.QMainWindow):
             part_address = int(self.config.modules[module_id].address('led'))
             part = self.detector.buses[bus_id].getPart(part_address) 
             try:
-                if item.column() == GRID_COLUMN_REFERENCE:
+                if item.column() == GRID_COLUMN_REQUESTED_LED:
                     cap = capability_by_led_grid_coords[(item.row(), item.column())]
                     logging.info(f'LED Changed: {cap} reference change request')
                     new_value = part.valueFromString(cap, item.text()) # now just converts str to int
@@ -958,12 +995,14 @@ async def main(argv):
     await future
     return True
 
+
 def start(argv):
     try:
         qasync.run(main(argv))
     except asyncio.exceptions.CancelledError:
         logging.info("Application exit.")  
         sys.exit(0)
+
 
 if __name__ == '__main__':
     start(sys.argv[1:])
