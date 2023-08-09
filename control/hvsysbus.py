@@ -19,6 +19,7 @@ from functools import partial
 
 sys.path.append('.')
 sys.path.append('lib/hvsys')
+sys.path.append('lib/workers')
 
 from task import *
 from partstate import *
@@ -28,11 +29,14 @@ from hvsyssupply import HVsysSupply
 from hvsyssupply800c import HVsysSupply800c
 from hvsyswall import HVsysWall
 
+import warner
+
+
 class HVsysBus:
     IP_PORT = 4001
     MAX_BURST_COMMANDS = 1
     DefaultBusId = 'default'
-    DefaultTimeout = 0.5 # sec
+    DefaultTimeout = 0.5  # sec
     DefaultRetry = 3     # Setting 0 or less will disable data exchange, will not recommend
     LatencyBuffer = 10
 
@@ -91,6 +95,7 @@ class HVsysBus:
         except asyncio.TimeoutError:
             self.online = False
             logging.warning(f"Cannot connect to {self.host}:{self.port}")
+            warner.warn(f"Cannot connect to {self.host}:{self.port}")
 
     async def disconnect(self):
         if hasattr(self, 'writer') and self.writer is not None:
@@ -162,10 +167,12 @@ class HVsysBus:
                                     logging.info(f"Success with retry={retry_number}/{self.retry}")
                             except asyncio.TimeoutError as e:        
                                 logging.warning(f"No response in timeout={self.timeout}s, retry={retry_number}/{self.retry}")
+                                warner.warn(f"No response in timeout={self.timeout}s, retry={retry_number}/{self.retry}")
                                 if self.global_response_callback is not None:
                                     self.global_response_callback(self, None)
                             except ValueError as e:
                                 logging.warning(f"Invalid response, retry={retry_number}/{self.retry}") # occurs on invalid bus response (e.g. empty line)
+                                warner.warn(f"Invalid response, retry={retry_number}/{self.retry}") # occurs on invalid bus response (e.g. empty line)
                                 if self.global_response_callback is not None:
                                     self.global_response_callback(self, None)
                             if success:
