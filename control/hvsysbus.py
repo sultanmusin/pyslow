@@ -160,19 +160,21 @@ class HVsysBus:
                             success = False
                             self.writer.write(str(task.cmd).encode())
                             try: 
-#                                await asyncio.wait_for(self.recv(task.cb, task.timestamp), self.timeout)
+                                #await asyncio.wait_for(self.recv(task.cb, task.timestamp), self.timeout)
                                 await asyncio.wait_for(self.recv(task.cb, time.time()), self.timeout)
                                 success = True
                                 if retry_number > 1:
                                     logging.info(f"Success with retry={retry_number}/{self.retry}")
                             except asyncio.TimeoutError as e:        
                                 logging.warning(f"No response in timeout={self.timeout}s, retry={retry_number}/{self.retry}")
-                                warner.warn(f"No response in timeout={self.timeout}s, retry={retry_number}/{self.retry}")
+                                warner.warn(f"No response in timeout={self.timeout}s, retry={retry_number}/{self.retry}"
+                                            f' {message.device.DESCRIPTION} {message.address}')
                                 if self.global_response_callback is not None:
                                     self.global_response_callback(self, None)
                             except ValueError as e:
                                 logging.warning(f"Invalid response, retry={retry_number}/{self.retry}") # occurs on invalid bus response (e.g. empty line)
-                                warner.warn(f"Invalid response, retry={retry_number}/{self.retry}") # occurs on invalid bus response (e.g. empty line)
+                                warner.warn(f"Invalid response, retry={retry_number}/{self.retry}"
+                                            f' {message.device.DESCRIPTION} {message.address}') # occurs on invalid bus response (e.g. empty line)
                                 if self.global_response_callback is not None:
                                     self.global_response_callback(self, None)
                             if success:
