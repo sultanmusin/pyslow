@@ -10,5 +10,6 @@ def warn(msg: str):
     data = {
         'MSG': f'{current_time}: {msg}'
     }
+    print(msg)
     for server in WARNING_SERVERS:
         r = requests.get(server, params=data)
