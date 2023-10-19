@@ -128,6 +128,7 @@ class HVsysBus:
             # Get a "work item" out of the queue.
             #TODO for  MAX_BURST_COMMANDS:
             if not self.task_queue.empty():
+                warner.warn(f'Polling...')
                 if not self.online:
                     logging.debug("send_worker: bus %s offline, not sending command." % (self.id))
                     await asyncio.sleep(0.1)
