@@ -2,6 +2,6 @@ lxml
 bs4
 PyQt5
 qasync
-
-
-
+requests
+flask
+Flask-SocketIO

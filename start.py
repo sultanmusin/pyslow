@@ -25,15 +25,15 @@ def UIGetConfigName(config_name : str = '') -> str:
             str: Config filename to use slow control with.
     """
     app = QApplication([])
-    selected_config = QFileDialog.getOpenFileName(None, 
-        "Select config file to open", 
-        config_name, 
+    selected_config = QFileDialog.getOpenFileName(None,
+        "Select config file to open",
+        config_name,
         "(*.xml)")
     app.exit()
     if selected_config and selected_config[0].endswith('.xml'):
         return selected_config[0]
 
-def GetLastUsedConfig() -> str: 
+def GetLastUsedConfig() -> str:
     """Searches the settings file in user's directory to find the last used config path
 
         Returns:
@@ -48,14 +48,14 @@ def GetLastUsedConfig() -> str:
     if not settings['DEFAULT']:
         return None
     if settings['DEFAULT']['Last_used_config']:
-        return settings['DEFAULT']['Last_used_config'] 
+        return settings['DEFAULT']['Last_used_config']
 
 def SaveConfigAsLastUsed(config_name : str) -> None:
     """Saves current config file as the last used and updates settings
 
         Args:
             config_name(str): Current config file name.
-            
+
     """
     if not config_name.endswith(".xml"):
         return
@@ -99,7 +99,11 @@ def main(argv : list = []):
         except:
             pass
         config_name = UIGetConfigName(config_name)
+        if config_name == "" or config_name is None:
+            print('No config file was chosen')
+            return
     StartProgram(config_name, argv)
+
 
 if __name__ == "__main__":
     main(sys.argv[1:])
