@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Slow control
+Comment=HV control
+Exec=sh -c "source {APP_DIR}/venv/bin/activate; cd {APP_DIR}; python {APP_DIR}/start.py"
+Icon={APP_DIR}/icon.png
+Terminal=true
+Type=Application
+StartupNotify=true
+Categories=Development;
+Keywords=slow_control;

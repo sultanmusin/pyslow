@@ -1,10 +1,10 @@
 [Desktop Entry]
 Name=Slow control
 Comment=HV control
-Exec=/opt/slow_control/pyslow/start.sh
-Icon=/opt/slow_control/pyslow/icon.png
+Exec=sh -c "source /opt/software/pyslow/venv/bin/activate; cd /opt/software/pyslow; python /opt/software/pyslow/start.py"
+Icon=/opt/software/pyslow/icon.png
 Terminal=true
 Type=Application
-StartupNotify=false
+StartupNotify=true
 Categories=Development;
 Keywords=slow_control;
