@@ -23,6 +23,7 @@ from PyQt5.QtCore import QItemSelectionModel, QTimer, Qt, QByteArray
 
 import string
 import sys
+import warner
 
 sys.path.append('.')
 sys.path.append('lib/hvsys')
@@ -758,6 +759,7 @@ class MainWindow(QtWidgets.QMainWindow):
             if capability == 'TEMPERATURE':
                 self.tableHV.item(GRID_ROW_TEMPERATURE, GRID_COLUMN_MEAS).setText("%.2f °C"%(float(str_value)))
                 logging.info('part %s temperature = %s'%(part, str_value))  
+                warner.warn(f'Temperature of module {part.config.id} = {str_value}')
 
                 # calculate and display voltage correction (if needed and capable - first times will fail without knowing calibration)
                 try:
