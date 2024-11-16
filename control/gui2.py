@@ -755,6 +755,10 @@ class MainWindow(QtWidgets.QMainWindow):
             if capability in hv_grid_coords:
                 (row, col) = hv_grid_coords[capability] 
                 self.tableHV.item(row, col).setText(str_value)
+
+                if(capability.endswith('MEAS_VOLTAGE')):
+                    warner.warn(f'Module {part.config.id}: {capability} = {str_value}')
+
             
             if capability == 'TEMPERATURE':
                 self.tableHV.item(GRID_ROW_TEMPERATURE, GRID_COLUMN_MEAS).setText("%.2f °C"%(float(str_value)))
