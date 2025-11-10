@@ -447,7 +447,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.moduleGrid.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
             self.moduleGrid.itemSelectionChanged.connect(self.moduleGridSelectionChanged) #connect it back
             
-            self.moduleGridSelectionChanged()
+            # self.moduleGridSelectionChanged()
 
 
     def moduleGridSelectionChanged(self):
@@ -455,7 +455,6 @@ class MainWindow(QtWidgets.QMainWindow):
         logging.info("moduleGridSelectionChanged: %s"%(selected_modules))
 
         self.moduleList.itemSelectionChanged.disconnect() # temporarily disconnect or we get a loop call and stack overflow
-
         self.moduleList.setSelectionMode(QtWidgets.QAbstractItemView.MultiSelection)
         self.moduleList.clearSelection()
         for index, (id, config) in enumerate(self.config.modules.items()):
